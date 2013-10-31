@@ -23,6 +23,7 @@
       (declare (ignore sub-char numarg))
       (let*
         ((invalid-last-characters (list "`" " " "(" ")"))
+         (is-inside-comment nil)
          (my-string "(list `("))
         ;; loop through stream.
         (loop for my-char = (coerce (list (read-char stream t nil t)) 'string)
@@ -35,6 +36,23 @@
                                                         (get-string-without-invalid-last-character
                                                           my-string invalid-last-characters)
                                                         invalid-last-characters) "))")))
+                   ;; is character newline and last character was not opening parenthesis?
+                   ;; if yes, output ")`(", end comment.
+                   ((and (equal my-char (coerce (list #\Newline) 'string)) (not (equal (get-last-character-string my-string) "(")))
+                    (progn
+                      (setf my-string (concatenate 'string my-string ")`("))
+                      (setf is-inside-comment nil)))
+                   ;; is character newline (and last character was opening parenthesis)?
+                   ;; if yes, don't output anything, end comment.
+                   ((equal my-char (coerce (list #\Newline) 'string))
+                    (setf is-inside-comment nil))
+                   ;; are we inside a comment?
+                   ;; if yes, don't output anything.
+                   (is-inside-comment nil)
+                   ;; is character ; ?
+                   ;; if yes, don't output anything, begin comment.
+                   ((equal my-char ";")
+                    (setf is-inside-comment t))
                    ;; is character space, and last character was space or opening parenthesis?
                    ;; if yes, don't output anything.
                    ((and (equal my-char " ") (or (equal (get-last-character-string my-string) " ") (equal (get-last-character-string my-string) "(")))
@@ -43,14 +61,6 @@
                    ;; if yes, output space.
                    ((equal my-char ",")
                     (setf my-string (concatenate 'string my-string " ")))
-                   ;; is character newline and last character was not opening parenthesis?
-                   ;; if yes, output ")`("
-                   ((and (equal my-char (coerce (list #\Newline) 'string)) (not (equal (get-last-character-string my-string) "(")))
-                    (setf my-string (concatenate 'string my-string ")`(")))
-                   ;; is character newline (and last character was opening parenthesis)?
-                   ;; if yes, don't output anything.
-                   ((equal my-char (coerce (list #\Newline) 'string))
-                    nil)
                    ;; otherwise output the character.
                    (t (setf my-string (concatenate 'string my-string my-char)))))))
       ;;; #a is the input which starts the custom reader.
@@ -62,7 +72,7 @@
 
 (defparameter *example-code*
   #a
-  push rbp
-  mov  rbp,rsp
-  lea  rdi,[testmsg1]
+  push rbp     ; push rbp.
+  mov  rbp,rsp ; create the stack frame
+  lea  rdi,[testmsg1] ; load effective address.
   #)
