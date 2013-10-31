@@ -26,30 +26,33 @@
          (my-string "(list `("))
         ;; loop through stream.
         (loop for my-char = (coerce (list (read-char stream t nil t)) 'string)
-              ;; is character # ?
-              do (if (equal my-char "#")
-                   ;; done, return, add closing parenthesis to the end.
-                   (return-from transform-code-to-string
-                                (concatenate 'string (get-string-without-invalid-last-character
-                                                       (get-string-without-invalid-last-character my-string invalid-last-characters) invalid-last-characters) "))"))
+              do (cond
+                   ;; is character # ?
+                   ;; if yes, we're done, fix closing parentheses and return. 
+                   ((equal my-char "#")
+                    (return-from transform-code-to-string
+                                 (concatenate 'string (get-string-without-invalid-last-character
+                                                        (get-string-without-invalid-last-character
+                                                          my-string invalid-last-characters)
+                                                        invalid-last-characters) "))")))
                    ;; is character space, and last character was space or opening parenthesis?
-                   (if (and (equal my-char " ") (or (equal (get-last-character-string my-string) " ") (equal (get-last-character-string my-string) "(")))
-                     ;; if yes, don't output anything.
-                     nil
-                     ;; is character comma?
-                     (if (equal my-char ",") 
-                       ;; if yes, output space.
-                       (setf my-string (concatenate 'string my-string " "))
-                       ;; is character newline and last character was not opening parenthesis?
-                       (if (and (equal my-char (coerce (list #\Newline) 'string)) (not (equal (get-last-character-string my-string) "(")))
-                         ;; if yes, output ")("
-                         (setf my-string (concatenate 'string my-string ")`("))
-                         ;; is character newline (and last character was opening parenthesis)?
-                         (if (equal my-char (coerce (list #\Newline) 'string))
-                           ;; if yes, don't output anything.
-                           nil
-                           ;; otherwise output the character.
-                           (setf my-string (concatenate 'string my-string my-char))))))))))
+                   ;; if yes, don't output anything.
+                   ((and (equal my-char " ") (or (equal (get-last-character-string my-string) " ") (equal (get-last-character-string my-string) "(")))
+                    nil)
+                   ;; is character comma?
+                   ;; if yes, output space.
+                   ((equal my-char ",")
+                    (setf my-string (concatenate 'string my-string " ")))
+                   ;; is character newline and last character was not opening parenthesis?
+                   ;; if yes, output ")`("
+                   ((and (equal my-char (coerce (list #\Newline) 'string)) (not (equal (get-last-character-string my-string) "(")))
+                    (setf my-string (concatenate 'string my-string ")`(")))
+                   ;; is character newline (and last character was opening parenthesis)?
+                   ;; if yes, don't output anything.
+                   ((equal my-char (coerce (list #\Newline) 'string))
+                    nil)
+                   ;; otherwise output the character.
+                   (t (setf my-string (concatenate 'string my-string my-char)))))))
       ;;; #a is the input which starts the custom reader.
       (set-dispatch-macro-character #\# #\a #'transform-code-to-string)))
 
