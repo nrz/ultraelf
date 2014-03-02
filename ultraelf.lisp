@@ -76,3 +76,10 @@
   mov  rbp,rsp ; create the stack frame
   lea  rdi,[testmsg1] ; load effective address.
   #)
+
+(defun lea (arg1 arg2)
+  #x80)
+(defun mul (arg1)
+  #x81)
+(defun mov (arg1 arg2)
+  #x82)
