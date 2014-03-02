@@ -72,7 +72,7 @@
 
 (defparameter *example-code*
   #a
-  push rbp     ; push rbp.
+  mul  rax     ; rdx:rax = rax^2.
   mov  rbp,rsp ; create the stack frame
   lea  rdi,[testmsg1] ; load effective address.
   #)
