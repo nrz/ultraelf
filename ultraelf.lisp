@@ -23,6 +23,7 @@
       (declare (ignore sub-char numarg))
       (let*
         ((invalid-last-characters (list "`" " " "(" ")"))
+         (is-instruction-printed nil)
          (is-inside-comment nil)
          (my-string "(list `("))
         ;; loop through stream.
@@ -41,10 +42,12 @@
                    ((and (equal my-char (coerce (list #\Newline) 'string)) (not (equal (get-last-character-string my-string) "(")))
                     (progn
                       (setf my-string (concatenate 'string my-string ")`("))
+                      (setf is-instruction-printed nil) 
                       (setf is-inside-comment nil)))
                    ;; is character newline (and last character was opening parenthesis)?
                    ;; if yes, don't output anything, end comment.
                    ((equal my-char (coerce (list #\Newline) 'string))
+                    (setf is-instruction-printed nil) 
                     (setf is-inside-comment nil))
                    ;; are we inside a comment?
                    ;; if yes, don't output anything.
@@ -53,6 +56,12 @@
                    ;; if yes, don't output anything, begin comment.
                    ((equal my-char ";")
                     (setf is-inside-comment t))
+                   ;; is character space, and last character was _not_ space or opening parenthesis?
+                   ;; if yes, mark instruction as printed, print space.
+                   ((and (equal my-char " ") (and (not (equal (get-last-character-string my-string) " ")) (not (equal (get-last-character-string my-string) "("))))
+                    (progn
+                      (setf is-instruction-printed t)
+                      (setf my-string (concatenate 'string my-string " "))))
                    ;; is character space, and last character was space or opening parenthesis?
                    ;; if yes, don't output anything.
                    ((and (equal my-char " ") (or (equal (get-last-character-string my-string) " ") (equal (get-last-character-string my-string) "(")))
