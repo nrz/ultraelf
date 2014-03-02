@@ -47,8 +47,9 @@
                    ;; is character newline (and last character was opening parenthesis)?
                    ;; if yes, don't output anything, end comment.
                    ((equal my-char (coerce (list #\Newline) 'string))
-                    (setf is-instruction-printed nil) 
-                    (setf is-inside-comment nil))
+                    (progn
+                      (setf is-instruction-printed nil) 
+                      (setf is-inside-comment nil)))
                    ;; are we inside a comment?
                    ;; if yes, don't output anything.
                    (is-inside-comment nil)
@@ -56,20 +57,28 @@
                    ;; if yes, don't output anything, begin comment.
                    ((equal my-char ";")
                     (setf is-inside-comment t))
-                   ;; is character space, and last character was _not_ space or opening parenthesis?
-                   ;; if yes, mark instruction as printed, print space.
-                   ((and (equal my-char " ") (and (not (equal (get-last-character-string my-string) " ")) (not (equal (get-last-character-string my-string) "("))))
-                    (progn
-                      (setf is-instruction-printed t)
-                      (setf my-string (concatenate 'string my-string " "))))
-                   ;; is character space, and last character was space or opening parenthesis?
-                   ;; if yes, don't output anything.
-                   ((and (equal my-char " ") (or (equal (get-last-character-string my-string) " ") (equal (get-last-character-string my-string) "(")))
-                    nil)
+                   ;; is character space?
+                   ((equal my-char " ")
+                    (cond
+                      ;; is character space, and instruction is printed, and last character was _not_ space or opening parenthesis?
+                      ;; if yes, output " and space.
+                      ((and is-instruction-printed (not (equal (get-last-character-string my-string) " ")) (not (equal (get-last-character-string my-string) "(")))
+                       (setf my-string (concatenate 'string my-string "\" ")))
+                      ;; is character space, and instruction is not printed, and last character was _not_ space or opening parenthesis?
+                      ;; if yes, mark instruction as printed, output space.
+                      ((and (not (equal (get-last-character-string my-string) " ")) (not (equal (get-last-character-string my-string) "(")))
+                       (progn
+                         (setf is-instruction-printed t)
+                         (setf my-string (concatenate 'string my-string " "))))
+                      (t nil)))
                    ;; is character comma?
-                   ;; if yes, output space.
+                   ;; if yes, output `" "`.
                    ((equal my-char ",")
-                    (setf my-string (concatenate 'string my-string " ")))
+                    (setf my-string (concatenate 'string my-string "\" \"")))
+                   ;; is instruction printed and this is the 1st character of 1st argument?
+                   ;; if yes, output " and current character.
+                   ((and is-instruction-printed (equal (get-last-character-string my-string) " "))
+                    (setf my-string (concatenate 'string my-string "\"" my-char))) 
                    ;; otherwise output the character.
                    (t (setf my-string (concatenate 'string my-string my-char)))))))
       ;;; #a is the input which starts the custom reader.
