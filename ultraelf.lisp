@@ -88,6 +88,11 @@
   "This function converts a string produced by transform-code-to-string into a syntax tree."
   (read-from-string my-string))
 
+(defun string-to-function (my-string)
+  "This fnuction converts a string to a function.
+   http://stackoverflow.com/questions/2940267/call-function-based-on-a-string/2940347#2940347"
+  (symbol-function (find-symbol (string-upcase my-string))))
+
 (defun lea (arg1 arg2)
   #x80)
 (defun mul (arg1)
