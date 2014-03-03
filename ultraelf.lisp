@@ -88,6 +88,13 @@
   "This function converts a string produced by transform-code-to-string into a syntax tree."
   (read-from-string my-string))
 
+(defun lea (arg1 arg2)
+  #x80)
+(defun mul (arg1)
+  #x81)
+(defun mov (arg1 arg2)
+  #x82)
+
 (defparameter *example-code*
   #a
   mul  rax     ; rdx:rax = rax^2.
@@ -97,9 +104,3 @@
    )
   #)
 
-(defun lea (arg1 arg2)
-  #x80)
-(defun mul (arg1)
-  #x81)
-(defun mov (arg1 arg2)
-  #x82)
