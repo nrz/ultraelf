@@ -140,3 +140,8 @@
   push arg2
   pop arg1
   #)
+
+(defparameter *alt-mov-reg64-reg64-lea*
+  #a
+  lea arg1,[arg2]
+  #)
