@@ -22,11 +22,10 @@
        Partially based on: http://weitz.de/macros.lisp"
       (declare (ignore sub-char numarg))
       (let*
-        ((invalid-last-characters (list "`" " " "(" ")"))
-         (is-first-character-printed nil)
-         (is-instruction-printed nil)
-         (is-inside-comment nil)
-         (my-string "(list `("))
+        ((invalid-last-characters (list "'" " " "(" ")"))
+         (is-there-code-on-this-line nil)
+         (current-phase "beginning-of-line")
+         (my-string "(list "))
         ;; loop through stream.
         (loop for my-char = (coerce (list (read-char stream t nil t)) 'string)
               do (cond
@@ -38,60 +37,78 @@
                                                         (get-string-without-invalid-last-character
                                                           my-string invalid-last-characters)
                                                         invalid-last-characters) "))")))
-                   ;; is character newline and last character was not opening parenthesis?
-                   ;; if yes, output ")`(", end comment.
-                   ((and (equal my-char (coerce (list #\Newline) 'string)) (not (equal (get-last-character-string my-string) "(")))
-                    (progn
-                      (setf my-string (concatenate 'string my-string ")`("))
-                      (setf is-first-character-printed nil)
-                      (setf is-instruction-printed nil) 
-                      (setf is-inside-comment nil)))
-                   ;; is character newline (and last character was opening parenthesis)?
-                   ;; if yes, don't output anything, end comment.
+                   ;; is character newline?
                    ((equal my-char (coerce (list #\Newline) 'string))
                     (progn
-                      (setf is-first-character-printed nil)
-                      (setf is-instruction-printed nil) 
-                      (setf is-inside-comment nil)))
+                      (cond
+                        ;; is there _no_ code on this line?
+                        ;; if true, do not print anything.
+                        ((not is-there-code-on-this-line)
+                         (setf current-phase "beginning-of-line"))
+                        ;; are we inside instruction or inside a parameter?
+                        ;; if true, print " )
+                        ((or (equal current-phase "inside-instruction") (equal current-phase "inside-parameters"))
+
+                         (progn
+                           (setf current-phase "beginning-of-line")
+                           (setf is-there-code-on-this-line nil)
+                           (setf my-string (concatenate 'string my-string "\")"))))
+                        ;; otherwise print )
+                        (t (progn
+                             (setf current-phase "beginning-of-line")
+                             (setf is-there-code-on-this-line nil)
+                             (setf my-string (concatenate 'string my-string ")")))))))
                    ;; are we inside a comment?
                    ;; if yes, don't output anything.
-                   (is-inside-comment nil)
+                   ((equal current-phase "inside-comment")
+                    nil)
+                   ;; are we in the beginning of the line?
+                   ((equal current-phase "beginning-of-line")
+                    (cond
+                      ;; is this a space in the beginning of the line?
+                      ;; if yes, do not output anything.
+                      ((equal my-char " ")
+                       nil)
+                      ;; is this the first character of instruction and not ( or ) ?
+                      ;; if yes, mark there is code on this line, mark first character as printed, output " and current character.
+                      ((and
+                         (not (equal my-char "("))
+                         (not (equal my-char ")")))
+                       (progn
+                         (setf current-phase "inside-instruction")
+                         (setf is-there-code-on-this-line t)
+                         (setf my-string (concatenate 'string my-string "'(\"" my-char))))
+                      (t nil)))
                    ;; is character ; ?
                    ;; if yes, don't output anything, begin comment.
                    ((equal my-char ";")
-                    (setf is-inside-comment t))
+                    (setf current-phase "inside-comment"))
                    ;; is character space?
-                   ((equal my-char " ")
+                   ((or (equal my-char " ") (equal my-char ","))
                     (cond
-                      ;; is character space, and instruction is printed, and last character was _not_ space or opening parenthesis?
+                      ;; is character space or comma, and last character was _not_ space, comma or opening parenthesis?
                       ;; if yes, output " and space.
-                      ((and is-instruction-printed (not (equal (get-last-character-string my-string) " ")) (not (equal (get-last-character-string my-string) "(")))
-                       (setf my-string (concatenate 'string my-string "\" ")))
-                      ;; is character space, and instruction is not printed, and last character was _not_ space or opening parenthesis?
-                      ;; if yes, mark instruction as printed, output " and space.
-                      ((and (not (equal (get-last-character-string my-string) " ")) (not (equal (get-last-character-string my-string) "(")))
+                      ((and
+                         (not (equal (get-last-character-string my-string) " "))
+                         (not (equal (get-last-character-string my-string) ","))
+                         (not (equal (get-last-character-string my-string) "(")))
                        (progn
-                         (setf is-instruction-printed t)
+                         (setf current-phase "in-space")
                          (setf my-string (concatenate 'string my-string "\" "))))
                       (t nil)))
-                   ;; is this the first character and not ( or ) ?
-                   ;; if yes, mark first character as printed, output " and current character.
-                   ((and (not is-first-character-printed) (not (equal my-char "(")) (not (equal my-char ")")))
-                    (progn
-                      (setf is-first-character-printed t)
-                      (setf my-string (concatenate 'string my-string "\"" my-char))))
-                   ;; is character comma?
-                   ;; if yes, output `" "`.
-                   ((equal my-char ",")
-                    (setf my-string (concatenate 'string my-string "\" \"")))
-                   ;; is instruction printed and this is the 1st character of 1st parameter?
+                   ;; is instruction printed and this is the 1st character of a parameter?
                    ;; if yes, output " and current character.
-                   ((and is-instruction-printed (equal (get-last-character-string my-string) " "))
-                    (setf my-string (concatenate 'string my-string "\"" my-char)))
+                   ((and
+                      (not (equal current-phase "inside-instruction"))
+                      (or (equal (get-last-character-string my-string) " ")
+                          (equal (get-last-character-string my-string) ",")))
+                    (progn
+                      (setf current-phase "inside-parameters")
+                      (setf my-string (concatenate 'string my-string "\"" my-char))))
                    ;; otherwise output the character.
-                   (t (setf my-string (concatenate 'string my-string my-char)))))))
-      ;;; #a is the input which starts the custom reader.
-      (set-dispatch-macro-character #\# #\a #'transform-code-to-string)))
+                   (t (setf my-string (concatenate 'string my-string my-char))))))))
+    ;;; #a is the input which starts the custom reader.
+    (set-dispatch-macro-character #\# #\a #'transform-code-to-string))
 
 (defun create-syntax-tree (my-string)
   "This function converts a string produced by transform-code-to-string into a syntax tree."
