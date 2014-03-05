@@ -23,6 +23,7 @@
       (declare (ignore sub-char numarg))
       (let*
         ((invalid-last-characters (list "`" " " "(" ")"))
+         (is-first-character-printed nil)
          (is-instruction-printed nil)
          (is-inside-comment nil)
          (my-string "(list `("))
@@ -42,12 +43,14 @@
                    ((and (equal my-char (coerce (list #\Newline) 'string)) (not (equal (get-last-character-string my-string) "(")))
                     (progn
                       (setf my-string (concatenate 'string my-string ")`("))
+                      (setf is-first-character-printed nil)
                       (setf is-instruction-printed nil) 
                       (setf is-inside-comment nil)))
                    ;; is character newline (and last character was opening parenthesis)?
                    ;; if yes, don't output anything, end comment.
                    ((equal my-char (coerce (list #\Newline) 'string))
                     (progn
+                      (setf is-first-character-printed nil)
                       (setf is-instruction-printed nil) 
                       (setf is-inside-comment nil)))
                    ;; are we inside a comment?
@@ -65,20 +68,26 @@
                       ((and is-instruction-printed (not (equal (get-last-character-string my-string) " ")) (not (equal (get-last-character-string my-string) "(")))
                        (setf my-string (concatenate 'string my-string "\" ")))
                       ;; is character space, and instruction is not printed, and last character was _not_ space or opening parenthesis?
-                      ;; if yes, mark instruction as printed, output space.
+                      ;; if yes, mark instruction as printed, output " and space.
                       ((and (not (equal (get-last-character-string my-string) " ")) (not (equal (get-last-character-string my-string) "(")))
                        (progn
                          (setf is-instruction-printed t)
-                         (setf my-string (concatenate 'string my-string " "))))
+                         (setf my-string (concatenate 'string my-string "\" "))))
                       (t nil)))
+                   ;; is this the first character and not ( or ) ?
+                   ;; if yes, mark first character as printed, output " and current character.
+                   ((and (not is-first-character-printed) (not (equal my-char "(")) (not (equal my-char ")")))
+                    (progn
+                      (setf is-first-character-printed t)
+                      (setf my-string (concatenate 'string my-string "\"" my-char))))
                    ;; is character comma?
                    ;; if yes, output `" "`.
                    ((equal my-char ",")
                     (setf my-string (concatenate 'string my-string "\" \"")))
-                   ;; is instruction printed and this is the 1st character of 1st argument?
+                   ;; is instruction printed and this is the 1st character of 1st parameter?
                    ;; if yes, output " and current character.
                    ((and is-instruction-printed (equal (get-last-character-string my-string) " "))
-                    (setf my-string (concatenate 'string my-string "\"" my-char))) 
+                    (setf my-string (concatenate 'string my-string "\"" my-char)))
                    ;; otherwise output the character.
                    (t (setf my-string (concatenate 'string my-string my-char)))))))
       ;;; #a is the input which starts the custom reader.
