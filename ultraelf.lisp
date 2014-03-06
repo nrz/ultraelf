@@ -214,3 +214,51 @@
   #a
   lea   arg1,[arg2]
   #)
+
+(defparameter *alt-shl-reg1-add*
+  #a
+  add   arg1,arg1
+  #)
+
+(defparameter *alt-add-reg1-reg1-shl*
+  #a
+  shl   arg1,1
+  #)
+
+(defparameter *alt-xchg-reg64-reg64-push-pop-1*
+  #a
+  push  arg1
+  push  arg2
+  pop   arg1
+  pop   arg2
+  #)
+
+(defparameter *alt-xchg-reg64-reg64-push-pop-2*
+  #a
+  push  arg2
+  push  arg1
+  pop   arg2
+  pop   arg1
+  #)
+
+(defparameter *alt-zero-reg-xor*
+  #a
+  xor   arg1,arg1
+  #)
+
+(defparameter *alt-zero-reg-sub*
+  #a
+  sub   arg1,arg1
+  #)
+
+(defparameter *alt-add-reg-reg-adc*
+  #a
+  clc
+  adc   arg1,arg2
+  #)
+
+(defparameter *alt-sub-reg-reg-sbb*
+  #a
+  clc
+  sbb   arg1,arg2
+  #)
