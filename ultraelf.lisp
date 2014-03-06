@@ -119,12 +119,44 @@
    http://stackoverflow.com/questions/2940267/call-function-based-on-a-string/2940347#2940347"
   (symbol-function (find-symbol (string-upcase my-string))))
 
-(defun lea (arg1 arg2)
-  #x80)
-(defun mul (arg1)
-  #x81)
-(defun mov (arg1 arg2)
-  #x82)
+(defun in (arg1 arg2)
+  (cond
+    ((and (equalp arg1 "al") (equalp arg2 "dx"))
+     #xec)
+    ((and (equalp arg1 "ax") (equalp arg2 "dx"))
+     #x66 #xed)
+    ((and (equalp arg1 "eax") (equalp arg2 "dx"))
+     #xed)
+    (t nil)))
+
+(defun out (arg1 arg2)
+  (cond
+    ((and (equalp arg1 "dx") (equalp arg2 "al"))
+     #xee)
+    ((and (equalp arg1 "dx") (equalp arg2 "ax"))
+     #x66 #xef)
+    ((and (equalp arg1 "dx") (equalp arg2 "eax"))
+     #xef)
+    (t nil)))
+
+(defun nop ()
+  #x90)
+(defun hlt ()
+  #xf4)
+(defun cmc ()
+  #xf5)
+(defun clc ()
+  #xf8)
+(defun stc ()
+  #xf9)
+(defun cli ()
+  #xfa)
+(defun sti ()
+  #xfb)
+(defun cld ()
+  #xfc)
+(defun std ()
+  #xfd)
 
 (defparameter *example-code*
   #a
