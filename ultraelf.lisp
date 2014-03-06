@@ -114,6 +114,12 @@
   "This function converts a string produced by transform-code-to-string into a syntax tree."
   (read-from-string my-string))
 
+(defun assemble (syntax-tree)
+  (mapcar #'funcall (mapcar #'(lambda (x) (string-to-function (first x))) (eval syntax-tree))))
+
+(defun assemble-and-print-hex (syntax-tree)
+  (print-hex-list (mapcar #'funcall (mapcar #'(lambda (x) (string-to-function (first x))) (eval syntax-tree)))))
+
 (defun print-hex (my-number)
   (format nil "~x" my-number))
 
