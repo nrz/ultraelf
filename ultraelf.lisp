@@ -198,6 +198,12 @@
    )
   #)
 
+(defparameter *example-code-cli-sti*
+  #a
+  cli
+  sti
+  #)
+
 (defparameter *alt-mov-reg64-reg64-push-pop*
   #a
   push arg2
