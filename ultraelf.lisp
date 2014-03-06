@@ -191,10 +191,10 @@
 
 (defparameter *example-code*
   #a
-  mul  rax     ; rdx:rax = rax^2.
+  mul   rax           ; rdx:rax = rax^2.
   (
-   mov  rbp,rsp ; create the stack frame
-   lea  rdi,[testmsg1] ; load effective address.
+   mov   rbp,rsp        ; create the stack frame
+   lea   rdi,[testmsg1] ; load effective address.
    )
   #)
 
