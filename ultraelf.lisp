@@ -262,3 +262,16 @@
   clc
   sbb   arg1,arg2
   #)
+
+(defparameter *emit-function-hash-table* (make-hash-table :test 'equalp))
+(setf (gethash "hlt" *emit-function-hash-table*) #'hlt)
+(setf (gethash "in" *emit-function-hash-table*) #'in)
+(setf (gethash "cld" *emit-function-hash-table*) #'cld)
+(setf (gethash "cli" *emit-function-hash-table*) #'cli)
+(setf (gethash "clc" *emit-function-hash-table*) #'clc)
+(setf (gethash "cmc" *emit-function-hash-table*) #'cmc)
+(setf (gethash "nop" *emit-function-hash-table*) #'nop)
+(setf (gethash "out" *emit-function-hash-table*) #'out)
+(setf (gethash "stc" *emit-function-hash-table*) #'stc)
+(setf (gethash "std" *emit-function-hash-table*) #'std)
+(setf (gethash "sti" *emit-function-hash-table*) #'sti)
