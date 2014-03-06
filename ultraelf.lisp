@@ -206,11 +206,11 @@
 
 (defparameter *alt-mov-reg64-reg64-push-pop*
   #a
-  push arg2
-  pop arg1
+  push  arg2
+  pop   arg1
   #)
 
 (defparameter *alt-mov-reg64-reg64-lea*
   #a
-  lea arg1,[arg2]
+  lea   arg1,[arg2]
   #)
