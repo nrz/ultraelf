@@ -461,6 +461,7 @@
 ;;; instructions in alphabetical order.
 (setf (gethash "clc"   *emit-function-hash-table-x64*) (list #'clc-x86))
 (setf (gethash "cld"   *emit-function-hash-table-x64*) (list #'cld-x86))
+(setf (gethash "cli"   *emit-function-hash-table-x64*) (list #'cli-x86))
 (setf (gethash "cmc"   *emit-function-hash-table-x64*) (list #'cmc-x86))
 (setf (gethash "cmpsb" *emit-function-hash-table-x64*) (list #'cmpsb-x86))
 (setf (gethash "cmpsd" *emit-function-hash-table-x64*) (list #'cmpsd-x32-x64))
