@@ -246,11 +246,13 @@
   #)
 
 (defparameter *alt-zero-reg-xor*
+  ;; modifies flags.
   #a
   xor   arg1,arg1
   #)
 
 (defparameter *alt-zero-reg-sub*
+  ;; modifies flags.
   #a
   sub   arg1,arg1
   #)
