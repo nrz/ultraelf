@@ -235,17 +235,33 @@
   "This function converts a string produced by transform-code-to-string into a syntax tree."
   (read-from-string my-string))
 
-(defun assemble (syntax-tree)
+(defun emit-binary-code (syntax-tree my-hash-table)
   "This function converts syntax tree to a list of binary code bytes."
   (mapcar #'(lambda (x)
               (funcall
                 (first ; currently uses only 1st possible encoding.
-                  (gethash (first x) *emit-function-hash-table-x64*))))
+                  (gethash (first x) my-hash-table))))
           (eval syntax-tree)))
 
-(defun assemble-and-print-hex (syntax-tree)
+(defun emit-binary-code-and-print-hex (syntax-tree my-hash-table)
   "This function converts syntax tree to a string of hexadecimal bytes."
-  (print-hex (assemble syntax-tree)))
+  (print-hex (emit-binary-code syntax-tree my-hash-table)))
+
+(defun assemble (code my-hash-table)
+  "This function assembles code."
+  (emit-binary-code (create-syntax-tree code) my-hash-table))
+
+(defun assemble-and-print-hex (code my-hash-table)
+  "This function assembles code and prints in a hexadecimal string."
+  (print-hex (assemble code my-hash-table)))
+
+(defun assemble-x64 (code)
+  "This function assembles x86-64 (x64) code."
+  (assemble code *emit-function-hash-table-x64*))
+
+(defun assemble-x64-and-print-hex (code)
+  "This function assembles x86-64 (x64) code and prints in a hexadecimal string."
+  (print-hex (assemble code *emit-function-hash-table-x64*)))
 
 (defun print-hex (my-number)
   (format nil "~x" my-number))
