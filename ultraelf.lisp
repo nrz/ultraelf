@@ -131,16 +131,6 @@
    http://stackoverflow.com/questions/2940267/call-function-based-on-a-string/2940347#2940347"
   (symbol-function (find-symbol (string-upcase my-string))))
 
-(defun out (arg1 arg2)
-  (cond
-    ((and (equalp arg1 "dx") (equalp arg2 "al"))
-     #xee)
-    ((and (equalp arg1 "dx") (equalp arg2 "ax"))
-     #x66 #xef)
-    ((and (equalp arg1 "dx") (equalp arg2 "eax"))
-     #xef)
-    (t nil)))
-
 (defparameter *old-low-reg8-list*  (list  "al"  "cl"  "dl"  "bl"))
 (defparameter *old-high-reg8-list* (list  "ah"  "ch"  "dh"  "bh"))
 (defparameter *new-low-reg8-list*  (list "spl" "bpl" "sil" "dil" "r8l" "r9l" "r10l" "r11l" "r12l" "r13l" "r14l" "r15l"))
@@ -262,6 +252,16 @@
      #x66 #xed)
     ((and (equalp arg1 "eax") (equalp arg2 "dx"))
      #xed)
+    (t nil)))
+
+(defun out-x32-x64 (arg1 arg2)
+  (cond
+    ((and (equalp arg1 "dx") (equalp arg2 "al"))
+     #xee)
+    ((and (equalp arg1 "dx") (equalp arg2 "ax"))
+     #x66 #xef)
+    ((and (equalp arg1 "dx") (equalp arg2 "eax"))
+     #xef)
     (t nil)))
 
 (defun nop-x86 ()
