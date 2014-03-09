@@ -110,27 +110,6 @@
     ;;; #a is the input which starts the custom reader.
     (set-dispatch-macro-character #\# #\a #'transform-code-to-string))
 
-(defun create-syntax-tree (my-string)
-  "This function converts a string produced by transform-code-to-string into a syntax tree."
-  (read-from-string my-string))
-
-(defun assemble (syntax-tree)
-  (mapcar #'funcall (mapcar #'(lambda (x) (string-to-function (first x))) (eval syntax-tree))))
-
-(defun assemble-and-print-hex (syntax-tree)
-  (print-hex-list (mapcar #'funcall (mapcar #'(lambda (x) (string-to-function (first x))) (eval syntax-tree)))))
-
-(defun print-hex (my-number)
-  (format nil "~x" my-number))
-
-(defun print-hex-list (my-list)
-  (mapcar #'(lambda (x) (print-hex x)) my-list))
-
-(defun string-to-function (my-string)
-  "This fnuction converts a string to a function.
-   http://stackoverflow.com/questions/2940267/call-function-based-on-a-string/2940347#2940347"
-  (symbol-function (find-symbol (string-upcase my-string))))
-
 (defparameter *old-low-reg8-list*  (list  "al"  "cl"  "dl"  "bl"))
 (defparameter *old-high-reg8-list* (list  "ah"  "ch"  "dh"  "bh"))
 (defparameter *new-low-reg8-list*  (list "spl" "bpl" "sil" "dil" "r8l" "r9l" "r10l" "r11l" "r12l" "r13l" "r14l" "r15l"))
@@ -231,6 +210,27 @@
   clc
   sbb   arg1,arg2
   #)
+
+(defun create-syntax-tree (my-string)
+  "This function converts a string produced by transform-code-to-string into a syntax tree."
+  (read-from-string my-string))
+
+(defun assemble (syntax-tree)
+  (mapcar #'funcall (mapcar #'(lambda (x) (gethash (first x) *emit-function-hash-table-x64*)) (eval syntax-tree))))
+
+(defun assemble-and-print-hex (syntax-tree)
+  (print-hex-list (mapcar #'funcall (mapcar #'(lambda (x) (string-to-function (first x))) (eval syntax-tree)))))
+
+(defun print-hex (my-number)
+  (format nil "~x" my-number))
+
+(defun print-hex-list (my-list)
+  (mapcar #'(lambda (x) (print-hex x)) my-list))
+
+(defun string-to-function (my-string)
+  "This fnuction converts a string to a function.
+   http://stackoverflow.com/questions/2940267/call-function-based-on-a-string/2940347#2940347"
+  (symbol-function (find-symbol (string-upcase my-string))))
 
 (defun in-x32-x64 (arg1 arg2)
   (cond
