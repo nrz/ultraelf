@@ -258,12 +258,14 @@
   #)
 
 (defparameter *alt-add-reg-reg-adc*
+  ;; clean, modifies flags identically.
   #a
   clc
   adc   arg1,arg2
   #)
 
 (defparameter *alt-sub-reg-reg-sbb*
+  ;; clean, modifies flags identically.
   #a
   clc
   sbb   arg1,arg2
