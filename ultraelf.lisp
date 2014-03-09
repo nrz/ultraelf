@@ -131,16 +131,6 @@
    http://stackoverflow.com/questions/2940267/call-function-based-on-a-string/2940347#2940347"
   (symbol-function (find-symbol (string-upcase my-string))))
 
-(defun in (arg1 arg2)
-  (cond
-    ((and (equalp arg1 "al") (equalp arg2 "dx"))
-     #xec)
-    ((and (equalp arg1 "ax") (equalp arg2 "dx"))
-     #x66 #xed)
-    ((and (equalp arg1 "eax") (equalp arg2 "dx"))
-     #xed)
-    (t nil)))
-
 (defun out (arg1 arg2)
   (cond
     ((and (equalp arg1 "dx") (equalp arg2 "al"))
@@ -264,6 +254,15 @@
 (setf (gethash "stc" *emit-function-hash-table*) #'stc)
 (setf (gethash "std" *emit-function-hash-table*) #'std)
 (setf (gethash "sti" *emit-function-hash-table*) #'sti)
+(defun in-x32-x64 (arg1 arg2)
+  (cond
+    ((and (equalp arg1 "al") (equalp arg2 "dx"))
+     #xec)
+    ((and (equalp arg1 "ax") (equalp arg2 "dx"))
+     #x66 #xed)
+    ((and (equalp arg1 "eax") (equalp arg2 "dx"))
+     #xed)
+    (t nil)))
 
 (defun nop-x86 ()
   #x90)
