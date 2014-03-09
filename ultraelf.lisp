@@ -236,7 +236,12 @@
   (read-from-string my-string))
 
 (defun assemble (syntax-tree)
-  (mapcar #'funcall (mapcar #'(lambda (x) (gethash (first x) *emit-function-hash-table-x64*)) (eval syntax-tree))))
+  "This function converts syntax tree to a list of binary code bytes."
+  (mapcar #'(lambda (x)
+              (funcall
+                (first ; currently uses only 1st possible encoding.
+                  (gethash (first x) *emit-function-hash-table-x64*))))
+          (eval syntax-tree)))
 
 (defun assemble-and-print-hex (syntax-tree)
   (print-hex-list (mapcar #'funcall (mapcar #'(lambda (x) (string-to-function (first x))) (eval syntax-tree)))))
