@@ -205,12 +205,14 @@
   #)
 
 (defparameter *alt-mov-reg64-reg64-push-pop*
+  ;; clean, does not modify flags.
   #a
   push  arg2
   pop   arg1
   #)
 
 (defparameter *alt-mov-reg64-reg64-lea*
+  ;; clean, does not modify flags.
   #a
   lea   arg1,[arg2]
   #)
@@ -226,6 +228,7 @@
   #)
 
 (defparameter *alt-xchg-reg64-reg64-push-pop-1*
+  ;; clean, does not modify flags.
   #a
   push  arg1
   push  arg2
@@ -234,6 +237,7 @@
   #)
 
 (defparameter *alt-xchg-reg64-reg64-push-pop-2*
+  ;; clean, does not modify flags.
   #a
   push  arg2
   push  arg1
