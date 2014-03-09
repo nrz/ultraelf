@@ -244,7 +244,8 @@
           (eval syntax-tree)))
 
 (defun assemble-and-print-hex (syntax-tree)
-  (print-hex-list (mapcar #'funcall (mapcar #'(lambda (x) (string-to-function (first x))) (eval syntax-tree)))))
+  "This function converts syntax tree to a string of hexadecimal bytes."
+  (print-hex (assemble syntax-tree)))
 
 (defun print-hex (my-number)
   (format nil "~x" my-number))
