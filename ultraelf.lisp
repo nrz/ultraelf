@@ -157,14 +157,11 @@
   lea   arg1,[arg2]
   #)
 
-(defparameter *alt-shl-reg1-add*
+(defparameter *alt-add-reg64-reg64-lea*
+  ;; clean, does not modify flags.
+  ;; overflow?
   #a
-  add   arg1,arg1
-  #)
-
-(defparameter *alt-add-reg1-reg1-shl*
-  #a
-  shl   arg1,1
+  lea   arg1,[arg1+arg1]
   #)
 
 (defparameter *alt-xchg-reg64-reg64-push-pop-1*
@@ -209,6 +206,29 @@
   #a
   clc
   sbb   arg1,arg2
+  #)
+
+(defparameter *alt-cmp-reg64-any-push-sub-pop*
+  ;; clean, modifies flags identically.
+  #a
+  push  arg1
+  sub   arg1,arg2
+  pop   arg1
+  #)
+
+(defparameter *alt-or-and-reg-reg-test*
+  #a
+  test  arg1,arg1
+  #)
+
+(defparameter *alt-test-reg-reg-or*
+  #a
+  or    arg1,arg1
+  #)
+
+(defparameter *alt-test-reg-reg-and*
+  #a
+  and   arg1,arg1
   #)
 
 (defun create-syntax-tree (my-string)
