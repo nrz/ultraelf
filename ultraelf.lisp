@@ -47,7 +47,8 @@
                          (setf current-phase "beginning-of-line"))
                         ;; are we inside instruction or inside a parameter?
                         ;; if true, print " )
-                        ((or (equal current-phase "inside-instruction") (equal current-phase "inside-parameters"))
+                        ((or (equal current-phase "inside-instruction")
+                             (equal current-phase "inside-parameters"))
 
                          (progn
                            (setf current-phase "beginning-of-line")
@@ -100,7 +101,8 @@
                       ;; otherwise print the character.
                       (t (setf my-string (concatenate 'string my-string my-char)))))
                    ;; is character space or comma?
-                   ((or (equal my-char " ") (equal my-char ","))
+                   ((or (equal my-char " ")
+                        (equal my-char ","))
                     (cond
                       ;; is character space or comma, and last character was _not_ space, comma or opening parenthesis?
                       ;; if yes, output " and space.
