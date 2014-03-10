@@ -583,13 +583,18 @@
   "This function converts a string produced by transform-code-to-string into a syntax tree."
   (read-from-string my-string))
 
-(defun emit-binary-code (syntax-tree my-hash-table)
-  "This function converts syntax tree to a list of binary code bytes."
-  (mapcan #'(lambda (x)
+(defun emit-binary-code-list (syntax-tree my-hash-table)
+  "This function converts syntax tree to a list of lists of binary code bytes,
+   the bytes of each instruction are on their list."
+  (mapcar #'(lambda (x)
               (apply
                 (first (gethash (first x) my-hash-table))
                 (rest x)))
           (eval syntax-tree)))
+
+(defun emit-binary-code (syntax-tree my-hash-table)
+  "This function produces a single list of binary code bytes."
+  (apply #'append (emit-binary-code-list syntax-tree my-hash-table)))
 
 (defun emit-binary-code-and-print-hex (syntax-tree my-hash-table)
   "This function converts syntax tree to a string of hexadecimal bytes."
