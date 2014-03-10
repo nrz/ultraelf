@@ -253,7 +253,7 @@
      (list #xef))
     (t nil)))
 
-(defun rep-repz-x32-x64 (&rest arg1)
+(defun rep-repz-x32-x64 (&optional arg1 &rest args)
   (cond
     ((equalp arg1 "cmpsw")
      (list #x66 #xf3 #xa7))
@@ -269,7 +269,9 @@
      (list #x66 #xf3 #xaf))
     ((equalp arg1 "stosw")
      (list #x66 #xf3 #xab))
-    (t (append (list #xf3) (funcall (string-to-function (concatenate 'string arg1 "-x86")))))))
+    ((eq arg1 nil)
+     (list #xf3))
+    (t (append (list #xf3) (funcall (first (gethash arg1 *emit-function-hash-table-x64*)))))))
 
 (defun cs-x86 (&rest args)
   (list #x2e))
