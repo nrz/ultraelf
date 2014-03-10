@@ -42,11 +42,11 @@
                     (progn
                       (cond
                         ;; is there _no_ code on this line?
-                        ;; if true, do not print anything.
+                        ;; if true, do not output anything.
                         ((not is-there-code-on-this-line)
                          (setf current-phase "beginning-of-line"))
                         ;; are we inside instruction or inside a parameter?
-                        ;; if true, print " )
+                        ;; if true, output ")
                         ((or (equal current-phase "inside-instruction")
                              (equal current-phase "inside-parameters"))
 
@@ -54,7 +54,7 @@
                            (setf current-phase "beginning-of-line")
                            (setf is-there-code-on-this-line nil)
                            (setf my-string (concatenate 'string my-string "\")"))))
-                        ;; otherwise print )
+                        ;; otherwise output )
                         (t (progn
                              (setf current-phase "beginning-of-line")
                              (setf is-there-code-on-this-line nil)
@@ -93,12 +93,12 @@
                       ((equal my-char " ")
                        nil)
                       ;; is this closing square bracket?
-                      ;; if yes, print ]"
+                      ;; if yes, output ]
                       ((equal my-char "]")
                        (progn
                          (setf current-phase "closing-square-bracket")
                          (setf my-string (concatenate 'string my-string my-char))))
-                      ;; otherwise print the character.
+                      ;; otherwise output the character.
                       (t (setf my-string (concatenate 'string my-string my-char)))))
                    ;; is character space or comma?
                    ((or (equal my-char " ")
