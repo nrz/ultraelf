@@ -380,11 +380,43 @@
   cld
   cli
   cmc
+  cmpsb
+  cmpsd
+  cmpsq
+  cmpsw
   hlt
+  in    al,dx
+  in    ax,dx
+  in    eax,dx
+  insb
+  insd
+  insw
+  lodsb
+  lodsd
+  lodsq
+  lodsw
   nop
+  out   dx,al
+  out   dx,ax
+  out   dx,eax
+  outsb
+  outsd
+  outsw
+  scasb
+  scasd
+  scasq
+  scasw
   stc
   std
   sti
+  stosb
+  stosd
+  stosq
+  stosw
+  movsb
+  movsd
+  movsq
+  movsw
   #)
 
 (defparameter *example-code-x64*
