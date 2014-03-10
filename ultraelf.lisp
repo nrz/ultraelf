@@ -482,6 +482,32 @@
   rep   stosd
   rep   stosq
   rep   stosw
+  repnz cmpsb
+  repnz cmpsd
+  repnz cmpsq
+  repnz cmpsw
+  repnz insb
+  repnz insd
+  repnz insw
+  repnz lodsb
+  repnz lodsd
+  repnz lodsq
+  repnz lodsw
+  repnz movsb
+  repnz movsd
+  repnz movsq
+  repnz movsw
+  repnz outsb
+  repnz outsd
+  repnz outsw
+  repnz scasb
+  repnz scasd
+  repnz scasq
+  repnz scasw
+  repnz stosb
+  repnz stosd
+  repnz stosq
+  repnz stosw
   scasb
   scasd
   scasq
