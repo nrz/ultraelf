@@ -530,7 +530,7 @@
   (mapcan #'(lambda (x)
               (apply
                 (first (gethash (first x) my-hash-table))
-                (cdr x)))
+                (rest x)))
           (eval syntax-tree)))
 
 (defun emit-binary-code-and-print-hex (syntax-tree my-hash-table)
