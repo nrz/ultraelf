@@ -368,6 +368,25 @@
 (defparameter *new-reg64-list* (list  "r8"  "r9" "r10" "r11" "r12" "r13" "r14" "r15"))
 (defparameter *reg64-list* (append *old-reg64-list* *new-reg64-list*))
 
+(defparameter *test-code-x64*
+  #a
+  cs:
+  ds:
+  es:
+  fs:
+  gs:
+  ss:
+  clc
+  cld
+  cli
+  cmc
+  hlt
+  nop
+  stc
+  std
+  sti
+  #)
+
 (defparameter *example-code-x64*
   #a
   mul   rax           ; rdx:rax = rax^2.
