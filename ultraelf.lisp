@@ -495,10 +495,10 @@
 
 (defun emit-binary-code (syntax-tree my-hash-table)
   "This function converts syntax tree to a list of binary code bytes."
-  (mapcar #'(lambda (x)
-              (funcall
-                (first ; currently uses only 1st possible encoding.
-                  (gethash (first x) my-hash-table))))
+  (mapcan #'(lambda (x)
+              (apply
+                (first (gethash (first x) my-hash-table))
+                (cdr x)))
           (eval syntax-tree)))
 
 (defun emit-binary-code-and-print-hex (syntax-tree my-hash-table)
