@@ -472,6 +472,14 @@
 (setf (gethash "ss" *sreg2-hash-table-x64*) #b10)
 (setf (gethash "ds" *sreg2-hash-table-x64*) #b11)
 
+(defparameter *sreg3-hash-table-x64* (make-hash-table :test 'equalp))
+(setf (gethash "es" *sreg2-hash-table-x64*) #b000)
+(setf (gethash "cs" *sreg2-hash-table-x64*) #b001)
+(setf (gethash "ss" *sreg2-hash-table-x64*) #b010)
+(setf (gethash "ds" *sreg2-hash-table-x64*) #b011)
+(setf (gethash "fs" *sreg2-hash-table-x64*) #b100)
+(setf (gethash "gs" *sreg2-hash-table-x64*) #b101)
+
 (defparameter *old-low-reg8-list*  (list  "al"  "cl"  "dl"  "bl"))
 (defparameter *old-high-reg8-list* (list  "ah"  "ch"  "dh"  "bh"))
 (defparameter *new-low-reg8-list*  (list "spl" "bpl" "sil" "dil" "r8l" "r9l" "r10l" "r11l" "r12l" "r13l" "r14l" "r15l"))
