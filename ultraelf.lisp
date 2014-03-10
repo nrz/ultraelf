@@ -271,7 +271,7 @@
      (list #x66 #xf3 #xab))
     ((eq arg1 nil)
      (list #xf3))
-    (t (append (list #xf3) (funcall (first (gethash arg1 *emit-function-hash-table-x64*)))))))
+    (t (cons #xf3 (funcall (first (gethash arg1 *emit-function-hash-table-x64*)))))))
 
 (defun cs-x86 (&rest args)
   (list #x2e))
