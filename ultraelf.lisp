@@ -83,7 +83,23 @@
                    ;; if yes, don't output anything, begin comment.
                    ((equal my-char ";")
                     (setf current-phase "inside-comment"))
-                   ;; is character space?
+                   ;; are we inside memory address syntax? 
+                   ;; if yes, don't output anything.
+                   ((equal current-phase "inside-memory-address-syntax")
+                    (cond
+                      ;; is this a space inside memory address syntax?
+                      ;; if yes, don't output anything.
+                      ((equal my-char " ")
+                       nil)
+                      ;; is this closing square bracket?
+                      ;; if yes, print ]"
+                      ((equal my-char "]")
+                       (progn
+                         (setf current-phase "closing-square-bracket")
+                         (setf my-string (concatenate 'string my-string my-char))))
+                      ;; otherwise print the character.
+                      (t (setf my-string (concatenate 'string my-string my-char)))))
+                   ;; is character space or comma?
                    ((or (equal my-char " ") (equal my-char ","))
                     (cond
                       ;; is character space or comma, and last character was _not_ space, comma or opening parenthesis?
@@ -97,14 +113,22 @@
                          (setf my-string (concatenate 'string my-string "\" "))))
                       (t nil)))
                    ;; is instruction printed and this is the 1st character of a parameter?
-                   ;; if yes, output " and current character.
                    ((and
                       (not (equal current-phase "inside-instruction"))
                       (or (equal (get-last-character-string my-string) " ")
                           (equal (get-last-character-string my-string) ",")))
-                    (progn
-                      (setf current-phase "inside-parameters")
-                      (setf my-string (concatenate 'string my-string "\"" my-char))))
+                    (cond
+                      ;; is this memory address syntax (with square brackets)?
+                      ;; if yes, mark we're inside memory address syntax, output " and current character.
+                      ((equal my-char "[")
+                       (progn
+                         (setf current-phase "inside-memory-address-syntax")
+                         (setf my-string (concatenate 'string my-string "\"" my-char))))
+                      ;; this is not a memory address syntax.
+                      ;; mark we're inside parameters, output " and current character.
+                      (t (progn
+                           (setf current-phase "inside-parameters")
+                           (setf my-string (concatenate 'string my-string "\"" my-char))))))
                    ;; otherwise output the character.
                    (t (setf my-string (concatenate 'string my-string my-char))))))))
     ;;; #a is the input which starts the custom reader.
