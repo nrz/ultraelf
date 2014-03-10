@@ -480,7 +480,7 @@
   mul   rax           ; rdx:rax = rax^2.
   (
    mov   rbp,rsp        ; create the stack frame
-   lea   rdi,[testmsg1] ; load effective address.
+   lea   rdi,[ rbx + 4*rax + testmsg1 ] ; load effective address.
    )
   #)
 
