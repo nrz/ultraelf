@@ -407,6 +407,33 @@
   outsb
   outsd
   outsw
+  rep
+  rep   cmpsb
+  rep   cmpsd
+  rep   cmpsq
+  rep   cmpsw
+  rep   insb
+  rep   insd
+  rep   insw
+  rep   lodsb
+  rep   lodsd
+  rep   lodsq
+  rep   lodsw
+  rep   movsb
+  rep   movsd
+  rep   movsq
+  rep   movsw
+  rep   outsb
+  rep   outsd
+  rep   outsw
+  rep   scasb
+  rep   scasd
+  rep   scasq
+  rep   scasw
+  rep   stosb
+  rep   stosd
+  rep   stosq
+  rep   stosw
   scasb
   scasd
   scasq
