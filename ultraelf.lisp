@@ -530,10 +530,10 @@
 (setf (gethash "ymm7" *modrm-reg-hash-table-x64*) #b111)
 
 (defparameter *sib-scale-hash-table-x64* (make-hash-table :test 'equalp))
-(setf (gethash "1" *modrm-reg-hash-table*) #b00)
-(setf (gethash "2" *modrm-reg-hash-table*) #b01)
-(setf (gethash "4" *modrm-reg-hash-table*) #b10)
-(setf (gethash "8" *modrm-reg-hash-table*) #b11)
+(setf (gethash "1" *sib-scale-hash-table-x64*) #b00)
+(setf (gethash "2" *sib-scale-hash-table-x64*) #b01)
+(setf (gethash "4" *sib-scale-hash-table-x64*) #b10)
+(setf (gethash "8" *sib-scale-hash-table-x64*) #b11)
 
 (defparameter *sreg2-hash-table-x64* (make-hash-table :test 'equalp))
 (setf (gethash "es" *sreg2-hash-table-x64*) #b00)
