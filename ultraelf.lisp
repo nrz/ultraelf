@@ -335,6 +335,20 @@
      (list #xef))
     (t nil)))
 
+(defun pop-x64 (arg1 &optional arg2)
+  (let*
+    ((modrm (gethash arg1 *modrm-reg-hash-table-x64*)))
+    (cond
+      ((equal (gethash arg1 *reg-type-hash-table-x64*) "old-16-bit-reg")
+       (list #x66 (logior #x58 modrm)))
+      ((equal (gethash arg1 *reg-type-hash-table-x64*) "old-64-bit-reg")
+       (list (logior #x58 modrm)))
+      ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-16-bit-reg")
+       (append (list #x66) (emit-odd-rex) (list (logior #x58 modrm))))
+      ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-64-bit-reg")
+       (append (emit-odd-rex) (list (logior #x58 modrm))))
+      (t nil))))
+
 (defun push-x64 (arg1 &optional arg2)
   (let*
     ((modrm (gethash arg1 *modrm-reg-hash-table-x64*)))
@@ -459,6 +473,7 @@
 (setf (gethash "outsb"   *emit-function-hash-table-x64*) (list #'outsb-x86))
 (setf (gethash "outsd"   *emit-function-hash-table-x64*) (list #'outsd-x32-x64))
 (setf (gethash "outsw"   *emit-function-hash-table-x64*) (list #'outsw-x86))
+(setf (gethash "pop"     *emit-function-hash-table-x64*) (list #'pop-x64))
 (setf (gethash "push"    *emit-function-hash-table-x64*) (list #'push-x64))
 (setf (gethash "scasb"   *emit-function-hash-table-x64*) (list #'scasb-x86))
 (setf (gethash "scasd"   *emit-function-hash-table-x64*) (list #'scasd-x32-x64))
