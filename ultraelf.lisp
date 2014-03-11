@@ -287,6 +287,12 @@
    Can be chosen randomly or at will."
   (list #x41))
 
+(defun emit-high-even-rex (&rest args)
+  "This function emits high even REX prefix:
+   0x48, 0x4a, 0x4c or 0x4e.
+   Can be chosen randomly or at will."
+  (list #x48))
+
 (defun out-x32-x64 (arg1 arg2 &rest args)
   (cond
     ((and (equalp arg1 "dx") (equalp arg2 "al"))
