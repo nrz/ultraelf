@@ -653,7 +653,7 @@
 
 (defparameter *old-low-reg8-list*  (list  "al"  "cl"  "dl"  "bl"))
 (defparameter *old-high-reg8-list* (list  "ah"  "ch"  "dh"  "bh"))
-(defparameter *new-low-reg8-list*  (list "spl" "bpl" "sil" "dil" "r8l" "r9l" "r10l" "r11l" "r12l" "r13l" "r14l" "r15l"))
+(defparameter *new-low-reg8-list*  (list "spl" "bpl" "sil" "dil" "r8b" "r9b" "r10b" "r11b" "r12b" "r13b" "r14b" "r15b"))
 (defparameter *old-reg8-list* (append *old-low-reg8-list* *old-high-reg8-list*))
 (defparameter *low-reg8-list* (append *old-low-reg8-list* *new-low-reg8-list*))
 (defparameter *reg8-list* (append *old-low-reg8-list* *old-high-reg8-list* *new-low-reg8-list*))
