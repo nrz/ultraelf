@@ -799,6 +799,66 @@
   movsd
   movsq
   movsw
+  inc   al
+  inc   cl
+  inc   dl
+  inc   bl
+  inc   ah
+  inc   ch
+  inc   dh
+  inc   bh
+  inc   spl
+  inc   bpl
+  inc   sil
+  inc   dil
+  inc   ax
+  inc   cx
+  inc   dx
+  inc   bx
+  inc   eax
+  inc   ecx
+  inc   edx
+  inc   ebx
+  inc   esp
+  inc   ebp
+  inc   esi
+  inc   edi
+  inc   rax
+  inc   rcx
+  inc   rdx
+  inc   rbx
+  inc   r8b
+  inc   r9b
+  inc   r10b
+  inc   r11b
+  inc   r12b
+  inc   r13b
+  inc   r14b
+  inc   r15b
+  inc   r8w
+  inc   r9w
+  inc   r10w
+  inc   r11w
+  inc   r12w
+  inc   r13w
+  inc   r14w
+  inc   r15w
+  inc   r8d
+  inc   r9d
+  inc   r10d
+  inc   r11d
+  inc   r12d
+  inc   r13d
+  inc   r14d
+  inc   r15d
+  inc   r8
+  inc   r9
+  inc   r10
+  inc   r11
+  inc   r12
+  inc   r13
+  inc   r14
+  inc   r15
   #)
 
 (defparameter *example-code-x64*
