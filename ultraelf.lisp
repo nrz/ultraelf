@@ -269,6 +269,12 @@
      (list #xed))
     (t nil)))
 
+(defun emit-even-rex (&rest args)
+  "This function emits an even REX prefix:
+   0x40, 0x42, 0x44, 0x46, 0x48, 0x4a, 0x4c or 0x4e.
+   Can be chosen randomly or at will."
+  (list #x40))
+
 (defun out-x32-x64 (arg1 arg2 &rest args)
   (cond
     ((and (equalp arg1 "dx") (equalp arg2 "al"))
