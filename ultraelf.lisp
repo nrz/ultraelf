@@ -761,6 +761,70 @@
   outsb
   outsd
   outsw
+  pop   ax
+  pop   cx
+  pop   dx
+  pop   bx
+  pop   sp
+  pop   bp
+  pop   si
+  pop   di
+  pop   r8w
+  pop   r9w
+  pop   r10w
+  pop   r11w
+  pop   r12w
+  pop   r13w
+  pop   r14w
+  pop   r15w
+  pop   rax
+  pop   rcx
+  pop   rdx
+  pop   rbx
+  pop   rsp
+  pop   rbp
+  pop   rsi
+  pop   rdi
+  pop   r8
+  pop   r9
+  pop   r10
+  pop   r11
+  pop   r12
+  pop   r13
+  pop   r14
+  pop   r15
+  push  ax
+  push  cx
+  push  dx
+  push  bx
+  push  sp
+  push  bp
+  push  si
+  push  di
+  push  r8w
+  push  r9w
+  push  r10w
+  push  r11w
+  push  r12w
+  push  r13w
+  push  r14w
+  push  r15w
+  push  rax
+  push  rcx
+  push  rdx
+  push  rbx
+  push  rsp
+  push  rbp
+  push  rsi
+  push  rdi
+  push  r8
+  push  r9
+  push  r10
+  push  r11
+  push  r12
+  push  r13
+  push  r14
+  push  r15
   rep
   rep   cmpsb
   rep   cmpsd
@@ -845,6 +909,10 @@
   inc   cx
   inc   dx
   inc   bx
+  inc   sp
+  inc   bp
+  inc   si
+  inc   di
   inc   eax
   inc   ecx
   inc   edx
