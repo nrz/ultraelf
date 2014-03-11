@@ -299,6 +299,32 @@
    Can be chosen randomly or at will."
   (list #x49))
 
+(defun inc-x64 (arg1 &optional arg2 &rest args)
+  (let*
+    ((modrm (gethash arg1 *modrm-reg-hash-table-x64*)))
+    (cond
+      ((or
+         (equal (gethash arg1 *reg-type-hash-table-x64*) "old-8-bit-low-reg")
+         (equal (gethash arg1 *reg-type-hash-table-x64*) "old-8-bit-high-reg"))
+       (list #xfe (logior #xc0 modrm)))
+      ((equal (gethash arg1 *reg-type-hash-table-x64*) "old-16-bit-reg")
+       (list #x66 #xff (logior #xc0 modrm)))
+      ((equal (gethash arg1 *reg-type-hash-table-x64*) "old-32-bit-reg")
+       (list #xff (logior #xc0 modrm)))
+      ((equal (gethash arg1 *reg-type-hash-table-x64*) "old-64-bit-reg")
+       (append (emit-high-even-rex) (list #xff (logior #xc0 modrm))))
+      ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-8-bit-low-reg-l")
+       (append (emit-even-rex) (list #xfe (logior #xc0 modrm))))
+      ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-8-bit-low-reg-b")
+       (append (emit-odd-rex) (list #xfe (logior #xc0 modrm))))
+      ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-16-bit-reg")
+       (append (list #x66) (emit-low-odd-rex) (list #xff (logior #xc0 modrm))))
+      ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-32-bit-reg")
+       (append (emit-low-odd-rex) (list #xff (logior #xc0 modrm))))
+      ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-64-bit-reg")
+       (append (emit-high-odd-rex) (list #xff (logior #xc0 modrm))))
+      (t nil))))
+
 (defun out-x32-x64 (arg1 arg2 &rest args)
   (cond
     ((and (equalp arg1 "dx") (equalp arg2 "al"))
@@ -401,6 +427,7 @@
 (setf (gethash "cmpsw"   *emit-function-hash-table-x64*) (list #'cmpsw-x86))
 (setf (gethash "hlt"     *emit-function-hash-table-x64*) (list #'hlt-x86))
 (setf (gethash "in"      *emit-function-hash-table-x64*) (list #'in-x32-x64))
+(setf (gethash "inc"     *emit-function-hash-table-x64*) (list #'inc-x64))
 (setf (gethash "insb"    *emit-function-hash-table-x64*) (list #'insb-x86))
 (setf (gethash "insd"    *emit-function-hash-table-x64*) (list #'insd-x32-x64))
 (setf (gethash "insw"    *emit-function-hash-table-x64*) (list #'insw-x86))
