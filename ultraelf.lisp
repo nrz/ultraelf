@@ -275,6 +275,12 @@
    Can be chosen randomly or at will."
   (list #x40))
 
+(defun emit-odd-rex (&rest args)
+  "This function emits an odd REX prefix:
+   0x41, 0x43, 0x45, 0x47, 0x49, 0x4b, 0x4d or 0x4f.
+   Can be chosen randomly or at will."
+  (list #x41))
+
 (defun out-x32-x64 (arg1 arg2 &rest args)
   (cond
     ((and (equalp arg1 "dx") (equalp arg2 "al"))
