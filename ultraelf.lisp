@@ -3,6 +3,11 @@
 ;;;; ultraELF x86-64 assembler, disassembler and metamorphic engine.
 ;;;; ultraELF packs and reconstructs ELF executables, maintaining original functionality.
 
+(defpackage #:ultraelf
+  (:use #:cl))
+
+(in-package #:ultraelf)
+
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (progn
     (defun get-last-character-string (my-string)
