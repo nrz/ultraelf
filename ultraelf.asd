@@ -4,12 +4,12 @@
 ;;; ultraELF packs and reconstructs ELF executables, maintaining original functionality.
 ;;;
 ;;; compiling and loading:
-;;; 1. CL-USER> (load (compile-file "ultraelf.asd")
+;;; 1. CL-USER> (load (compile-file "ultraelf.asd"))
 ;;; 2. CL-USER> (compile-ultraelf)
 ;;; 3. CL-USER> (in-package :ultraelf)
 ;;;
 ;;; example usage:
-;;; 4. CL-USER> (assemble-x64-and-print-hex *test-code-x64*)
+;;; 4. ULTRAELF> (assemble-x64-and-print-hex *test-code-x64*)
 
 (in-package :cl-user)
 
