@@ -23,6 +23,7 @@
 (setf (gethash "cmpsd"   *emit-function-hash-table-x64*) (list #'cmpsd-x32-x64))
 (setf (gethash "cmpsq"   *emit-function-hash-table-x64*) (list #'cmpsq-48-x64 #'cmpsq-49-x64 #'cmpsq-4a-x64 #'cmpsq-4b-x64 #'cmpsq-4c-x64 #'cmpsq-4d-x64 #'cmpsq-4e-x64 #'cmpsq-4f-x64))
 (setf (gethash "cmpsw"   *emit-function-hash-table-x64*) (list #'cmpsw-x86))
+(setf (gethash "dec"     *emit-function-hash-table-x64*) (list #'dec-x64))
 (setf (gethash "hlt"     *emit-function-hash-table-x64*) (list #'hlt-x86))
 (setf (gethash "in"      *emit-function-hash-table-x64*) (list #'in-x32-x64))
 (setf (gethash "inc"     *emit-function-hash-table-x64*) (list #'inc-x64))
