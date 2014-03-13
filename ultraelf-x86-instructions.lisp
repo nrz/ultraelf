@@ -51,30 +51,7 @@
   (list #x4f #xa7))
 
 (defun dec-x64 (arg1 &optional arg2 &rest args)
-  (let*
-    ((modrm (gethash arg1 *modrm-reg-hash-table-x64*)))
-    (cond
-      ((or
-         (equal (gethash arg1 *reg-type-hash-table-x64*) "old-8-bit-low-reg")
-         (equal (gethash arg1 *reg-type-hash-table-x64*) "old-8-bit-high-reg"))
-       (list #xfe (logior #xc8 modrm)))
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "old-16-bit-reg")
-       (list #x66 #xff (logior #xc8 modrm)))
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "old-32-bit-reg")
-       (list #xff (logior #xc8 modrm)))
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "old-64-bit-reg")
-       (append (emit-high-even-rex) (list #xff (logior #xc8 modrm))))
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-8-bit-low-reg-l")
-       (append (emit-even-rex) (list #xfe (logior #xc8 modrm))))
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-8-bit-low-reg-b")
-       (append (emit-odd-rex) (list #xfe (logior #xc8 modrm))))
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-16-bit-reg")
-       (append (list #x66) (emit-low-odd-rex) (list #xff (logior #xc8 modrm))))
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-32-bit-reg")
-       (append (emit-low-odd-rex) (list #xff (logior #xc8 modrm))))
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-64-bit-reg")
-       (append (emit-high-odd-rex) (list #xff (logior #xc8 modrm))))
-      (t nil))))
+  (one-operand-x64 #xfe #xc8 arg1 arg2))
 
 (defun hlt-x86 (&rest args)
   (list #xf4))
@@ -90,30 +67,7 @@
     (t nil)))
 
 (defun inc-x64 (arg1 &optional arg2 &rest args)
-  (let*
-    ((modrm (gethash arg1 *modrm-reg-hash-table-x64*)))
-    (cond
-      ((or
-         (equal (gethash arg1 *reg-type-hash-table-x64*) "old-8-bit-low-reg")
-         (equal (gethash arg1 *reg-type-hash-table-x64*) "old-8-bit-high-reg"))
-       (list #xfe (logior #xc0 modrm)))
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "old-16-bit-reg")
-       (list #x66 #xff (logior #xc0 modrm)))
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "old-32-bit-reg")
-       (list #xff (logior #xc0 modrm)))
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "old-64-bit-reg")
-       (append (emit-high-even-rex) (list #xff (logior #xc0 modrm))))
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-8-bit-low-reg-l")
-       (append (emit-even-rex) (list #xfe (logior #xc0 modrm))))
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-8-bit-low-reg-b")
-       (append (emit-odd-rex) (list #xfe (logior #xc0 modrm))))
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-16-bit-reg")
-       (append (list #x66) (emit-low-odd-rex) (list #xff (logior #xc0 modrm))))
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-32-bit-reg")
-       (append (emit-low-odd-rex) (list #xff (logior #xc0 modrm))))
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-64-bit-reg")
-       (append (emit-high-odd-rex) (list #xff (logior #xc0 modrm))))
-      (t nil))))
+  (one-operand-x64 #xfe #xc0 arg1 arg2))
 
 (defun insb-x86 (&rest args)
   (list #x6c))

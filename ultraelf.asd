@@ -34,6 +34,7 @@
                (:file "ultraelf-register-types")
                (:file "ultraelf-register-lists")
                (:file "ultraelf-x64-rex")
+               (:file "ultraelf-x86-general-emit-functions")
                (:file "ultraelf-x86-instructions")
                (:file "ultraelf-instructions-hash-tables")
                (:file "ultraelf-alt-code")
