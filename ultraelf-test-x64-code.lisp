@@ -21,6 +21,70 @@
   cmpsd
   cmpsq
   cmpsw
+  dec   al
+  dec   cl
+  dec   dl
+  dec   bl
+  dec   ah
+  dec   ch
+  dec   dh
+  dec   bh
+  dec   spl
+  dec   bpl
+  dec   sil
+  dec   dil
+  dec   ax
+  dec   cx
+  dec   dx
+  dec   bx
+  dec   sp
+  dec   bp
+  dec   si
+  dec   di
+  dec   eax
+  dec   ecx
+  dec   edx
+  dec   ebx
+  dec   esp
+  dec   ebp
+  dec   esi
+  dec   edi
+  dec   rax
+  dec   rcx
+  dec   rdx
+  dec   rbx
+  dec   r8b
+  dec   r9b
+  dec   r10b
+  dec   r11b
+  dec   r12b
+  dec   r13b
+  dec   r14b
+  dec   r15b
+  dec   r8w
+  dec   r9w
+  dec   r10w
+  dec   r11w
+  dec   r12w
+  dec   r13w
+  dec   r14w
+  dec   r15w
+  dec   r8d
+  dec   r9d
+  dec   r10d
+  dec   r11d
+  dec   r12d
+  dec   r13d
+  dec   r14d
+  dec   r15d
+  dec   r8
+  dec   r9
+  dec   r10
+  dec   r11
+  dec   r12
+  dec   r13
+  dec   r14
+  dec   r15
   hlt
   in    al,dx
   in    ax,dx
