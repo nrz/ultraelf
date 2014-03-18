@@ -27,16 +27,16 @@
   :author "Antti Nuortimo"
   :components ((:file "packages")
                (:file "ultraelf-asm-reader")
-               (:file "ultraelf-modrm")
-               (:file "ultraelf-sib")
-               (:file "ultraelf-sreg2")
-               (:file "ultraelf-sreg3")
-               (:file "ultraelf-register-types")
+               (:file "ultraelf-modrm")                      ; x86 ModRM byte register values hash table.
+               (:file "ultraelf-sib")                        ; x86 SIB byte scale values hash table.
+               (:file "ultraelf-sreg2")                      ; x86 SREG2 segment register values hash table.
+               (:file "ultraelf-sreg3")                      ; x86 SREG2 segment register values hash table.
+               (:file "ultraelf-register-types")             ; x86 register type hash table.
                (:file "ultraelf-register-lists")
-               (:file "ultraelf-x64-rex")
-               (:file "ultraelf-x86-general-emit-functions")
-               (:file "ultraelf-x86-instructions")
-               (:file "ultraelf-instructions-hash-tables")
-               (:file "ultraelf-alt-code")
+               (:file "ultraelf-x64-rex")                    ; x64 "emit REX" functions.
+               (:file "ultraelf-x86-general-emit-functions") ; general x86 emit-code functions.
+               (:file "ultraelf-x86-instructions")           ; instruction-specific x86 emit-code functions.
+               (:file "ultraelf-instructions-hash-tables")   ; x86 instructions hash tables.
+               (:file "ultraelf-alt-code")                   ; alternative code used for metamorphic engine.
                (:file "ultraelf-1")
-               (:file "ultraelf-test-x64-code")))
+               (:file "ultraelf-test-x64-code")))            ; x64 test code, used for testing.
