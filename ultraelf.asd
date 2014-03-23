@@ -30,7 +30,7 @@
                (:file "ultraelf-modrm")                      ; x86 ModRM byte register values hash table.
                (:file "ultraelf-sib")                        ; x86 SIB byte scale values hash table.
                (:file "ultraelf-sreg2")                      ; x86 SREG2 segment register values hash table.
-               (:file "ultraelf-sreg3")                      ; x86 SREG2 segment register values hash table.
+               (:file "ultraelf-sreg3")                      ; x86 SREG3 segment register values hash table.
                (:file "ultraelf-register-types")             ; x86 register type hash table.
                (:file "ultraelf-register-lists")
                (:file "ultraelf-x64-rex")                    ; x64 "emit REX" functions.
