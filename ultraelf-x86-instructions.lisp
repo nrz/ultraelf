@@ -174,6 +174,18 @@
        (append (emit-odd-rex) (list (logior #x50 modrm))))
       (t nil))))
 
+(defun rcl-1-x64 (arg1 &optional arg2 &rest args)
+  (one-operand-x64 #xd0 #xd0 arg1 arg2))
+
+(defun rcl-cl-x64 (arg1 &optional arg2 &rest args)
+  (one-operand-x64 #xd2 #xd0 arg1 arg2))
+
+(defun rcr-1-x64 (arg1 &optional arg2 &rest args)
+  (one-operand-x64 #xd0 #xd8 arg1 arg2))
+
+(defun rcr-cl-x64 (arg1 &optional arg2 &rest args)
+  (one-operand-x64 #xd2 #xd8 arg1 arg2))
+
 (defun rep-repz-x32-x64 (&optional arg1 &rest args)
   (cond
     ((equalp arg1 "cmpsw")
@@ -214,6 +226,24 @@
      (list #xf2))
     (t (cons #xf2 (funcall (first (gethash arg1 *emit-function-hash-table-x64*)))))))
 
+(defun rol-1-x64 (arg1 &optional arg2 &rest args)
+  (one-operand-x64 #xd0 #xc0 arg1 arg2))
+
+(defun rol-cl-x64 (arg1 &optional arg2 &rest args)
+  (one-operand-x64 #xd2 #xc0 arg1 arg2))
+
+(defun ror-1-x64 (arg1 &optional arg2 &rest args)
+  (one-operand-x64 #xd0 #xc8 arg1 arg2))
+
+(defun ror-cl-x64 (arg1 &optional arg2 &rest args)
+  (one-operand-x64 #xd2 #xc8 arg1 arg2))
+
+(defun sar-1-x64 (arg1 &optional arg2 &rest args)
+  (one-operand-x64 #xd0 #xf8 arg1 arg2))
+
+(defun sar-cl-x64 (arg1 &optional arg2 &rest args)
+  (one-operand-x64 #xd2 #xf8 arg1 arg2))
+
 (defun scasb-x86 (&rest args)
   (list #xae))
 (defun scasw-x86 (&rest args)
@@ -236,6 +266,19 @@
   (list #x4e #xaf))
 (defun scasq-4f-x64 (&rest args)
   (list #x4f #xaf))
+
+(defun shl-1-x64 (arg1 &optional arg2 &rest args)
+  (one-operand-x64 #xd0 #xe0 arg1 arg2))
+
+(defun shl-cl-x64 (arg1 &optional arg2 &rest args)
+  (one-operand-x64 #xd2 #xe0 arg1 arg2))
+
+(defun shr-1-x64 (arg1 &optional arg2 &rest args)
+  (one-operand-x64 #xd0 #xe8 arg1 arg2))
+
+(defun shr-cl-x64 (arg1 &optional arg2 &rest args)
+  (one-operand-x64 #xd2 #xe8 arg1 arg2))
+
 (defun stc-x86 (&rest args)
   (list #xf9))
 (defun std-x86 (&rest args)
