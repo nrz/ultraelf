@@ -126,6 +126,9 @@
 (defun nop-x86 (&rest args)
   (list #x90))
 
+(defun not-x64 (arg1 &optional arg2 &rest args)
+  (one-operand-x64 #xf6 #xd0 arg1 arg2))
+
 (defun out-x32-x64 (arg1 arg2 &rest args)
   (cond
     ((and (equalp arg1 "dx") (equalp arg2 "al"))
