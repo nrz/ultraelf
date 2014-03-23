@@ -34,6 +34,7 @@
 (setf (gethash "lodsd"   *emit-function-hash-table-x64*) (list #'lodsd-x32-x64))
 (setf (gethash "lodsq"   *emit-function-hash-table-x64*) (list #'lodsq-48-x64 #'lodsq-49-x64 #'lodsq-4a-x64 #'lodsq-4b-x64 #'lodsq-4c-x64 #'lodsq-4d-x64 #'lodsq-4e-x64 #'lodsq-4f-x64))
 (setf (gethash "lodsw"   *emit-function-hash-table-x64*) (list #'lodsw-x86))
+(setf (gethash "neg"     *emit-function-hash-table-x64*) (list #'neg-x64))
 (setf (gethash "nop"     *emit-function-hash-table-x64*) (list #'nop-x86))
 (setf (gethash "rep"     *emit-function-hash-table-x64*) (list #'rep-repz-x32-x64))
 (setf (gethash "repe"    *emit-function-hash-table-x64*) (list #'rep-repz-x32-x64))

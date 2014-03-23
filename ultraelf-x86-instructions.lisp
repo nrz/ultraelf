@@ -119,6 +119,10 @@
   (list #x4e #xa5))
 (defun movsq-4f-x64 (&rest args)
   (list #x4f #xa5))
+
+(defun neg-x64 (arg1 &optional arg2 &rest args)
+  (one-operand-x64 #xf6 #xd8 arg1 arg2))
+
 (defun nop-x86 (&rest args)
   (list #x90))
 
