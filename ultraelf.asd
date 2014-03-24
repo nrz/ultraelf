@@ -6,26 +6,27 @@
 ;;; compiling and loading:
 ;;; 1. CL-USER> (load (compile-file "ultraelf.asd"))
 ;;; 2. CL-USER> (compile-ultraelf)
-;;; 3. CL-USER> (in-package :ultraelf)
 ;;;
 ;;; example usage:
-;;; 4. ULTRAELF> (assemble-x64-and-print-hex *test-code-x64*)
+;;; 3. ULTRAELF> (assemble-x64-and-print-hex *test-code-x64*)
 
 (in-package :cl-user)
 
-(defun compile-ultraelf ()
-  (asdf:oos 'asdf:load-op 'ultraelf))
+(defmacro compile-ultraelf ()
+  (asdf:oos 'asdf:load-op 'ultraelf)
+  (in-package :ultraelf))
 
 (defpackage :ultraelf-asd
   (:use :cl :asdf))
 
-(in-package :ultraelf-asd) 
+(in-package :ultraelf-asd)
 
 (defsystem :ultraelf
   :serial t
   :description "UltraELF system"
   :author "Antti Nuortimo"
   :components ((:file "packages")
+               (:file "ultraelf-compiling-macros")
                (:file "ultraelf-asm-reader")
                (:file "ultraelf-modrm")                      ; x86 ModRM byte register values hash table.
                (:file "ultraelf-sib")                        ; x86 SIB byte scale values hash table.
