@@ -299,7 +299,7 @@
   inc     r13
   inc     r14
   inc     r15
-  #)
+  #e)
 
 (defparameter *example-code-x64*
   #a
@@ -308,4 +308,4 @@
    mov   rbp,rsp        ; create the stack frame
    lea   rdi,[ rbx + 4*rax + testmsg1 ] ; load effective address.
    )
-  #)
+  #e)
