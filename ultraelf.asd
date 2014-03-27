@@ -27,7 +27,7 @@
   :author "Antti Nuortimo"
   :components ((:file "packages")
                (:file "ultraelf-compiling-macros")
-               (:file "ultraelf-asm-reader")
+               (:file "ultraelf-asm-reader")                 ; Lisp assembly reader.
                (:file "ultraelf-modrm")                      ; x86 ModRM byte register values hash table.
                (:file "ultraelf-sib")                        ; x86 SIB byte scale values hash table.
                (:file "ultraelf-sreg2")                      ; x86 SREG2 segment register values hash table.
