@@ -3,6 +3,26 @@
 ;;; ultraELF x86-64 assembler, disassembler and metamorphic engine.
 ;;; ultraELF packs and reconstructs ELF executables, maintaining original functionality.
 
+;;; Code to be tested can also be defined in read-eval loop:
+;;; ULTRAELF> (defparameter *test-code-inc-rax* #a inc rax #e)
+;;; *TEST-CODE-INC-RAX*
+;;; ULTRAELF> (create-syntax-tree *test-code-inc-rax*)
+;;; (LIST '("inc" "rax"))
+;;; 21
+;;; ULTRAELF> (assemble-x64-and-print-hex *test-code-inc-rax*)
+;;; "(48 FF C0)"
+;;;
+;;; Test code containing multiple instructions can also be defined
+;;; in the read-eval loop, just press Enter between instructions.
+;;;
+;;; It is not necessary to use DEFPARAMETER, you can give the assembly
+;;; code as input to instructions.
+;;; ULTRAELF> (create-syntax-tree #a inc rax #e)
+;;; (LIST '("inc" "rax"))
+;;; 21
+;;; ULTRAELF> (assemble-x64-and-print-hex #a inc rax #e)
+;;; "(48 FF C0)"
+
 (in-package :ultraelf)
 
 (defparameter *test-code-x64*
