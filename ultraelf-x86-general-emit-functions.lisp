@@ -74,3 +74,9 @@
       ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-64-bit-reg")
        (append (emit-high-odd-rex) (list (1+ first-byte-base) (logior reg-byte-base modrm))))
       (t nil))))
+
+(defun emit-modrm-byte (mod regmem reg)
+  "This function emits ModRM byte."
+  (list (logior (gethash regmem *modrm-reg-hash-table-x64*)
+                (ash (gethash reg *modrm-reg-hash-table-x64*) 3)
+                (ash mod 6))))
