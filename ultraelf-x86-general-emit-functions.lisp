@@ -80,3 +80,7 @@
   (list (logior (gethash regmem *modrm-reg-hash-table-x64*)
                 (ash (gethash reg *modrm-reg-hash-table-x64*) 3)
                 (ash mod 6))))
+
+(defun emit-modrm-byte-for-reg-reg (arg1 arg2)
+  "This function emits ModRM for reg,reg."
+  (emit-modrm-byte #b11 arg1 arg2))
