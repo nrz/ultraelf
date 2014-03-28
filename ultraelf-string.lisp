@@ -19,3 +19,8 @@
         do (if (equal (get-last-character-string my-string) invalid-last-character)
              (setf my-string (get-string-without-last-character my-string))))
   my-string)
+
+(defun split-string-into-list-of-strings (my-string)
+  "This function splits a string to a list of strings of 1 character each."
+  (loop for i from 0 to (1- (length my-string))
+        collect (subseq my-string i (1+ i))))
