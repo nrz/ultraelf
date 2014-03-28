@@ -22,7 +22,7 @@
           do (cond
                ((equal current-mode "asm")
                 (cond
-                  ((equal current-phase "asterisk-read")
+                  ((equal current-phase "hash-sign-read")
                    ;; is character e ?
                    ;; if yes, we're done, fix closing parentheses and return.
                    (cond
@@ -51,9 +51,9 @@
                      ;; otherwise, print error.
                      (t (error "undefined control character after #"))))
                   ;; is character # ?
-                  ;; if yes, mark asterisk read.
+                  ;; if yes, mark hash sign read.
                   ((equal my-char "#")
-                   (setf current-phase "asterisk-read"))
+                   (setf current-phase "hash-sign-read"))
                   ;; is character newline?
                   ((equal my-char (coerce (list #\Newline) 'string))
                    (progn
@@ -153,7 +153,7 @@
                ((equal current-mode "Lisp")
                 ;; in Lisp mode, read text until # is reached and eval it.
                 (cond
-                  ((equal current-phase "asterisk-read")
+                  ((equal current-phase "hash-sign-read")
                    (cond
                      ;; is character e ?
                      ;; if yes, we're done, fix closing parentheses and return.
@@ -184,9 +184,9 @@
                      ;; otherwise, print error.
                      (t (error "undefined control character after #"))))
                   ;; is character # ?
-                  ;; if yes, mark asterisk read.
+                  ;; if yes, mark hash sign read.
                   ((equal my-char "#")
-                   (setf current-phase "asterisk-read"))
+                   (setf current-phase "hash-sign-read"))
                   ;; otherwise add the character to the Lisp code to be evaluated.
                   (t (setf my-string (concatenate 'string lisp-code-string my-char)))))
                (t (error "invalid current mode"))))))
