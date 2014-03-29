@@ -14,7 +14,7 @@
   ;; if yes, read it to convert it to a list and append the resulting list to earlier elements.
   ;; otherwise use CONS to create (LIST element-1 element-2 ... ) .
   (if (stringp (first (last my-list)))
-    (create-syntax-tree (append (get-list-without-last-element my-list) (rest (read-from-string (first (last my-list))))))
+    (create-syntax-tree (append (butlast my-list) (rest (read-from-string (first (last my-list))))))
     (cons 'list my-list)))
 
 (defun emit-binary-code-list (syntax-tree my-hash-table)
