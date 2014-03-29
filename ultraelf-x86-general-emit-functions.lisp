@@ -49,6 +49,21 @@
                    (nth 1 base-index-and-scale)
                    (nth 2 base-index-and-scale))))
 
+(defun emit-modrm-byte (mod regmem reg)
+  "This function emits ModRM byte."
+  (list (logior (gethash regmem *modrm-reg-hash-table-x64*)
+                (ash (gethash reg *modrm-reg-hash-table-x64*) 3)
+                (ash mod 6))))
+
+(defun emit-modrm-byte-for-reg-reg (arg1 arg2)
+  "This function emits ModRM for reg,reg."
+  (emit-modrm-byte #b11 arg1 arg2))
+
+(defun emit-modrm-byte-for-indirect-without-SIB (arg1 arg2)
+  "This function emits ModRM for simple indirect addressing
+   (without SIB), using only base. No index, no displacement."
+  (emit-modrm-byte #b00 arg1 arg2))
+
 (defun one-operand-x64 (first-byte-base reg-byte-base arg1 &optional arg2) 
   (let*
     ((modrm (gethash arg1 *modrm-reg-hash-table-x64*)))
@@ -75,17 +90,3 @@
        (append (emit-high-odd-rex) (list (1+ first-byte-base) (logior reg-byte-base modrm))))
       (t nil))))
 
-(defun emit-modrm-byte (mod regmem reg)
-  "This function emits ModRM byte."
-  (list (logior (gethash regmem *modrm-reg-hash-table-x64*)
-                (ash (gethash reg *modrm-reg-hash-table-x64*) 3)
-                (ash mod 6))))
-
-(defun emit-modrm-byte-for-reg-reg (arg1 arg2)
-  "This function emits ModRM for reg,reg."
-  (emit-modrm-byte #b11 arg1 arg2))
-
-(defun emit-modrm-byte-for-indirect-without-SIB (arg1 arg2)
-  "This function emits ModRM for simple indirect addressing
-   (without SIB), using only base. No index, no displacement."
-  (emit-modrm-byte #b00 arg1 arg2))
