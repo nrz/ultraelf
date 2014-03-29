@@ -90,3 +90,102 @@
        (append (emit-high-odd-rex) (list (1+ opcode-base) (logior reg-byte-base modrm))))
       (t nil))))
 
+(defun arithmetic-rm-reg-x64 (opcode-base arg1 arg2 &optional arg3)
+  (let*
+    ((arg1-reg-type (gethash arg1 *reg-type-hash-table-x64*))
+     (arg2-reg-type (gethash arg2 *reg-type-hash-table-x64*)))
+    (cond
+      ((and
+         (or
+           (equal arg1-reg-type "old-8-bit-low-reg")
+           (equal arg1-reg-type "old-8-bit-high-reg"))
+         (or
+           (equal arg2-reg-type "old-8-bit-low-reg")
+           (equal arg2-reg-type "old-8-bit-high-reg")))
+       ;; Example op-codes for add (method is the same for other instructions too):
+       ;; 0x02 can also be used, requires reverse order in ModRM.
+       ;; 0x00: add r/m8, r8
+       ;; 0x02: add r8, r/m8
+       (cons opcode-base (emit-modrm-byte-for-reg-reg arg1 arg2)))
+      ((and (equal arg1-reg-type "old-16-bit-reg")
+            (equal arg2-reg-type "old-16-bit-reg"))
+       ;; Example op-codes for add (method is the same for other instructions too):
+       ;; 0x03 can also be used, requires reverse order in ModRM.
+       ;; 0x01: add r/m16, r16
+       ;; 0x03: add r16, r/m16
+       (append (list #x66 (1+ opcode-base)) (emit-modrm-byte-for-reg-reg arg1 arg2)))
+      ((and (equal arg1-reg-type "old-32-bit-reg")
+            (equal arg2-reg-type "old-32-bit-reg"))
+       ;; Example op-codes for add (method is the same for other instructions too):
+       ;; 0x03 can also be used, requires reverse order in ModRM.
+       ;; 0x01: add r/m32, r32
+       ;; 0x03: add r32, r/m32
+       (cons (1+ opcode-base) (emit-modrm-byte-for-reg-reg arg1 arg2)))
+      ((and
+         (equal arg1-reg-type "register-indirect-without-SIB")
+         (or
+           (equal arg2-reg-type "old-8-bit-low-reg")
+           (equal arg2-reg-type "old-8-bit-high-reg")))
+       (cons opcode-base (emit-modrm-byte-for-indirect-without-SIB arg1 arg2)))
+      ((and
+         (equal arg1-reg-type "register-indirect-without-SIB")
+         (equal arg2-reg-type "old-16-bit-reg"))
+       (append (list #x66 (1+ opcode-base)) (emit-modrm-byte-for-indirect-without-SIB arg1 arg2)))
+      ((and
+         (equal arg1-reg-type "register-indirect-without-SIB")
+         (equal arg2-reg-type "old-32-bit-reg"))
+       (cons (1+ opcode-base) (emit-modrm-byte-for-indirect-without-SIB arg1 arg2)))
+      (t nil))))
+
+(defun arithmetic-reg-rm-x64 (opcode-base arg1 arg2 &optional arg3)
+  (let*
+    ((arg1-reg-type (gethash arg1 *reg-type-hash-table-x64*))
+     (arg2-reg-type (gethash arg2 *reg-type-hash-table-x64*)))
+    (cond
+      ((and
+         (or
+           (equal arg1-reg-type "old-8-bit-low-reg")
+           (equal arg1-reg-type "old-8-bit-high-reg"))
+         (or
+           (equal arg2-reg-type "old-8-bit-low-reg")
+           (equal arg2-reg-type "old-8-bit-high-reg")))
+       ;; Example op-codes for add (method is the same for other instructions too):
+       ;; 0x02 can also be used, requires reverse order in ModRM.
+       ;; 0x00: add r/m8, r8
+       ;; 0x02: add r8, r/m8
+       (cons (+ opcode-base 2) (emit-modrm-byte-for-reg-reg arg2 arg1)))
+      ((and (equal arg1-reg-type "old-16-bit-reg")
+            (equal arg2-reg-type "old-16-bit-reg"))
+       ;; Example op-codes for add (method is the same for other instructions too):
+       ;; 0x03 can also be used, requires reverse order in ModRM.
+       ;; 0x01: add r/m16, r16
+       ;; 0x03: add r16, r/m16
+       (append (list #x66 (+ opcode-base 3)) (emit-modrm-byte-for-reg-reg arg2 arg1)))
+      ((and (equal arg1-reg-type "old-32-bit-reg")
+            (equal arg2-reg-type "old-32-bit-reg"))
+       ;; Example op-codes for add (method is the same for other instructions too):
+       ;; 0x03 can also be used, requires reverse order in ModRM.
+       ;; 0x01: add r/m32, r32
+       ;; 0x03: add r32, r/m32
+       (cons (+ opcode-base 3) (emit-modrm-byte-for-reg-reg arg2 arg1)))
+      ((and
+         (or
+           (equal arg1-reg-type "old-8-bit-low-reg")
+           (equal arg1-reg-type "old-8-bit-high-reg"))
+         (equal arg2-reg-type "register-indirect-without-SIB"))
+       (cons (+ opcode-base 2) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
+      ((and (equal arg1-reg-type "old-16-bit-reg")
+            (equal arg2-reg-type "register-indirect-without-SIB"))
+       (append (list #x66 (+ opcode-base 3)) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
+      ((and (equal arg1-reg-type "old-32-bit-reg")
+            (equal arg2-reg-type "register-indirect-without-SIB"))
+       (cons (+ opcode-base 3) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
+      (t nil))))
+
+(defun arithmetic-x64 (opcode-base arg1 arg2 &optional arg3)
+  ;; Following the logic used in YASM:
+  ;; Use `defun arithmetic-rm-reg-x64` always when you can.
+  ;; Use `defun arithmetic-reg-rm-x64` only if source is a register indirect without SIB.
+  (if (equal (gethash arg2 *reg-type-hash-table-x64*) "register-indirect-without-SIB")
+    (arithmetic-reg-rm-x64 opcode-base arg1 arg2 arg3)
+    (arithmetic-rm-reg-x64 opcode-base arg1 arg2 arg3)))

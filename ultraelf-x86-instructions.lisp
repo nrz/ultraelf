@@ -20,96 +20,13 @@
   (list #x36))
 
 (defun add-reg-rm-x64 (arg1 arg2 &optional arg3 &rest args)
-  (let*
-    ((arg1-reg-type (gethash arg1 *reg-type-hash-table-x64*))
-     (arg2-reg-type (gethash arg2 *reg-type-hash-table-x64*)))
-    (cond
-      ((and
-         (or
-           (equal arg1-reg-type "old-8-bit-low-reg")
-           (equal arg1-reg-type "old-8-bit-high-reg"))
-         (or
-           (equal arg2-reg-type "old-8-bit-low-reg")
-           (equal arg2-reg-type "old-8-bit-high-reg")))
-       ;; 0x02 can also be used, requires reverse order in ModRM.
-       ;; 0x00: add r/m8, r8
-       ;; 0x02: add r8, r/m8
-       (cons #x02 (emit-modrm-byte-for-reg-reg arg2 arg1)))
-      ((and (equal arg1-reg-type "old-16-bit-reg")
-            (equal arg2-reg-type "old-16-bit-reg"))
-       ;; 0x03 can also be used, requires reverse order in ModRM.
-       ;; 0x01: add r/m16, r16
-       ;; 0x03: add r16, r/m16
-       (append (list #x66 #x03) (emit-modrm-byte-for-reg-reg arg2 arg1)))
-      ((and (equal arg1-reg-type "old-32-bit-reg")
-            (equal arg2-reg-type "old-32-bit-reg"))
-       ;; 0x03 can also be used, requires reverse order in ModRM.
-       ;; 0x01: add r/m32, r32
-       ;; 0x03: add r32, r/m32
-       (cons #x03 (emit-modrm-byte-for-reg-reg arg2 arg1)))
-      ((and
-         (or
-           (equal arg1-reg-type "old-8-bit-low-reg")
-           (equal arg1-reg-type "old-8-bit-high-reg"))
-         (equal arg2-reg-type "register-indirect-without-SIB"))
-       (cons #x02 (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
-      ((and (equal arg1-reg-type "old-16-bit-reg")
-            (equal arg2-reg-type "register-indirect-without-SIB"))
-       (append (list #x66 #x03) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
-      ((and (equal arg1-reg-type "old-32-bit-reg")
-            (equal arg2-reg-type "register-indirect-without-SIB"))
-       (cons #x03 (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
-      (t nil))))
+  (arithmetic-reg-rm-x64 #x00 arg1 arg2 arg3))
 
 (defun add-rm-reg-x64 (arg1 arg2 &optional arg3 &rest args)
-  (let*
-    ((arg1-reg-type (gethash arg1 *reg-type-hash-table-x64*))
-     (arg2-reg-type (gethash arg2 *reg-type-hash-table-x64*)))
-    (cond
-      ((and
-         (or
-           (equal arg1-reg-type "old-8-bit-low-reg")
-           (equal arg1-reg-type "old-8-bit-high-reg"))
-         (or
-           (equal arg2-reg-type "old-8-bit-low-reg")
-           (equal arg2-reg-type "old-8-bit-high-reg")))
-       ;; 0x02 can also be used, requires reverse order in ModRM.
-       ;; 0x00: add r/m8, r8
-       ;; 0x02: add r8, r/m8
-       (cons #x00 (emit-modrm-byte-for-reg-reg arg1 arg2)))
-      ((and (equal arg1-reg-type "old-16-bit-reg")
-            (equal arg2-reg-type "old-16-bit-reg"))
-       ;; 0x03 can also be used, requires reverse order in ModRM.
-       ;; 0x01: add r/m16, r16
-       ;; 0x03: add r16, r/m16
-       (append (list #x66 #x01) (emit-modrm-byte-for-reg-reg arg1 arg2)))
-      ((and (equal arg1-reg-type "old-32-bit-reg")
-            (equal arg2-reg-type "old-32-bit-reg"))
-       ;; 0x03 can also be used, requires reverse order in ModRM.
-       ;; 0x01: add r/m32, r32
-       ;; 0x03: add r32, r/m32
-       (cons #x01 (emit-modrm-byte-for-reg-reg arg1 arg2)))
-      ((and
-         (equal arg1-reg-type "register-indirect-without-SIB")
-         (or
-           (equal arg2-reg-type "old-8-bit-low-reg")
-           (equal arg2-reg-type "old-8-bit-high-reg")))
-       (cons #x00 (emit-modrm-byte-for-indirect-without-SIB arg1 arg2)))
-      ((and (equal arg1-reg-type "register-indirect-without-SIB")
-            (equal arg2-reg-type "old-16-bit-reg"))
-       (append (list #x66 #x01) (emit-modrm-byte-for-indirect-without-SIB arg1 arg2)))
-      ((and (equal arg1-reg-type "register-indirect-without-SIB")
-            (equal arg2-reg-type "old-32-bit-reg"))
-       (cons #x01 (emit-modrm-byte-for-indirect-without-SIB arg1 arg2)))
-      (t nil))))
+  (arithmetic-rm-reg-x64 #x00 arg1 arg2 arg3))
 
 (defun add-x64 (arg1 arg2 &optional arg3 &rest args)
-  ;; Following the logic used in YASM:
-  ;; Use `defun add-rm-reg-x64` always when you can.
-  ;; Use `defun add-reg-rm-x64` only if target is a register indirect without SIB.
-  (if (equal (gethash arg2 *reg-type-hash-table-x64*) "register-indirect-without-SIB")
-    (add-reg-rm-x64 arg1 arg2 arg3 args)
-    (add-rm-reg-x64 arg1 arg2 arg3 args)))
+  (arithmetic-x64 #x00 arg1 arg2 arg3))
 
 (defun clc-x86 (&rest args)
   (list #xf8))
@@ -494,96 +411,13 @@
   (list #x4f #xab))
 
 (defun sub-reg-rm-x64 (arg1 arg2 &optional arg3 &rest args)
-  (let*
-    ((arg1-reg-type (gethash arg1 *reg-type-hash-table-x64*))
-     (arg2-reg-type (gethash arg2 *reg-type-hash-table-x64*)))
-    (cond
-      ((and
-         (or
-           (equal arg1-reg-type "old-8-bit-low-reg")
-           (equal arg1-reg-type "old-8-bit-high-reg"))
-         (or
-           (equal arg2-reg-type "old-8-bit-low-reg")
-           (equal arg2-reg-type "old-8-bit-high-reg")))
-       ;; 0x2a can also be used, requires reverse order in ModRM.
-       ;; 0x28: sub r/m8, r8
-       ;; 0x2a: sub r8, r/m8
-       (cons #x2a (emit-modrm-byte-for-reg-reg arg2 arg1)))
-      ((and (equal arg1-reg-type "old-16-bit-reg")
-            (equal arg2-reg-type "old-16-bit-reg"))
-       ;; 0x2b can also be used, requires reverse order in ModRM.
-       ;; 0x29: sub r/m16, r16
-       ;; 0x2b: sub r16, r/m16
-       (append (list #x66 #x2b) (emit-modrm-byte-for-reg-reg arg2 arg1)))
-      ((and (equal arg1-reg-type "old-32-bit-reg")
-            (equal arg2-reg-type "old-32-bit-reg"))
-       ;; 0x2b can also be used, requires reverse order in ModRM.
-       ;; 0x29: sub r/m32, r32
-       ;; 0x2b: sub r32, r/m32
-       (cons #x2b (emit-modrm-byte-for-reg-reg arg2 arg1)))
-      ((and
-         (or
-           (equal arg1-reg-type "old-8-bit-low-reg")
-           (equal arg1-reg-type "old-8-bit-high-reg"))
-         (equal arg2-reg-type "register-indirect-without-SIB"))
-       (cons #x2a (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
-      ((and (equal arg1-reg-type "old-16-bit-reg")
-            (equal arg2-reg-type "register-indirect-without-SIB"))
-       (append (list #x66 #x2b) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
-      ((and (equal arg1-reg-type "old-32-bit-reg")
-            (equal arg2-reg-type "register-indirect-without-SIB"))
-       (cons #x2b (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
-      (t nil))))
+  (arithmetic-reg-rm-x64 #x28 arg1 arg2 arg3))
 
 (defun sub-rm-reg-x64 (arg1 arg2 &optional arg3 &rest args)
-  (let*
-    ((arg1-reg-type (gethash arg1 *reg-type-hash-table-x64*))
-     (arg2-reg-type (gethash arg2 *reg-type-hash-table-x64*)))
-    (cond
-      ((and
-         (or
-           (equal arg1-reg-type "old-8-bit-low-reg")
-           (equal arg1-reg-type "old-8-bit-high-reg"))
-         (or
-           (equal arg2-reg-type "old-8-bit-low-reg")
-           (equal arg2-reg-type "old-8-bit-high-reg")))
-       ;; 0x2a can also be used, requires reverse order in ModRM.
-       ;; 0x28: sub r/m8, r8
-       ;; 0x2a: sub r8, r/m8
-       (cons #x28 (emit-modrm-byte-for-reg-reg arg1 arg2)))
-      ((and (equal arg1-reg-type "old-16-bit-reg")
-            (equal arg2-reg-type "old-16-bit-reg"))
-       ;; 0x2b can also be used, requires reverse order in ModRM.
-       ;; 0x29: sub r/m16, r16
-       ;; 0x2b: sub r16, r/m16
-       (append (list #x66 #x29) (emit-modrm-byte-for-reg-reg arg1 arg2)))
-      ((and (equal arg1-reg-type "old-32-bit-reg")
-            (equal arg2-reg-type "old-32-bit-reg"))
-       ;; 0x2b can also be used, requires reverse order in ModRM.
-       ;; 0x29: sub r/m32, r32
-       ;; 0x2b: sub r32, r/m32
-       (cons #x29 (emit-modrm-byte-for-reg-reg arg1 arg2)))
-      ((and
-         (equal arg1-reg-type "register-indirect-without-SIB")
-         (or
-           (equal arg2-reg-type "old-8-bit-low-reg")
-           (equal arg2-reg-type "old-8-bit-high-reg")))
-       (cons #x28 (emit-modrm-byte-for-indirect-without-SIB arg1 arg2)))
-      ((and (equal arg1-reg-type "register-indirect-without-SIB")
-            (equal arg2-reg-type "old-16-bit-reg"))
-       (append (list #x66 #x29) (emit-modrm-byte-for-indirect-without-SIB arg1 arg2)))
-      ((and (equal arg1-reg-type "register-indirect-without-SIB")
-            (equal arg2-reg-type "old-32-bit-reg"))
-       (cons #x29 (emit-modrm-byte-for-indirect-without-SIB arg1 arg2)))
-      (t nil))))
+  (arithmetic-rm-reg-x64 #x28 arg1 arg2 arg3))
 
 (defun sub-x64 (arg1 arg2 &optional arg3 &rest args)
-  ;; Following the logic used in YASM:
-  ;; Use `defun sub-rm-reg-x64` always when you can.
-  ;; Use `defun sub-reg-rm-x64` only if target is a register indirect without SIB.
-  (if (equal (gethash arg2 *reg-type-hash-table-x64*) "register-indirect-without-SIB")
-    (sub-reg-rm-x64 arg1 arg2 arg3 args)
-    (sub-rm-reg-x64 arg1 arg2 arg3 args)))
+  (arithmetic-x64 #x28 arg1 arg2 arg3))
 
 (defun syscall-x64 (&rest args)
   (list #x0f #x05))
