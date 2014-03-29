@@ -329,3 +329,20 @@
    lea   rdi,[ rbx + 4*rax + testmsg1 ] ; load effective address.
    )
   #e)
+
+(defparameter *example-code-x64-with-lisp*
+  #a
+  inc r10     ; increment register r10.
+  mov r11,r12 ; store value of r12 into r11.
+  #l
+  (let*
+    ((lisp-code-output-string ""))
+    (loop for current-instruction in (list "inc" "dec")
+          do (loop for current-arg in (list "r13" "r14" "r15")
+                   do (setf lisp-code-output-string
+                            (concatenate 'string
+                                         lisp-code-output-string
+                                         current-instruction " " current-arg
+                                         (coerce (list #\Newline) 'string)))))
+    lisp-code-output-string)
+  #e)

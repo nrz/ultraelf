@@ -40,16 +40,8 @@
                         (setf is-there-code-on-this-line nil)
                         (setf lisp-code-string "")
                         (setf current-phase "beginning-of-line")))
-                     ;; is character a ?
-                     ;; if yes, change to asm mode.
-                     ((equal my-char "a")
-                      (progn
-                        (setf current-mode "asm")
-                        (setf is-there-code-on-this-line nil)
-                        (setf lisp-code-string "")
-                        (setf current-phase "beginning-of-line")))
                      ;; otherwise, print error.
-                     (t (error "undefined control character after #"))))
+                     (t (error "in asm mode undefined control character after #"))))
                   ;; is character # ?
                   ;; if yes, mark hash sign read.
                   ((equal my-char "#")
@@ -66,7 +58,6 @@
                        ;; if true, output ")
                        ((or (equal current-phase "inside-instruction")
                             (equal current-phase "inside-parameters"))
-
                         (progn
                           (setf current-phase "beginning-of-line")
                           (setf is-there-code-on-this-line nil)
@@ -101,7 +92,7 @@
                   ;; if yes, don't output anything, begin comment.
                   ((equal my-char ";")
                    (setf current-phase "inside-comment"))
-                  ;; are we inside memory address syntax? 
+                  ;; are we inside memory address syntax?
                   ;; if yes, don't output anything.
                   ((equal current-phase "inside-memory-address-syntax")
                    (cond
@@ -151,7 +142,7 @@
                   ;; otherwise output the character.
                   (t (setf my-string (concatenate 'string my-string my-char)))))
                ((equal current-mode "Lisp")
-                ;; in Lisp mode, read text until # is reached and eval it.
+                ;; in Lisp mode, read text until #e or #a is reached and eval it.
                 (cond
                   ((equal current-phase "hash-sign-read")
                    (cond
@@ -159,20 +150,19 @@
                      ;; if yes, we're done, fix closing parentheses and return.
                      ((equal my-char "e")
                       (progn
-                        (with-output-to-string (eval lisp-code-string))
+                        (setf my-string (concatenate 'string
+                                                     my-string
+                                                     (coerce (list #\Newline) 'string)
+                                                     "#a"
+                                                     (coerce (list #\Newline) 'string)
+                                                     (eval (read-from-string lisp-code-string))
+                                                     (coerce (list #\Newline) 'string)
+                                                     "#e")) ; this should be something different.
                         (return-from transform-code-to-string
                                      (concatenate 'string (get-string-without-invalid-last-character
                                                             (get-string-without-invalid-last-character
                                                               my-string invalid-last-characters)
                                                             invalid-last-characters) "))"))))
-                     ;; is character l ?
-                     ;; if yes, change to Lisp mode.
-                     ((equal my-char "l")
-                      (progn
-                        (setf current-mode "Lisp")
-                        (setf is-there-code-on-this-line nil)
-                        (setf current-phase "beginning-of-line")
-                        (with-output-to-string (eval lisp-code-string))))
                      ;; is character a ?
                      ;; if yes, change to asm mode.
                      ((equal my-char "a")
@@ -180,16 +170,27 @@
                         (setf current-mode "asm")
                         (setf is-there-code-on-this-line nil)
                         (setf current-phase "beginning-of-line")
-                        (with-output-to-string (eval lisp-code-string))))
-                     ;; otherwise, print error.
-                     (t (error "undefined control character after #"))))
+                        (setf my-string (concatenate 'string
+                                                     my-string
+                                                     (coerce (list #\Newline) 'string)
+                                                     "#a"
+                                                     (coerce (list #\Newline) 'string)
+                                                     (eval (read-from-string lisp-code-string))
+                                                     (coerce (list #\Newline) 'string)
+                                                     "#e")))) ; this should be something different.
+                     ;; otherwise, add # and the character to the Lisp code to be evaluated.
+                     (t (progn
+                          (setf current-phase "")
+                          (setf lisp-code-string (concatenate 'string lisp-code-string "#" my-char))))))
                   ;; is character # ?
                   ;; if yes, mark hash sign read.
                   ((equal my-char "#")
                    (setf current-phase "hash-sign-read"))
                   ;; otherwise add the character to the Lisp code to be evaluated.
-                  (t (setf my-string (concatenate 'string lisp-code-string my-char)))))
-               (t (error "invalid current mode"))))))
+                  (t (setf lisp-code-string (concatenate 'string lisp-code-string my-char)))))
+               (t (progn
+                    (format t "current mode: ~a~a" current-mode #\Newline)
+                    (error "invalid current mode")))))))
 
 ;;; #a is the input which starts the custom reader.
 (set-dispatch-macro-character #\# #\a #'transform-code-to-string)
