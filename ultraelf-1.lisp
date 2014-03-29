@@ -5,9 +5,17 @@
 
 (in-package :ultraelf)
 
-(defun create-syntax-tree (my-string)
-  "This function converts a string produced by transform-code-to-string into a syntax tree."
-  (read-from-string my-string))
+(defun create-syntax-tree (my-list)
+  "This recursive function converts a string produced by transform-code-to-string into a syntax tree.
+   Input argument my-list can be a string, in that case it is first stored into a list."
+  (if (stringp my-list)
+    (setf my-list (list my-list)))
+  ;; is last element of the list a string?
+  ;; if yes, read it to convert it to a list and append the resulting list to earlier elements.
+  ;; otherwise use CONS to create (LIST element-1 element-2 ... ) .
+  (if (stringp (first (last my-list)))
+    (create-syntax-tree (append (get-list-without-last-element my-list) (rest (read-from-string (first (last my-list))))))
+    (cons 'list my-list)))
 
 (defun emit-binary-code-list (syntax-tree my-hash-table)
   "This function converts syntax tree to a list of lists of binary code bytes,

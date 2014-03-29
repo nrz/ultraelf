@@ -27,6 +27,7 @@
   :author "Antti Nuortimo"
   :components ((:file "packages")
                (:file "ultraelf-compiling-macros")
+               (:file "ultraelf-list")                       ; list functions.
                (:file "ultraelf-string")                     ; string functions.
                (:file "ultraelf-asm-reader")                 ; Lisp assembly reader.
                (:file "ultraelf-modrm")                      ; x86 ModRM byte register values hash table.

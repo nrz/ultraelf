@@ -333,7 +333,7 @@
 (defparameter *example-code-x64-with-lisp*
   #a
   inc r10     ; increment register r10.
-  mov r11,r12 ; store value of r12 into r11.
+  inc r11     ; increment register r10.
   #l
   (let*
     ((lisp-code-output-string ""))
