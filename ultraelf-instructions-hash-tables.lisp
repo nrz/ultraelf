@@ -15,6 +15,9 @@
 (setf (gethash "ss:"        *emit-function-hash-table-x64*) (list #'ss-x86))
                            
 ;;; instructions in alphaaabetical order.
+(setf (gethash "add"        *emit-function-hash-table-x64*) (list #'add-x64))
+(setf (gethash "add-reg-rm" *emit-function-hash-table-x64*) (list #'add-reg-rm-x64))
+(setf (gethash "add-rm-reg" *emit-function-hash-table-x64*) (list #'add-rm-reg-x64))
 (setf (gethash "clc"        *emit-function-hash-table-x64*) (list #'clc-x86))
 (setf (gethash "cld"        *emit-function-hash-table-x64*) (list #'cld-x86))
 (setf (gethash "cli"        *emit-function-hash-table-x64*) (list #'cli-x86))
