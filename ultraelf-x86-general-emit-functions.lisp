@@ -84,3 +84,8 @@
 (defun emit-modrm-byte-for-reg-reg (arg1 arg2)
   "This function emits ModRM for reg,reg."
   (emit-modrm-byte #b11 arg1 arg2))
+
+(defun emit-modrm-byte-for-indirect-without-SIB (arg1 arg2)
+  "This function emits ModRM for simple indirect addressing
+   (without SIB), using only base. No index, no displacement."
+  (emit-modrm-byte #b00 arg1 arg2))
