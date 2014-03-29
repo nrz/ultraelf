@@ -77,6 +77,8 @@
 (setf (gethash "stosw"      *emit-function-hash-table-x64*) (list #'stosw-x86))
 (setf (gethash "syscall"    *emit-function-hash-table-x64*) (list #'syscall-x64))
 (setf (gethash "mov"        *emit-function-hash-table-x64*) (list #'mov-x64))
+(setf (gethash "mov-reg-rm" *emit-function-hash-table-x64*) (list #'mov-reg-rm-x64))
+(setf (gethash "mov-rm-reg" *emit-function-hash-table-x64*) (list #'mov-rm-reg-x64))
 (setf (gethash "movsb"      *emit-function-hash-table-x64*) (list #'movsb-x86))
 (setf (gethash "movsd"      *emit-function-hash-table-x64*) (list #'movsd-x32-x64))
 (setf (gethash "movsq"      *emit-function-hash-table-x64*) (list #'movsq-48-x64 #'movsq-49-x64 #'movsq-4a-x64 #'movsq-4b-x64 #'movsq-4c-x64 #'movsq-4d-x64 #'movsq-4e-x64 #'movsq-4f-x64))
