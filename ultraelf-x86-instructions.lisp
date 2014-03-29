@@ -123,8 +123,8 @@
       ((and (equal arg1-reg-type "old-32-bit-reg")
             (equal arg2-reg-type "old-32-bit-reg"))
        ;; 0x8b can also be used, requires reverse order in ModRM.
-       ;; 0x89: mov r/m16, r16
-       ;; 0x8b: mov r16, r/m16
+       ;; 0x89: mov r/m32, r32
+       ;; 0x8b: mov r32, r/m32
        (cons #x8b (emit-modrm-byte-for-reg-reg arg2 arg1)))
       ((and
          (or
@@ -165,8 +165,8 @@
       ((and (equal arg1-reg-type "old-32-bit-reg")
             (equal arg2-reg-type "old-32-bit-reg"))
        ;; 0x8b can also be used, requires reverse order in ModRM.
-       ;; 0x89: mov r/m16, r16
-       ;; 0x8b: mov r16, r/m16
+       ;; 0x89: mov r/m32, r32
+       ;; 0x8b: mov r32, r/m32
        (cons #x89 (emit-modrm-byte-for-reg-reg arg1 arg2)))
       ((and
          (equal arg1-reg-type "register-indirect-without-SIB")
