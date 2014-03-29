@@ -11,7 +11,7 @@
    Partially based on: http://weitz.de/macros.lisp"
   (declare (ignore sub-char numarg))
   (let*
-    ((invalid-last-characters (list "'" " " "("))
+    ((invalid-last-characters (list "'" " " "(" ")"))
      (current-mode "asm")
      (is-there-code-on-this-line nil)
      (current-phase "beginning-of-line")
@@ -31,7 +31,7 @@
                                    (concatenate 'string (get-string-without-invalid-last-character
                                                           (get-string-without-invalid-last-character
                                                             my-string invalid-last-characters)
-                                                          invalid-last-characters) ")")))
+                                                          invalid-last-characters) "))")))
                      ;; is character l ?
                      ;; if yes, change to Lisp mode.
                      ((equal my-char "l")
@@ -162,7 +162,7 @@
                                      (concatenate 'string (get-string-without-invalid-last-character
                                                             (get-string-without-invalid-last-character
                                                               my-string invalid-last-characters)
-                                                            invalid-last-characters)))))
+                                                            invalid-last-characters) ")"))))
                      ;; is character a ?
                      ;; if yes, change to asm mode.
                      ((equal my-char "a")
