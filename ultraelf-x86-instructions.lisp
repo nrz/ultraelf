@@ -19,6 +19,15 @@
 (defun ss-x86 (&rest args)
   (list #x36))
 
+(defun adc-reg-rm-x64 (arg1 arg2 &optional arg3 &rest args)
+  (arithmetic-reg-rm-x64 #x10 arg1 arg2 arg3))
+
+(defun adc-rm-reg-x64 (arg1 arg2 &optional arg3 &rest args)
+  (arithmetic-rm-reg-x64 #x10 arg1 arg2 arg3))
+
+(defun adc-x64 (arg1 arg2 &optional arg3 &rest args)
+  (arithmetic-x64 #x10 arg1 arg2 arg3))
+
 (defun add-reg-rm-x64 (arg1 arg2 &optional arg3 &rest args)
   (arithmetic-reg-rm-x64 #x00 arg1 arg2 arg3))
 
@@ -28,6 +37,15 @@
 (defun add-x64 (arg1 arg2 &optional arg3 &rest args)
   (arithmetic-x64 #x00 arg1 arg2 arg3))
 
+(defun and-reg-rm-x64 (arg1 arg2 &optional arg3 &rest args)
+  (arithmetic-reg-rm-x64 #x20 arg1 arg2 arg3))
+
+(defun and-rm-reg-x64 (arg1 arg2 &optional arg3 &rest args)
+  (arithmetic-rm-reg-x64 #x20 arg1 arg2 arg3))
+
+(defun and-x64 (arg1 arg2 &optional arg3 &rest args)
+  (arithmetic-x64 #x20 arg1 arg2 arg3))
+
 (defun clc-x86 (&rest args)
   (list #xf8))
 (defun cld-x86 (&rest args)
@@ -36,6 +54,16 @@
   (list #xfa))
 (defun cmc-x86 (&rest args)
   (list #xf5))
+
+(defun cmp-reg-rm-x64 (arg1 arg2 &optional arg3 &rest args)
+  (arithmetic-reg-rm-x64 #x38 arg1 arg2 arg3))
+
+(defun cmp-rm-reg-x64 (arg1 arg2 &optional arg3 &rest args)
+  (arithmetic-rm-reg-x64 #x38 arg1 arg2 arg3))
+
+(defun cmp-x64 (arg1 arg2 &optional arg3 &rest args)
+  (arithmetic-x64 #x38 arg1 arg2 arg3))
+
 (defun cmpsb-x86 (&rest args)
   (list #xa6))
 (defun cmpsw-x86 (&rest args)
@@ -231,6 +259,15 @@
 (defun not-x64 (arg1 &optional arg2 &rest args)
   (one-operand-x64 #xf6 #xd0 arg1 arg2))
 
+(defun or-reg-rm-x64 (arg1 arg2 &optional arg3 &rest args)
+  (arithmetic-reg-rm-x64 #x08 arg1 arg2 arg3))
+
+(defun or-rm-reg-x64 (arg1 arg2 &optional arg3 &rest args)
+  (arithmetic-rm-reg-x64 #x08 arg1 arg2 arg3))
+
+(defun or-x64 (arg1 arg2 &optional arg3 &rest args)
+  (arithmetic-x64 #x08 arg1 arg2 arg3))
+
 (defun out-x32-x64 (arg1 arg2 &rest args)
   (cond
     ((and (equalp arg1 "dx") (equalp arg2 "al"))
@@ -346,6 +383,15 @@
 (defun sar-cl-x64 (arg1 &optional arg2 &rest args)
   (one-operand-x64 #xd2 #xf8 arg1 arg2))
 
+(defun sbb-reg-rm-x64 (arg1 arg2 &optional arg3 &rest args)
+  (arithmetic-reg-rm-x64 #x18 arg1 arg2 arg3))
+
+(defun sbb-rm-reg-x64 (arg1 arg2 &optional arg3 &rest args)
+  (arithmetic-rm-reg-x64 #x18 arg1 arg2 arg3))
+
+(defun sbb-x64 (arg1 arg2 &optional arg3 &rest args)
+  (arithmetic-x64 #x18 arg1 arg2 arg3))
+
 (defun scasb-x86 (&rest args)
   (list #xae))
 (defun scasw-x86 (&rest args)
@@ -421,3 +467,12 @@
 
 (defun syscall-x64 (&rest args)
   (list #x0f #x05))
+
+(defun xor-reg-rm-x64 (arg1 arg2 &optional arg3 &rest args)
+  (arithmetic-reg-rm-x64 #x30 arg1 arg2 arg3))
+
+(defun xor-rm-reg-x64 (arg1 arg2 &optional arg3 &rest args)
+  (arithmetic-rm-reg-x64 #x30 arg1 arg2 arg3))
+
+(defun xor-x64 (arg1 arg2 &optional arg3 &rest args)
+  (arithmetic-x64 #x30 arg1 arg2 arg3))
