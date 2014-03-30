@@ -6,6 +6,8 @@
 (in-package :ultraelf)
 
 (defparameter *emit-function-hash-table-x64* (make-hash-table :test 'equalp))
+;;; pseudo-ops.
+(setf (gethash "[bits"      *emit-function-hash-table-x64*) (list #'bits-pseudo-op))
 ;;; segment registers.
 (setf (gethash "cs:"        *emit-function-hash-table-x64*) (list #'cs-x86))
 (setf (gethash "ds:"        *emit-function-hash-table-x64*) (list #'ds-x86))
