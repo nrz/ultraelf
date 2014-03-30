@@ -8,7 +8,7 @@
 (defun create-syntax-tree (my-list)
   "This recursive function converts a string produced by transform-code-to-string into a syntax tree.
    Input argument my-list can be a string, in that case it is first stored into a list."
-  (if (stringp my-list)
+  (when (stringp my-list)
     (setf my-list (list my-list)))
   ;; is last element of the list a string?
   ;; if yes, read it to convert it to a list and append the resulting list to earlier elements.
