@@ -35,11 +35,10 @@
                      ;; is character l ?
                      ;; if yes, change to Lisp mode.
                      ((equal my-char "l")
-                      (progn
-                        (setf current-mode "Lisp")
-                        (setf is-there-code-on-this-line nil)
-                        (setf lisp-code-string "")
-                        (setf current-phase "beginning-of-line")))
+                      (setf current-mode "Lisp")
+                      (setf is-there-code-on-this-line nil)
+                      (setf lisp-code-string "") 
+                      (setf current-phase "beginning-of-line"))
                      ;; otherwise, print error.
                      (t (error "in asm mode undefined control character after #"))))
                   ;; is character # ?
@@ -48,25 +47,22 @@
                    (setf current-phase "hash-sign-read"))
                   ;; is character newline?
                   ((equal my-char (coerce (list #\Newline) 'string))
-                   (progn
-                     (cond
-                       ;; is there _no_ code on this line?
-                       ;; if true, do not output anything.
-                       ((not is-there-code-on-this-line)
-                        (setf current-phase "beginning-of-line"))
-                       ;; are we inside instruction or inside a parameter?
-                       ;; if true, output ")
-                       ((or (equal current-phase "inside-instruction")
-                            (equal current-phase "inside-parameters"))
-                        (progn
-                          (setf current-phase "beginning-of-line")
-                          (setf is-there-code-on-this-line nil)
-                          (setf my-string (concatenate 'string my-string "\")"))))
-                       ;; otherwise output )
-                       (t (progn
-                            (setf current-phase "beginning-of-line")
-                            (setf is-there-code-on-this-line nil)
-                            (setf my-string (concatenate 'string my-string ")")))))))
+                   (cond
+                     ;; is there _no_ code on this line?
+                     ;; if true, do not output anything.
+                     ((not is-there-code-on-this-line)
+                      (setf current-phase "beginning-of-line"))
+                     ;; are we inside instruction or inside a parameter?
+                     ;; if true, output ")
+                     ((or (equal current-phase "inside-instruction")
+                          (equal current-phase "inside-parameters"))
+                      (setf current-phase "beginning-of-line")
+                      (setf is-there-code-on-this-line nil)
+                      (setf my-string (concatenate 'string my-string "\")")))
+                     ;; otherwise output )
+                     (t (setf current-phase "beginning-of-line")
+                      (setf is-there-code-on-this-line nil)
+                      (setf my-string (concatenate 'string my-string ")")))))
                   ;; are we inside a comment?
                   ;; if yes, don't output anything.
                   ((equal current-phase "inside-comment")
@@ -83,10 +79,9 @@
                      ((and
                         (not (equal my-char "("))
                         (not (equal my-char ")")))
-                      (progn
-                        (setf current-phase "inside-instruction")
-                        (setf is-there-code-on-this-line t)
-                        (setf my-string (concatenate 'string my-string "'(\"" my-char))))
+                      (setf current-phase "inside-instruction")
+                      (setf is-there-code-on-this-line t)
+                      (setf my-string (concatenate 'string my-string "'(\"" my-char)))
                      (t nil)))
                   ;; is character ; ?
                   ;; if yes, don't output anything, begin comment.
@@ -103,9 +98,8 @@
                      ;; is this closing square bracket?
                      ;; if yes, output ]
                      ((equal my-char "]")
-                      (progn
-                        (setf current-phase "closing-square-bracket")
-                        (setf my-string (concatenate 'string my-string my-char))))
+                      (setf current-phase "closing-square-bracket")
+                      (setf my-string (concatenate 'string my-string my-char)))
                      ;; otherwise output the character.
                      (t (setf my-string (concatenate 'string my-string my-char)))))
                   ;; is character space or comma?
@@ -118,9 +112,8 @@
                         (not (equal (get-last-character-string my-string) " "))
                         (not (equal (get-last-character-string my-string) ","))
                         (not (equal (get-last-character-string my-string) "(")))
-                      (progn
-                        (setf current-phase "in-space")
-                        (setf my-string (concatenate 'string my-string "\" "))))
+                      (setf current-phase "in-space")
+                      (setf my-string (concatenate 'string my-string "\" ")))
                      (t nil)))
                   ;; is instruction printed and this is the 1st character of a parameter?
                   ((and
@@ -131,14 +124,13 @@
                      ;; is this memory address syntax (with square brackets)?
                      ;; if yes, mark we're inside memory address syntax, output " and current character.
                      ((equal my-char "[")
-                      (progn
-                        (setf current-phase "inside-memory-address-syntax")
-                        (setf my-string (concatenate 'string my-string "\"" my-char))))
+                      (setf current-phase "inside-memory-address-syntax")
+                      (setf my-string (concatenate 'string my-string "\"" my-char)))
                      ;; this is not a memory address syntax.
                      ;; mark we're inside parameters, output " and current character.
-                     (t (progn
-                          (setf current-phase "inside-parameters")
-                          (setf my-string (concatenate 'string my-string "\"" my-char))))))
+                     (t
+                      (setf current-phase "inside-parameters")
+                      (setf my-string (concatenate 'string my-string "\"" my-char)))))
                   ;; otherwise output the character.
                   (t (setf my-string (concatenate 'string my-string my-char)))))
                ((equal current-mode "Lisp")
@@ -149,48 +141,46 @@
                      ;; is character e ?
                      ;; if yes, we're done, fix closing parentheses and return.
                      ((equal my-char "e")
-                      (progn
-                        (setf my-string (concatenate 'string
-                                                     my-string
-                                                     (coerce (list #\Newline) 'string)
-                                                     "#a"
-                                                     (coerce (list #\Newline) 'string)
-                                                     (eval (read-from-string lisp-code-string))
-                                                     (coerce (list #\Newline) 'string)
-                                                     "#e)"))
-                        (return-from transform-code-to-string
-                                     (concatenate 'string (get-string-without-invalid-last-character
-                                                            (get-string-without-invalid-last-character
-                                                              my-string invalid-last-characters)
-                                                            invalid-last-characters) ")"))))
+                      (setf my-string (concatenate 'string
+                                                   my-string
+                                                   (coerce (list #\Newline) 'string)
+                                                   "#a"
+                                                   (coerce (list #\Newline) 'string)
+                                                   (eval (read-from-string lisp-code-string))
+                                                   (coerce (list #\Newline) 'string)
+                                                   "#e)"))
+                      (return-from transform-code-to-string
+                                   (concatenate 'string (get-string-without-invalid-last-character
+                                                          (get-string-without-invalid-last-character
+                                                            my-string invalid-last-characters)
+                                                          invalid-last-characters) ")")))
                      ;; is character a ?
                      ;; if yes, change to asm mode.
                      ((equal my-char "a")
-                      (progn
-                        (setf current-mode "asm")
-                        (setf is-there-code-on-this-line nil)
-                        (setf current-phase "beginning-of-line")
-                        (setf my-string (concatenate 'string
-                                                     my-string
-                                                     (coerce (list #\Newline) 'string)
-                                                     "#a"
-                                                     (coerce (list #\Newline) 'string)
-                                                     (eval (read-from-string lisp-code-string))
-                                                     (coerce (list #\Newline) 'string)
-                                                     "#e)"))))
+                      (setf current-mode "asm")
+                      (setf is-there-code-on-this-line nil)
+                      (setf current-phase "beginning-of-line")
+                      (setf my-string (concatenate 'string
+                                                   my-string
+                                                   (coerce (list #\Newline) 'string)
+                                                   "#a"
+                                                   (coerce (list #\Newline) 'string)
+                                                   (eval (read-from-string lisp-code-string))
+                                                   (coerce (list #\Newline) 'string)
+                                                   "#e)")))
                      ;; otherwise, add # and the character to the Lisp code to be evaluated.
-                     (t (progn
-                          (setf current-phase "")
-                          (setf lisp-code-string (concatenate 'string lisp-code-string "#" my-char))))))
+                     (t 
+                      (setf current-phase "")
+                      (setf lisp-code-string (concatenate 'string lisp-code-string "#" my-char)))))
                   ;; is character # ?
                   ;; if yes, mark hash sign read.
                   ((equal my-char "#")
                    (setf current-phase "hash-sign-read"))
                   ;; otherwise add the character to the Lisp code to be evaluated.
                   (t (setf lisp-code-string (concatenate 'string lisp-code-string my-char)))))
-               (t (progn
-                    (format t "current mode: ~a~a" current-mode #\Newline)
-                    (error "invalid current mode")))))))
+               (t
+                 (format t "current mode: ~a~a" current-mode #\Newline)
+                 (error "invalid current mode"))))))
 
 ;;; #a is the input which starts the custom reader.
 (set-dispatch-macro-character #\# #\a #'transform-code-to-string)
