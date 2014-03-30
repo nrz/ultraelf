@@ -90,6 +90,37 @@
        (append (emit-high-odd-rex) (list (1+ opcode-base) (logior reg-byte-base modrm))))
       (t nil))))
 
+(defun arithmetic-al-imm8-x86 (opcode-base arg1)
+  "This function uses AL-specific encoding to encode instruction al,imm8."
+  (list (+ opcode-base 4) (parse-integer arg1)))
+
+(defun arithmetic-ax-imm16-x64 (opcode-base arg1)
+  "This function uses AX-specific encoding to encode instruction ax,imm16."
+  (let*
+    ((imm16 (parse-integer arg1)))
+  (list #x66 (+ opcode-base 5) (logand imm16 #xff) (ash imm16 -8))))
+
+(defun arithmetic-eax-imm32-x64 (opcode-base arg1)
+  "This function uses EAX-specific encoding to encode instruction eax,imm32."
+  (let*
+    ((imm32 (parse-integer arg1)))
+    (list (+ opcode-base 5)
+          (logand imm32 #xff)
+          (logand (ash imm32 -8) #xff)
+          (logand (ash imm32 -16) #xff)
+          (logand (ash imm32 -24) #xff))))
+
+(defun arithmetic-rax-imm32-x64 (opcode-base arg1)
+  "This function uses RAX-specific encoding to encode instruction rax,imm32."
+  (let*
+    ((imm32 (parse-integer arg1)))
+    (append (emit-high-rex)
+            (list (+ opcode-base 5)
+                  (logand imm32 #xff)
+                  (logand (ash imm32 -8) #xff)
+                  (logand (ash imm32 -16) #xff)
+                  (logand (ash imm32 -24) #xff)))))
+
 (defun arithmetic-rm-reg-x64 (opcode-base arg1 arg2 &optional arg3)
   (let*
     ((arg1-reg-type (gethash arg1 *reg-type-hash-table-x64*))
