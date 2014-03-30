@@ -5,6 +5,11 @@
 
 (in-package :ultraelf)
 
+(defun emit-0x48-or-0x4a-rex (&rest args)
+  "This function emits a REX prefix 0x48 or 0x4a.
+   Can be chosen randomly or at will."
+  (list #x48))
+
 (defun emit-high-rex (&rest args)
   "This function emits a high REX prefix:
    0x48, 0x49, 0x4a, 0x4b, 0x4c, 0x4d, 0x4e or 0x4f.
