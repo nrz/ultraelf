@@ -6,4 +6,6 @@
 (in-package :cl-user)
 
 (defpackage :ultraelf
-  (:use :cl))
+  (:use :cl
+        :elf)
+  (:shadow :type))

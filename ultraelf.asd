@@ -25,6 +25,7 @@
   :serial t
   :description "UltraELF system"
   :author "Antti Nuortimo"
+  :depends-on (:elf)
   :components ((:file "packages")
                (:file "ultraelf-compiling-macros")
                (:file "ultraelf-string")                     ; string functions.
