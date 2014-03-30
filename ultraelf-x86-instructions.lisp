@@ -112,6 +112,23 @@
   (list #x66 #x6d))
 (defun insd-x32-x64 (&rest args)
   (list #x6d))
+
+(defun lea-x64 (arg1 arg2 &rest args)
+  (cond
+    ((and
+       (equal (gethash arg1 *reg-type-hash-table-x64*) "old-16-bit-reg")
+       (equal (gethash arg2 *reg-type-hash-table-x64*) "register-indirect-without-SIB"))
+     (append (list #x66 #x8d) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
+    ((and
+       (equal (gethash arg1 *reg-type-hash-table-x64*) "old-32-bit-reg")
+       (equal (gethash arg2 *reg-type-hash-table-x64*) "register-indirect-without-SIB"))
+     (append (list #x8d) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
+    ((and
+       (equal (gethash arg1 *reg-type-hash-table-x64*) "old-64-bit-reg")
+       (equal (gethash arg2 *reg-type-hash-table-x64*) "register-indirect-without-SIB"))
+     (append (emit-0x48-or-0x4a-rex) (list #x8d) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
+    (t nil)))
+
 (defun lodsb-x86 (&rest args)
   (list #xac))
 (defun lodsw-x86 (&rest args)
