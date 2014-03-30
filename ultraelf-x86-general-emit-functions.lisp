@@ -100,6 +100,10 @@
                 opcode-base
                 (ash mod 6))))
 
+(defun emit-modrm-byte-for-arithmetic-reg-imm (opcode-base arg1)
+  "This function emits ModRM (?) byte for reg,imm for arithmetic instructions."
+  (emit-modrm-byte-for-arithmetic-rm-imm opcode-base #b11 arg1))
+
 (defun emit-modrm-byte-for-reg-reg (arg1 arg2)
   "This function emits ModRM for reg,reg."
   (emit-modrm-byte #b11 arg1 arg2))
