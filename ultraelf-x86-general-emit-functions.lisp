@@ -137,7 +137,7 @@
   "This function uses AX-specific encoding to encode instruction ax,imm16."
   (let*
     ((imm16 (parse-integer arg1)))
-  (list #x66 (+ opcode-base 5) (logand imm16 #xff) (ash imm16 -8))))
+    (list #x66 (+ opcode-base 5) (logand imm16 #xff) (ash imm16 -8))))
 
 (defun arithmetic-eax-imm32-x64 (opcode-base arg1)
   "This function uses EAX-specific encoding to encode instruction eax,imm32."
