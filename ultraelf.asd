@@ -43,5 +43,5 @@
                (:file "ultraelf-x86-instructions")           ; instruction-specific x86 emit-code functions.
                (:file "ultraelf-instructions-hash-tables")   ; x86 instructions hash tables.
                (:file "ultraelf-alt-code")                   ; alternative code used for metamorphic engine.
-               (:file "ultraelf-1")
+               (:file "ultraelf-assembling-functions")       ; general assembling functions.
                (:file "ultraelf-test-x64-code")))            ; x64 test code, used for testing.
