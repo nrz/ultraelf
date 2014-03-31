@@ -77,4 +77,7 @@
                                          current-instruction " " current-arg
                                          (coerce (list #\Newline) 'string)))))
     lisp-code-output-string)
+  #a
+  not ax
+  neg bx
   #e)

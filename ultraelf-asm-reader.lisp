@@ -148,7 +148,9 @@
                                                    (coerce (list #\Newline) 'string)
                                                    (eval (read-from-string lisp-code-string))
                                                    (coerce (list #\Newline) 'string)
-                                                   "#e)"))
+                                                   "#e"
+                                                   (coerce (list #\Newline) 'string)
+                                                   ")"))
                       (return-from transform-code-to-string
                                    (concatenate 'string (get-string-without-invalid-last-character
                                                           (get-string-without-invalid-last-character
@@ -167,7 +169,8 @@
                                                    (coerce (list #\Newline) 'string)
                                                    (eval (read-from-string lisp-code-string))
                                                    (coerce (list #\Newline) 'string)
-                                                   "#e)")))
+                                                   "#e"
+                                                   (coerce (list #\Newline) 'string))))
                      ;; otherwise, add # and the character to the Lisp code to be evaluated.
                      (t 
                       (setf current-phase "")

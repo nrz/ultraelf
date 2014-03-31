@@ -13,8 +13,15 @@
   ;; is last element of the list a string?
   ;; if yes, read it to convert it to a list and append the resulting list to earlier elements.
   ;; otherwise use CONS to create (LIST element-1 element-2 ... ) .
-  (if (stringp (first (last my-list)))
-    (create-syntax-tree (append (butlast my-list) (rest (read-from-string (first (last my-list))))))
+  (loop for i from 0 to (1- (length my-list))
+        do (when (stringp (nth i my-list))
+             (cond
+               ((eq i 0)
+                (setf my-list (create-syntax-tree (append (rest (read-from-string (nth i my-list))) (subseq my-list (1+ i))))))
+               (t
+                (setf my-list (create-syntax-tree (append (subseq my-list 0 (1- i)) (rest (read-from-string (nth i my-list))) (subseq my-list (1+ i)))))))))
+  (if (eq (first my-list) 'list)
+    my-list
     (cons 'list my-list)))
 
 (defun emit-binary-code-list (syntax-tree my-hash-table)
