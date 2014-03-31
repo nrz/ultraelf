@@ -64,6 +64,6 @@
   (mapcar #'(lambda (x) (print-hex x)) my-list))
 
 (defun string-to-function (my-string)
-  "This fnuction converts a string to a function.
+  "This function converts a string to a function.
    http://stackoverflow.com/questions/2940267/call-function-based-on-a-string/2940347#2940347"
   (symbol-function (find-symbol (string-upcase my-string))))
