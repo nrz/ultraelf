@@ -99,6 +99,37 @@
   sub   arg1,arg1
   #e)
 
+(defparameter *alt-zero-reg-sbb*
+  ;; not clean.
+  ;; modifies flags.
+  #a
+  clc
+  sbb   arg1,arg1
+  #e)
+
+(defparameter *alt-neg-not-inc*
+  ;; not clean.
+  ;; modifies flags.
+  #a
+  neg   arg1
+  inc   arg1
+  #e)
+
+(defparameter *alt-not-xor*
+  ;; not clean?
+  ;; modifies flags.
+  #a
+  xor   arg1,-1
+  #e)
+
+(defparameter *alt-not-neg-dec*
+  ;; not clean.
+  ;; modifies flags.
+  #a
+  neg   arg1
+  dec   arg1
+  #e)
+
 (defparameter *alt-add-reg-reg-adc*
   ;; clean, modifies flags identically.
   #a
@@ -113,12 +144,155 @@
   sbb   arg1,arg2
   #e)
 
+(defparameter *alt-dec-sub*
+  ;; not clean, modifies carry.
+  #a
+  sub   arg1,1
+  #e)
+
+(defparameter *alt-dec-clc-sbb*
+  ;; not clean, modifies carry.
+  #a
+  clc
+  sbb   arg1,1
+  #e)
+
+(defparameter *alt-dec-stc-sub*
+  ;; not clean, modifies carry.
+  #a
+  stc
+  sbb   arg1,0
+  #e)
+
+(defparameter *alt-inc-add*
+  ;; not clean, modifies carry.
+  #a
+  add   arg1,1
+  #e)
+
+(defparameter *alt-inc-clc-adc*
+  ;; not clean, modifies carry.
+  #a
+  clc
+  adc   arg1,1
+  #e)
+
+(defparameter *alt-inc-stc-adc*
+  ;; not clean, modifies carry.
+  #a
+  stc
+  adc   arg1,0
+  #e)
+
 (defparameter *alt-cmp-reg64-any-push-sub-pop*
   ;; clean, modifies flags identically.
   #a
   push  arg1
   sub   arg1,arg2
   pop   arg1
+  #e)
+
+(defparameter *alt-shl-rm32-rol-and*
+ ;; not clean?
+ #a
+ rol    arg1,1
+ and    arg1,0xfffffffe
+ #e)
+
+(defparameter *alt-shl-rm16-rol-and*
+ ;; not clean?
+ #a
+ rol    arg1,1
+ and    arg1,0xfffe
+ #e)
+
+(defparameter *alt-shl-rm8-rol-and*
+ ;; not clean?
+ #a
+ rol    arg1,1
+ and    arg1,0xfe
+ #e)
+
+(defparameter *alt-shl-rm32-rcl-and*
+ ;; not clean?
+ #a
+ rcl    arg1,1
+ and    arg1,0xfffffffe
+ #e)
+
+(defparameter *alt-shl-rm16-rcl-and*
+ ;; not clean?
+ #a
+ rcl    arg1,1
+ and    arg1,0xfffe
+ #e)
+
+(defparameter *alt-shl-rm8-rcl-and*
+ ;; not clean?
+ #a
+ rcl    arg1,1
+ and    arg1,0xfe
+ #e)
+
+(defparameter *alt-shr-rm32-sar-pushf-and-popf*
+  ;; clean, modifies flags identically.
+  #a
+  sar   arg1,1
+  pushf
+  and   arg1,0x7fffffff
+  popf
+  #e)
+
+(defparameter *alt-shr-rm16-sar-pushf-and-popf*
+  ;; clean, modifies flags identically.
+  #a
+  sar   arg1,1
+  pushf
+  and   arg1,0x7fff
+  popf
+  #e)
+
+(defparameter *alt-rol-shl-adc*
+ ;; not clean?
+ #a
+ shl    arg1,1
+ adc    arg1,0
+ #e)
+
+(defparameter *alt-rol-shl-jnc-inc*
+ ;; not clean?
+ #a
+ shl    arg1,1
+ jnc    >.label
+ inc    arg1
+ .label:
+ #e)
+
+(defparameter *alt-rol-shl-jnc-or*
+ ;; not clean?
+ #a
+ shl    arg1,1
+ jnc    >.label
+ or     arg1,1
+ .label:
+ #e)
+
+(defparameter *alt-rol-shl-jnc-xor*
+ ;; not clean?
+ #a
+ shl    arg1,1
+ jnc    >.label
+ xor    arg1,1
+ .label:
+ #e)
+
+(defparameter *alt-shr-rm8-sar-pushf-and-popf*
+  ;; clean, modifies flags identically.
+  #a
+  sar   arg1,1
+  pushf
+  and   arg1,0x7f
+  popf
   #e)
 
 (defparameter *alt-and-reg1-reg1-test*
