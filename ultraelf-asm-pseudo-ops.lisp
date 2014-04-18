@@ -11,10 +11,14 @@
   (defparameter *bits* (parse-integer (get-string-without-last-character arg1)))
   nil)
 
-(defun align (arg1 &rest args)
+(defun align-pseudo-op (arg1 &rest args)
   "`align` aligns the code by emitting enough nop's (0x90)."
-  (loop for i from 0 to (- *align-value* (mod *global-offset* *align-value*))
-        collect #x90))
+  (if (or
+        (eq *global-offset* 0)
+        (eq (mod *global-offset* arg1) 0))
+    nil
+    (loop for i from 1 to (- arg1 (mod *global-offset* arg1))
+          collect #x90)))
 
 (defun db (&rest args)
   "`db` defines a byte."
