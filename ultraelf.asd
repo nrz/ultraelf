@@ -31,6 +31,7 @@
                (:file "ultraelf-string")                     ; string functions.
                (:file "ultraelf-printing")                   ; printing functions.
                (:file "ultraelf-asm-reader")                 ; Lisp assembly reader.
+               (:file "ultraelf-general-emit-functions")     ; general emit functions, needed for assembling and pseudo-ops.
                (:file "ultraelf-asm-pseudo-ops")             ; asm pseudo-ops.
                (:file "ultraelf-modrm")                      ; x86 ModRM byte register values hash table.
                (:file "ultraelf-sib")                        ; x86 SIB byte scale values hash table.
