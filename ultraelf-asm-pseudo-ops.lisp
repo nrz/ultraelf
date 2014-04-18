@@ -11,6 +11,11 @@
   (defparameter *bits* (parse-integer (get-string-without-last-character arg1)))
   nil)
 
+(defun align (arg1 &rest args)
+  "`align` aligns the code by emitting enough nop's (0x90)."
+  (loop for i from 0 to (- *align-value* (mod *global-offset* *align-value*))
+        collect #x90))
+
 (defun db (&rest args)
   "`db` defines a byte."
   (apply #'append (loop for my-string in args collect (string-to-8-bit-little-endian my-string))))
