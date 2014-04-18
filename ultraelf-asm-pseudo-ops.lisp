@@ -10,3 +10,19 @@
    Example usage: [bits 64]"
   (defparameter *bits* (parse-integer (get-string-without-last-character arg1)))
   nil)
+
+(defun db (&rest args)
+  "`db` defines a byte."
+  (apply #'append (loop for my-string in args collect (string-to-8-bit-little-endian my-string))))
+
+(defun dw (&rest args)
+  "`dw` defines a word (2 bytes)."
+  (apply #'append (loop for my-string in args collect (string-to-16-bit-little-endian my-string))))
+
+(defun dd (&rest args)
+  "`dd` defines a doubleword (4 bytes)."
+  (apply #'append (loop for my-string in args collect (string-to-32-bit-little-endian my-string))))
+
+(defun dq (&rest args)
+  "`dq` defines a quadword (8 bytes)."
+  (apply #'append (loop for my-string in args collect (string-to-64-bit-little-endian my-string))))
