@@ -7,6 +7,7 @@
 
 (defparameter *emit-function-hash-table-x64* (make-hash-table :test 'equalp))
 ;;; pseudo-ops.
+(setf (gethash "align"      *emit-function-hash-table-x64*) (list #'align-pseudo-op))
 (setf (gethash "db"         *emit-function-hash-table-x64*) (list #'db))
 (setf (gethash "dw"         *emit-function-hash-table-x64*) (list #'dw))
 (setf (gethash "dd"         *emit-function-hash-table-x64*) (list #'dd))
