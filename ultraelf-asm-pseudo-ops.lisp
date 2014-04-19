@@ -35,3 +35,8 @@
 (defun dq (&rest args)
   "`dq` defines a quadword (8 bytes)."
   (apply #'append (loop for my-string in args collect (string-to-64-bit-little-endian my-string))))
+
+(defun global-pseudo-op (arg1 &rest args)
+  "`global` pseudo-op defines the entry point (?) of the code."
+  (defparameter *entry-point* arg1)
+  nil)
