@@ -12,6 +12,7 @@
 (setf (gethash "dw"         *emit-function-hash-table-x64*) (list #'dw))
 (setf (gethash "dd"         *emit-function-hash-table-x64*) (list #'dd))
 (setf (gethash "dq"         *emit-function-hash-table-x64*) (list #'dq))
+(setf (gethash "bits"       *emit-function-hash-table-x64*) (list #'bits-pseudo-op))
 (setf (gethash "[bits"      *emit-function-hash-table-x64*) (list #'bits-pseudo-op))
 (setf (gethash "global"     *emit-function-hash-table-x64*) (list #'global-pseudo-op))
 ;;; segment registers.
