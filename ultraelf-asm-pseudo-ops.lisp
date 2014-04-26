@@ -39,3 +39,8 @@
   "`global` pseudo-op defines the entry point (?) of the code."
   (defparameter *entry-point* arg1)
   nil)
+
+(defun section-pseudo-op (arg1 &rest args)
+  "`section` pseudo-op starts a new section."
+  (defparameter *current-section* arg1)
+  nil)
