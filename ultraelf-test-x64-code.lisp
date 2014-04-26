@@ -49,7 +49,8 @@
   section .data
 
   align 8
-  message        db 'Hello world!', 0x0a
+  message:
+  db 'Hello world!', 0x0a
   equ message_length ($-message)
   #e)
 
