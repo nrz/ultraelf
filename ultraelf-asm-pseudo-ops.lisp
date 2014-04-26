@@ -6,9 +6,8 @@
 (in-package :ultraelf)
 
 (defun bits-pseudo-op (arg1 &rest args)
-  "This pseudo-op sets *bits* according to what is requested.
-   Example usage: [bits 64]"
-  (defparameter *bits* (parse-integer (get-string-without-last-character arg1)))
+  "`bits` or `[bits` pseudo-op affects the encoding used. Use `[bits 64]` for x86-64."
+  (defparameter *bits* arg1)
   nil)
 
 (defun align-pseudo-op (arg1 &rest args)
