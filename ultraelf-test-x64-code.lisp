@@ -32,8 +32,8 @@
   section .text
   global _start
 
-  NR_write equ 1
-  NR_exit  equ 60
+  equ NR_write 1             ; equ is also a prefix operation.
+  equ NR_exit  60
 
   _start:                    ; linker entry point.
 
@@ -50,7 +50,7 @@
 
   align 8
   message        db 'Hello world!', 0x0a
-  message_length equ ($-message)
+  equ message_length ($-message)
   #e)
 
 (defparameter *example-code-x64*
