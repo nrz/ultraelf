@@ -25,11 +25,11 @@
   :serial t
   :description "UltraELF system"
   :author "Antti Nuortimo"
-  :depends-on (:elf)
   :components ((:file "packages")
                (:file "ultraelf-compiling-macros")
                (:file "ultraelf-string")                     ; string functions.
                (:file "ultraelf-printing")                   ; printing functions.
+               (:file "ultraelf-classes")                    ; classes.
                (:file "ultraelf-asm-reader")                 ; Lisp assembly reader.
                (:file "ultraelf-general-emit-functions")     ; general emit functions, needed for assembling and pseudo-ops.
                (:file "ultraelf-asm-pseudo-ops")             ; asm pseudo-ops.
