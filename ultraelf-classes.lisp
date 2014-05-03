@@ -6,10 +6,7 @@
 (in-package :ultraelf)
 
 (defclass elf-file ()
-  ((elf-header
-     :reader elf-header
-     :documentation "ELF header as a whole")
-   (program-header-table
+  ((program-header-table
      :accessor program-header-table
      :documentation "required for loadable file, optional for relocatable file")
    (sections
@@ -47,3 +44,12 @@
      :accessor filler-bytes
      :initform (list 0 0 0 0 0 0 0)
      :documentation "filler bytes")))
+
+(defmethod elf-header ((elf-file elf-file))
+  (append (slot-value elf-file 'magic)
+          (slot-value elf-file 'file-class)
+          (slot-value elf-file 'data-encoding)
+          (slot-value elf-file 'file-version)
+          (slot-value elf-file 'os-abi-identification)
+          (slot-value elf-file 'abi-version)
+          (slot-value elf-file 'filler-bytes)))
