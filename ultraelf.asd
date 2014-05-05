@@ -29,6 +29,7 @@
                (:file "ultraelf-compiling-macros")
                (:file "ultraelf-string")                     ; string functions.
                (:file "ultraelf-printing")                   ; printing functions.
+               (:file "ultraelf-register-classes")           ; register classes.
                (:file "ultraelf-elf-classes")                ; ELF classes.
                (:file "ultraelf-asm-reader")                 ; Lisp assembly reader.
                (:file "ultraelf-general-emit-functions")     ; general emit functions, needed for assembling and pseudo-ops.
