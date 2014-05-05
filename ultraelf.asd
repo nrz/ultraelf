@@ -30,6 +30,7 @@
                (:file "ultraelf-string")                     ; string functions.
                (:file "ultraelf-printing")                   ; printing functions.
                (:file "ultraelf-register-classes")           ; register classes.
+               (:file "ultraelf-create-register-instances")  ; lists of registers belonging to different register classes.
                (:file "ultraelf-elf-classes")                ; ELF classes.
                (:file "ultraelf-asm-reader")                 ; Lisp assembly reader.
                (:file "ultraelf-general-emit-functions")     ; general emit functions, needed for assembling and pseudo-ops.
@@ -39,7 +40,6 @@
                (:file "ultraelf-sreg2")                      ; x86 SREG2 segment register values hash table.
                (:file "ultraelf-sreg3")                      ; x86 SREG3 segment register values hash table.
                (:file "ultraelf-register-types")             ; x86 register type hash table.
-               (:file "ultraelf-register-lists")
                (:file "ultraelf-x64-rex")                    ; x64 "emit REX" functions.
                (:file "ultraelf-x86-general-emit-functions") ; general x86 emit-code functions.
                (:file "ultraelf-x86-instructions")           ; instruction-specific x86 emit-code functions.
