@@ -43,7 +43,14 @@
    (filler-bytes
      :accessor filler-bytes
      :initform (list 0 0 0 0 0 0 0)
-     :documentation "filler bytes")))
+     :documentation "filler bytes")
+   (elf-type
+     :accessor elf-type
+     :initform (list 2)
+     :documentation "0 for no file type, 1 for relocatable object file, 2 for executable file, 3 for shared object file, 4 for core file, #xfe00 environment-specific use, #xff00 for processor-specific use.")
+   (elf-machine
+     :accessor elf-machine
+     :documentation "target architecture")))
 
 (defmethod elf-header ((elf-file elf-file))
   (append (slot-value elf-file 'magic)
