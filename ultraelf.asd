@@ -29,7 +29,7 @@
                (:file "ultraelf-compiling-macros")
                (:file "ultraelf-string")                     ; string functions.
                (:file "ultraelf-printing")                   ; printing functions.
-               (:file "ultraelf-register-classes")           ; register classes.
+               (:file "ultraelf-addressing-form-classes")    ; addressing form classes.
                (:file "ultraelf-register-lists")             ; lists of registers belonging to each register class.
                (:file "ultraelf-create-register-instances")  ; lists of registers belonging to different register classes.
                (:file "ultraelf-elf-classes")                ; ELF classes.
