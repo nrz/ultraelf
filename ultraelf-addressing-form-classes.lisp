@@ -16,11 +16,11 @@
      :documentation "any CPU-register")))
 
 (defclass x86-addressing-form (addressing-form)
-  ((modrm
-     :initarg :modrm
-     :reader modrm
-     :initform (error "ModRM must be specified")
-     :documentation "ModRM")))
+  ((r/m
+     :initarg :r/m
+     :reader r/m
+     :initform (error "r/m must be specified")
+     :documentation "r/m bits of ModRM byte")))
 
 (defclass x86-register (register x86-addressing-form)
   ((is-x86-register

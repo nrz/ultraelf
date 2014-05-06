@@ -10,4 +10,4 @@
   (loop for i below (length *create-register-classes-list*)
         do (loop for j below (length (second (nth i *create-register-classes-list*)))
                  do (setf (symbol-value (intern (string-upcase (nth j (second (nth i *create-register-classes-list*))))))
-                          (make-instance (third (nth i *create-register-classes-list*)) :modrm (+ j (first (nth i *create-register-classes-list*))))))))
+                          (make-instance (third (nth i *create-register-classes-list*)) :r/m (+ j (first (nth i *create-register-classes-list*))))))))
