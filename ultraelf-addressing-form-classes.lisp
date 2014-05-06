@@ -5,7 +5,12 @@
 
 (in-package :ultraelf)
 
-(defclass register ()
+(defclass addressing-form ()
+  ((addressing-form-name
+     :reader addressing-form-name
+     :documentation "any CPU addressing form")))
+
+(defclass register (addressing-form)
   ((register-name
      :reader register-name
      :documentation "any CPU-register")))
