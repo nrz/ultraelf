@@ -31,7 +31,7 @@
                (:file "ultraelf-printing")                   ; printing functions.
                (:file "ultraelf-addressing-form-classes")    ; addressing form classes.
                (:file "ultraelf-addressing-form-lists")      ; lists of registers etc. belonging to each addressing form class.
-               (:file "ultraelf-create-register-instances")  ; lists of registers belonging to different register classes.
+               (:file "ultraelf-create-addressing-form-instances") ; create instance for each addressing form, including each register.
                (:file "ultraelf-elf-classes")                ; ELF classes.
                (:file "ultraelf-asm-reader")                 ; Lisp assembly reader.
                (:file "ultraelf-general-emit-functions")     ; general emit functions, needed for assembling and pseudo-ops.
