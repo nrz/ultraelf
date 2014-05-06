@@ -15,15 +15,17 @@
      :reader register-name
      :documentation "any CPU-register")))
 
-(defclass x86-register (register)
-  ((is-x86-register
-     :reader is-x86-register
-     :initform t)
-   (modrm
+(defclass x86-addressing-form (addressing-form)
+  ((modrm
      :initarg :modrm
      :reader modrm
      :initform (error "ModRM must be specified")
      :documentation "ModRM")))
+
+(defclass x86-register (register x86-addressing-form)
+  ((is-x86-register
+     :reader is-x86-register
+     :initform t)))
 
 (defclass x86-old-register (x86-register)
   ((is-old-register
