@@ -13,7 +13,12 @@
 (defclass x86-register (register)
   ((is-x86-register
      :reader is-x86-register
-     :initform t)))
+     :initform t)
+   (modrm
+     :initarg :modrm
+     :reader modrm
+     :initform (error "ModRM must be specified")
+     :documentation "ModRM")))
 
 (defclass x86-old-register (x86-register)
   ((is-old-register
