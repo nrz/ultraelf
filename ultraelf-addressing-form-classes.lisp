@@ -7,7 +7,7 @@
 
 (defclass register ()
   ((register-name
-     :accessor register-name
+     :reader register-name
      :documentation "any CPU-register")))
 
 (defclass x86-register (register)
