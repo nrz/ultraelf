@@ -52,6 +52,9 @@
      :accessor elf-machine
      :documentation "target architecture")))
 
+(defgeneric elf-header (elf-file)
+  (:documentation "get the entire ELF header at once."))
+
 (defmethod elf-header ((elf-file elf-file))
   (append (slot-value elf-file 'magic)
           (slot-value elf-file 'file-class)
