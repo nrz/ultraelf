@@ -27,15 +27,6 @@
      :reader is-x86-register
      :initform t)))
 
-(defclass x86-register-indirect (x86-addressing-form)
-  ((is-memory-addressing
-     :reader is-memory-addressing
-     :initform t)
-   (needs-sib
-     :reader needs-sib
-     :initform nil
-     :documentation "basic memory addressing forms do _not_ need SIB.")))
-
 (defclass x86-old-register (x86-register)
   ((is-old-register
      :reader is-old-register
@@ -189,3 +180,24 @@
   ((is-zmm-reg
      :reader is-ymm-reg
      :initform t)))
+
+(defclass x86-register-indirect (x86-addressing-form)
+  ((is-memory-addressing
+     :reader is-memory-addressing
+     :initform t)
+   (needs-sib
+     :reader needs-sib
+     :initform nil
+     :documentation "basic memory addressing forms do _not_ need SIB.")))
+
+(defclass x86-old-register-indirect (x86-register-indirect)
+  ((needs-rex
+     :reader needs-rex
+     :initform nil
+     :documentation "[rax], [rcx], [rdx], [rbx], [rsi] & [rdi] do need REX.")))
+
+(defclass x86-new-register-indirect (x86-register-indirect)
+  ((needs-rex
+     :reader needs-rex
+     :initform t
+     :documentation "[r8], [r9], [r10], [r11], [r14] & [r15] do _not_ need REX.")))
