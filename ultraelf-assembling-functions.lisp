@@ -13,7 +13,7 @@
   ;; is last element of the list a string?
   ;; if yes, read it to convert it to a list and append the resulting list to earlier elements.
   ;; otherwise use CONS to create (LIST element-1 element-2 ... ) .
-  (loop for i from 0 to (1- (length my-list))
+  (loop for i below (length my-list)
         do (when (stringp (nth i my-list))
              (if (eq i 0)
                (setf my-list (create-syntax-tree (append (rest (read-from-string (nth i my-list))) (subseq my-list (1+ i)))))
