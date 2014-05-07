@@ -118,15 +118,15 @@
     ((and
        (equal (gethash arg1 *reg-type-hash-table-x64*) "old-16-bit-reg")
        (equal (gethash arg2 *reg-type-hash-table-x64*) "register-indirect-without-SIB"))
-     (append (list #x66 #x8d) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
+     (append (list #x66 #x8d) (emit-r/m-byte-for-indirect-without-SIB arg2 arg1)))
     ((and
        (equal (gethash arg1 *reg-type-hash-table-x64*) "old-32-bit-reg")
        (equal (gethash arg2 *reg-type-hash-table-x64*) "register-indirect-without-SIB"))
-     (append (list #x8d) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
+     (append (list #x8d) (emit-r/m-byte-for-indirect-without-SIB arg2 arg1)))
     ((and
        (equal (gethash arg1 *reg-type-hash-table-x64*) "old-64-bit-reg")
        (equal (gethash arg2 *reg-type-hash-table-x64*) "register-indirect-without-SIB"))
-     (append (emit-0x48-or-0x4a-rex) (list #x8d) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
+     (append (emit-0x48-or-0x4a-rex) (list #x8d) (emit-r/m-byte-for-indirect-without-SIB arg2 arg1)))
     (t nil)))
 
 (defun lodsb-x86 (&rest args)
@@ -167,31 +167,31 @@
        ;; 0x8a can also be used, requires reverse order in ModRM.
        ;; 0x88: mov r/m8, r8
        ;; 0x8a: mov r8, r/m8
-       (cons #x8a (emit-modrm-byte-for-reg-reg arg2 arg1)))
+       (cons #x8a (emit-r/m-byte-for-reg-reg arg2 arg1)))
       ((and (equal arg1-reg-type "old-16-bit-reg")
             (equal arg2-reg-type "old-16-bit-reg"))
        ;; 0x8b can also be used, requires reverse order in ModRM.
        ;; 0x89: mov r/m16, r16
        ;; 0x8b: mov r16, r/m16
-       (append (list #x66 #x8b) (emit-modrm-byte-for-reg-reg arg2 arg1)))
+       (append (list #x66 #x8b) (emit-r/m-byte-for-reg-reg arg2 arg1)))
       ((and (equal arg1-reg-type "old-32-bit-reg")
             (equal arg2-reg-type "old-32-bit-reg"))
        ;; 0x8b can also be used, requires reverse order in ModRM.
        ;; 0x89: mov r/m32, r32
        ;; 0x8b: mov r32, r/m32
-       (cons #x8b (emit-modrm-byte-for-reg-reg arg2 arg1)))
+       (cons #x8b (emit-r/m-byte-for-reg-reg arg2 arg1)))
       ((and
          (or
            (equal arg1-reg-type "old-8-bit-low-reg")
            (equal arg1-reg-type "old-8-bit-high-reg"))
          (equal arg2-reg-type "register-indirect-without-SIB"))
-       (cons #x8a (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
+       (cons #x8a (emit-r/m-byte-for-indirect-without-SIB arg2 arg1)))
       ((and (equal arg1-reg-type "old-16-bit-reg")
             (equal arg2-reg-type "register-indirect-without-SIB"))
-       (append (list #x66 #x8b) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
+       (append (list #x66 #x8b) (emit-r/m-byte-for-indirect-without-SIB arg2 arg1)))
       ((and (equal arg1-reg-type "old-32-bit-reg")
             (equal arg2-reg-type "register-indirect-without-SIB"))
-       (cons #x8b (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
+       (cons #x8b (emit-r/m-byte-for-indirect-without-SIB arg2 arg1)))
       (t nil))))
 
 (defun mov-rm-reg-x64 (arg1 arg2 &optional arg3 &rest args)
@@ -209,31 +209,31 @@
        ;; 0x8a can also be used, requires reverse order in ModRM.
        ;; 0x88: mov r/m8, r8
        ;; 0x8a: mov r8, r/m8
-       (cons #x88 (emit-modrm-byte-for-reg-reg arg1 arg2)))
+       (cons #x88 (emit-r/m-byte-for-reg-reg arg1 arg2)))
       ((and (equal arg1-reg-type "old-16-bit-reg")
             (equal arg2-reg-type "old-16-bit-reg"))
        ;; 0x8b can also be used, requires reverse order in ModRM.
        ;; 0x89: mov r/m16, r16
        ;; 0x8b: mov r16, r/m16
-       (append (list #x66 #x89) (emit-modrm-byte-for-reg-reg arg1 arg2)))
+       (append (list #x66 #x89) (emit-r/m-byte-for-reg-reg arg1 arg2)))
       ((and (equal arg1-reg-type "old-32-bit-reg")
             (equal arg2-reg-type "old-32-bit-reg"))
        ;; 0x8b can also be used, requires reverse order in ModRM.
        ;; 0x89: mov r/m32, r32
        ;; 0x8b: mov r32, r/m32
-       (cons #x89 (emit-modrm-byte-for-reg-reg arg1 arg2)))
+       (cons #x89 (emit-r/m-byte-for-reg-reg arg1 arg2)))
       ((and
          (equal arg1-reg-type "register-indirect-without-SIB")
          (or
            (equal arg2-reg-type "old-8-bit-low-reg")
            (equal arg2-reg-type "old-8-bit-high-reg")))
-       (cons #x88 (emit-modrm-byte-for-indirect-without-SIB arg1 arg2)))
+       (cons #x88 (emit-r/m-byte-for-indirect-without-SIB arg1 arg2)))
       ((and (equal arg1-reg-type "register-indirect-without-SIB")
             (equal arg2-reg-type "old-16-bit-reg"))
-       (append (list #x66 #x89) (emit-modrm-byte-for-indirect-without-SIB arg1 arg2)))
+       (append (list #x66 #x89) (emit-r/m-byte-for-indirect-without-SIB arg1 arg2)))
       ((and (equal arg1-reg-type "register-indirect-without-SIB")
             (equal arg2-reg-type "old-32-bit-reg"))
-       (cons #x89 (emit-modrm-byte-for-indirect-without-SIB arg1 arg2)))
+       (cons #x89 (emit-r/m-byte-for-indirect-without-SIB arg1 arg2)))
       (t nil))))
 
 (defun mov-x64 (arg1 arg2 &optional arg3 &rest args)
@@ -304,30 +304,30 @@
 
 (defun pop-x64 (arg1 &optional arg2)
   (let*
-    ((modrm (gethash arg1 *r/m-reg-hash-table-x64*)))
+    ((r/m (gethash arg1 *r/m-reg-hash-table-x64*)))
     (cond
       ((equal (gethash arg1 *reg-type-hash-table-x64*) "old-16-bit-reg")
-       (list #x66 (logior #x58 modrm)))
+       (list #x66 (logior #x58 r/m)))
       ((equal (gethash arg1 *reg-type-hash-table-x64*) "old-64-bit-reg")
-       (list (logior #x58 modrm)))
+       (list (logior #x58 r/m)))
       ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-16-bit-reg")
-       (append (list #x66) (emit-odd-rex) (list (logior #x58 modrm))))
+       (append (list #x66) (emit-odd-rex) (list (logior #x58 r/m))))
       ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-64-bit-reg")
-       (append (emit-odd-rex) (list (logior #x58 modrm))))
+       (append (emit-odd-rex) (list (logior #x58 r/m))))
       (t nil))))
 
 (defun push-x64 (arg1 &optional arg2)
   (let*
-    ((modrm (gethash arg1 *r/m-reg-hash-table-x64*)))
+    ((r/m (gethash arg1 *r/m-reg-hash-table-x64*)))
     (cond
       ((equal (gethash arg1 *reg-type-hash-table-x64*) "old-16-bit-reg")
-       (list #x66 (logior #x50 modrm)))
+       (list #x66 (logior #x50 r/m)))
       ((equal (gethash arg1 *reg-type-hash-table-x64*) "old-64-bit-reg")
-       (list (logior #x50 modrm)))
+       (list (logior #x50 r/m)))
       ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-16-bit-reg")
-       (append (list #x66) (emit-odd-rex) (list (logior #x50 modrm))))
+       (append (list #x66) (emit-odd-rex) (list (logior #x50 r/m))))
       ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-64-bit-reg")
-       (append (emit-odd-rex) (list (logior #x50 modrm))))
+       (append (emit-odd-rex) (list (logior #x50 r/m))))
       (t nil))))
 
 (defun rcl-1-x64 (arg1 &optional arg2 &rest args)
