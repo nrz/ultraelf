@@ -27,6 +27,15 @@
      :reader is-x86-register
      :initform t)))
 
+(defclass x86-register-indirect (x86-addressing-form)
+  ((is-memory-addressing
+     :reader is-memory-addressing
+     :initform t)
+   (needs-sib
+     :reader needs-sib
+     :initform nil
+     :documentation "basic memory addressing forms do _not_ need SIB.")))
+
 (defclass x86-old-register (x86-register)
   ((is-old-register
      :reader is-old-register

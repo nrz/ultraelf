@@ -17,7 +17,15 @@
 (defparameter *new-reg32-list*             (list "r8d" "r9d" "r10d" "r11d" "r12d" "r13d" "r14d" "r15d"))
 (defparameter *new-reg64-list*             (list  "r8"  "r9"  "r10"  "r11"  "r12"  "r13"  "r14"  "r15"))
 
-(defparameter *create-register-classes-list*
+; other addressing form lists, must be ordered in ModRM order.
+; `noindex` is a reserved word in ultraELF.
+(defparameter *reg64-indirect-no-scale-list* (list   "[rax]"   "[rcx]"   "[rdx]"   "[rbx]"   "noindex"   "[rbp]"   "[rsi]"   "[rdi]"))
+(defparameter *reg64-indirect-scale-1-list*  (list "[1*rax]" "[1*rcx]" "[1*rdx]" "[1*rbx]" "1*noindex" "[1*rbp]" "[1*rsi]" "[1*rdi]"))
+(defparameter *reg64-indirect-scale-2-list*  (list "[2*rax]" "[2*rcx]" "[2*rdx]" "[2*rbx]" "2*noindex" "[2*rbp]" "[2*rsi]" "[2*rdi]"))
+(defparameter *reg64-indirect-scale-4-list*  (list "[4*rax]" "[4*rcx]" "[4*rdx]" "[4*rbx]" "4*noindex" "[4*rbp]" "[4*rsi]" "[4*rdi]"))
+(defparameter *reg64-indirect-scale-8-list*  (list "[8*rax]" "[8*rcx]" "[8*rdx]" "[8*rbx]" "8*noindex" "[8*rbp]" "[8*rsi]" "[8*rdi]"))
+
+(defparameter *create-addressing-form-instances-list*
   (list
     (list 0 *old-low-reg8-list* 'x86-old-8-bits-low-register)
     (list 4 *old-high-reg8-list* 'x86-old-8-bits-high-register)
@@ -28,4 +36,9 @@
     (list 0 *new-low-reg8-list-from-r8b* 'x86-new-8-bits-register)
     (list 0 *new-reg16-list* 'x86-new-16-bits-register)
     (list 0 *new-reg32-list* 'x86-new-32-bits-register)
-    (list 0 *new-reg64-list* 'x86-new-64-bits-register)))
+    (list 0 *new-reg64-list* 'x86-new-64-bits-register)
+    (list 0 *reg64-indirect-no-scale-list* 'x86-register-indirect)
+    (list 0 *reg64-indirect-scale-1-list* 'x86-register-indirect)
+    (list 0 *reg64-indirect-scale-2-list* 'x86-register-indirect)
+    (list 0 *reg64-indirect-scale-4-list* 'x86-register-indirect)
+    (list 0 *reg64-indirect-scale-8-list* 'x86-register-indirect)))

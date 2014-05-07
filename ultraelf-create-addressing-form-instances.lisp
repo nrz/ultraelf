@@ -5,9 +5,11 @@
 
 (in-package :ultraelf)
 
-;; create register instances.
+;; create addressing form instances.
+;; note: indirect addressing form that use `[` & `]` need backslash in SBCL REPL,
+;; eg: ULTRAELF> \[rax\]
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (loop for i below (length *create-register-classes-list*)
-        do (loop for j below (length (second (nth i *create-register-classes-list*)))
-                 do (setf (symbol-value (intern (string-upcase (nth j (second (nth i *create-register-classes-list*))))))
-                          (make-instance (third (nth i *create-register-classes-list*)) :r/m (+ j (first (nth i *create-register-classes-list*))))))))
+  (loop for i below (length *create-addressing-form-instances-list*)
+        do (loop for j below (length (second (nth i *create-addressing-form-instances-list*)))
+                 do (setf (symbol-value (intern (string-upcase (nth j (second (nth i *create-addressing-form-instances-list*))))))
+                          (make-instance (third (nth i *create-addressing-form-instances-list*)) :r/m (+ j (first (nth i *create-addressing-form-instances-list*))))))))
