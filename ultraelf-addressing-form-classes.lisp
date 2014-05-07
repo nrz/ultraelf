@@ -169,3 +169,23 @@
      :reader needs-rex
      :initform t
      :documentation "REX is needed")))
+
+(defclass x86-mmx-register (x86-register)
+  ((is-mmx-reg
+     :reader is-mmx-reg
+     :initform t)))
+
+(defclass x86-xmm-register (x86-register)
+  ((is-xmm-reg
+     :reader is-xmm-reg
+     :initform t)))
+
+(defclass x86-ymm-register (x86-register)
+  ((is-ymm-reg
+     :reader is-ymm-reg
+     :initform t)))
+
+(defclass x86-zmm-register (x86-register)
+  ((is-zmm-reg
+     :reader is-ymm-reg
+     :initform t)))
