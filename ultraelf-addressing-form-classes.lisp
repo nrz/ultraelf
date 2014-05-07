@@ -164,22 +164,38 @@
 (defclass x86-mmx-register (x86-register)
   ((is-mmx-reg
      :reader is-mmx-reg
-     :initform t)))
+     :initform t)
+   (register-size
+     :reader register-size
+     :initform 64
+     :documentation "register size in bits")))
 
 (defclass x86-xmm-register (x86-register)
   ((is-xmm-reg
      :reader is-xmm-reg
-     :initform t)))
+     :initform t)
+   (register-size
+     :reader register-size
+     :initform 128
+     :documentation "register size in bits")))
 
 (defclass x86-ymm-register (x86-register)
   ((is-ymm-reg
      :reader is-ymm-reg
-     :initform t)))
+     :initform t)
+   (register-size
+     :reader register-size
+     :initform 256
+     :documentation "register size in bits")))
 
 (defclass x86-zmm-register (x86-register)
   ((is-zmm-reg
      :reader is-ymm-reg
-     :initform t)))
+     :initform t)
+   (register-size
+     :reader register-size
+     :initform 512
+     :documentation "register size in bits")))
 
 (defclass x86-register-indirect (x86-addressing-form)
   ((is-memory-addressing
