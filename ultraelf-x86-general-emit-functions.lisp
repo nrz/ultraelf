@@ -36,8 +36,8 @@
 (defun emit-sib-byte (base index scale)
   "This function emits SIB byte."
   (list (logior
-          (gethash base *r/m-reg-hash-table-x64*)
-          (ash (gethash index *r/m-reg-hash-table-x64*) 3)
+          (r/m (symbol-value (intern (string-upcase base))))
+          (ash (r/m (symbol-value (intern (string-upcase index)))) 3)
           (ash (gethash scale *sib-scale-hash-table-x64*) 6))))
 
 (defun emit-sib-byte-for-memory-address-syntax (memory-address-syntax)
@@ -51,13 +51,13 @@
 
 (defun emit-modrm-byte (mod regmem reg)
   "This function emits ModRM byte."
-  (list (logior (gethash regmem *r/m-reg-hash-table-x64*)
-                (ash (gethash reg *r/m-reg-hash-table-x64*) 3)
+  (list (logior (r/m (symbol-value (intern (string-upcase regmem))))
+                (ash (r/m (symbol-value (intern (string-upcase reg)))) 3)
                 (ash mod 6))))
 
 (defun emit-modrm-byte-for-arithmetic-rm-imm (opcode-base mod arg1)
   "This function emits ModRM (?) byte for r/m,imm for arithmetic instructions."
-  (list (logior (gethash arg1 *r/m-reg-hash-table-x64*)
+  (list (logior (r/m (symbol-value (intern (string-upcase arg1))))
                 opcode-base
                 (ash mod 6))))
 
@@ -76,7 +76,7 @@
 
 (defun one-operand-x64 (opcode-base reg-byte-base arg1 &optional arg2)
   (let*
-    ((r/m (gethash arg1 *r/m-reg-hash-table-x64*)))
+    ((r/m (r/m (symbol-value (intern (string-upcase arg1))))))
     (cond
       ((or
          (equal (gethash arg1 *reg-type-hash-table-x64*) "old-8-bit-low-reg")

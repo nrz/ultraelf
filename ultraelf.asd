@@ -36,7 +36,6 @@
                (:file "ultraelf-asm-reader")                       ; Lisp assembly reader.
                (:file "ultraelf-general-emit-functions")           ; general emit functions, needed for assembling and pseudo-ops.
                (:file "ultraelf-asm-pseudo-ops")                   ; asm pseudo-ops.
-               (:file "ultraelf-modrm")                            ; x86 ModRM byte register values hash table.
                (:file "ultraelf-sib")                              ; x86 SIB byte scale values hash table.
                (:file "ultraelf-sreg2")                            ; x86 SREG2 segment register values hash table.
                (:file "ultraelf-sreg3")                            ; x86 SREG3 segment register values hash table.

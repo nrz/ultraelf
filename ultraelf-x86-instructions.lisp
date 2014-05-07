@@ -304,7 +304,7 @@
 
 (defun pop-x64 (arg1 &optional arg2)
   (let*
-    ((r/m (gethash arg1 *r/m-reg-hash-table-x64*)))
+    ((r/m (r/m (symbol-value (intern (string-upcase arg1))))))
     (cond
       ((equal (gethash arg1 *reg-type-hash-table-x64*) "old-16-bit-reg")
        (list #x66 (logior #x58 r/m)))
@@ -318,7 +318,7 @@
 
 (defun push-x64 (arg1 &optional arg2)
   (let*
-    ((r/m (gethash arg1 *r/m-reg-hash-table-x64*)))
+    ((r/m (r/m (symbol-value (intern (string-upcase arg1))))))
     (cond
       ((equal (gethash arg1 *reg-type-hash-table-x64*) "old-16-bit-reg")
        (list #x66 (logior #x50 r/m)))
