@@ -210,10 +210,10 @@
   ((needs-rex
      :reader needs-rex
      :initform nil
-     :documentation "[rax], [rcx], [rdx], [rbx], [rsi] & [rdi] do need REX.")))
+     :documentation "[rax], [rcx], [rdx], [rbx], [rsi] & [rdi] do not need REX.")))
 
 (defclass x86-new-register-indirect (x86-register-indirect)
   ((needs-rex
      :reader needs-rex
      :initform t
-     :documentation "[r8], [r9], [r10], [r11], [r14] & [r15] do _not_ need REX.")))
+     :documentation "[r8], [r9], [r10], [r11], [r14] & [r15] do need REX.")))
