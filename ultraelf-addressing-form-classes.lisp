@@ -28,22 +28,22 @@
      :initform t)))
 
 (defclass x86-old-register (x86-register)
-  ((is-old-register
-     :reader is-old-register
+  ((is-old-reg
+     :reader is-old-reg
      :initform t
      :documentation "old registers are all registers which can be accessed without REX")
-   (is-new-register
-     :reader is-new-register
+   (is-new-reg
+     :reader is-new-reg
      :initform nil
      :documentation "new registers are all registers which can _not_ be accessed without REX")))
 
 (defclass x86-new-register (x86-register)
-  ((is-old-register
-     :reader is-old-register
+  ((is-old-reg
+     :reader is-old-reg
      :initform nil
      :documentation "old registers are all registers which can be accessed without REX")
-   (is-new-register
-     :reader is-new-register
+   (is-new-reg
+     :reader is-new-reg
      :initform t
      :documentation "new registers are all registers which can _not_ be accessed without REX")))
 
