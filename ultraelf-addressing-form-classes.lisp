@@ -22,6 +22,59 @@
      :initform (error "r/m must be specified")
      :documentation "r/m bits of ModRM byte")))
 
+(defclass x86-register-indirect (x86-addressing-form)
+  ((is-memory-addressing
+     :reader is-memory-addressing
+     :initform t)))
+
+(defclass x86-needs-sib (x86-register-indirect)
+  ((needs-sib
+     :reader needs-sib
+     :initform t
+     :documentation "[rsp], [rbp], [r12] and [r13] and [base+index] forms do need SIB.")))
+
+(defclass x86-does-not-need-sib (x86-register-indirect)
+  ((needs-sib
+     :reader needs-sib
+     :initform nil
+     :documentation "[rax], [rcx], [rdx], [rbx], [rsi], [rdi], [r8], [r9], [r10], [r11], [r14] and [r15] do _not_ need SIB.")))
+
+(defclass x86-rex.b-0 (x86-addressing-form)
+  ((rex.b
+     :reader rex.b
+     :initform 0
+     :documentation "REX.B = 0")))
+
+(defclass x86-rex.b-1 (x86-addressing-form)
+  ((rex.b
+     :reader rex.b
+     :initform 1
+     :documentation "REX.B = 1")))
+
+(defclass x86-sib-0 (x86-rex.b-0 x86-needs-sib)
+  ())
+
+(defclass x86-sib-1 (x86-rex.b-1 x86-needs-sib)
+  ())
+
+(defclass x86-sib (x86-needs-sib)
+  ())
+
+(defclass x86-register-indirect-needs-sib (x86-needs-sib)
+  ())
+
+(defclass x86-old-register-indirect (x86-rex.b-0 x86-register-indirect)
+  ((needs-rex
+     :reader needs-rex
+     :initform nil
+     :documentation "[rax], [rcx], [rdx], [rbx], [rsi] & [rdi] do _not_ need REX.")))
+
+(defclass x86-new-register-indirect (x86-rex.b-1 x86-register-indirect)
+  ((needs-rex
+     :reader needs-rex
+     :initform t
+     :documentation "[r8], [r9], [r10], [r11], [r14] & [r15] do need REX.")))
+
 (defclass x86-register (register x86-addressing-form)
   ((is-x86-register
      :reader is-x86-register
@@ -196,47 +249,6 @@
      :reader register-size
      :initform 512
      :documentation "register size in bits")))
-
-(defclass x86-register-indirect (x86-addressing-form)
-  ((is-memory-addressing
-     :reader is-memory-addressing
-     :initform t)))
-
-(defclass x86-old-register-indirect (x86-register-indirect)
-  ((needs-rex
-     :reader needs-rex
-     :initform nil
-     :documentation "[rax], [rcx], [rdx], [rbx], [rsi] & [rdi] do _not_ need REX.")))
-
-(defclass x86-new-register-indirect (x86-register-indirect)
-  ((needs-rex
-     :reader needs-rex
-     :initform t
-     :documentation "[r8], [r9], [r10], [r11], [r14] & [r15] do need REX.")))
-
-(defclass x86-needs-sib (x86-register-indirect)
-  ((needs-sib
-     :reader needs-sib
-     :initform t
-     :documentation "[rsp], [rbp], [r12] and [r13] and [base+index] forms do need SIB.")))
-
-(defclass x86-does-not-need-sib (x86-register-indirect)
-  ((needs-sib
-     :reader needs-sib
-     :initform nil
-     :documentation "[rax], [rcx], [rdx], [rbx], [rsi], [rdi], [r8], [r9], [r10], [r11], [r14] and [r15] do _not_ need SIB.")))
-
-(defclass x86-sib-0 (x86-needs-sib)
-  ())
-
-(defclass x86-sib-1 (x86-needs-sib)
-  ())
-
-(defclass x86-sib (x86-needs-sib)
-  ())
-
-(defclass x86-register-indirect-needs-sib (x86-needs-sib)
-  ())
 
 (defclass x86-rip-relative (x86-does-not-need-sib)
   ((displacement-size
