@@ -31,6 +31,17 @@
 (defparameter *reg64-indirect-list-from-r8*  (list "[r8]"  "[r9]"  "[r10]" "[r11]"))
 (defparameter *reg64-indirect-list-from-r14* (list "[r14]" "[r15]"))
 
+; aadressing forms which need SIB.
+(defparameter *reg64-register-indirect-sib-0* (list "SIB1"))
+(defparameter *reg64-register-indirect-sib-1* (list "SIB2"))
+(defparameter *reg64-register-indirect-sib*   (list "SIB"))
+(defparameter *reg64-register-indirect-rip-0* (list "[rip0]"))
+(defparameter *reg64-register-indirect-rip-1* (list "[rip1]"))
+(defparameter *reg64-register-indirect-rip*   (list "[rip]"))
+(defparameter *reg64-register-indirect-rip-disp32-0* (list "[rip0+disp32]"))
+(defparameter *reg64-register-indirect-rip-disp32-1* (list "[rip1+disp32]"))
+(defparameter *reg64-register-indirect-rip-disp32*   (list "[rip+disp32]"))
+
 (defparameter *create-addressing-form-instances-list*
   (list
     (list #b000 *old-low-reg8-list* 'x86-old-8-bits-low-register)
@@ -50,4 +61,13 @@
     (list #b000 *reg64-indirect-list-from-rax* 'x86-old-register-indirect-does-not-need-sib)
     (list #b110 *reg64-indirect-list-from-rsi* 'x86-old-register-indirect-does-not-need-sib)
     (list #b000 *reg64-indirect-list-from-r8*  'x86-new-register-indirect-does-not-need-sib)
-    (list #b110 *reg64-indirect-list-from-r14* 'x86-new-register-indirect-does-not-need-sib)))
+    (list #b110 *reg64-indirect-list-from-r14* 'x86-new-register-indirect-does-not-need-sib)
+    (list #b100 *reg64-register-indirect-sib-0* 'x86-sib-0)
+    (list #b100 *reg64-register-indirect-sib-1* 'x86-sib-1)
+    (list #b100 *reg64-register-indirect-sib* 'x86-sib)
+    (list #b101 *reg64-register-indirect-rip-0* 'x86-rip-disp32-0)
+    (list #b101 *reg64-register-indirect-rip-1* 'x86-rip-disp32-1)
+    (list #b101 *reg64-register-indirect-rip* 'x86-rip-disp32)
+    (list #b101 *reg64-register-indirect-rip-disp32-0* 'x86-rip-disp32-0)
+    (list #b101 *reg64-register-indirect-rip-disp32-1* 'x86-rip-disp32-1)
+    (list #b101 *reg64-register-indirect-rip-disp32* 'x86-rip-disp32)))

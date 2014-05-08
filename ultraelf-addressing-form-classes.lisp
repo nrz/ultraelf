@@ -214,13 +214,59 @@
      :initform t
      :documentation "[r8], [r9], [r10], [r11], [r14] & [r15] do need REX.")))
 
-(defclass x86-register-indirect-needs-sib (x86-register-indirect)
+(defclass x86-needs-sib (x86-register-indirect)
   ((needs-sib
      :reader needs-sib
      :initform t
      :documentation "[rsp], [rbp], [r12] and [r13] and [base+index] forms do need SIB.")))
 
-(defclass x86-register-indirect-does-not-need-sib (x86-register-indirect)
+(defclass x86-does-not-need-sib (x86-register-indirect)
+  ((needs-sib
+     :reader needs-sib
+     :initform nil
+     :documentation "[rax], [rcx], [rdx], [rbx], [rsi], [rdi], [r8], [r9], [r10], [r11], [r14] and [r15] do _not_ need SIB.")))
+
+(defclass x86-sib-0 (x86-needs-sib)
+  ())
+
+(defclass x86-sib-1 (x86-needs-sib)
+  ())
+
+(defclass x86-sib (x86-needs-sib)
+  ())
+
+(defclass x86-register-indirect-needs-sib (x86-needs-sib)
+  ())
+
+(defclass x86-rip-relative (x86-does-not-need-sib)
+  ((displacement-size
+     :reader displacement-size
+     :initform 32
+     :documentation "RIP-relative addressing form has always disp32.")
+   (needs-rex
+     :reader needs-rex
+     :initform nil
+     :documentation "RIP-relative addressing does not need REX.")))
+
+(defclass x86-rip-disp32-0 (x86-rip-relative)
+  ((rex-b
+     :reader rex-b
+     :initform 0
+     :documentation "REX.B = 0")))
+
+(defclass x86-rip-disp32-1 (x86-rip-relative)
+  ((rex-b
+     :reader rex-b
+     :initform 1
+     :documentation "REX.B = 1")))
+
+(defclass x86-rip-disp32 (x86-rip-relative)
+  ((rex-b
+     :reader rex-b
+     :initform nil
+     :documentation "REX.B can be 0 or 1")))
+
+(defclass x86-register-indirect-does-not-need-sib (x86-does-not-need-sib)
   ((needs-sib
      :reader needs-sib
      :initform nil
