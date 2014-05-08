@@ -79,7 +79,7 @@
    (needs-rex
      :reader needs-rex
      :initform nil
-     :documentation "REX is not needed")))
+     :documentation "REX is _not_ needed")))
 
 (defclass x86-old-8-bits-high-register (x86-old-register x86-16-bits-register)
   ((works-with-rex
@@ -89,7 +89,7 @@
    (needs-rex
      :reader needs-rex
      :initform nil
-     :documentation "REX is not needed")))
+     :documentation "REX is _not_ needed")))
 
 (defclass x86-old-16-bits-register (x86-old-register x86-16-bits-register)
   ((works-with-rex
@@ -99,7 +99,7 @@
    (needs-rex
      :reader needs-rex
      :initform nil
-     :documentation "REX is not needed")))
+     :documentation "REX is _not_ needed")))
 
 (defclass x86-old-32-bits-register (x86-old-register x86-32-bits-register)
   ((works-with-rex
@@ -109,7 +109,7 @@
    (needs-rex
      :reader needs-rex
      :initform nil
-     :documentation "REX is not needed")))
+     :documentation "REX is _not_ needed")))
 
 (defclass x86-old-64-bits-register (x86-old-register x86-64-bits-register)
   ((works-with-rex
@@ -210,7 +210,7 @@
   ((needs-rex
      :reader needs-rex
      :initform nil
-     :documentation "[rax], [rcx], [rdx], [rbx], [rsi] & [rdi] do not need REX.")))
+     :documentation "[rax], [rcx], [rdx], [rbx], [rsi] & [rdi] do _not_ need REX.")))
 
 (defclass x86-new-register-indirect (x86-register-indirect)
   ((needs-rex
