@@ -200,11 +200,7 @@
 (defclass x86-register-indirect (x86-addressing-form)
   ((is-memory-addressing
      :reader is-memory-addressing
-     :initform t)
-   (needs-sib
-     :reader needs-sib
-     :initform nil
-     :documentation "basic memory addressing forms do _not_ need SIB.")))
+     :initform t)))
 
 (defclass x86-old-register-indirect (x86-register-indirect)
   ((needs-rex
@@ -217,3 +213,27 @@
      :reader needs-rex
      :initform t
      :documentation "[r8], [r9], [r10], [r11], [r14] & [r15] do need REX.")))
+
+(defclass x86-register-indirect-needs-sib (x86-register-indirect)
+  ((needs-sib
+     :reader needs-sib
+     :initform t
+     :documentation "[rsp], [rbp], [r12] and [r13] and [base+index] forms do need SIB.")))
+
+(defclass x86-register-indirect-does-not-need-sib (x86-register-indirect)
+  ((needs-sib
+     :reader needs-sib
+     :initform nil
+     :documentation "[rax], [rcx], [rdx], [rbx], [rsi], [rdi], [r8], [r9], [r10], [r11], [r14] and [r15] do _not_ need SIB.")))
+
+(defclass x86-old-register-indirect-needs-sib (x86-old-register-indirect x86-register-indirect-needs-sib)
+  ())
+
+(defclass x86-old-register-indirect-does-not-need-sib (x86-old-register-indirect x86-register-indirect-does-not-need-sib)
+  ())
+
+(defclass x86-new-register-indirect-needs-sib (x86-new-register-indirect x86-register-indirect-needs-sib)
+  ())
+
+(defclass x86-new-register-indirect-does-not-need-sib (x86-new-register-indirect x86-register-indirect-does-not-need-sib)
+  ())
