@@ -249,20 +249,20 @@
      :documentation "RIP-relative addressing does not need REX.")))
 
 (defclass x86-rip-disp32-0 (x86-rip-relative)
-  ((rex-b
-     :reader rex-b
+  ((rex.b
+     :reader rex.b
      :initform 0
      :documentation "REX.B = 0")))
 
 (defclass x86-rip-disp32-1 (x86-rip-relative)
-  ((rex-b
-     :reader rex-b
+  ((rex.b
+     :reader rex.b
      :initform 1
      :documentation "REX.B = 1")))
 
 (defclass x86-rip-disp32 (x86-rip-relative)
-  ((rex-b
-     :reader rex-b
+  ((rex.b
+     :reader rex.b
      :initform nil
      :documentation "REX.B can be 0 or 1")))
 
