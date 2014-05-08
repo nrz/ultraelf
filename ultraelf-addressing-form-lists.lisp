@@ -32,8 +32,8 @@
 (defparameter *reg64-indirect-list-from-r14* (list "[r14]" "[r15]"))
 
 ; aadressing forms which need SIB.
-(defparameter *reg64-register-indirect-sib-0* (list "SIB1"))
-(defparameter *reg64-register-indirect-sib-1* (list "SIB2"))
+(defparameter *reg64-register-indirect-sib-0* (list "SIB0"))
+(defparameter *reg64-register-indirect-sib-1* (list "SIB1"))
 (defparameter *reg64-register-indirect-sib*   (list "SIB"))
 (defparameter *reg64-register-indirect-rip-0* (list "[rip0]"))
 (defparameter *reg64-register-indirect-rip-1* (list "[rip1]"))
