@@ -39,6 +39,26 @@
      :initform nil
      :documentation "[rax], [rcx], [rdx], [rbx], [rsi], [rdi], [r8], [r9], [r10], [r11], [r14] and [r15] do _not_ need SIB.")))
 
+(defclass x86-modrm.mod-b00 (x86-addressing-form)
+  ((modrm.mod
+     :reader modrm.mod
+     :initform #b00)))
+
+(defclass x86-modrm.mod-b01 (x86-addressing-form)
+  ((modrm.mod
+     :reader modrm.mod
+     :initform #b01)))
+
+(defclass x86-modrm.mod-b10 (x86-addressing-form)
+  ((modrm.mod
+     :reader modrm.mod
+     :initform #b10)))
+
+(defclass x86-modrm.mod-b11 (x86-addressing-form)
+  ((modrm.mod
+     :reader modrm.mod
+     :initform #b11)))
+
 (defclass x86-rex.b-0 (x86-addressing-form)
   ((rex.b
      :reader rex.b
