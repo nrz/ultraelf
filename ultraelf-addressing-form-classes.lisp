@@ -58,7 +58,10 @@
   ())
 
 (defclass x86-sib (x86-needs-sib)
-  ())
+  ((rex.b
+     :reader rex.b
+     :initform (list 0 1)
+     :documentation "REX.B can be 0 or 1")))
 
 (defclass x86-register-indirect-needs-sib (x86-needs-sib)
   ())
