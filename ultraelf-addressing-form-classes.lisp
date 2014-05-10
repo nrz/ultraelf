@@ -147,7 +147,7 @@
      :initform 64
      :documentation "register size in bits")))
 
-(defclass x86-old-8-bits-low-register (x86-old-register x86-16-bits-register)
+(defclass x86-old-8-bits-low-register (x86-old-register x86-8-bits-register)
   ((works-with-rex
      :reader works-with-rex
      :initform t
