@@ -157,7 +157,7 @@
      :initform nil
      :documentation "REX is _not_ needed")))
 
-(defclass x86-old-8-bits-high-register (x86-old-register x86-16-bits-register)
+(defclass x86-old-8-bits-high-register (x86-old-register x86-8-bits-register)
   ((works-with-rex
      :reader works-with-rex
      :initform nil
