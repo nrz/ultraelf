@@ -5,6 +5,153 @@
 
 (in-package :ultraelf)
 
+;; addressing-form
+;; - register (addressing-form)
+;; - x86-addressing-form (addressing-form)
+;;
+;; register
+;; - x86-register (register x86-addressing-form)
+;;
+;; x86-register-indirect (x86-addressing-form)
+;; - x86-needs-sib (x86-register-indirect)
+;; - x86-does-not-need-sib (x86-register-indirect)
+;; - x86-old-register-indirect (x86-rex.b-0 x86-register-indirect)
+;; - x86-new-register-indirect (x86-rex.b-1 x86-register-indirect)
+;;
+;; x86-needs-sib (x86-register-indirect)
+;; - x86-sib-0 (x86-rex.b-0 x86-needs-sib)
+;; - x86-sib-1 (x86-rex.b-1 x86-needs-sib)
+;; - x86-sib (x86-needs-sib)
+;; - x86-register-indirect-needs-sib (x86-needs-sib)
+;;
+;; x86-does-not-need-sib (x86-register-indirect)
+;; - x86-rip-relative (x86-does-not-need-sib)
+;; - x86-register-indirect-does-not-need-sib (x86-does-not-need-sib)
+;;
+;; x86-modrm.mod-b00 (x86-addressing-form)
+;;
+;; x86-modrm.mod-b01 (x86-addressing-form)
+;;
+;; x86-modrm.mod-b10 (x86-addressing-form)
+;;
+;; x86-modrm.mod-b11 (x86-addressing-form)
+;;
+;; x86-rex.b-0  (x86-addressing-form)
+;; - x86-sib-0 (x86-rex.b-0 x86-needs-sib)
+;; - x86-old-register-indirect (x86-rex.b-0 x86-register-indirect)
+;;
+;; x86-rex.b-1 (x86-addressing-form)
+;; - x86-sib-1 (x86-rex.b-1 x86-needs-sib)
+;; - x86-new-register-indirect (x86-rex.b-1 x86-register-indirect)
+;;
+;; x86-sib-0 (x86-rex.b-0 x86-needs-sib)
+;;
+;; x86-sib-1 (x86-rex.b-1 x86-needs-sib)
+;;
+;; x86-sib (x86-needs-sib)
+;;
+;; x86-register-indirect-needs-sib (x86-needs-sib)
+;; - x86-old-register-indirect-needs-sib (x86-old-register-indirect x86-register-indirect-needs-sib)
+;; - x86-new-register-indirect-needs-sib (x86-new-register-indirect x86-register-indirect-needs-sib)
+;;
+;; x86-old-register-indirect (x86-rex.b-0 x86-register-indirect)
+;; - x86-old-register-indirect-needs-sib (x86-old-register-indirect x86-register-indirect-needs-sib)
+;; - x86-old-register-indirect-does-not-need-sib (x86-old-register-indirect x86-register-indirect-does-not-need-sib)
+;;
+;; x86-new-register-indirect (x86-rex.b-1 x86-register-indirect)
+;; - x86-new-register-indirect-needs-sib (x86-new-register-indirect x86-register-indirect-needs-sib)
+;; - x86-new-register-indirect-does-not-need-sib (x86-new-register-indirect x86-register-indirect-does-not-need-sib)
+;;
+;; x86-register (register x86-addressing-form)
+;; - x86-old-register (x86-register)
+;; - x86-new-register (x86-register)
+;; - x86-8-bits-register (x86-register)
+;; - x86-16-bits-register (x86-register)
+;; - x86-32-bits-register (x86-register)
+;; - x86-64-bits-register (x86-register)
+;; - x86-mmx-register (x86-register)
+;; - x86-xmm-register (x86-register)
+;; - x86-ymm-register (x86-register)
+;; - x86-zmm-register (x86-register)
+;;
+;; x86-old-register (x86-register)
+;; - x86-old-8-bits-low-register (x86-old-register x86-16-bits-register)
+;; - x86-old-8-bits-high-register (x86-old-register x86-16-bits-register)
+;; - x86-old-16-bits-register (x86-old-register x86-16-bits-register)
+;; - x86-old-32-bits-register (x86-old-register x86-32-bits-register)
+;; - x86-old-64-bits-register (x86-old-register x86-64-bits-register)
+;;
+;; x86-new-register (x86-register)
+;; - x86-new-8-bits-register (x86-new-register x86-8-bits-register)
+;; - x86-new-16-bits-register (x86-new-register x86-16-bits-register)
+;; - x86-new-32-bits-register (x86-new-register x86-32-bits-register)
+;; - x86-new-64-bits-register (x86-new-register x86-64-bits-register)
+;;
+;; x86-8-bits-register (x86-register)
+;; - x86-old-8-bits-low-register (x86-old-register x86-8-bits-register)
+;; - x86-new-8-bits-register (x86-new-register x86-8-bits-register)
+;;
+;; x86-16-bits-register (x86-register)
+;; - x86-old-16-bits-register (x86-old-register x86-16-bits-register)
+;; - x86-new-16-bits-register (x86-new-register x86-16-bits-register)
+;;
+;; x86-32-bits-register (x86-register)
+;; - x86-old-32-bits-register (x86-old-register x86-32-bits-register)
+;; - x86-new-32-bits-register (x86-new-register x86-32-bits-register)
+;;
+;; x86-64-bits-register (x86-register)
+;; - x86-old-64-bits-register (x86-old-register x86-64-bits-register)
+;; - x86-new-64-bits-register (x86-new-register x86-64-bits-register)
+;;
+;; x86-old-8-bits-low-register (x86-old-register x86-8-bits-register)
+;;
+;; x86-old-8-bits-high-register (x86-old-register x86-8-bits-register)
+;;
+;; x86-old-16-bits-register (x86-old-register x86-16-bits-register)
+;;
+;; x86-old-32-bits-register (x86-old-register x86-32-bits-register)
+;;
+;; x86-old-64-bits-register (x86-old-register x86-64-bits-register)
+;;
+;; x86-new-8-bits-register (x86-new-register x86-8-bits-register)
+;;
+;; x86-new-16-bits-register (x86-new-register x86-16-bits-register)
+;;
+;; x86-new-32-bits-register (x86-new-register x86-32-bits-register)
+;;
+;; x86-new-64-bits-register (x86-new-register x86-64-bits-register)
+;;
+;; x86-mmx-register (x86-register)
+;;
+;; x86-xmm-register (x86-register)
+;;
+;; x86-ymm-register (x86-register)
+;;
+;; x86-zmm-register (x86-register)
+;;
+;; x86-rip-relative (x86-does-not-need-sib)
+;; - x86-rip-disp32-0 (x86-rip-relative)
+;; - x86-rip-disp32-1 (x86-rip-relative)
+;; - x86-rip-disp32 (x86-rip-relative)
+;;
+;; x86-rip-disp32-0 (x86-rip-relative)
+;;
+;; x86-rip-disp32-1 (x86-rip-relative)
+;;
+;; x86-rip-disp32 (x86-rip-relative)
+;;
+;; x86-register-indirect-does-not-need-sib (x86-does-not-need-sib)
+;; - x86-old-register-indirect-does-not-need-sib (x86-old-register-indirect x86-register-indirect-does-not-need-sib)
+;; - x86-new-register-indirect-does-not-need-sib (x86-new-register-indirect x86-register-indirect-does-not-need-sib)
+;;
+;; x86-old-register-indirect-needs-sib (x86-old-register-indirect x86-register-indirect-needs-sib)
+;;
+;; x86-old-register-indirect-does-not-need-sib (x86-old-register-indirect x86-register-indirect-does-not-need-sib)
+;;
+;; x86-new-register-indirect-needs-sib (x86-new-register-indirect x86-register-indirect-needs-sib)
+;;
+;; x86-new-register-indirect-does-not-need-sib (x86-new-register-indirect x86-register-indirect-does-not-need-sib)
+
 (defclass addressing-form ()
   ((addressing-form-name
      :reader addressing-form-name
