@@ -271,26 +271,26 @@
      :documentation "new registers are all registers which can _not_ be accessed without REX")))
 
 (defclass x86-8-bits-register (x86-register)
-  ((register-size
-     :reader register-size
+  ((reg-size
+     :reader reg-size
      :initform 8
      :documentation "register size in bits")))
 
 (defclass x86-16-bits-register (x86-register)
-  ((register-size
-     :reader register-size
+  ((reg-size
+     :reader reg-size
      :initform 16
      :documentation "register size in bits")))
 
 (defclass x86-32-bits-register (x86-register)
-  ((register-size
-     :reader register-size
+  ((reg-size
+     :reader reg-size
      :initform 32
      :documentation "register size in bits")))
 
 (defclass x86-64-bits-register (x86-register)
-  ((register-size
-     :reader register-size
+  ((reg-size
+     :reader reg-size
      :initform 64
      :documentation "register size in bits")))
 
@@ -388,8 +388,8 @@
   ((is-mmx-reg
      :reader is-mmx-reg
      :initform t)
-   (register-size
-     :reader register-size
+   (reg-size
+     :reader reg-size
      :initform 64
      :documentation "register size in bits")))
 
@@ -397,8 +397,8 @@
   ((is-xmm-reg
      :reader is-xmm-reg
      :initform t)
-   (register-size
-     :reader register-size
+   (reg-size
+     :reader reg-size
      :initform 128
      :documentation "register size in bits")))
 
@@ -406,8 +406,8 @@
   ((is-ymm-reg
      :reader is-ymm-reg
      :initform t)
-   (register-size
-     :reader register-size
+   (reg-size
+     :reader reg-size
      :initform 256
      :documentation "register size in bits")))
 
@@ -415,8 +415,8 @@
   ((is-zmm-reg
      :reader is-ymm-reg
      :initform t)
-   (register-size
-     :reader register-size
+   (reg-size
+     :reader reg-size
      :initform 512
      :documentation "register size in bits")))
 
