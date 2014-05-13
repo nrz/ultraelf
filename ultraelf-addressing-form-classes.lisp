@@ -161,6 +161,9 @@
   ((is-reg
      :reader is-reg
      :initform t)
+   (is-register-indirect
+     :reader is-register-indirect
+     :initform nil)
    (register-name
      :reader register-name
      :documentation "any CPU-register")))
@@ -176,6 +179,9 @@
   ((is-reg
      :reader is-reg
      :initform nil)
+   (is-register-indirect
+     :reader is-register-indirect
+     :initform t)
    (is-memory-addressing
      :reader is-memory-addressing
      :initform t)))
