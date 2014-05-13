@@ -158,7 +158,10 @@
      :documentation "any CPU addressing form")))
 
 (defclass register (addressing-form)
-  ((register-name
+  ((is-reg
+     :reader is-reg
+     :initform t)
+   (register-name
      :reader register-name
      :documentation "any CPU-register")))
 
@@ -170,7 +173,10 @@
      :documentation "r/m bits of ModRM byte")))
 
 (defclass x86-register-indirect (x86-addressing-form)
-  ((is-memory-addressing
+  ((is-reg
+     :reader is-reg
+     :initform nil)
+   (is-memory-addressing
      :reader is-memory-addressing
      :initform t)))
 
