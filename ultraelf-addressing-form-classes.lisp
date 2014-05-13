@@ -433,7 +433,10 @@
      :documentation "register size in bits")))
 
 (defclass x86-rip-relative (x86-does-not-need-sib)
-  ((displacement-size
+  ((is-reg
+     :reader is-reg
+     :initform nil)
+   (displacement-size
      :reader displacement-size
      :initform 32
      :documentation "RIP-relative addressing form has always disp32.")
