@@ -218,6 +218,18 @@
      :reader modrm.mod
      :initform #b11)))
 
+(defclass x86-rex.r-0 (x86-addressing-form)
+  ((rex.r
+     :reader rex.r
+     :initform 0
+     :documentation "REX.R = 0")))
+
+(defclass x86-rex.r-1 (x86-addressing-form)
+  ((rex.r
+     :reader rex.r
+     :initform 1
+     :documentation "REX.R = 1")))
+
 (defclass x86-rex.b-0 (x86-addressing-form)
   ((rex.b
      :reader rex.b
