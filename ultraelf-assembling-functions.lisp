@@ -35,7 +35,8 @@
   (mapcar #'(lambda (x)
               (let*
                 ((emit-functions-list (gethash (first x) my-hash-table)))
-                (apply (funcall emit-function-selector-function emit-functions-list) (rest x))))
+                (apply (funcall emit-function-selector-function emit-functions-list)
+                       (loop for arg in (rest x) collecting (convert-string-to-symbol-if-symbol-exists arg)))))
           (eval syntax-tree)))
 
 (defun emit-binary-code (syntax-tree my-hash-table)
