@@ -458,6 +458,18 @@
      :initform 128
      :documentation "register size in bits")))
 
+(defclass x86-old-xmm-register (x86-rex.r-0 x86-xmm-register)
+  ((needs-rex
+     :reader needs-rex
+     :initform nil
+     :documentation "xmm0, xmm1, xmm2, xmm3, xmm4, xmm5, xmm6 & xmm7 do not need REX.")))
+
+(defclass x86-new-xmm-register (x86-rex.r-1 x86-xmm-register)
+  ((needs-rex
+     :reader needs-rex
+     :initform t
+     :documentation "xmm8, xmm9, xmm10, xmm11, xmm12, xmm13, xmm14 & xmm15 _do_ need REX.")))
+
 (defclass x86-ymm-register (x86-register)
   ((is-ymm-reg
      :reader is-ymm-reg
