@@ -384,6 +384,12 @@
      :initform 0
      :documentation "Only spl, bpl, sil & dil belong to this class.")))
 
+(defclass x86-new-8-bits-register-rex.r-1 (x86-rex.r-1 x86-new-8-bits-register)
+  ((rex.r
+     :reader rex.r
+     :initform 1
+     :documentation "r8b, r9b, r10b, r11b, r12b, r13b, r14b & r15b belong to this class.")))
+
 (defclass x86-new-16-bits-register (x86-new-register x86-16-bits-register)
   ((works-with-rex
      :reader works-with-rex
