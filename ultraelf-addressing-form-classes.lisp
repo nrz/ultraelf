@@ -378,6 +378,12 @@
      :initform t
      :documentation "REX is needed")))
 
+(defclass x86-new-8-bits-register-rex.r-0 (x86-rex.r-0 x86-new-8-bits-register)
+  ((rex.r
+     :reader rex.r
+     :initform 0
+     :documentation "Only spl, bpl, sil & dil belong to this class.")))
+
 (defclass x86-new-16-bits-register (x86-new-register x86-16-bits-register)
   ((works-with-rex
      :reader works-with-rex
