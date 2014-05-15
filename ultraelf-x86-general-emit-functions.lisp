@@ -75,30 +75,64 @@
   (emit-modrm-byte #b00 arg1 arg2))
 
 (defun one-operand-x64 (opcode-base reg-byte-base arg1 &optional arg2)
-  (let*
-    ((r/m (r/m (symbol-value (intern (string-upcase arg1))))))
-    (cond
-      ((or
-         (equal (gethash arg1 *reg-type-hash-table-x64*) "old-8-bit-low-reg")
-         (equal (gethash arg1 *reg-type-hash-table-x64*) "old-8-bit-high-reg"))
-       (list opcode-base (logior reg-byte-base r/m)))
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "old-16-bit-reg")
-       (list #x66 (1+ opcode-base) (logior reg-byte-base r/m)))
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "old-32-bit-reg")
-       (list (1+ opcode-base) (logior reg-byte-base r/m)))
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "old-64-bit-reg")
-       (append (emit-high-even-rex) (list (1+ opcode-base) (logior reg-byte-base r/m))))
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-8-bit-low-reg-l")
-       (append (emit-even-rex) (list opcode-base (logior reg-byte-base r/m))))
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-8-bit-low-reg-b")
-       (append (emit-odd-rex) (list opcode-base (logior reg-byte-base r/m))))
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-16-bit-reg")
-       (append (list #x66) (emit-low-odd-rex) (list (1+ opcode-base) (logior reg-byte-base r/m))))
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-32-bit-reg")
-       (append (emit-low-odd-rex) (list (1+ opcode-base) (logior reg-byte-base r/m))))
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-64-bit-reg")
-       (append (emit-high-odd-rex) (list (1+ opcode-base) (logior reg-byte-base r/m))))
-      (t nil))))
+  (cond
+    ;; al, cl, dl, bl, ah, ch, dh, bh.
+    ((and
+       (is-reg arg1)
+       (not (needs-rex arg1))
+       (eq (reg-size arg1) 8))
+     (list opcode-base (logior reg-byte-base (r/m arg1))))
+    ;; ax, cx, dx, bx, ax, cx, dx, bx, sp, bp, si, di.
+    ((and
+       (is-reg arg1)
+       (not (needs-rex arg1))
+       (eq (reg-size arg1) 16))
+     (list #x66 (1+ opcode-base) (logior reg-byte-base (r/m arg1))))
+    ;; eax, ecx, edx, ebx, eax, ecx, edx, ebx, esp, ebp, esi, edi.
+    ((and
+       (is-reg arg1)
+       (not (needs-rex arg1))
+       (eq (reg-size arg1) 32))
+     (list (1+ opcode-base) (logior reg-byte-base (r/m arg1))))
+    ;; rax, rcx, rdx, rbx, rax, rcx, rdx, rbx, rsp, rbp, rsi, rdi.
+    ((and
+       (is-reg arg1)
+       (eq (rex.r arg1) 0)
+       (eq (reg-size arg1) 64))
+     (append (emit-high-even-rex) (list (1+ opcode-base) (logior reg-byte-base (r/m arg1)))))
+    ;; spl, bpl, sil, dil.
+    ((and
+       (is-reg arg1)
+       (needs-rex arg1)
+       (eq (rex.r arg1) 0)
+       (eq (reg-size arg1) 8))
+     (append (emit-even-rex) (list opcode-base (logior reg-byte-base (r/m arg1)))))
+    ;; r8b, r9b, r10b, r11b, r12b, r13b, r14b, r15b.
+    ((and
+       (is-reg arg1)
+       (needs-rex arg1)
+       (eq (rex.r arg1) 1)
+       (eq (reg-size arg1) 8))
+     (append (emit-odd-rex) (list opcode-base (logior reg-byte-base (r/m arg1)))))
+    ;; r8w, r9w, r10w, r11w, r12w, r13w, r14w, r15w.
+    ((and
+       (is-reg arg1)
+       (needs-rex arg1)
+       (eq (reg-size arg1) 16))
+     (append (list #x66) (emit-low-odd-rex) (list (1+ opcode-base) (logior reg-byte-base (r/m arg1)))))
+    ;; r8d, r9d, r10d, r11d, r12d, r13d, r14d, r15d.
+    ((and
+       (is-reg arg1)
+       (needs-rex arg1)
+       (eq (reg-size arg1) 32))
+     (append (emit-low-odd-rex) (list (1+ opcode-base) (logior reg-byte-base (r/m arg1)))))
+    ;; r8, r9, r10, r11, r12, r13, r14, r15.
+    ((and
+       (is-reg arg1)
+       (needs-rex arg1)
+       (eq (reg-size arg1) 64))
+     (append (emit-high-odd-rex) (list (1+ opcode-base) (logior reg-byte-base (r/m arg1)))))
+    (t nil)))
 
 (defun arithmetic-al-imm8-x86 (opcode-base arg1)
   "This function uses AL-specific encoding to encode instruction al,imm8."
