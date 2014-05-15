@@ -116,16 +116,25 @@
 (defun lea-x64 (arg1 arg2 &rest args)
   (cond
     ((and
-       (equal (gethash arg1 *reg-type-hash-table-x64*) "old-16-bit-reg")
-       (equal (gethash arg2 *reg-type-hash-table-x64*) "register-indirect-without-SIB"))
+       (is-reg arg1)
+       (not (needs-rex arg1))
+       (eq (reg-size arg1) 16)
+       (is-register-indirect arg2)
+       (not (needs-sib arg2)))
      (append (list #x66 #x8d) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
     ((and
-       (equal (gethash arg1 *reg-type-hash-table-x64*) "old-32-bit-reg")
-       (equal (gethash arg2 *reg-type-hash-table-x64*) "register-indirect-without-SIB"))
+       (is-reg arg1)
+       (not (needs-rex arg1))
+       (eq (reg-size arg1) 32)
+       (is-register-indirect arg2)
+       (not (needs-sib arg2)))
      (append (list #x8d) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
     ((and
-       (equal (gethash arg1 *reg-type-hash-table-x64*) "old-64-bit-reg")
-       (equal (gethash arg2 *reg-type-hash-table-x64*) "register-indirect-without-SIB"))
+       (is-reg arg1)
+       (eq (rex.r arg1) 0)
+       (eq (reg-size arg1) 64)
+       (is-register-indirect arg2)
+       (not (needs-sib arg2)))
      (append (emit-0x48-or-0x4a-rex) (list #x8d) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
     (t nil)))
 
