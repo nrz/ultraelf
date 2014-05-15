@@ -282,7 +282,11 @@
    (is-new-reg
      :reader is-new-reg
      :initform nil
-     :documentation "new registers are all registers which can _not_ be accessed without REX")))
+     :documentation "new registers are all registers which can _not_ be accessed without REX")
+   (rex.r
+     :reader rex.r
+     :initform 0
+     :documentation "REX.R must be 0 for all old registers.")))
 
 (defclass x86-new-register (x86-register)
   ((is-old-reg
@@ -398,7 +402,11 @@
    (needs-rex
      :reader needs-rex
      :initform t
-     :documentation "REX is needed")))
+     :documentation "REX is needed")
+   (rex.r
+     :reader rex.r
+     :initform 1
+     :documentation "REX.R must be 1")))
 
 (defclass x86-new-32-bits-register (x86-new-register x86-32-bits-register)
   ((works-with-rex
@@ -408,7 +416,11 @@
    (needs-rex
      :reader needs-rex
      :initform t
-     :documentation "REX is needed")))
+     :documentation "REX is needed")
+   (rex.r
+     :reader rex.r
+     :initform 1
+     :documentation "REX.R must be 1")))
 
 (defclass x86-new-64-bits-register (x86-new-register x86-64-bits-register)
   ((works-with-rex
@@ -418,7 +430,11 @@
    (needs-rex
      :reader needs-rex
      :initform t
-     :documentation "REX is needed")))
+     :documentation "REX is needed")
+   (rex.r
+     :reader rex.r
+     :initform 1
+     :documentation "REX.R must be 1")))
 
 (defclass x86-mmx-register (x86-register)
   ((is-mmx-reg
@@ -427,7 +443,11 @@
    (reg-size
      :reader reg-size
      :initform 64
-     :documentation "register size in bits")))
+     :documentation "register size in bits")
+   (rex.r
+     :reader rex.r
+     :initform (list 0 1)
+     :documentation "REX.R can be 0 or 1, no difference.")))
 
 (defclass x86-xmm-register (x86-register)
   ((is-xmm-reg
