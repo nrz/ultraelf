@@ -500,6 +500,12 @@
      :initform 512
      :documentation "register size in bits")))
 
+(defclass x86-old-zmm-register (x86-rex.r-0 x86-zmm-register)
+  ())
+
+(defclass x86-new-zmm-register (x86-rex.r-1 x86-zmm-register)
+  ())
+
 (defclass x86-rip-relative (x86-does-not-need-sib)
   ((is-reg
      :reader is-reg
