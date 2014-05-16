@@ -382,18 +382,28 @@
     (t nil)))
 
 (defun push-x64 (arg1 &optional arg2)
-  (let*
-    ((r/m (r/m (symbol-value (intern (string-upcase arg1))))))
-    (cond
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "old-16-bit-reg")
-       (list #x66 (logior #x50 r/m)))
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "old-64-bit-reg")
-       (list (logior #x50 r/m)))
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-16-bit-reg")
-       (append (list #x66) (emit-odd-rex) (list (logior #x50 r/m))))
-      ((equal (gethash arg1 *reg-type-hash-table-x64*) "new-64-bit-reg")
-       (append (emit-odd-rex) (list (logior #x50 r/m))))
-      (t nil))))
+  (cond
+    ((and
+       (is-reg arg1)
+       (not (needs-rex arg1))
+       (eql (reg-size arg1) 16))
+     (list #x66 (logior #x50 (r/m arg1))))
+    ((and
+       (is-reg arg1)
+       (eql (rex.r arg1) 0)
+       (eql (reg-size arg1) 64))
+     (list (logior #x50 (r/m arg1))))
+    ((and
+       (is-reg arg1)
+       (needs-rex arg1)
+       (eql (reg-size arg1) 16))
+     (append (list #x66) (emit-odd-rex) (list (logior #x50 (r/m arg1)))))
+    ((and
+       (is-reg arg1)
+       (eql (rex.r arg1) 1)
+       (eql (reg-size arg1) 64))
+     (append (emit-odd-rex) (list (logior #x50 (r/m arg1)))))
+    (t nil)))
 
 (defun rcl-1-x64 (arg1 &optional arg2 &rest args)
   (one-operand-x64 #xd0 #xd0 arg1 arg2))
