@@ -302,11 +302,17 @@
 
 (defun out-x32-x64 (arg1 arg2 &rest args)
   (cond
-    ((and (equalp arg1 "dx") (equalp arg2 "al"))
+    ((and
+       (equalp (name arg1) "dx")
+       (equalp (name arg2) "al"))
      (list #xee))
-    ((and (equalp arg1 "dx") (equalp arg2 "ax"))
+    ((and
+       (equalp (name arg1) "dx")
+       (equalp (name arg2) "ax"))
      (list #x66 #xef))
-    ((and (equalp arg1 "dx") (equalp arg2 "eax"))
+    ((and
+       (equalp (name arg1) "dx")
+       (equalp (name arg2) "eax"))
      (list #xef))
     (t nil)))
 
