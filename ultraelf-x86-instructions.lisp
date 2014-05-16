@@ -95,11 +95,17 @@
 
 (defun in-x32-x64 (arg1 arg2 &rest args)
   (cond
-    ((and (equalp arg1 "al") (equalp arg2 "dx"))
+    ((and
+       (equalp (name arg1) "al")
+       (equalp (name arg2) "dx"))
      (list #xec))
-    ((and (equalp arg1 "ax") (equalp arg2 "dx"))
+    ((and
+       (equalp (name arg1) "ax")
+       (equalp (name arg2) "dx"))
      (list #x66 #xed))
-    ((and (equalp arg1 "eax") (equalp arg2 "dx"))
+    ((and
+       (equalp (name arg1) "eax")
+       (equalp (name arg2) "dx"))
      (list #xed))
     (t nil)))
 
