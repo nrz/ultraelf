@@ -13,8 +13,8 @@
 (defun align-pseudo-op (arg1 &rest args)
   "`align` aligns the code by emitting enough nop's (0x90)."
   (if (or
-        (eq *global-offset* 0)
-        (eq (mod *global-offset* arg1) 0))
+        (eql *global-offset* 0)
+        (eql (mod *global-offset* arg1) 0))
     nil
     (loop for i from 1 to (- arg1 (mod *global-offset* arg1))
           collect #x90)))

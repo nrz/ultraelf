@@ -15,10 +15,10 @@
   ;; otherwise use CONS to create (LIST element-1 element-2 ... ) .
   (loop for i below (length my-list)
         do (when (stringp (nth i my-list))
-             (if (eq i 0)
+             (if (eql i 0)
                (setf my-list (create-syntax-tree (append (rest (read-from-string (nth i my-list))) (subseq my-list (1+ i)))))
                (setf my-list (create-syntax-tree (append (subseq my-list 0 (1- i)) (rest (read-from-string (nth i my-list))) (subseq my-list (1+ i))))))))
-  (if (eq (first my-list) 'list)
+  (if (eql (first my-list) 'list)
     my-list
     (cons 'list my-list)))
 

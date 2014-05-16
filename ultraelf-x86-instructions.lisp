@@ -118,21 +118,21 @@
     ((and
        (is-reg arg1)
        (not (needs-rex arg1))
-       (eq (reg-size arg1) 16)
+       (eql (reg-size arg1) 16)
        (is-register-indirect arg2)
        (not (needs-sib arg2)))
      (append (list #x66 #x8d) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
     ((and
        (is-reg arg1)
        (not (needs-rex arg1))
-       (eq (reg-size arg1) 32)
+       (eql (reg-size arg1) 32)
        (is-register-indirect arg2)
        (not (needs-sib arg2)))
      (append (list #x8d) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
     ((and
        (is-reg arg1)
-       (eq (rex.r arg1) 0)
-       (eq (reg-size arg1) 64)
+       (eql (rex.r arg1) 0)
+       (eql (reg-size arg1) 64)
        (is-register-indirect arg2)
        (not (needs-sib arg2)))
      (append (emit-0x48-or-0x4a-rex) (list #x8d) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
@@ -367,7 +367,7 @@
      (list #x66 #xf3 #xaf))
     ((equalp arg1 "stosw")
      (list #x66 #xf3 #xab))
-    ((eq arg1 nil)
+    ((eql arg1 nil)
      (list #xf3))
     (t (cons #xf3 (funcall (first (gethash arg1 *emit-function-hash-table-x64*)))))))
 
@@ -387,7 +387,7 @@
      (list #x66 #xf2 #xaf))
     ((equalp arg1 "stosw")
      (list #x66 #xf2 #xab))
-    ((eq arg1 nil)
+    ((eql arg1 nil)
      (list #xf2))
     (t (cons #xf2 (funcall (first (gethash arg1 *emit-function-hash-table-x64*)))))))
 
