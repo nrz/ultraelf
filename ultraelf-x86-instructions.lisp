@@ -287,7 +287,9 @@
   ;; Following the logic used in YASM:
   ;; Use `defun mov-rm-reg-x64` always when you can.
   ;; Use `defun mov-reg-rm-x64` only if target is a register indirect without SIB.
-  (if (equal (gethash arg2 *reg-type-hash-table-x64*) "register-indirect-without-SIB")
+  (if (and
+        (is-register-indirect arg2)
+        (not (needs-sib arg2)))
     (mov-reg-rm-x64 arg1 arg2 arg3 args)
     (mov-rm-reg-x64 arg1 arg2 arg3 args)))
 
