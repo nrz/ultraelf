@@ -168,46 +168,62 @@
   (list #x4f #xad))
 
 (defun mov-reg-rm-x64 (arg1 arg2 &optional arg3 &rest args)
-  (let*
-    ((arg1-reg-type (gethash arg1 *reg-type-hash-table-x64*))
-     (arg2-reg-type (gethash arg2 *reg-type-hash-table-x64*)))
-    (cond
-      ((and
-         (or
-           (equal arg1-reg-type "old-8-bit-low-reg")
-           (equal arg1-reg-type "old-8-bit-high-reg"))
-         (or
-           (equal arg2-reg-type "old-8-bit-low-reg")
-           (equal arg2-reg-type "old-8-bit-high-reg")))
-       ;; 0x8a can also be used, requires reverse order in ModRM.
-       ;; 0x88: mov r/m8, r8
-       ;; 0x8a: mov r8, r/m8
-       (cons #x8a (emit-modrm-byte-for-reg-reg arg2 arg1)))
-      ((and (equal arg1-reg-type "old-16-bit-reg")
-            (equal arg2-reg-type "old-16-bit-reg"))
-       ;; 0x8b can also be used, requires reverse order in ModRM.
-       ;; 0x89: mov r/m16, r16
-       ;; 0x8b: mov r16, r/m16
-       (append (list #x66 #x8b) (emit-modrm-byte-for-reg-reg arg2 arg1)))
-      ((and (equal arg1-reg-type "old-32-bit-reg")
-            (equal arg2-reg-type "old-32-bit-reg"))
-       ;; 0x8b can also be used, requires reverse order in ModRM.
-       ;; 0x89: mov r/m32, r32
-       ;; 0x8b: mov r32, r/m32
-       (cons #x8b (emit-modrm-byte-for-reg-reg arg2 arg1)))
-      ((and
-         (or
-           (equal arg1-reg-type "old-8-bit-low-reg")
-           (equal arg1-reg-type "old-8-bit-high-reg"))
-         (equal arg2-reg-type "register-indirect-without-SIB"))
-       (cons #x8a (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
-      ((and (equal arg1-reg-type "old-16-bit-reg")
-            (equal arg2-reg-type "register-indirect-without-SIB"))
-       (append (list #x66 #x8b) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
-      ((and (equal arg1-reg-type "old-32-bit-reg")
-            (equal arg2-reg-type "register-indirect-without-SIB"))
-       (cons #x8b (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
-      (t nil))))
+  (cond
+    ((and
+       (is-reg arg1)
+       (not (needs-rex arg1))
+       (eql (reg-size arg1) 8)
+       (is-reg arg2)
+       (not (needs-rex arg2))
+       (eql (reg-size arg2) 8))
+     ;; 0x8a can also be used, requires reverse order in ModRM.
+     ;; 0x88: mov r/m8, r8
+     ;; 0x8a: mov r8, r/m8
+     (cons #x8a (emit-modrm-byte-for-reg-reg arg2 arg1)))
+    ((and
+       (is-reg arg1)
+       (not (needs-rex arg1))
+       (eql (reg-size arg1) 16)
+       (is-reg arg2)
+       (not (needs-rex arg2))
+       (eql (reg-size arg2) 16))
+     ;; 0x8b can also be used, requires reverse order in ModRM.
+     ;; 0x89: mov r/m16, r16
+     ;; 0x8b: mov r16, r/m16
+     (append (list #x66 #x8b) (emit-modrm-byte-for-reg-reg arg2 arg1)))
+    ((and
+       (is-reg arg1)
+       (not (needs-rex arg1))
+       (eql (reg-size arg1) 32)
+       (is-reg arg2)
+       (not (needs-rex arg2))
+       (eql (reg-size arg2) 32))
+     ;; 0x8b can also be used, requires reverse order in ModRM.
+     ;; 0x89: mov r/m32, r32
+     ;; 0x8b: mov r32, r/m32
+     (cons #x8b (emit-modrm-byte-for-reg-reg arg2 arg1)))
+    ((and
+       (is-reg arg1)
+       (not (needs-rex arg1))
+       (eql (reg-size arg1) 8)
+       (is-register-indirect arg2)
+       (not (needs-sib arg2)))
+     (cons #x8a (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
+    ((and
+       (is-reg arg1)
+       (not (needs-rex arg1))
+       (eql (reg-size arg1) 16)
+       (is-register-indirect arg2)
+       (not (needs-sib arg2)))
+     (append (list #x66 #x8b) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
+    ((and
+       (is-reg arg1)
+       (not (needs-rex arg1))
+       (eql (reg-size arg1) 32)
+       (is-register-indirect arg2)
+       (not (needs-sib arg2)))
+     (cons #x8b (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
+    (t nil)))
 
 (defun mov-rm-reg-x64 (arg1 arg2 &optional arg3 &rest args)
   (let*
