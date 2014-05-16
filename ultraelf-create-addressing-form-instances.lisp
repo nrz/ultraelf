@@ -13,4 +13,5 @@
         do (loop for register-index below (length (second register-list))
                  do (setf (symbol-value (intern (string-upcase (nth register-index (second register-list)))))
                           (make-instance (third register-list)
-                                         :r/m (+ register-index (first register-list)))))))
+                                         :r/m (+ register-index (first register-list))
+                                         :name (string-upcase (nth register-index (second register-list))))))))

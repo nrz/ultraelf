@@ -153,8 +153,10 @@
 ;; x86-new-register-indirect-does-not-need-sib (x86-new-register-indirect x86-register-indirect-does-not-need-sib)
 
 (defclass addressing-form ()
-  ((addressing-form-name
-     :reader addressing-form-name
+  ((name
+     :initarg :name
+     :reader name
+     :initform (error "name must be specified")
      :documentation "any CPU addressing form")))
 
 (defclass register (addressing-form)
