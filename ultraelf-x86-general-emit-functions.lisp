@@ -36,8 +36,8 @@
 (defun emit-sib-byte (base index scale)
   "This function emits SIB byte."
   (list (logior
-          (r/m (symbol-value (intern (string-upcase base))))
-          (ash (r/m (symbol-value (intern (string-upcase index)))) 3)
+          (r/m base)
+          (ash (r/m index) 3)
           (ash (gethash scale *sib-scale-hash-table-x64*) 6))))
 
 (defun emit-sib-byte-for-memory-address-syntax (memory-address-syntax)
