@@ -147,7 +147,7 @@
 (defun arithmetic-eax-imm32-x64 (opcode-base arg1)
   "This function uses EAX-specific encoding to encode instruction eax,imm32."
   (let*
-    ((imm32 (parse-integer arg1)))
+    ((imm32 (parse-integer (name arg1))))
     (list (+ opcode-base 5)
           (logand imm32 #xff)
           (logand (ash imm32 -8) #xff)
