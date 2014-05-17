@@ -157,7 +157,7 @@
 (defun arithmetic-rax-imm32-x64 (opcode-base arg1)
   "This function uses RAX-specific encoding to encode instruction rax,imm32."
   (let*
-    ((imm32 (parse-integer arg1)))
+    ((imm32 (parse-integer (name arg1))))
     (append (emit-high-rex)
             (list (+ opcode-base 5)
                   (logand imm32 #xff)
