@@ -236,7 +236,7 @@
        (string-to-32-bit-little-endian arg3)))
     (t nil)))
 
-(defun arithmetic-reg-rm-x64 (opcode-base arg1 arg2)
+(defun arithmetic-reg-rm-x64 (opcode-base arg1 arg2 &rest args)
   (let*
     ((arg1-reg-type (gethash arg1 *reg-type-hash-table-x64*))
      (arg2-reg-type (gethash arg2 *reg-type-hash-table-x64*)))
