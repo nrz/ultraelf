@@ -223,25 +223,30 @@
 
 (defun arithmetic-rm32-imm32-x64 (opcode-base arg1 arg2 &optional arg3)
   (cond
-    ((equal (gethash arg1 *reg-type-hash-table-x64*) "old-32-bit-reg")
+    ((and
+       (is-reg arg1)
+       (not (needs-rex arg1))
+       (eql (reg-size arg1) 32))
      (append
        (list #x81)
        (emit-modrm-byte-for-arithmetic-reg-imm opcode-base arg1)
-       (string-to-32-bit-little-endian arg2)))
+       (string-to-32-bit-little-endian (name arg2))))
     ((and
-       (equal (gethash arg1 *reg-type-hash-table-x64*) "register-indirect-without-SIB")
-       (parse-integer arg2 :junk-allowed t))
+       (is-register-indirect arg1)
+       (not (needs-sib arg1))
+       (parse-integer (name arg2) :junk-allowed t))
      (append
        (list #x81)
        (emit-modrm-byte-for-arithmetic-rm-imm opcode-base #x00 arg1)
-       (string-to-32-bit-little-endian arg2)))
+       (string-to-32-bit-little-endian (name arg2))))
     ((and
-       (equal (gethash arg1 *reg-type-hash-table-x64*) "register-indirect-without-SIB")
-       (equalp arg2 "dword"))
+       (is-register-indirect arg1)
+       (not (needs-sib arg1))
+       (equalp (name arg2) "dword"))
      (append
        (list #x81)
        (emit-modrm-byte-for-arithmetic-rm-imm opcode-base #x00 arg1)
-       (string-to-32-bit-little-endian arg3)))
+       (string-to-32-bit-little-endian (name arg3))))
     (t nil)))
 
 (defun arithmetic-reg-rm-x64 (opcode-base arg1 arg2 &rest args)
