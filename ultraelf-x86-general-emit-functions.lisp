@@ -197,7 +197,7 @@
   (cond
     ((equal (gethash arg1 *reg-type-hash-table-x64*) "old-16-bit-reg")
      (append
-       (list #x81)
+       (list #x66 #x81)
        (emit-modrm-byte-for-arithmetic-reg-imm opcode-base arg1)
        (string-to-16-bit-little-endian arg2)))
     ((and
