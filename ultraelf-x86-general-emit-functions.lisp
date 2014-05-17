@@ -57,7 +57,7 @@
 
 (defun emit-modrm-byte-for-arithmetic-rm-imm (opcode-base mod arg1)
   "This function emits ModRM (?) byte for r/m,imm for arithmetic instructions."
-  (list (logior (r/m (symbol-value (intern (string-upcase arg1))))
+  (list (logior (r/m arg1)
                 opcode-base
                 (ash mod 6))))
 
