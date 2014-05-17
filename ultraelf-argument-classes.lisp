@@ -16,11 +16,11 @@
   ((is-unknown
      :reader is-unknown
      :initform t)
-   (my-string
-     :initarg :my-string
-     :reader my-string
-     :initform (error "my-string must be specified")
-     :documentation "the unknown string")
+   (name
+     :initarg :name
+     :reader name
+     :initform (error "name must be specified")
+     :documentation "the unknown string must be given as a name")
    (is-register
      :reader is-register
      :initform nil
@@ -135,3 +135,9 @@
   (list #xf2 (slot-value x86-32-bit-string-instruction 'op-code)))
 (defmethod repne ((x86-64-bit-string-instruction x86-64-bit-string-instruction))
   (cons #xf2 (append (emit-high-rex) (list (slot-value x86-64-bit-string-instruction 'op-code)))))
+
+(defgeneric my-string (argument)
+  (:documentation "string that is converted to this instance."))
+
+(defmethod my-string ((argument argument))
+  (slot-value argument 'name))
