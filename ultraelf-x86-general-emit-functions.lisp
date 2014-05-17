@@ -250,49 +250,65 @@
     (t nil)))
 
 (defun arithmetic-reg-rm-x64 (opcode-base arg1 arg2 &rest args)
-  (let*
-    ((arg1-reg-type (gethash arg1 *reg-type-hash-table-x64*))
-     (arg2-reg-type (gethash arg2 *reg-type-hash-table-x64*)))
-    (cond
-      ((and
-         (or
-           (equal arg1-reg-type "old-8-bit-low-reg")
-           (equal arg1-reg-type "old-8-bit-high-reg"))
-         (or
-           (equal arg2-reg-type "old-8-bit-low-reg")
-           (equal arg2-reg-type "old-8-bit-high-reg")))
-       ;; Example op-codes for add (method is the same for other instructions too):
-       ;; 0x02 can also be used, requires reverse order in ModRM.
-       ;; 0x00: add r/m8, r8
-       ;; 0x02: add r8, r/m8
-       (cons (+ opcode-base 2) (emit-modrm-byte-for-reg-reg arg2 arg1)))
-      ((and (equal arg1-reg-type "old-16-bit-reg")
-            (equal arg2-reg-type "old-16-bit-reg"))
-       ;; Example op-codes for add (method is the same for other instructions too):
-       ;; 0x03 can also be used, requires reverse order in ModRM.
-       ;; 0x01: add r/m16, r16
-       ;; 0x03: add r16, r/m16
-       (append (list #x66 (+ opcode-base 3)) (emit-modrm-byte-for-reg-reg arg2 arg1)))
-      ((and (equal arg1-reg-type "old-32-bit-reg")
-            (equal arg2-reg-type "old-32-bit-reg"))
-       ;; Example op-codes for add (method is the same for other instructions too):
-       ;; 0x03 can also be used, requires reverse order in ModRM.
-       ;; 0x01: add r/m32, r32
-       ;; 0x03: add r32, r/m32
-       (cons (+ opcode-base 3) (emit-modrm-byte-for-reg-reg arg2 arg1)))
-      ((and
-         (or
-           (equal arg1-reg-type "old-8-bit-low-reg")
-           (equal arg1-reg-type "old-8-bit-high-reg"))
-         (equal arg2-reg-type "register-indirect-without-SIB"))
-       (cons (+ opcode-base 2) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
-      ((and (equal arg1-reg-type "old-16-bit-reg")
-            (equal arg2-reg-type "register-indirect-without-SIB"))
-       (append (list #x66 (+ opcode-base 3)) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
-      ((and (equal arg1-reg-type "old-32-bit-reg")
-            (equal arg2-reg-type "register-indirect-without-SIB"))
-       (cons (+ opcode-base 3) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
-      (t nil))))
+  (cond
+    ((and
+       (is-reg arg1)
+       (not (needs-rex arg1))
+       (eql (reg-size arg1) 8)
+       (is-reg arg2)
+       (not (needs-rex arg2))
+       (eql (reg-size arg2) 8))
+     ;; Example op-codes for add (method is the same for other instructions too):
+     ;; 0x02 can also be used, requires reverse order in ModRM.
+     ;; 0x00: add r/m8, r8
+     ;; 0x02: add r8, r/m8
+     (cons (+ opcode-base 2) (emit-modrm-byte-for-reg-reg arg2 arg1)))
+    ((and
+       (is-reg arg1)
+       (not (needs-rex arg1))
+       (eql (reg-size arg1) 16)
+       (is-reg arg2)
+       (not (needs-rex arg2))
+       (eql (reg-size arg2) 16))
+     ;; Example op-codes for add (method is the same for other instructions too):
+     ;; 0x03 can also be used, requires reverse order in ModRM.
+     ;; 0x01: add r/m16, r16
+     ;; 0x03: add r16, r/m16
+     (append (list #x66 (+ opcode-base 3)) (emit-modrm-byte-for-reg-reg arg2 arg1)))
+    ((and
+       (is-reg arg1)
+       (not (needs-rex arg1))
+       (eql (reg-size arg1) 32)
+       (is-reg arg2)
+       (not (needs-rex arg2))
+       (eql (reg-size arg2) 32))
+     ;; Example op-codes for add (method is the same for other instructions too):
+     ;; 0x03 can also be used, requires reverse order in ModRM.
+     ;; 0x01: add r/m32, r32
+     ;; 0x03: add r32, r/m32
+     (cons (+ opcode-base 3) (emit-modrm-byte-for-reg-reg arg2 arg1)))
+    ((and
+       (is-reg arg1)
+       (not (needs-rex arg1))
+       (eql (reg-size arg1) 8)
+       (is-register-indirect arg2)
+       (not (needs-sib arg2)))
+     (cons (+ opcode-base 2) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
+    ((and
+       (is-reg arg1)
+       (not (needs-rex arg1))
+       (eql (reg-size arg1) 16)
+       (is-register-indirect arg2)
+       (not (needs-sib arg2)))
+     (append (list #x66 (+ opcode-base 3)) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
+    ((and
+       (is-reg arg1)
+       (not (needs-rex arg1))
+       (eql (reg-size arg1) 32)
+       (is-register-indirect arg2)
+       (not (needs-sib arg2)))
+     (cons (+ opcode-base 3) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
+    (t nil)))
 
 (defun arithmetic-rm-reg-x64 (opcode-base arg1 arg2)
   (let*
