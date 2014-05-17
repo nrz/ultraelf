@@ -467,7 +467,7 @@
            (is-reg arg1)
            (not (needs-rex arg1))
            (eql (reg-size arg1) 8)))
-       (equal (name arg2) "byte"))
+       (equalp (name arg2) "byte"))
      ;; no alternatives available here.
      (arithmetic-rm8-imm8-x64 opcode-base arg1 arg3))
     ((and
@@ -479,7 +479,7 @@
            (is-reg arg1)
            (not (needs-rex arg1))
            (eql (reg-size arg1) 16)))
-       (equal (name arg2) "word"))
+       (equalp (name arg2) "word"))
      ;; no alternatives available here.
      (arithmetic-rm16-imm16-x64 opcode-base arg1 arg3))
     ((and
@@ -491,7 +491,7 @@
            (is-reg arg1)
            (not (needs-rex arg1))
            (eql (reg-size arg1) 32)))
-       (equal (name arg2) "dword"))
+       (equalp (name arg2) "dword"))
      ;; no alternatives available here.
      (arithmetic-rm32-imm32-x64 opcode-base arg1 arg3))
     (t nil)))
