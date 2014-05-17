@@ -43,7 +43,6 @@
                (:file "ultraelf-sib")                              ; x86 SIB byte scale values hash table.
                (:file "ultraelf-sreg2")                            ; x86 SREG2 segment register values hash table.
                (:file "ultraelf-sreg3")                            ; x86 SREG3 segment register values hash table.
-               (:file "ultraelf-register-types")                   ; x86 register type hash table.
                (:file "ultraelf-x86-general-emit-functions")       ; general x86 emit-code functions.
                (:file "ultraelf-x86-instructions")                 ; instruction-specific x86 emit-code functions.
                (:file "ultraelf-instructions-hash-tables")         ; x86 instructions hash tables.
