@@ -136,7 +136,7 @@
 
 (defun arithmetic-al-imm8-x86 (opcode-base arg1)
   "This function uses AL-specific encoding to encode instruction al,imm8."
-  (list (+ opcode-base 4) (parse-integer arg1)))
+  (list (+ opcode-base 4) (parse-integer (name arg1))))
 
 (defun arithmetic-ax-imm16-x64 (opcode-base arg1)
   "This function uses AX-specific encoding to encode instruction ax,imm16."
