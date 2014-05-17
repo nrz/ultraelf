@@ -552,3 +552,9 @@
 
 (defclass x86-new-register-indirect-does-not-need-sib (x86-new-register-indirect x86-register-indirect-does-not-need-sib)
   ())
+
+(defgeneric my-string (addressing-form)
+  (:documentation "string that is converted to this instance."))
+
+(defmethod my-string ((addressing-form addressing-form))
+  (slot-value addressing-form 'name))
