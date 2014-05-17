@@ -167,27 +167,30 @@
 
 (defun arithmetic-rm8-imm8-x64 (opcode-base arg1 arg2 &optional arg3)
   (cond
-    ((or
-       (equal (gethash arg1 *reg-type-hash-table-x64*) "old-8-bit-low-reg")
-       (equal (gethash arg1 *reg-type-hash-table-x64*) "old-8-bit-high-reg"))
+    ((and
+       (is-reg arg1)
+       (not (needs-rex arg1))
+       (eql (reg-size arg1) 8))
      (append
        (list #x80)
        (emit-modrm-byte-for-arithmetic-reg-imm opcode-base arg1)
-       (string-to-8-bit-little-endian arg2)))
+       (string-to-8-bit-little-endian (name arg2))))
     ((and
-       (equal (gethash arg1 *reg-type-hash-table-x64*) "register-indirect-without-SIB")
-       (parse-integer arg2 :junk-allowed t))
+       (is-register-indirect arg1)
+       (not (needs-sib arg1))
+       (parse-integer (name arg2) :junk-allowed t))
      (append
        (list #x80)
        (emit-modrm-byte-for-arithmetic-rm-imm opcode-base #x00 arg1)
-       (string-to-8-bit-little-endian arg2)))
+       (string-to-8-bit-little-endian (name arg2))))
     ((and
-       (equal (gethash arg1 *reg-type-hash-table-x64*) "register-indirect-without-SIB")
-       (equalp arg2 "byte"))
+       (is-register-indirect arg1)
+       (not (needs-sib arg1))
+       (equalp (name arg2) "byte"))
      (append
        (list #x80)
        (emit-modrm-byte-for-arithmetic-rm-imm opcode-base #x00 arg1)
-       (string-to-8-bit-little-endian arg3)))
+       (string-to-8-bit-little-endian (name arg3))))
     (t nil)))
 
 (defun arithmetic-rm16-imm16-x64 (opcode-base arg1 arg2 &optional arg3)
