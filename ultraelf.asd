@@ -29,6 +29,10 @@
                (:file "ultraelf-compiling-macros")
                (:file "ultraelf-string")                           ; string functions.
                (:file "ultraelf-printing")                         ; printing functions.
+               (:file "ultraelf-x64-rex")                          ; x64 "emit REX" functions.
+               (:file "ultraelf-argument-classes")                 ; instruction argument classes except addressing form classes.
+               (:file "ultraelf-argument-lists")                   ; lists of arguments belonging to each argument class (currently for each string instruction).
+               (:file "ultraelf-create-argument-instances")        ; create instance for each argument (currently for each string instruction). uses emit REX functions.
                (:file "ultraelf-addressing-form-classes")          ; addressing form classes.
                (:file "ultraelf-addressing-form-lists")            ; lists of registers etc. belonging to each addressing form class.
                (:file "ultraelf-create-addressing-form-instances") ; create instance for each addressing form, including each register.
@@ -40,7 +44,6 @@
                (:file "ultraelf-sreg2")                            ; x86 SREG2 segment register values hash table.
                (:file "ultraelf-sreg3")                            ; x86 SREG3 segment register values hash table.
                (:file "ultraelf-register-types")                   ; x86 register type hash table.
-               (:file "ultraelf-x64-rex")                          ; x64 "emit REX" functions.
                (:file "ultraelf-x86-general-emit-functions")       ; general x86 emit-code functions.
                (:file "ultraelf-x86-instructions")                 ; instruction-specific x86 emit-code functions.
                (:file "ultraelf-instructions-hash-tables")         ; x86 instructions hash tables.
