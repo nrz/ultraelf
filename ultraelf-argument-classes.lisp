@@ -21,8 +21,8 @@
      :reader name
      :initform (error "name must be specified")
      :documentation "the unknown string must be given as a name")
-   (is-register
-     :reader is-register
+   (is-reg
+     :reader is-reg
      :initform nil
      :documentation "registers are _not_ unknown.")
    (register-indirect
