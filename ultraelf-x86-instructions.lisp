@@ -434,7 +434,7 @@
     ((null arg1)
      (list #xf2))
     ((is-string-instruction arg1)
-     (rep arg1))
+     (repnz arg1))
     ;; arg1 is unknown.
     (t (cons #xf2 (emit-binary-code-for-one-instruction
                     (loop for arg in (cons arg1 args)
