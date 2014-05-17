@@ -25,8 +25,8 @@
      :reader is-reg
      :initform nil
      :documentation "registers are _not_ unknown.")
-   (register-indirect
-     :reader register-indirect
+   (is-register-indirect
+     :reader is-register-indirect
      :initform nil
      :documentation "register indirects are _not_ unknown.")
    (is-string-instruction
