@@ -52,7 +52,7 @@
 (defun emit-modrm-byte (mod regmem reg)
   "This function emits ModRM byte."
   (list (logior (r/m regmem)
-                (ash (r/m  reg) 3)
+                (ash (r/m reg) 3)
                 (ash mod 6))))
 
 (defun emit-modrm-byte-for-arithmetic-rm-imm (opcode-base mod arg1)
