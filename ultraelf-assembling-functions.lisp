@@ -42,10 +42,7 @@
    the bytes of each instruction are on their list.
    `emit-function-selector-function` can be eg. `#'first` or `#'(lambda (x) (first (last x)))`."
   (mapcar #'(lambda (x)
-              (let*
-                ((emit-functions-list (gethash (first x) my-hash-table)))
-                (apply (funcall emit-function-selector-function emit-functions-list)
-                       (loop for arg in (rest x) collect (convert-string-to-symbol-if-symbol-exists arg)))))
+              (emit-binary-code-for-one-instruction x my-hash-table))
           (eval syntax-tree)))
 
 (defun emit-binary-code (syntax-tree my-hash-table)
