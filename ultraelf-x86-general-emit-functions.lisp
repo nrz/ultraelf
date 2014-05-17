@@ -381,97 +381,117 @@
   ;; Use `defun arithmetic-reg-rm-x64` only if source is a register indirect without SIB.
   (cond
     ((and
-       (equal (gethash (gethash arg1 *reg-type-hash-table-x64*) *is-register-hash-table-x64*) "is-register")
-       (equal (gethash (gethash arg2 *reg-type-hash-table-x64*) *is-register-hash-table-x64*) "is-register"))
+       (is-reg arg1)
+       (is-reg arg2))
      ;; this could be also (arithmetic-reg-rm-x64 opcode-base arg1 arg2 arg3) .
      (arithmetic-rm-reg-x64 opcode-base arg1 arg2))
     ((and
-       (equal (gethash (gethash arg1 *reg-type-hash-table-x64*) *is-register-hash-table-x64*) "is-register")
-       (equal (gethash arg2 *reg-type-hash-table-x64*) "register-indirect-without-SIB"))
+       (is-reg arg1)
+       (is-register-indirect arg2)
+       (not (needs-sib arg2)))
      ;; no alternatives available here, except using SIB.
      (arithmetic-reg-rm-x64 opcode-base arg1 arg2))
     ((and
-       (equal (gethash arg1 *reg-type-hash-table-x64*) "register-indirect-without-SIB")
-       (equal (gethash (gethash arg2 *reg-type-hash-table-x64*) *is-register-hash-table-x64*) "is-register"))
+       (is-register-indirect arg1)
+       (not (needs-sib arg1))
+       (is-reg arg2))
      ;; no alternatives available here, except using SIB.
      (arithmetic-rm-reg-x64 opcode-base arg1 arg2))
     ((and
-       (equalp arg1 "al")
-       (equalp arg2 "byte"))
+       (equalp (name arg1) "al")
+       (equalp (name arg2) "byte"))
      ;; could use also `arithmetic-rm8-imm8-x64` instead of AL-specific encoding.
      (arithmetic-al-imm8-x86 opcode-base arg3))
     ((and
-       (equalp arg1 "al")
-       (parse-integer arg2 :junk-allowed t))
+       (equalp (name arg1) "al")
+       (parse-integer (name arg2) :junk-allowed t))
      ;; could use also `arithmetic-rm8-imm8-x64` instead of AL-specific encoding.
      (arithmetic-al-imm8-x86 opcode-base arg2))
     ((and
-       (equalp arg1 "ax")
-       (equalp arg2 "word"))
+       (equalp (name arg1) "ax")
+       (equalp (name arg2) "word"))
      ;; could use also `arithmetic-rm16-imm16-x64` instead of AX-specific encoding.
      (arithmetic-ax-imm16-x64 opcode-base arg3))
     ((and
-       (equalp arg1 "ax")
-       (parse-integer arg2 :junk-allowed t))
+       (equalp (name arg1) "ax")
+       (parse-integer (name arg2) :junk-allowed t))
      ;; could use also `arithmetic-rm16-imm16-x64` instead of AX-specific encoding.
      (arithmetic-ax-imm16-x64 opcode-base arg2))
     ((and
-       (equalp arg1 "eax")
-       (equalp arg2 "dword"))
+       (equalp (name arg1) "eax")
+       (equalp (name arg2) "dword"))
      ;; could use also `arithmetic-rm32-imm32-x64` instead of EAX-specific encoding.
      (arithmetic-eax-imm32-x64 opcode-base arg3))
     ((and
-       (equalp arg1 "eax")
-       (parse-integer arg2 :junk-allowed t))
+       (equalp (name arg1) "eax")
+       (parse-integer (name arg2) :junk-allowed t))
      ;; could use also `arithmetic-rm32-imm32-x64` instead of EAX-specific encoding.
      (arithmetic-eax-imm32-x64 opcode-base arg2))
     ((and
-       (equalp arg1 "rax")
-       (equalp arg2 "dword"))
+       (equalp (name arg1) "rax")
+       (equalp (name arg2) "dword"))
      ;; could use also ...
      (arithmetic-rax-imm32-x64 opcode-base arg3))
     ((and
-       (equalp arg1 "rax")
-       (parse-integer arg2 :junk-allowed t))
+       (equalp (name arg1) "rax")
+       (parse-integer (name arg2) :junk-allowed t))
      ;; could use also ...
      (arithmetic-rax-imm32-x64 opcode-base arg2))
     ((and
-       (or
-         (equal (gethash arg1 *reg-type-hash-table-x64*) "old-8-bit-low-reg")
-         (equal (gethash arg1 *reg-type-hash-table-x64*) "old-8-bit-high-reg"))
-       (parse-integer arg2 :junk-allowed t))
+       (is-reg arg1)
+       (not (needs-rex arg1))
+       (eql (reg-size arg1) 8)
+       (parse-integer (name arg2) :junk-allowed t))
      ;; no alternatives available here.
      (arithmetic-rm8-imm8-x64 opcode-base arg1 arg2))
     ((and
-       (equal (gethash arg1 *reg-type-hash-table-x64*) "old-16-bit-reg")
-       (parse-integer arg2 :junk-allowed t))
+       (is-reg arg1)
+       (not (needs-rex arg1))
+       (eql (reg-size arg1) 16)
+       (parse-integer (name arg2) :junk-allowed t))
      ;; no alternatives available here.
      (arithmetic-rm16-imm16-x64 opcode-base arg1 arg2))
     ((and
-       (equal (gethash arg1 *reg-type-hash-table-x64*) "old-32-bit-reg")
-       (parse-integer arg2 :junk-allowed t))
+       (is-reg arg1)
+       (not (needs-rex arg1))
+       (eql (reg-size arg1) 32)
+       (parse-integer (name arg2) :junk-allowed t))
      ;; no alternatives available here.
      (arithmetic-rm32-imm32-x64 opcode-base arg1 arg2))
     ((and
        (or
-         (equal (gethash arg1 *reg-type-hash-table-x64*) "register-indirect-without-SIB")
-         (equal (gethash arg1 *reg-type-hash-table-x64*) "old-8-bit-low-reg")
-         (equal (gethash arg1 *reg-type-hash-table-x64*) "old-8-bit-high-reg"))
-       (equal arg2 "byte"))
+         (and
+           (is-register-indirect arg1)
+           (not (needs-sib arg1)))
+         (and
+           (is-reg arg1)
+           (not (needs-rex arg1))
+           (eql (reg-size arg1) 8)))
+       (equal (name arg2) "byte"))
      ;; no alternatives available here.
      (arithmetic-rm8-imm8-x64 opcode-base arg1 arg3))
     ((and
        (or
-         (equal (gethash arg1 *reg-type-hash-table-x64*) "register-indirect-without-SIB")
-         (equal (gethash arg1 *reg-type-hash-table-x64*) "old-16-bit-reg"))
-       (equal arg2 "word"))
+         (and
+           (is-register-indirect arg1)
+           (not (needs-sib arg1)))
+         (and
+           (is-reg arg1)
+           (not (needs-rex arg1))
+           (eql (reg-size arg1) 16)))
+       (equal (name arg2) "word"))
      ;; no alternatives available here.
      (arithmetic-rm16-imm16-x64 opcode-base arg1 arg3))
     ((and
        (or
-         (equal (gethash arg1 *reg-type-hash-table-x64*) "register-indirect-without-SIB")
-         (equal (gethash arg1 *reg-type-hash-table-x64*) "old-32-bit-reg"))
-       (equal arg2 "dword"))
+         (and
+           (is-register-indirect arg1)
+           (not (needs-sib arg1)))
+         (and
+           (is-reg arg1)
+           (not (needs-rex arg1))
+           (eql (reg-size arg1) 32)))
+       (equal (name arg2) "dword"))
      ;; no alternatives available here.
      (arithmetic-rm32-imm32-x64 opcode-base arg1 arg3))
     (t nil)))
