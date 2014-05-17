@@ -23,10 +23,11 @@
     (cons 'list my-list)))
 
 (defun convert-string-to-symbol-if-symbol-exists (my-string)
-  "This function converts a string into a symbol, if such symbol exists."
+  "This function converts a string into a symbol, if such symbol exists.
+   Otherwise this function converts the string into an instance of `unknown` class."
   (if (boundp (intern (string-upcase my-string)))
     (symbol-value (intern (string-upcase my-string)))
-    my-string))
+    (make-instance 'unknown :my-string my-string)))
 
 (defun emit-binary-code-list (syntax-tree my-hash-table &key (emit-function-selector-function #'first))
   "This function converts syntax tree to a list of lists of binary code bytes,
