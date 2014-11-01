@@ -46,6 +46,14 @@
 (defun and-x64 (arg1 arg2 &optional arg3 &rest args)
   (arithmetic-x64 #x20 arg1 arg2 arg3))
 
+(defun cbw-x32-x64 (&rest args)
+  (list #x66 #x98))
+(defun cdq-x32-x64 (&rest args)
+  (list #x99))
+
+(defun cdqe-x64 (&rest args)
+  (append (emit-high-rex) (list #x98)))
+
 (defun clc-x86 (&rest args)
   (list #xf8))
 (defun cld-x86 (&rest args)
@@ -86,6 +94,12 @@
   (list #x4e #xa7))
 (defun cmpsq-4f-x64 (&rest args)
   (list #x4f #xa7))
+
+(defun cwd-x32-x64 (&rest args)
+  (list #x66 #x99))
+
+(defun cwde-x32-x64 (&rest args)
+  (list #x98))
 
 (defun dec-x64 (arg1 &optional arg2 &rest args)
   (one-operand-x64 #xfe #xc8 arg1 arg2))
