@@ -8,7 +8,8 @@
 ;;; 2. CL-USER> (compile-ultraelf)
 ;;;
 ;;; example usage:
-;;; 3. ULTRAELF> (assemble-x64-and-print-hex *test-code-x64*)
+;;; 3. ULTRAELF> (assemble-x64-and-print-hex *example-code-x64-with-lisp*)
+;;; 4. ULTRAELF> (assemble-x64-and-print-hex #a mov ax,bx #e)
 
 (in-package :cl-user)
 
