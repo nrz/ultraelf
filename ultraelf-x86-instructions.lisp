@@ -441,6 +441,9 @@
                           collect (my-string arg))
                     *emit-function-hash-table-x64*)))))
 
+(defun ret-x86 (&rest args)
+  (list #xc3))
+
 (defun rol-1-x64 (arg1 &optional arg2 &rest args)
   (one-operand-x64 #xd0 #xc0 arg1 arg2))
 

@@ -90,6 +90,7 @@
 (setf (gethash "outsw"      *emit-function-hash-table-x64*) (list #'outsw-x86))
 (setf (gethash "pop"        *emit-function-hash-table-x64*) (list #'pop-x64))
 (setf (gethash "push"       *emit-function-hash-table-x64*) (list #'push-x64))
+(setf (gethash "ret"        *emit-function-hash-table-x64*) (list #'ret-x86))
 (setf (gethash "sbb"        *emit-function-hash-table-x64*) (list #'sbb-x64))
 (setf (gethash "sbb-reg-rm" *emit-function-hash-table-x64*) (list #'sbb-reg-rm-x64))
 (setf (gethash "sbb-rm-reg" *emit-function-hash-table-x64*) (list #'sbb-rm-reg-x64))
