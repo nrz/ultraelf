@@ -119,6 +119,9 @@
 (defun insd-x32-x64 (&rest args)
   (list #x6d))
 
+(defun iret-x86 (&rest args)
+  (list #xcf))
+
 (defun lea-x64 (arg1 arg2 &rest args)
   (cond
     ((and

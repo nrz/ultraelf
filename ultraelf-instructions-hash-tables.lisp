@@ -52,6 +52,7 @@
 (setf (gethash "insb"       *emit-function-hash-table-x64*) (list #'insb-x86))
 (setf (gethash "insd"       *emit-function-hash-table-x64*) (list #'insd-x32-x64))
 (setf (gethash "insw"       *emit-function-hash-table-x64*) (list #'insw-x86))
+(setf (gethash "iret"       *emit-function-hash-table-x64*) (list #'iret-x86))
 (setf (gethash "lea"        *emit-function-hash-table-x64*) (list #'lea-x64))
 (setf (gethash "lodsb"      *emit-function-hash-table-x64*) (list #'lodsb-x86))
 (setf (gethash "lodsd"      *emit-function-hash-table-x64*) (list #'lodsd-x32-x64))
