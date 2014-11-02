@@ -3,6 +3,8 @@
 ;;; ultraELF x86-64 assembler, disassembler and metamorphic engine.
 ;;; ultraELF packs and reconstructs ELF executables, maintaining original functionality.
 
+(in-package :ultraelf)
+
 (defparameter *string-instructions-8-bit* (list (list  "insb" #x6c)
                                                 (list "outsb" #x6e)
                                                 (list "movsb" #xa4)
