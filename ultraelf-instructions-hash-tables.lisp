@@ -24,7 +24,7 @@
 (setf (gethash "gs:"        *emit-function-hash-table-x64*) (list #'gs-x86))
 (setf (gethash "ss:"        *emit-function-hash-table-x64*) (list #'ss-x86))
 
-;;; instructions in alphaaabetical order.
+;;; instructions in alphabetical order.
 (setf (gethash "adc"        *emit-function-hash-table-x64*) (list #'adc-x64))
 (setf (gethash "adc-reg-rm" *emit-function-hash-table-x64*) (list #'adc-reg-rm-x64))
 (setf (gethash "adc-rm-reg" *emit-function-hash-table-x64*) (list #'adc-rm-reg-x64))
