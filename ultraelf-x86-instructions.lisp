@@ -161,6 +161,8 @@
      (append (emit-0x48-or-0x4a-rex) (list #x8d) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
     (t nil)))
 
+(defun leave-x86 (&rest args)
+  (list #xc9))
 (defun lodsb-x86 (&rest args)
   (list #xac))
 (defun lodsw-x86 (&rest args)

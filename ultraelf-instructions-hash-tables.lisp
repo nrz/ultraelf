@@ -59,6 +59,7 @@
 (setf (gethash "insw"       *emit-function-hash-table-x64*) (list #'insw-x86))
 (setf (gethash "iret"       *emit-function-hash-table-x64*) (list #'iret-x86))
 (setf (gethash "lea"        *emit-function-hash-table-x64*) (list #'lea-x64))
+(setf (gethash "leave"      *emit-function-hash-table-x64*) (list #'leave-x86))
 (setf (gethash "lodsb"      *emit-function-hash-table-x64*) (list #'lodsb-x86))
 (setf (gethash "lodsd"      *emit-function-hash-table-x64*) (list #'lodsd-x32-x64))
 (setf (gethash "lodsq"      *emit-function-hash-table-x64*) (list #'lodsq-48-x64 #'lodsq-49-x64 #'lodsq-4a-x64 #'lodsq-4b-x64 #'lodsq-4c-x64 #'lodsq-4d-x64 #'lodsq-4e-x64 #'lodsq-4f-x64))
