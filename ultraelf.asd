@@ -46,6 +46,7 @@
                (:file "ultraelf-sreg3")                            ; x86 SREG3 segment register values hash table.
                (:file "ultraelf-x86-general-emit-functions")       ; general x86 emit-code functions.
                (:file "ultraelf-x86-instructions")                 ; instruction-specific x86 emit-code functions.
+               (:file "ultraelf-x87-instructions")                 ; instruction-specific x87 emit-code functions.
                (:file "ultraelf-instructions-hash-tables")         ; x86 instructions hash tables.
                (:file "ultraelf-alt-code")                         ; alternative code used for metamorphic engine.
                (:file "ultraelf-assembling-functions")             ; general assembling functions.
