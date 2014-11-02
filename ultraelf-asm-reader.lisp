@@ -5,6 +5,25 @@
 
 (in-package :ultraelf)
 
+(defun new-instruction (is-there-code-on-this-line current-phase my-string)
+  (cond
+    ;; is there _no_ code on this line?
+    ;; if true, do not output anything.
+    ((not is-there-code-on-this-line)
+     (setf current-phase "beginning-of-line"))
+    ;; are we inside instruction or inside a parameter?
+    ;; if true, output ")
+    ((or (equal current-phase "inside-instruction")
+         (equal current-phase "inside-parameters"))
+     (setf current-phase "beginning-of-line")
+     (setf is-there-code-on-this-line nil)
+     (setf my-string (concatenate 'string my-string "\")")))
+    ;; otherwise output )
+    (t (setf current-phase "beginning-of-line")
+     (setf is-there-code-on-this-line nil)
+     (setf my-string (concatenate 'string my-string ")"))))
+  (values is-there-code-on-this-line current-phase my-string))
+
 (defun transform-code-to-string (stream sub-char numarg)
   "This function converts assembly code into a string.
    #l marks change to Lisp code. #a marks return to asm. #e marks end.
@@ -36,24 +55,10 @@
                                                                my-string invalid-last-characters)
                                                              invalid-last-characters) "))")))
                         ;; is character a ?
-                        ;; if yes, do exactly the same is if it was linefeed.
+                        ;; if yes, do exactly the same is if it was newline.
                         ((equal my-char "a")
-                         (cond
-                           ;; is there _no_ code on this line?
-                           ;; if true, do not output anything.
-                           ((not is-there-code-on-this-line)
-                            (setf current-phase "beginning-of-line"))
-                           ;; are we inside instruction or inside a parameter?
-                           ;; if true, output ")
-                           ((or (equal current-phase "inside-instruction")
-                                (equal current-phase "inside-parameters"))
-                            (setf current-phase "beginning-of-line")
-                            (setf is-there-code-on-this-line nil)
-                            (setf my-string (concatenate 'string my-string "\")")))
-                           ;; otherwise output )
-                           (t (setf current-phase "beginning-of-line")
-                            (setf is-there-code-on-this-line nil)
-                            (setf my-string (concatenate 'string my-string ")")))))
+                         (setf (values is-there-code-on-this-line current-phase my-string)
+                               (new-instruction is-there-code-on-this-line current-phase my-string)))
                         ;; is character l ?
                         ;; if yes, change to Lisp mode.
                         ((equal my-char "l")
@@ -69,22 +74,8 @@
                    (setf is-hash-sign-read t))
                   ;; is character newline?
                   ((equal my-char (coerce (list #\Newline) 'string))
-                   (cond
-                     ;; is there _no_ code on this line?
-                     ;; if true, do not output anything.
-                     ((not is-there-code-on-this-line)
-                      (setf current-phase "beginning-of-line"))
-                     ;; are we inside instruction or inside a parameter?
-                     ;; if true, output ")
-                     ((or (equal current-phase "inside-instruction")
-                          (equal current-phase "inside-parameters"))
-                      (setf current-phase "beginning-of-line")
-                      (setf is-there-code-on-this-line nil)
-                      (setf my-string (concatenate 'string my-string "\")")))
-                     ;; otherwise output )
-                     (t (setf current-phase "beginning-of-line")
-                      (setf is-there-code-on-this-line nil)
-                      (setf my-string (concatenate 'string my-string ")")))))
+                   (setf (values is-there-code-on-this-line current-phase my-string)
+                         (new-instruction is-there-code-on-this-line current-phase my-string)))
                   ;; are we inside a comment?
                   ;; if yes, don't output anything.
                   ((equal current-phase "inside-comment")
