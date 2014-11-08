@@ -56,7 +56,8 @@
     ((and
        (is-register-indirect arg1)
        (not (needs-sib arg1)))
-     (list #xff (logior #x10 (r/m arg1))))))
+     (list #xff (logior #x10 (r/m arg1))))
+    (t nil)))
 
 (defun cbw-x32-x64 (&rest args)
   (list #x66 #x98))
