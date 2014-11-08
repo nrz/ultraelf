@@ -159,7 +159,8 @@
     ((and
        (is-register-indirect arg1)
        (not (needs-sib arg1)))
-     (list #xff (logior #x20 (r/m arg1))))))
+     (list #xff (logior #x20 (r/m arg1))))
+    (t nil)))
 
 (defun lea-x64 (arg1 arg2 &rest args)
   (cond
