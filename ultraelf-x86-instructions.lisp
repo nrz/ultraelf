@@ -136,6 +136,18 @@
 (defun iret-x86 (&rest args)
   (list #xcf))
 
+(defun jmp-x64 (arg1 &rest args)
+  (cond
+    ((and
+       (is-reg arg1)
+       (eql (rex.r arg1) 0)
+       (eql (reg-size arg1) 64))
+     (list #xff (logior #xe0 (r/m arg1))))
+    ((and
+       (is-register-indirect arg1)
+       (not (needs-sib arg1)))
+     (list #xff (logior #x20 (r/m arg1))))))
+
 (defun lea-x64 (arg1 arg2 &rest args)
   (cond
     ((and
