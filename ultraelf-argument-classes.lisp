@@ -10,7 +10,12 @@
      :initarg :name
      :reader name
      :initform nil
-     :documentation "any argument to an instruction")))
+     :documentation "any argument to an instruction")
+   (value
+     :initarg :value
+     :reader value
+     :initform nil
+     :documentation "numeric value of the argument. must be converted into bytes as needed.")))
 
 (defclass unknown (argument)
   ((is-unknown
