@@ -46,6 +46,18 @@
 (defun and-x64 (arg1 arg2 &optional arg3 &rest args)
   (arithmetic-x64 #x20 arg1 arg2 arg3))
 
+(defun call-x64 (arg1 &rest args)
+  (cond
+    ((and
+       (is-reg arg1)
+       (eql (rex.r arg1) 0)
+       (eql (reg-size arg1) 64))
+     (list #xff (logior #xd0 (r/m arg1))))
+    ((and
+       (is-register-indirect arg1)
+       (not (needs-sib arg1)))
+     (list #xff (logior #x10 (r/m arg1))))))
+
 (defun cbw-x32-x64 (&rest args)
   (list #x66 #x98))
 (defun cdq-x32-x64 (&rest args)

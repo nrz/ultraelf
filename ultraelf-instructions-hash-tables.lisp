@@ -34,6 +34,7 @@
 (setf (gethash "and"        *emit-function-hash-table-x64*) (list #'and-x64))
 (setf (gethash "and-reg-rm" *emit-function-hash-table-x64*) (list #'and-reg-rm-x64))
 (setf (gethash "and-rm-reg" *emit-function-hash-table-x64*) (list #'and-rm-reg-x64))
+(setf (gethash "call"       *emit-function-hash-table-x64*) (list #'call-x64))
 (setf (gethash "cbw"        *emit-function-hash-table-x64*) (list #'cbw-x32-x64))
 (setf (gethash "cdq"        *emit-function-hash-table-x64*) (list #'cdq-x32-x64))
 (setf (gethash "cdqe"       *emit-function-hash-table-x64*) (list #'cdqe-x64))
