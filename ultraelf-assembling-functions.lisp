@@ -32,7 +32,7 @@
    Otherwise this function converts the string into an instance of `unknown` class."
   (if (boundp (intern (string-upcase my-string)))
     (symbol-value (intern (string-upcase my-string)))
-    (make-instance 'unknown :name my-string)))
+    (make-instance 'unknown :name my-string :value (parse-integer my-string))))
 
 (defun emit-binary-code-for-one-instruction (syntax-list my-hash-table &key (emit-function-selector-function #'first))
   "This function converts a syntax list of one instruction to a list of binary code bytes,
