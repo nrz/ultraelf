@@ -149,6 +149,42 @@
 (defun iret-x86 (&rest args)
   (list #xcf))
 
+(defun ja-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x77 arg1))
+
+(defun jae-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x73 arg1))
+
+(defun jb-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x72 arg1))
+
+(defun jbe-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x76 arg1))
+
+(defun jc-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x72 arg1))
+
+(defun je-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x74 arg1))
+
+(defun jecxz-rel8-x32-x64 (arg1 &rest args)
+  (jcc-x64 (list #x67 #xe3) arg1))
+
+(defun jg-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x7f arg1))
+
+(defun jge-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x7d arg1))
+
+(defun jl-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x7c arg1))
+
+(defun jle-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x7e arg1))
+
+(defun jmp-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #xeb arg1))
+
 (defun jmp-x64 (arg1 &rest args)
   (cond
     ((and
@@ -161,6 +197,69 @@
        (not (needs-sib arg1)))
      (list #xff (logior #x20 (r/m arg1))))
     (t nil)))
+
+(defun jna-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x76 arg1))
+
+(defun jnae-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x72 arg1))
+
+(defun jnb-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x73 arg1))
+
+(defun jnbe-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x77 arg1))
+
+(defun jnc-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x73 arg1))
+
+(defun jne-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x75 arg1))
+
+(defun jng-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x7e arg1))
+
+(defun jnge-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x7c arg1))
+
+(defun jnl-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x7d arg1))
+
+(defun jnle-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x7f arg1))
+
+(defun jno-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x71 arg1))
+
+(defun jnp-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x7b arg1))
+
+(defun jns-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x79 arg1))
+
+(defun jnz-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x75 arg1))
+
+(defun jo-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x70 arg1))
+
+(defun jp-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x7a arg1))
+
+(defun jpe-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x7a arg1))
+
+(defun jpo-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x7b arg1))
+
+(defun jrcxz-rel8-x64 (arg1 &rest args)
+  (jcc-x64 #xe3 arg1))
+
+(defun js-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x78 arg1))
+
+(defun jz-rel8-x86 (arg1 &rest args)
+  (jcc-x64 #x74 arg1))
 
 (defun lea-x64 (arg1 arg2 &rest args)
   (cond

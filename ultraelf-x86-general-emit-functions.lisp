@@ -74,6 +74,20 @@
    (without SIB), using only base. No index, no displacement."
   (emit-modrm-byte #b00 arg1 arg2))
 
+(defun jcc-x64 (opcode arg1 &rest args)
+  "Jump on condition. Currently supports only numeric rel8 values.
+   For ultraELF the argument value is the same as encoded value.
+   Here the behavior of ultraSPM differs from NASM and YASM.
+   See NASM/YASM compatibility mode."
+  (unless (listp opcode)
+    (setf opcode (list opcode)))
+  (if
+    (or
+      (< (value arg1) -128)
+      (> (value arg1) 127))
+    (error "rel8 must be [ -128, +127 ]")
+    (append opcode (list (value arg1)))))
+
 (defun one-operand-x64 (opcode-base reg-byte-base arg1 &optional arg2)
   (cond
     ;; al, cl, dl, bl, ah, ch, dh, bh.
