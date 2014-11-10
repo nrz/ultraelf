@@ -26,7 +26,10 @@
         collect (subseq my-string i (1+ i))))
 
 (defun parse-number (my-string)
+  "This function parses a number (integer or floating point) and returns it, or nil if my-string is not a number."
   (handler-case
-    (progn (parse-number:parse-number my-string))
-    (parse-number:invalid-number ()
-                                 nil)))
+    (parse-number:parse-number my-string)
+    (sb-int:simple-parse-error ()
+                               nil)
+    (org.mapcar.parse-number:invalid-number ()
+                                            nil)))
