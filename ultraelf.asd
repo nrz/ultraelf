@@ -15,7 +15,6 @@
 
 (defmacro compile-ultraelf ()
   (asdf:oos 'asdf:load-op 'ultraelf)
-  (asdf:oos 'asdf:load-op 'parse-number)
   (in-package :ultraelf))
 
 (defpackage :ultraelf-asd
@@ -51,4 +50,5 @@
                (:file "ultraelf-instructions-hash-tables")         ; x86 instructions hash tables.
                (:file "ultraelf-alt-code")                         ; alternative code used for metamorphic engine.
                (:file "ultraelf-assembling-functions")             ; general assembling functions.
-               (:file "ultraelf-test-x64-code")))                  ; x64 test code, used for testing.
+               (:file "ultraelf-test-x64-code"))                   ; x64 test code, used for testing.
+  :depends-on (:parse-number))
