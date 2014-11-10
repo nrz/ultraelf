@@ -15,7 +15,7 @@
      :initarg :value
      :reader value
      :initform nil
-     :documentation "numeric value of the argument. must be converted into bytes as needed.")))
+     :documentation "numeric value of the argument. may be integer or real. must be converted into bytes as needed.")))
 
 (defclass unknown (argument)
   ((is-unknown
