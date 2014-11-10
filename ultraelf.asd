@@ -6,10 +6,14 @@
 ;;; compiling and loading:
 ;;; 1. CL-USER> (load (compile-file "ultraelf.asd"))
 ;;; 2. CL-USER> (compile-ultraelf)
+;;; or
+;;; 3. CL-USER> (c-u)
+;;;
+;;; (compile-ultraelf) and (c-u) are 2 separate but identical macros.
 ;;;
 ;;; example usage:
-;;; 3. ULTRAELF> (assemble-x64-and-print-hex *example-code-x64-with-lisp*)
-;;; 4. ULTRAELF> (assemble-x64-and-print-hex #a mov ax,bx #e)
+;;; 4. ULTRAELF> (assemble-x64-and-print-hex *example-code-x64-with-lisp*)
+;;; 5. ULTRAELF> (assemble-x64-and-print-hex #a mov ax,bx #e)
 
 (in-package :cl-user)
 
