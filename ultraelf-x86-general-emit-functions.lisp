@@ -81,12 +81,7 @@
    See NASM/YASM compatibility mode."
   (unless (listp opcode)
     (setf opcode (list opcode)))
-  (if
-    (or
-      (< (value arg1) -128)
-      (> (value arg1) 127))
-    (error "rel8 must be [ -128, +127 ]")
-    (append opcode (list (value arg1)))))
+  (append opcode (list (convert-negative-byte-to-positive (value arg1)))))
 
 (defun one-operand-x64 (opcode-base reg-byte-base arg1 &optional arg2)
   (cond
