@@ -24,3 +24,9 @@
   "This function splits a string to a list of strings of 1 character each."
   (loop for i from 0 to (1- (length my-string))
         collect (subseq my-string i (1+ i))))
+
+(defun parse-number (my-string)
+  (handler-case
+    (progn (parse-number:parse-number my-string))
+    (parse-number:invalid-number ()
+                                 nil)))

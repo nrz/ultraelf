@@ -15,6 +15,7 @@
 
 (defmacro compile-ultraelf ()
   (asdf:oos 'asdf:load-op 'ultraelf)
+  (asdf:oos 'asdf:load-op 'parse-number)
   (in-package :ultraelf))
 
 (defpackage :ultraelf-asd
