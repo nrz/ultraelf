@@ -7,3 +7,6 @@
 
 (defmacro compile-ultraelf ()
   (asdf:oos 'asdf:load-op 'ultraelf))
+
+(defmacro c-u ()
+  (asdf:oos 'asdf:load-op 'ultraelf))

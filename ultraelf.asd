@@ -17,6 +17,10 @@
   (asdf:oos 'asdf:load-op 'ultraelf)
   (in-package :ultraelf))
 
+(defmacro c-u ()
+  (asdf:oos 'asdf:load-op 'ultraelf)
+  (in-package :ultraelf))
+
 (defpackage :ultraelf-asd
   (:use :cl :asdf))
 
