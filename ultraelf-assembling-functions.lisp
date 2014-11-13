@@ -30,17 +30,25 @@
 (defun convert-string-to-symbol-if-symbol-exists (my-string)
   "This function converts a string into a symbol, if such symbol exists.
    Otherwise this function converts the string into an instance of `unknown` class."
-  (if (boundp (intern (string-upcase my-string)))
-    (symbol-value (intern (string-upcase my-string)))
-    (make-instance 'unknown :name my-string :value (parse-number my-string))))
+  (cond
+    ((equal my-string "$")
+     (setf $ (make-instance 'address :name (write-to-string *global-offset*) :value *global-offset*)))
+    ((boundp (intern (string-upcase my-string)))
+     (symbol-value (intern (string-upcase my-string))))
+    (t (make-instance 'unknown :name my-string :value (parse-number my-string)))))
 
 (defun emit-binary-code-for-one-instruction (syntax-list my-hash-table &key (emit-function-selector-function #'first))
   "This function converts a syntax list of one instruction to a list of binary code bytes,
    `emit-function-selector-function` can be eg. `#'first` or `#'(lambda (x) (first (last x)))`."
   (let*
-    ((emit-functions-list (gethash (first syntax-list) my-hash-table)))
-    (apply (funcall emit-function-selector-function emit-functions-list)
-           (loop for arg in (rest syntax-list) collect (convert-string-to-symbol-if-symbol-exists arg)))))
+    ((emit-functions-list (gethash (first syntax-list) my-hash-table))
+     (binary-code (apply (funcall emit-function-selector-function emit-functions-list)
+                         (loop for arg in (rest syntax-list) collect (convert-string-to-symbol-if-symbol-exists arg)))))
+    (when (boundp '*global-offset*)
+      (progn
+        (incf *global-offset* (length binary-code))
+        (setf $ (make-instance 'address :name (write-to-string *global-offset*) :value *global-offset*))))
+    binary-code))
 
 (defun emit-binary-code-list (syntax-tree my-hash-table &key (emit-function-selector-function #'first))
   "This function converts syntax tree to a list of lists of binary code bytes,
