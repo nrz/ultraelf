@@ -39,6 +39,31 @@
      :initform nil
      :documentation "string instructions are _not_ unknown.")))
 
+(defclass address (argument)
+  ((name
+     :initarg :name
+     :accessor name
+     :initform nil)
+   (is-unknown
+     :reader is-unknown
+     :initform nil
+     :documentation "Addresses are not unknown, although their value may be unknown.")
+   (is-reg
+     :reader is-reg
+     :initform nil)
+   (is-register-indirect
+     :reader is-register-indirect
+     :initform nil)
+   (is-address
+     :reader is-address
+     :initform t)
+   (is-string-instruction
+     :reader is-string-instruction
+     :initform nil)
+   (value
+     :accessor value
+     :initform nil)))
+
 (defclass x86-string-instruction (argument)
   ((is-string-instruction
      :reader is-string-instruction
