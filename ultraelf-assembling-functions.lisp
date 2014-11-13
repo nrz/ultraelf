@@ -52,6 +52,8 @@
 
 (defun emit-binary-code (syntax-tree my-hash-table)
   "This function produces a single list of binary code bytes."
+  (defparameter *global-offset* 0)
+  (defparameter $ (make-instance 'address :name (write-to-string *global-offset*) :value *global-offset*))
   (apply #'append (emit-binary-code-list syntax-tree my-hash-table)))
 
 (defun emit-binary-code-and-print-hex (syntax-tree my-hash-table)
