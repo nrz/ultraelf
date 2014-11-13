@@ -34,6 +34,10 @@
      :reader is-register-indirect
      :initform nil
      :documentation "register indirects are _not_ unknown.")
+   (is-address
+     :reader is-address
+     :initform nil
+     :documentation "addresses indirects are _not_ unknown (although their values may be).")
    (is-string-instruction
      :reader is-string-instruction
      :initform nil
