@@ -55,7 +55,7 @@
 
 (defun emit-binary-code-list (syntax-tree my-hash-table &key (emit-function-selector-function #'first))
   "This function converts syntax tree to a list of lists of binary code bytes,
-   the bytes of each instruction are on their list.
+   the bytes of each instruction are on their own list.
    `emit-function-selector-function` can be eg. `#'first` or `#'(lambda (x) (first (last x)))`."
   (mapcar #'(lambda (x)
               (emit-binary-code-for-one-instruction x my-hash-table))
