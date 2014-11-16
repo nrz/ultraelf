@@ -68,6 +68,10 @@
           collect (loop for emit-function-i below (length (gethash (first syntax-list) my-hash-table))
                         collect (emit-binary-code-for-one-instruction syntax-list my-hash-table :emit-function-selector-function (get-nth emit-function-i))))))
 
+(defun get-all-encodings-for-syntax-tree-and-print-hex (syntax-tree my-hash-table)
+  "This function converts syntax tree to a list of strings of hexadecimal bytes."
+  (print-hex (get-all-encodings-for-syntax-tree syntax-tree my-hash-table)))
+
 (defun emit-binary-code-list (syntax-tree my-hash-table &key (emit-function-selector-function #'first))
   "This function converts syntax tree to a list of lists of binary code bytes,
    the bytes of each instruction are on their own list.
