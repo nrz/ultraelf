@@ -116,6 +116,10 @@
   "This function assembles x86-64 (x64) code and prints in a hexadecimal string."
   (print-hex (assemble code *emit-function-hash-table-x64*)))
 
+(defun assemble-alternatives (code my-hash-table)
+  "This function assembles code, all alternatives."
+  (get-all-encodings-for-syntax-tree (create-syntax-tree code) my-hash-table))
+
 (defun string-to-function (my-string)
   "This function converts a string to a function.
    http://stackoverflow.com/questions/2940267/call-function-based-on-a-string/2940347#2940347"
