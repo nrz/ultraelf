@@ -117,8 +117,11 @@
   (print-hex (assemble code *emit-function-hash-table-x64*)))
 
 (defun assemble-alternatives (code my-hash-table)
-  "This function assembles code, all alternatives."
-  (get-all-encodings-for-syntax-tree (create-syntax-tree code) my-hash-table))
+  "This function assembles code, all alternatives.
+   Duplicates are removed."
+  (mapcar #'(lambda (x)
+              (remove-duplicates x :test #'equal))
+          (get-all-encodings-for-syntax-tree (create-syntax-tree code) my-hash-table)))
 
 (defun assemble-alternatives-and-print-hex (code my-hash-table)
   "This function assembles code, all alternatives, and prints in a hexadecimal string."
