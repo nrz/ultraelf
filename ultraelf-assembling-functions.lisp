@@ -7,7 +7,10 @@
 
 (defun create-syntax-tree (my-list)
   "This recursive function converts a string produced by transform-code-to-string into a syntax tree.
-   Input argument my-list can be a string, in that case it is first stored into a list."
+   Input argument my-list can be a string, in that case it is first stored into a list.
+   usage examples:
+   (create-syntax-tree #a nop #e)
+   (create-syntax-tree #a mov ax,bx #a shl bx,1 #e)"
   (unless (listp my-list)
     (setf my-list (list my-list)))
   ;; is last element of the list a string?
