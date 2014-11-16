@@ -57,6 +57,17 @@
   "This function returns a function that gets the nth value of a list."
   #'(lambda (my-list) (nth n my-list)))
 
+(defun get-all-encodings-for-syntax-tree (syntax-tree my-hash-table)
+  "This function converts syntax tree to a list of lists of lists of binary code bytes,
+   the encodings of each instruction on their own list,
+   the bytes of each encoding on their own list."
+  (let*
+    ((syntax-list-of-lists (eval syntax-tree))
+     (n-instructions (length syntax-list-of-lists)))
+    (loop for syntax-list in syntax-list-of-lists
+          collect (loop for emit-function-i below (length (gethash (first syntax-list) my-hash-table))
+                        collect (emit-binary-code-for-one-instruction syntax-list my-hash-table :emit-function-selector-function (get-nth emit-function-i))))))
+
 (defun emit-binary-code-list (syntax-tree my-hash-table &key (emit-function-selector-function #'first))
   "This function converts syntax tree to a list of lists of binary code bytes,
    the bytes of each instruction are on their own list.
