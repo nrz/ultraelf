@@ -72,6 +72,12 @@
   "This function converts syntax tree to a list of strings of hexadecimal bytes."
   (print-hex (get-all-encodings-for-syntax-tree syntax-tree my-hash-table)))
 
+(defun get-all-encodings-for-x64-syntax-tree (syntax-tree)
+  "This function converts x64 syntax tree to a list of lists of lists of binary code bytes,
+   the encodings of each instruction on their own list,
+   the bytes of each encoding on their own list."
+  (get-all-encodings-for-syntax-tree syntax-tree *emit-function-hash-table-x64*))
+
 (defun emit-binary-code-list (syntax-tree my-hash-table &key (emit-function-selector-function #'first))
   "This function converts syntax tree to a list of lists of binary code bytes,
    the bytes of each instruction are on their own list.
