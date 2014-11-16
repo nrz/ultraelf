@@ -53,6 +53,10 @@
         (setf $ (make-instance 'address :name (write-to-string *global-offset*) :value *global-offset*))))
     binary-code))
 
+(defun get-nth (n)
+  "This function returns a function that gets the nth value of a list."
+  #'(lambda (my-list) (nth n my-list)))
+
 (defun emit-binary-code-list (syntax-tree my-hash-table &key (emit-function-selector-function #'first))
   "This function converts syntax tree to a list of lists of binary code bytes,
    the bytes of each instruction are on their own list.
