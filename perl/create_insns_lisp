@@ -1,0 +1,106 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+
+# this program converts NASM's `insns.dat` to Common Lisp `list` syntax.
+
+my $firstchar;
+my $line_length;
+my $are_there_square_brackets;
+my $mnemonic_and_operands;
+my $mnemonic;
+my $operands;
+my $code_string;
+my $flags;
+
+my $mnemonic_length_max;
+my $operands_length_max;
+my $code_string_length_max;
+my $flags_length_max;
+
+my $padded_mnemonic_w_quotes;
+my $padded_operands_w_quotes;
+my $padded_code_string_w_quotes;
+my $padded_flags_w_quotes;
+
+my @mnemonic_array;
+my @operands_array;
+my @code_string_array;
+my @flags_array;
+
+# subfunction to get the length of the longest string in an array.
+sub longest_length
+{
+    my $max = -1;
+    for (@_)
+    {
+        if (length > $max)
+        {
+            $max = length;
+        }
+    }
+    return $max;
+}
+
+open(FILE, 'insns.dat');
+
+# read one line at once.
+while (<FILE>)
+{
+    $firstchar = substr($_, 0, 1);
+    $line_length = length($_);
+    $are_there_square_brackets = ($_ =~ /\[.*\]/);
+    chomp;
+    if (($line_length > 1) && ($firstchar =~ /[^\t ;]/))
+    {
+        if ($are_there_square_brackets)
+        {
+            ($mnemonic_and_operands, $code_string, $flags) = split /[\[\]]+/, $_;
+            $code_string = "[" . $code_string . "]";
+            ($mnemonic, $operands) = split /[\t ]+/, $mnemonic_and_operands;
+        }
+        else
+        {
+            ($mnemonic, $operands, $code_string, $flags) = split /[\t ]+/, $_;
+        }
+        $mnemonic =~ s/[\t ]+/ /g;
+        $operands =~ s/[\t ]+/ /g;
+        $code_string =~ s/[\t ]+/ /g;
+        $flags =~ s/[\t ]+//g;
+        push @mnemonic_array, $mnemonic;
+        push @operands_array, $operands;
+        push @code_string_array, $code_string;
+        push @flags_array, $flags;
+    }
+}
+
+close(FILE);
+
+# find out maximum length of each field.
+$mnemonic_length_max = longest_length(@mnemonic_array);
+$operands_length_max = longest_length(@operands_array);
+$code_string_length_max = longest_length(@code_string_array);
+$flags_length_max = longest_length(@flags_array);
+
+printf("(list\n");
+
+for (my $i=0; $i <= $#mnemonic_array; $i++)
+{
+    # add double quotes on both sides and then pad with spaces.
+    $padded_mnemonic_w_quotes    = sprintf("%-*s", ($mnemonic_length_max + 2),    "\"" . $mnemonic_array[$i] . "\"");
+    $padded_operands_w_quotes    = sprintf("%-*s", ($operands_length_max + 2),    "\"" . $operands_array[$i] . "\"");
+    $padded_code_string_w_quotes = sprintf("%-*s", ($code_string_length_max + 2), "\"" . $code_string_array[$i] . "\"");
+    $padded_flags_w_quotes       = sprintf("%-*s", ($flags_length_max + 2),       "\"" . $flags_array[$i] . "\"");
+
+    # print the line.
+    printf("(list %s %s %s %s)", $padded_mnemonic_w_quotes, $padded_operands_w_quotes, $padded_code_string_w_quotes, $padded_flags_w_quotes);
+    if ($i eq $#mnemonic_array)
+    {
+        # last line needs one right parenthesis more to close the first list.
+        printf(")");
+    }
+    # print linefeed.
+    printf("\n");
+}
+
+exit;
