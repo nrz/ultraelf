@@ -82,7 +82,7 @@ $operands_length_max = longest_length(@operands_array);
 $code_string_length_max = longest_length(@code_string_array);
 $flags_length_max = longest_length(@flags_array);
 
-printf("(list\n");
+printf("(defparameter *x86-instructions-list-from-nasm* (list\n");
 
 for (my $i=0; $i <= $#mnemonic_array; $i++)
 {
@@ -96,8 +96,8 @@ for (my $i=0; $i <= $#mnemonic_array; $i++)
     printf("(list %s %s %s %s)", $padded_mnemonic_w_quotes, $padded_operands_w_quotes, $padded_code_string_w_quotes, $padded_flags_w_quotes);
     if ($i eq $#mnemonic_array)
     {
-        # last line needs one right parenthesis more to close the first list.
-        printf(")");
+        # last line needs two right parentheses more to close the first 2 lists.
+        printf("))");
     }
     # print linefeed.
     printf("\n");
