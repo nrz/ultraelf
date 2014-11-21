@@ -1,4 +1,4 @@
-(list
+(defparameter *x86-instructions-list-from-nasm* (list
 (list "DB"               "ignore"                                     "ignore"                                         "ignore"                    )
 (list "DW"               "ignore"                                     "ignore"                                         "ignore"                    )
 (list "DD"               "ignore"                                     "ignore"                                         "ignore"                    )
@@ -5044,4 +5044,4 @@
 (list "HINT_NOP62"       "rm64"                                       "[m: o64 0f 1f /6]"                              "X64,UNDOC"                 )
 (list "HINT_NOP63"       "rm16"                                       "[m: o16 0f 1f /7]"                              "P6,UNDOC"                  )
 (list "HINT_NOP63"       "rm32"                                       "[m: o32 0f 1f /7]"                              "P6,UNDOC"                  )
-(list "HINT_NOP63"       "rm64"                                       "[m: o64 0f 1f /7]"                              "X64,UNDOC"                 ))
+(list "HINT_NOP63"       "rm64"                                       "[m: o64 0f 1f /7]"                              "X64,UNDOC"                 )))
