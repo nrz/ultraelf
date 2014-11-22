@@ -62,4 +62,8 @@
                (:file "ultraelf-alt-code")                         ; alternative code used for metamorphic engine.
                (:file "ultraelf-assembling-functions")             ; general assembling functions.
                (:file "ultraelf-test-x64-code"))                   ; x64 test code, used for testing.
-  :depends-on (:parse-number))
+  :depends-on (:parse-number :cl-ppcre))
+
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  ;; `re:scan` etc. ...
+  (rename-package "CL-PPCRE" "CL-PPCRE" '("PPCRE" "RE")))
