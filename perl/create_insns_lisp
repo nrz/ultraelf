@@ -28,6 +28,17 @@ my @operands_array;
 my @code_string_array;
 my @flags_array;
 
+# print the header.
+open(FILE, 'ultraelf-lisp-file-header.lisp');
+
+# read one line at once.
+while (<FILE>)
+{
+    print;
+}
+
+close(FILE);
+
 # subfunction to get the length of the longest string in an array.
 sub longest_length
 {
