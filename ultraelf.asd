@@ -38,6 +38,7 @@
                (:file "ultraelf-compiling-macros")
                (:file "ultraelf-string")                           ; string functions.
                (:file "ultraelf-printing")                         ; printing functions.
+               (:file "ultraelf-regex")                            ; regular expression functions.
                (:file "ultraelf-numbers")                          ; number-handling functions.
                (:file "ultraelf-x64-rex")                          ; x64 "emit REX" functions.
                (:file "ultraelf-argument-classes")                 ; instruction argument classes except addressing form classes.
