@@ -67,6 +67,7 @@ while (<FILE>)
         $operands =~ s/[\t ]+/ /g;
         $code_string =~ s/[\t ]+/ /g;
         $flags =~ s/[\t ]+//g;
+        $flags =~ s/,/" "/g; # make each flag its own Common Lisp string.
         push @mnemonic_array, $mnemonic;
         push @operands_array, $operands;
         push @code_string_array, $code_string;
@@ -93,7 +94,7 @@ for (my $i=0; $i <= $#mnemonic_array; $i++)
     $padded_flags_w_quotes       = sprintf("%-*s", ($flags_length_max + 2),       "\"" . $flags_array[$i] . "\"");
 
     # print the line.
-    printf("(list %s %s %s %s)", $padded_mnemonic_w_quotes, $padded_operands_w_quotes, $padded_code_string_w_quotes, $padded_flags_w_quotes);
+    printf("(list %s %s %s (list %s))", $padded_mnemonic_w_quotes, $padded_operands_w_quotes, $padded_code_string_w_quotes, $padded_flags_w_quotes);
     if ($i eq $#mnemonic_array)
     {
         # last line needs two right parentheses more to close the first 2 lists.
