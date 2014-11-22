@@ -1,3 +1,10 @@
+;;;; ultraELF 0.0.1
+;;;
+;;; ultraELF x86-64 assembler, disassembler and metamorphic engine.
+;;; ultraELF packs and reconstructs ELF executables, maintaining original functionality.
+
+(in-package :ultraelf)
+
 (defparameter *x86-instructions-list-from-nasm* (list
 (list "DB"               "ignore"                                     "ignore"                                         "ignore"                    )
 (list "DW"               "ignore"                                     "ignore"                                         "ignore"                    )
