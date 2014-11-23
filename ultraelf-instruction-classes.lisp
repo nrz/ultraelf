@@ -18,7 +18,6 @@
    (operands
      :initarg :operands
      :reader operands
-     :initform (error "operands must be specified")
      :documentation "A string defining the operands of this instruction object.")
    (code-string
      :initarg :code-string
