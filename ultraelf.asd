@@ -59,6 +59,7 @@
                (:file "ultraelf-instruction-classes")              ; instruction classes.
                (:file "ultraelf-x86-general-emit-functions")       ; general x86 emit-code functions.
                (:file "ultraelf-x86-instructions")                 ; instruction-specific x86 emit-code functions.
+               (:file "ultraelf-x86-instructions-list")            ; instruction-specific x86 instruction data list, converted from NASM's `insns.dat`.
                (:file "ultraelf-x87-instructions")                 ; instruction-specific x87 emit-code functions.
                (:file "ultraelf-instructions-hash-tables")         ; x86 instructions hash tables.
                (:file "ultraelf-alt-code")                         ; alternative code used for metamorphic engine.
