@@ -26,7 +26,6 @@
    (arch-flags
      :initarg :arch-flags
      :reader arch-flags
-     :initform (error "arch-flags must be specified")
      :documentation "A list defining the architecture flags of this instruction object.")
    (is-asm-instruction
      :reader is-asm-instruction
