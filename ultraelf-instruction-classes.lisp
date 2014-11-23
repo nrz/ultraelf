@@ -22,7 +22,6 @@
    (code-string
      :initarg :code-string
      :reader code-string
-     :initform (error "code-string must be specified")
      :documentation "A string defining the code-string of this instruction object.")
    (arch-flags
      :initarg :arch-flags
