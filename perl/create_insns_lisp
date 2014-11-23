@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-# this program converts NASM's `insns.dat` to Common Lisp `list` syntax.
+# this program converts NASM's `insns.dat` to Common Lisp Object System (CLOS) syntax.
 
 my $firstchar;
 my $line_length;
@@ -13,16 +13,19 @@ my $operands;
 my $code_string;
 my $flags;
 
+my $clos_object_name;
+my $clos_mnemonic;
+my $clos_operands;
+my $clos_code_string;
+my $clos_flags;
+
+my $object_name_length_max;
 my $mnemonic_length_max;
 my $operands_length_max;
 my $code_string_length_max;
 my $flags_length_max;
 
-my $padded_mnemonic_w_quotes;
-my $padded_operands_w_quotes;
-my $padded_code_string_w_quotes;
-my $padded_flags_w_quotes;
-
+my @object_name_array;
 my @mnemonic_array;
 my @operands_array;
 my @code_string_array;
@@ -74,45 +77,95 @@ while (<FILE>)
         {
             ($mnemonic, $operands, $code_string, $flags) = split /[\t ]+/, $_;
         }
+        # find out the following data:
+        # object name (Perl syntax): `$mnemonic . "-" . $operands`
+        # example object name:        `mov-mem,reg_sreg`
+        #
+        # fieldname in ultraELF     example
+        # :mnemonic                 `"MOV"`
+        # :operands                 `"mem,reg_sreg"`
+        # :code-string              `"[mr:	8c /r]"`
+        # :flags                    `(list "8086" "SW")`
         $mnemonic =~ s/[\t ]+/ /g;
         $operands =~ s/[\t ]+/ /g;
         $code_string =~ s/[\t ]+/ /g;
         $flags =~ s/[\t ]+//g;
-        $flags =~ s/,/" "/g; # make each flag its own Common Lisp string.
-        push @mnemonic_array, $mnemonic;
-        push @operands_array, $operands;
-        push @code_string_array, $code_string;
-        push @flags_array, $flags;
+
+        # we don't want non-x86-64 instructions here.
+        # they _need_ to be left out, because sometimes the same
+        # mnemonic-operands combination has different encodings in x86 and x86-64,
+        # and this would also cause identical object names in ultraELF.
+        unless ($flags =~ "NOLONG")
+        {
+            # ok, the content of each field is now filtered,
+            # let's convert them to a suitable Common Lisp format.
+            
+            $clos_object_name = $mnemonic . "-" . $operands;
+            
+            # in Common Lisp object names `|`, `,`, and `:` must be escaped with a backslash `\`,
+            # but that would get too complicated.
+            # so we'll simply replace them:
+            # `|` -> `-`.
+            # `,` -> `.`.
+            # `:` -> `.`.
+            $clos_object_name =~ s/\|/-/g;              
+            $clos_object_name =~ s/,/./g;              
+            $clos_object_name =~ s/:/./g;              
+
+            $clos_mnemonic    = "\"" . $mnemonic . "\"";
+            $clos_operands    = "\"" . $operands . "\"";
+            $clos_code_string = "\"" . $code_string . "\"";
+            
+            $clos_flags = "\"" . $flags . "\"";        # add first and last double quotes.
+            $clos_flags =~ s/,/" "/g;                  # make each flag its own Common Lisp string.
+            $clos_flags = "(list " . $clos_flags. ")"; # convert to `list` syntax.
+            
+            push @object_name_array, $clos_object_name;
+            push @mnemonic_array, $clos_mnemonic;
+            push @operands_array, $clos_operands;
+            push @code_string_array, $clos_code_string;
+            push @flags_array, $clos_flags;
+        }
     }
 }
 
 close(FILE);
 
 # find out maximum length of each field.
+$object_name_length_max = longest_length(@object_name_array);
+$mnemonic_length_max = longest_length(@mnemonic_array);
 $mnemonic_length_max = longest_length(@mnemonic_array);
 $operands_length_max = longest_length(@operands_array);
 $code_string_length_max = longest_length(@code_string_array);
 $flags_length_max = longest_length(@flags_array);
 
-printf("(defparameter *x86-instructions-list-from-nasm* (list\n");
+# these objects need be created already during compilation.
+printf("(eval-when (:compile-toplevel :load-toplevel :execute)\n");
 
 for (my $i=0; $i <= $#mnemonic_array; $i++)
 {
-    # add double quotes on both sides and then pad with spaces.
-    $padded_mnemonic_w_quotes    = sprintf("%-*s", ($mnemonic_length_max + 2),    "\"" . $mnemonic_array[$i] . "\"");
-    $padded_operands_w_quotes    = sprintf("%-*s", ($operands_length_max + 2),    "\"" . $operands_array[$i] . "\"");
-    $padded_code_string_w_quotes = sprintf("%-*s", ($code_string_length_max + 2), "\"" . $code_string_array[$i] . "\"");
-    $padded_flags_w_quotes       = sprintf("%-*s", ($flags_length_max + 2),       "\"" . $flags_array[$i] . "\"");
+    $clos_object_name = $object_name_array[$i];
+    $mnemonic         = $mnemonic_array[$i];
+    $operands         = $operands_array[$i];
+    $code_string      = $code_string_array[$i];
+    $flags            = $flags_array[$i];
 
     # print the line.
-    printf("(list %s %s %s (list %s))", $padded_mnemonic_w_quotes, $padded_operands_w_quotes, $padded_code_string_w_quotes, $padded_flags_w_quotes);
+    # actually printed as 5 lines to make it easier to read (for us humans, I mean), with an empty line in the end.
+    printf("(setf %s (make-instance 'x86-asm-instruction\n:name %s\n:operands %s\n:code-string %s\n:arch-flags %s))",
+        $clos_object_name,
+        $mnemonic,
+        $operands,
+        $code_string,
+        $flags);
     if ($i eq $#mnemonic_array)
     {
-        # last line needs two right parentheses more to close the first 2 lists.
-        printf("))");
+        printf(")");
     }
-    # print linefeed.
-    printf("\n");
+    else
+    {
+        printf("\n\n");
+    }
 }
 
 exit;
