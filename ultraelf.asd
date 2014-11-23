@@ -56,6 +56,7 @@
                (:file "ultraelf-sreg2")                            ; x86 SREG2 segment register values hash table.
                (:file "ultraelf-sreg3")                            ; x86 SREG3 segment register values hash table.
                (:file "ultraelf-arm-instructions")                 ; instruction-specific ARM emit-code functions.
+               (:file "ultraelf-instruction-classes")              ; instruction classes.
                (:file "ultraelf-x86-general-emit-functions")       ; general x86 emit-code functions.
                (:file "ultraelf-x86-instructions")                 ; instruction-specific x86 emit-code functions.
                (:file "ultraelf-x87-instructions")                 ; instruction-specific x87 emit-code functions.
