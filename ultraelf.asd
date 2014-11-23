@@ -26,7 +26,8 @@
   (in-package :ultraelf))
 
 (defpackage :ultraelf-asd
-  (:use :cl :asdf))
+  (:use :cl :asdf)
+  (:import-from :cl-ppcre :create-scanner :regex-replace-all :scan))
 
 (in-package :ultraelf-asd)
 
