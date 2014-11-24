@@ -64,9 +64,8 @@
   "This function converts syntax tree to a list of lists of lists of binary code bytes,
    the encodings of each instruction on their own list,
    the bytes of each encoding on their own list."
-  (let*
-    ((syntax-list-of-lists (eval syntax-tree))
-     (n-instructions (length syntax-list-of-lists)))
+  (let
+    ((syntax-list-of-lists (eval syntax-tree)))
     (loop for syntax-list in syntax-list-of-lists
           collect (loop for emit-function-i below (length (gethash (first syntax-list) my-hash-table))
                         collect (emit-binary-code-for-one-instruction syntax-list my-hash-table :emit-function-selector-function (get-nth emit-function-i))))))
