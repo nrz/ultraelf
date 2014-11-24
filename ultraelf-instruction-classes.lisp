@@ -9,6 +9,13 @@
 ;; x86/x86-64: `insns.dat` from NASM source.
 ;; ARM:        `ARMTABLE.INC` from FASMARM source.
 
+(defclass asm-instruction-container ()
+  ((name
+     :initarg :name
+     :reader name
+     :initform (error "name must be specified")
+     :documentation "The instruction mnemonic.")))
+
 (defclass asm-instruction ()
   ((name
      :initarg :name
