@@ -31,6 +31,8 @@ my @each_mnemonic_only_once_array = ();
 my @instruction_variants_array = ();
 my @instruction_variants_for_current_instruction_array = ();
 
+my $container_object_name;
+
 # print the header.
 open(FILE, 'ultraelf-lisp-file-header.lisp');
 
@@ -96,9 +98,10 @@ while (<FILE>)
             # `|` -> `-`.
             # `,` -> `.`.
             # `:` -> `.`.
-            $clos_object_name =~ s/\|/-/g;              
-            $clos_object_name =~ s/,/./g;              
-            $clos_object_name =~ s/:/./g;              
+            $clos_object_name =~ s/\|/-/g;
+            $clos_object_name =~ s/,/./g;
+            $clos_object_name =~ s/:/./g;
+            $clos_object_name = "x64-instruction-variant-" . $clos_object_name;
 
             $clos_mnemonic    = "\"" . $mnemonic . "\"";
             $clos_operands    = "\"" . $operands . "\"";
@@ -153,7 +156,7 @@ close(FILE);
 
 # print the code to create each instruction + operands combination object.
 
-for (my $i=0; $i <= $#mnemonic_array; $i++)
+for my $i (0 .. $#mnemonic_array)
 {
     $clos_object_name = $object_name_array[$i];
     $mnemonic         = $mnemonic_array[$i];
@@ -175,16 +178,15 @@ for (my $i=0; $i <= $#mnemonic_array; $i++)
 
 # print the code to create each instruction + operands combination object.
 
-# for (my $i=0; $i <= $#each_mnemonic_only_once_array; $i++)
 for my $i (0 .. $#instruction_variants_array)
 {
     $mnemonic = $each_mnemonic_only_once_array[$i];
+    $container_object_name = "x64-instruction-container-" . $mnemonic;
 
     # print the code to create a container object.
-    printf("(defparameter %s (make-instance 'x86-asm-instruction :name \"%s\" :is-container t :variants (list\n", $mnemonic, $mnemonic);
+    printf("(defparameter %s (make-instance 'x86-asm-instruction :name \"%s\" :is-container t :variants (list\n", $container_object_name, $mnemonic);
     @instruction_variants_for_current_instruction_array = $instruction_variants_array[$i];
 
-    # for (my $j=0; $j <= $#instruction_variants_for_current_instruction_array; $j++)
     for my $j (0 .. $#{$instruction_variants_array[$i]} )
     {
         printf("%s", $instruction_variants_array[$i][$j]);
