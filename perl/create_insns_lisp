@@ -171,6 +171,7 @@ printf("\n");
 for my $i (0 .. $#mnemonic_array)
 {
     $clos_object_name = $object_name_array[$i];
+    $mnemonic         = $mnemonic_array[$i];
     $operands         = $operands_array[$i];
     $code_string      = $code_string_array[$i];
     $flags            = $flags_array[$i];
