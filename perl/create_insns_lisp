@@ -15,7 +15,6 @@ my $flags;
 my $mnemonic_of_current_mnemonic_array;
 
 my $clos_object_name;
-my $clos_mnemonic;
 my $clos_operands;
 my $clos_code_string;
 my $clos_flags;
@@ -31,7 +30,7 @@ my @each_mnemonic_only_once_array = ();
 my @instruction_variants_array = ();
 my @instruction_variants_for_current_instruction_array = ();
 
-my $container_object_name;
+my $container_class_name;
 
 # print the header.
 open(FILE, 'ultraelf-lisp-file-header.lisp');
@@ -103,7 +102,6 @@ while (<FILE>)
             $clos_object_name =~ s/:/./g;
             $clos_object_name = "x64-instruction-variant-" . $clos_object_name;
 
-            $clos_mnemonic    = "\"" . $mnemonic . "\"";
             $clos_operands    = "\"" . $operands . "\"";
             $clos_code_string = "\"" . $code_string . "\"";
             
@@ -112,7 +110,7 @@ while (<FILE>)
             $clos_flags = "(list " . $clos_flags. ")"; # convert to `list` syntax.
             
             push @object_name_array, $clos_object_name;
-            push @mnemonic_array, $clos_mnemonic;
+            push @mnemonic_array, $mnemonic;
             push @operands_array, $clos_operands;
             push @code_string_array, $clos_code_string;
             push @flags_array, $clos_flags;
@@ -154,57 +152,42 @@ if (@instruction_variants_for_current_instruction_array)
 
 close(FILE);
 
+# print the code to create each container class.
+
+for my $i (0 .. $#instruction_variants_array)
+{
+    $mnemonic = $each_mnemonic_only_once_array[$i];
+    $container_class_name = "x64-" . $mnemonic . "-instruction";
+
+    # print the code to create a container object.
+    printf("(defclass %s (x64-asm-instruction) ((name :reader name :initform \"%s\")))\n", $container_class_name, $mnemonic);
+    @instruction_variants_for_current_instruction_array = $instruction_variants_array[$i];
+}
+
+printf("\n");
+
 # print the code to create each instruction + operands combination object.
 
 for my $i (0 .. $#mnemonic_array)
 {
     $clos_object_name = $object_name_array[$i];
-    $mnemonic         = $mnemonic_array[$i];
     $operands         = $operands_array[$i];
     $code_string      = $code_string_array[$i];
     $flags            = $flags_array[$i];
 
+    $container_class_name = "x64-" . $mnemonic . "-instruction";
+
     # print the code to create a variant object.
     # each object here is a variant of a single instruction (or a single mnemonic).
-    # actually printed as 6 lines to make it easier to read (for us humans, I mean), with an empty line in the end.
-    printf("(defparameter %s (make-instance 'x86-asm-instruction\n:name %s\n:operands %s\n:code-string %s\n:arch-flags %s\n:is-variant t))",
+    # actually printed as 5 lines to make it easier to read (for us humans, I mean), with an empty line in the end.
+    printf("(defparameter %s (make-instance '%s\n:operands %s\n:code-string %s\n:arch-flags %s))",
         $clos_object_name,
-        $mnemonic,
+        $container_class_name,
         $operands,
         $code_string,
         $flags);
-    printf("\n\n");
-}
 
-# print the code to create each instruction + operands combination object.
-
-for my $i (0 .. $#instruction_variants_array)
-{
-    $mnemonic = $each_mnemonic_only_once_array[$i];
-    $container_object_name = "x64-instruction-container-" . $mnemonic;
-
-    # print the code to create a container object.
-    printf("(defparameter %s (make-instance 'x86-asm-instruction :name \"%s\" :is-container t :variants (list\n", $container_object_name, $mnemonic);
-    @instruction_variants_for_current_instruction_array = $instruction_variants_array[$i];
-
-    for my $j (0 .. $#{$instruction_variants_array[$i]} )
-    {
-        printf("%s", $instruction_variants_array[$i][$j]);
-
-        # print 3 closing brackets if this is the last variant.
-        if ($j == $#{$instruction_variants_array[$i]})
-        {
-            printf(")))");
-        }
-        else
-        {
-            printf(" ");
-        }
-    }
-
-    # if this is not the last instruction, print two newlines.
-    # if this is the last instruction, print closing bracket to close `eval-when`.
-    if ($i < $#instruction_variants_array)
+    if ($i < $#mnemonic_array)
     {
         printf("\n\n");
     }
