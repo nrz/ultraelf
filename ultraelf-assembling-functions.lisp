@@ -5,6 +5,9 @@
 
 (in-package :ultraelf)
 
+(defparameter *global-offset* 0)
+(defparameter $ 0)
+
 (defun create-syntax-tree (my-list)
   "This recursive function converts a string produced by transform-code-to-string into a syntax tree.
    Input argument my-list can be a string, in that case it is first stored into a list.
