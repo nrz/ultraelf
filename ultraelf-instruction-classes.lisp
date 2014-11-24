@@ -91,6 +91,11 @@
      :reader is-x86-instruction
      :initform t)))
 
+(defclass x64-asm-instruction (x86-asm-instruction)
+  ((x64-asm-instruction
+     :reader x64-asm-instruction
+     :initform t)))
+
 (defclass x86-nop (x86-asm-instruction)
   ((emit
      :reader emit
