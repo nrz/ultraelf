@@ -36,7 +36,8 @@
      :documentation "A list defining the architecture flags of this instruction object.")
    (variants
      :initarg :variants
-     :reader variants
+     :accessor variants
+     :allocation :class
      :documentation "A list of variants contained in a container. Each variant must be an object of 'asm-instruction class or of some its subclass.")
    (is-asm-instruction
      :reader is-asm-instruction
