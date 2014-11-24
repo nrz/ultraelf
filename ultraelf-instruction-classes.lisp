@@ -34,16 +34,6 @@
      :initarg :arch-flags
      :reader arch-flags
      :documentation "A list defining the architecture flags of this instruction object.")
-   (is-variant
-     :initarg :is-variant
-     :reader is-variant
-     :initform nil
-     :documentation "A variant contains the complete information for some encoding.")
-   (is-container
-     :initarg :is-container
-     :reader is-container
-     :initform nil
-     :documentation "A container contains one or more variants, but it itself doesn't contain any encoding information.")
    (variants
      :initarg :variants
      :reader variants
