@@ -60,7 +60,7 @@
                (:file "ultraelf-x86-instructions")                 ; instruction-specific x86 emit-code functions.
                (:file "ultraelf-create-instruction-instances")     ; create instance for each x64 instruction+operands combination. converted from NASM's `insns.dat`.
                (:file "ultraelf-x87-instructions")                 ; instruction-specific x87 emit-code functions.
-               (:file "ultraelf-instructions-hash-tables")         ; x86 instructions hash tables.
+               (:file "ultraelf-instruction-hash-tables")          ; instruction hash tables for different architectures (currently x64).
                (:file "ultraelf-alt-code")                         ; alternative code used for metamorphic engine.
                (:file "ultraelf-assembling-functions")             ; general assembling functions.
                (:file "ultraelf-test-x64-code"))                   ; x64 test code, used for testing.
