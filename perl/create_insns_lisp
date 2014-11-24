@@ -12,6 +12,7 @@ my $mnemonic;
 my $operands;
 my $code_string;
 my $flags;
+my $mnemonic_of_current_mnemonic_array;
 
 my $clos_object_name;
 my $clos_mnemonic;
@@ -19,17 +20,16 @@ my $clos_operands;
 my $clos_code_string;
 my $clos_flags;
 
-my $object_name_length_max;
-my $mnemonic_length_max;
-my $operands_length_max;
-my $code_string_length_max;
-my $flags_length_max;
+my @object_name_array = ();
+my @mnemonic_array = ();
+my @operands_array = ();
+my @code_string_array = ();
+my @flags_array = ();
 
-my @object_name_array;
-my @mnemonic_array;
-my @operands_array;
-my @code_string_array;
-my @flags_array;
+my @each_mnemonic_only_once_array = ();
+
+my @instruction_variants_array = ();
+my @instruction_variants_for_current_instruction_array = ();
 
 # print the header.
 open(FILE, 'ultraelf-lisp-file-header.lisp');
@@ -42,21 +42,9 @@ while (<FILE>)
 
 close(FILE);
 
-# subfunction to get the length of the longest string in an array.
-sub longest_length
-{
-    my $max = -1;
-    for (@_)
-    {
-        if (length > $max)
-        {
-            $max = length;
-        }
-    }
-    return $max;
-}
-
 open(FILE, 'insns.dat');
+
+$mnemonic_of_current_mnemonic_array = "";
 
 # read one line at once.
 while (<FILE>)
@@ -125,22 +113,45 @@ while (<FILE>)
             push @operands_array, $clos_operands;
             push @code_string_array, $clos_code_string;
             push @flags_array, $clos_flags;
+
+            if ($mnemonic eq $mnemonic_of_current_mnemonic_array)
+            {
+                # ok, same mnemonic as the previous one,
+                # so the current object name goes to the list.
+                push @instruction_variants_for_current_instruction_array, $clos_object_name;
+            }
+            else
+            {
+                # ok, this is a new mnemonic.
+                # so we'll mark this as current mnemonic.
+                $mnemonic_of_current_mnemonic_array = $mnemonic;
+                push @each_mnemonic_only_once_array, $mnemonic;
+
+                # we first push the old array (unless it's empty), then clear it,
+                # and then push the current object name to the cleared array.
+
+                if (@instruction_variants_for_current_instruction_array)
+                {
+                    # push the variants array, unless it's empty.
+                    push @instruction_variants_array, [ @instruction_variants_for_current_instruction_array ];
+                }
+                @instruction_variants_for_current_instruction_array = ();
+                push @instruction_variants_for_current_instruction_array, $clos_object_name;
+            }
         }
     }
 }
 
+# the last instruction's instruction variants must be pushed too.
+if (@instruction_variants_for_current_instruction_array)
+{
+    # push the variants array, unless it's empty.
+    push @instruction_variants_array, [ @instruction_variants_for_current_instruction_array ];
+}
+
 close(FILE);
 
-# find out maximum length of each field.
-$object_name_length_max = longest_length(@object_name_array);
-$mnemonic_length_max = longest_length(@mnemonic_array);
-$mnemonic_length_max = longest_length(@mnemonic_array);
-$operands_length_max = longest_length(@operands_array);
-$code_string_length_max = longest_length(@code_string_array);
-$flags_length_max = longest_length(@flags_array);
-
-# these objects need be created already during compilation.
-printf("(eval-when (:compile-toplevel :load-toplevel :execute)\n");
+# print the code to create each instruction + operands combination object.
 
 for (my $i=0; $i <= $#mnemonic_array; $i++)
 {
@@ -150,19 +161,48 @@ for (my $i=0; $i <= $#mnemonic_array; $i++)
     $code_string      = $code_string_array[$i];
     $flags            = $flags_array[$i];
 
-    # print the line.
-    # actually printed as 5 lines to make it easier to read (for us humans, I mean), with an empty line in the end.
-    printf("(setf %s (make-instance 'x86-asm-instruction\n:name %s\n:operands %s\n:code-string %s\n:arch-flags %s))",
+    # print the code to create a variant object.
+    # each object here is a variant of a single instruction (or a single mnemonic).
+    # actually printed as 6 lines to make it easier to read (for us humans, I mean), with an empty line in the end.
+    printf("(defparameter %s (make-instance 'x86-asm-instruction\n:name %s\n:operands %s\n:code-string %s\n:arch-flags %s\n:is-variant t))",
         $clos_object_name,
         $mnemonic,
         $operands,
         $code_string,
         $flags);
-    if ($i eq $#mnemonic_array)
+    printf("\n\n");
+}
+
+# print the code to create each instruction + operands combination object.
+
+# for (my $i=0; $i <= $#each_mnemonic_only_once_array; $i++)
+for my $i (0 .. $#instruction_variants_array)
+{
+    $mnemonic = $each_mnemonic_only_once_array[$i];
+
+    # print the code to create a container object.
+    printf("(defparameter %s (make-instance 'x86-asm-instruction :name \"%s\" :is-container t :variants (list\n", $mnemonic, $mnemonic);
+    @instruction_variants_for_current_instruction_array = $instruction_variants_array[$i];
+
+    # for (my $j=0; $j <= $#instruction_variants_for_current_instruction_array; $j++)
+    for my $j (0 .. $#{$instruction_variants_array[$i]} )
     {
-        printf(")");
+        printf("%s", $instruction_variants_array[$i][$j]);
+
+        # print 3 closing brackets if this is the last variant.
+        if ($j == $#{$instruction_variants_array[$i]})
+        {
+            printf(")))");
+        }
+        else
+        {
+            printf(" ");
+        }
     }
-    else
+
+    # if this is not the last instruction, print two newlines.
+    # if this is the last instruction, print closing bracket to close `eval-when`.
+    if ($i < $#instruction_variants_array)
     {
         printf("\n\n");
     }
