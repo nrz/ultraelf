@@ -7,4 +7,13 @@
 
 (defpackage :ultraelf
   (:use :cl)
-  (:shadow :type))
+  (:shadow :type)
+  (:export :asm-instruction
+           :x16-asm-instruction
+           :x32-asm-instruction
+           :x64-asm-instruction
+           :arm-asm-instruction
+           :name
+           :operands
+           :code-string
+           :arch-flags))

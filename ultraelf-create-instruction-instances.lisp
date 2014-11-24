@@ -3,7 +3,20 @@
 ;;; ultraELF x86-64 assembler, disassembler and metamorphic engine.
 ;;; ultraELF packs and reconstructs ELF executables, maintaining original functionality.
 
-(in-package :ultraelf)
+(defpackage :x64
+  (:import-from :cl :defclass
+                    :defpackage
+                    :defparameter
+                    :in-package
+                    :list
+                    :make-instance)
+  (:import-from :ultraelf :x64-asm-instruction
+                          :name
+                          :operands
+                          :code-string
+                          :arch-flags))
+
+(in-package :x64)
 
 (defclass x64-DB-instruction (x64-asm-instruction) ((name :reader name :initform "DB")))
 (defclass x64-DW-instruction (x64-asm-instruction) ((name :reader name :initform "DW")))
