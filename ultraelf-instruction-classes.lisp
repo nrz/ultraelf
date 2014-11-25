@@ -11,81 +11,87 @@
 
 (defclass architecture ()
   ((is-x86-architecture
-     :initarg :is-x86-architecture
      :reader is-x86-architecture
+     :initarg :is-x86-architecture
      :initform nil)
    (is-x16-architecture
-     :initarg :is-x16-architecture
      :reader is-x16-architecture
+     :initarg :is-x16-architecture
      :initform nil)
    (is-x32-architecture
-     :initarg :is-x32-architecture
      :reader is-x32-architecture
+     :initarg :is-x32-architecture
      :initform nil)
    (is-x64-architecture
-     :initarg :is-x64-architecture
      :reader is-x64-architecture
+     :initarg :is-x64-architecture
      :initform nil)
    (is-arm-architecture
-     :initarg :is-arm-architecture
      :reader is-arm-architecture
+     :initarg :is-arm-architecture
      :initform nil)))
 
 (defclass x86-architecture (architecture)
   ((is-x86-architecture
-     :initarg :is-x86-architecture
      :reader is-x86-architecture
+     :allocation :class
+     :initarg :is-x86-architecture
      :initform t)))
 
 (defclass x16-architecture (x86-architecture) ; 16-bit x86 architecture
   ((is-x16-architecture
-     :initarg :is-x16-architecture
      :reader is-x16-architecture
+     :allocation :class
+     :initarg :is-x16-architecture
      :initform t)))
 
 (defclass x32-architecture (x86-architecture) ; 32-bit x86 architecture
   ((is-x32-architecture
-     :initarg :is-x32-architecture
      :reader is-x32-architecture
+     :allocation :class
+     :initarg :is-x32-architecture
      :initform t)))
 
 (defclass x64-architecture (x86-architecture) ; 64-bit x86-64 architecture
   ((is-x64-architecture
-     :initarg :is-x64-architecture
      :reader is-x64-architecture
+     :allocation :class
+     :initarg :is-x64-architecture
      :initform t)))
 
 (defclass arm-architecture (architecture) ; ARM architecture
   ((is-arm-architecture
-     :initarg :is-arm-architecture
      :reader is-arm-architecture
+     :allocation :class
+     :initarg :is-arm-architecture
      :initform t)))
 
 (defclass asm-instruction ()
   ((name
-     :initarg :name
      :reader name
+     :initarg :name
      :initform (error "name must be specified")
      :documentation "The instruction mnemonic.")
    (operands
-     :initarg :operands
      :reader operands
+     :initarg :operands
      :documentation "A string defining the operands of this instruction object.")
-   (code-string
-     :initarg :code-string
-     :reader code-string
-     :documentation "A string defining the code-string of this instruction object.")
+   (code-format
+     :reader code-format
+     :initarg :code-format
+     :documentation "A list defining the code format of this instruction object.")
    (arch-flags
-     :initarg :arch-flags
      :reader arch-flags
+     :initarg :arch-flags
      :documentation "A list defining the architecture flags of this instruction object.")
    (variants
-     :initarg :variants
      :accessor variants
      :allocation :class
+     :initarg :variants
      :documentation "A list of variants contained in a container. Each variant must be an object of 'asm-instruction class or of some its subclass.")
    (is-asm-instruction
      :reader is-asm-instruction
+     :allocation :class
      :initform t)
    (is-x86-instruction
      :reader is-x86-instruction
@@ -93,8 +99,6 @@
    (is-arm-instruction
      :reader is-arm-instruction
      :initform nil)
-   (emit
-     :reader emit)
    (modifies-flags
      :reader modifies-flags
      :initform t
@@ -134,16 +138,19 @@
 (defclass x16-asm-instruction (x16-architecture asm-instruction)
   ((x16-asm-instruction
      :reader x16-asm-instruction
+     :allocation :class
      :initform t)))
 
 (defclass x32-asm-instruction (x32-architecture asm-instruction)
   ((x32-asm-instruction
      :reader x32-asm-instruction
+     :allocation :class
      :initform t)))
 
 (defclass x64-asm-instruction (x64-architecture asm-instruction)
   ((x64-asm-instruction
      :reader x64-asm-instruction
+     :allocation :class
      :initform t)))
 
 (defclass arm-asm-instruction (arm-architecture asm-instruction)
