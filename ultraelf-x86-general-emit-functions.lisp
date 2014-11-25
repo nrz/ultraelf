@@ -5,6 +5,8 @@
 
 (in-package :ultraelf)
 
+(defvar *sib-scale-hash-table-x64*)
+
 (defun get-base-index-and-scale (memory-address-syntax)
   "This function converts memory address syntax to a list of base, index and scale.
    Memory address syntax must start with [ and end with ] and it must not contain spaces."
