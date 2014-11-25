@@ -20,6 +20,7 @@
 (defclass unknown (argument)
   ((is-unknown
      :reader is-unknown
+     :allocation :class
      :initform t)
    (name
      :initarg :name
@@ -29,17 +30,21 @@
    (is-reg
      :reader is-reg
      :initform nil
+     :allocation :class
      :documentation "registers are _not_ unknown.")
    (is-register-indirect
      :reader is-register-indirect
+     :allocation :class
      :initform nil
      :documentation "register indirects are _not_ unknown.")
    (is-address
      :reader is-address
+     :allocation :class
      :initform nil
      :documentation "addresses indirects are _not_ unknown (although their values may be).")
    (is-string-instruction
      :reader is-string-instruction
+     :allocation :class
      :initform nil
      :documentation "string instructions are _not_ unknown.")))
 
@@ -51,18 +56,23 @@
    (is-unknown
      :reader is-unknown
      :initform nil
+     :allocation :class
      :documentation "Addresses are not unknown, although their value may be unknown.")
    (is-reg
      :reader is-reg
+     :allocation :class
      :initform nil)
    (is-register-indirect
      :reader is-register-indirect
+     :allocation :class
      :initform nil)
    (is-address
      :reader is-address
+     :allocation :class
      :initform t)
    (is-string-instruction
      :reader is-string-instruction
+     :allocation :class
      :initform nil)
    (value
      :accessor value
@@ -71,6 +81,7 @@
 (defclass x86-string-instruction (argument)
   ((is-string-instruction
      :reader is-string-instruction
+     :allocation :class
      :initform t
      :documentation "any string instruction")
    (op-code
@@ -81,21 +92,25 @@
 (defclass x86-8-bit-string-instruction (x86-string-instruction)
   ((operand-size
      :reader operand-size
+     :allocation :class
      :initform 8)))
 
 (defclass x86-16-bit-string-instruction (x86-string-instruction)
   ((operand-size
      :reader operand-size
+     :allocation :class
      :initform 16)))
 
 (defclass x86-32-bit-string-instruction (x86-string-instruction)
   ((operand-size
      :reader operand-size
+     :allocation :class
      :initform 32)))
 
 (defclass x86-64-bit-string-instruction (x86-string-instruction)
   ((operand-size
      :reader operand-size
+     :allocation :class
      :initform 64)))
 
 (defgeneric rep (x86-string-instruction)
