@@ -5,6 +5,8 @@
 
 (in-package :ultraelf)
 
+(defvar *emit-function-hash-table-x64*)
+
 ;; segment registers.
 (defun cs-x86 (&rest args)
   (list #x2e))
