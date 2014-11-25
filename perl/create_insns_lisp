@@ -30,7 +30,7 @@ my @each_mnemonic_only_once_array = ();
 my @instruction_variants_array = ();
 my @instruction_variants_for_current_instruction_array = ();
 
-my $container_class_name;
+my $instruction_class_name;
 
 # print the header.
 open(FILE, 'ultraelf-lisp-file-header.lisp');
@@ -100,7 +100,6 @@ while (<FILE>)
             $clos_object_name =~ s/\|/-/g;
             $clos_object_name =~ s/,/./g;
             $clos_object_name =~ s/:/./g;
-            $clos_object_name = "x64-instruction-variant-" . $clos_object_name;
 
             $clos_operands    = "\"" . $operands . "\"";
             $clos_code_string = "\"" . $code_string . "\"";
@@ -157,10 +156,10 @@ close(FILE);
 for my $i (0 .. $#instruction_variants_array)
 {
     $mnemonic = $each_mnemonic_only_once_array[$i];
-    $container_class_name = "x64-" . $mnemonic . "-instruction";
+    $instruction_class_name = "x64-" . $mnemonic . "-instruction";
 
     # print the code to create a container object.
-    printf("(defclass %s (x64-asm-instruction) ((name :reader name :initform \"%s\")))\n", $container_class_name, $mnemonic);
+    printf("(defclass %s (x64-asm-instruction) ((name :reader name :initform \"%s\")))\n", $instruction_class_name, $mnemonic);
     @instruction_variants_for_current_instruction_array = $instruction_variants_array[$i];
 }
 
@@ -176,14 +175,14 @@ for my $i (0 .. $#mnemonic_array)
     $code_string      = $code_string_array[$i];
     $flags            = $flags_array[$i];
 
-    $container_class_name = "x64-" . $mnemonic . "-instruction";
+    $instruction_class_name = "x64-" . $mnemonic . "-instruction";
 
     # print the code to create a variant object.
     # each object here is a variant of a single instruction (or a single mnemonic).
     # actually printed as 5 lines to make it easier to read (for us humans, I mean), with an empty line in the end.
     printf("(defparameter %s (make-instance '%s\n:operands %s\n:code-string %s\n:arch-flags %s))",
         $clos_object_name,
-        $container_class_name,
+        $instruction_class_name,
         $operands,
         $code_string,
         $flags);
