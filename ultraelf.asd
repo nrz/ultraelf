@@ -36,6 +36,7 @@
   :author "Antti Nuortimo"
   :components ((:file "packages")
                (:file "ultraelf-compiling-macros")
+               (:file "ultraelf-init")                             ; some `defparameter` variable definitions.
                (:file "ultraelf-string")                           ; string functions.
                (:file "ultraelf-printing")                         ; printing functions.
                (:file "ultraelf-regex")                            ; regular expression functions.

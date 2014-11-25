@@ -5,8 +5,6 @@
 
 (in-package :ultraelf)
 
-(defvar *global-offset*)
-
 (defun bits-pseudo-op (arg1 &rest args)
   "`bits` or `[bits` pseudo-op affects the encoding used. Use `[bits 64]` for x86-64."
   (defparameter *bits* arg1)
