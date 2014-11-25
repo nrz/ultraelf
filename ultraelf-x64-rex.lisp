@@ -5,10 +5,11 @@
 
 (in-package :ultraelf)
 
-(defun emit-0x48-or-0x4a-rex (&rest args)
-  "This function emits a REX prefix 0x48 or 0x4a.
+(defun emit-low-rex (&rest args)
+  "This function emits a low REX prefix:
+   0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46 or 0x47.
    Can be chosen randomly or at will."
-  (list #x48))
+  (list #x40))
 
 (defun emit-high-rex (&rest args)
   "This function emits a high REX prefix:
@@ -34,14 +35,26 @@
    Can be chosen randomly or at will."
   (list #x41))
 
+(defun emit-high-odd-rex (&rest args)
+  "This function emits high even REX prefix:
+   0x49, 0x4b, 0x4d or 0x4f.
+   Can be chosen randomly or at will."
+  (list #x49))
+
+(defun emit-low-even-rex (&rest args)
+  "This function emits low even REX prefix:
+   0x40, 0x42, 0x44 or 0x46.
+   Can be chosen randomly or at will."
+  (list #x40))
+
 (defun emit-high-even-rex (&rest args)
   "This function emits high even REX prefix:
    0x48, 0x4a, 0x4c or 0x4e.
    Can be chosen randomly or at will."
   (list #x48))
 
-(defun emit-high-odd-rex (&rest args)
-  "This function emits high even REX prefix:
-   0x49, 0x4b, 0x4d or 0x4f.
+(defun emit-0x48-or-0x4a-rex (&rest args)
+  "This function emits a REX prefix 0x48 or 0x4a.
    Can be chosen randomly or at will."
-  (list #x49))
+  (list #x48))
+
