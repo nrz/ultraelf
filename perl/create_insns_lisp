@@ -90,6 +90,10 @@ while (<FILE>)
             $object_name =~ s/,/./g;
             $object_name =~ s/:/./g;
 
+            # add a square bracket in the beginning.
+            # if first element in `:code-format` is `"["`, then the encoding is constant.
+            $code_format = "[" . $code_format;
+
             # let's convert operands to Common Lisp list syntax.
             $operands =~ s/[, ]+/\" \"/g;
             $operands = "(list \"" . $operands . "\")";

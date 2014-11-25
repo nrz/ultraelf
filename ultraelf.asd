@@ -42,11 +42,12 @@
                (:file "ultraelf-regex")                            ; regular expression functions.
                (:file "ultraelf-numbers")                          ; number-handling functions.
                (:file "ultraelf-x64-rex")                          ; x64 "emit REX" functions.
+               (:file "ultraelf-instruction-classes")              ; instruction classes.
                (:file "ultraelf-argument-classes")                 ; instruction argument classes except addressing form classes.
-               (:file "ultraelf-argument-lists")                   ; lists of arguments belonging to each argument class (currently for each string instruction).
-               (:file "ultraelf-create-argument-instances")        ; create instance for each argument (currently for each string instruction). uses emit REX functions.
                (:file "ultraelf-addressing-form-classes")          ; addressing form classes.
+               (:file "ultraelf-argument-lists")                   ; lists of arguments belonging to each argument class (currently for each string instruction).
                (:file "ultraelf-addressing-form-lists")            ; lists of registers etc. belonging to each addressing form class.
+               (:file "ultraelf-create-argument-instances")        ; create instance for each argument (currently for each string instruction). uses emit REX functions.
                (:file "ultraelf-create-addressing-form-instances") ; create instance for each addressing form, including each register.
                (:file "ultraelf-elf-classes")                      ; ELF classes.
                (:file "ultraelf-asm-reader")                       ; Lisp assembly reader.
@@ -56,7 +57,6 @@
                (:file "ultraelf-sreg2")                            ; x86 SREG2 segment register values hash table.
                (:file "ultraelf-sreg3")                            ; x86 SREG3 segment register values hash table.
                (:file "ultraelf-arm-instructions")                 ; instruction-specific ARM emit-code functions.
-               (:file "ultraelf-instruction-classes")              ; instruction classes.
                (:file "ultraelf-x86-general-emit-functions")       ; general x86 emit-code functions.
                (:file "ultraelf-x86-instructions")                 ; instruction-specific x86 emit-code functions.
                (:file "ultraelf-create-instruction-instances")     ; create instance for each x64 instruction+operands combination. converted from NASM's `insns.dat`.

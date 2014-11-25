@@ -17,11 +17,9 @@
                     :make-instance
                     :nth
                     :push)
-  (:import-from :ultraelf :x64-asm-instruction
-                          :name
-                          :operands
-                          :code-format
-                          :arch-flags))
+  (:import-from :ultraelf
+                :emit :emit-hex :x64-asm-instruction :name :operands :code-format :arch-flags
+                :print-hex))
 
 (in-package :x64)
 

@@ -9,11 +9,13 @@
   (:use :cl)
   (:shadow :type)
   (:export :asm-instruction
-           :x16-asm-instruction
-           :x32-asm-instruction
-           :x64-asm-instruction
+           :emit
+           :emit-hex
            :arm-asm-instruction
            :name
            :operands
            :code-string
-           :arch-flags))
+           :arch-flags
+           :x16-asm-instruction
+           :x32-asm-instruction
+           :x64-asm-instruction))

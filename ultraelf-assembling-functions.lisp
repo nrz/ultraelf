@@ -141,3 +141,13 @@
   "This function converts a string to a function.
    http://stackoverflow.com/questions/2940267/call-function-based-on-a-string/2940347#2940347"
   (symbol-function (find-symbol (string-upcase my-string))))
+
+(defun emit-with-format-and-operands (code-format operands &rest args)
+  "This function emits code (list of binary code bytes) for one instruction variant."
+  (cond
+    ((equal (first code-format) "[")
+     ;; The encoding of this variant is constant, so just convert
+     ;; the rest elements (hexadecimal numbers) to numbers in a list.
+     (loop for hex-string in (rest code-format)
+           collecting (parse-integer hex-string :radix 16)))
+    (t nil)))
