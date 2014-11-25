@@ -9,13 +9,18 @@
   (:import-from :cl :defclass
                     :defpackage
                     :defparameter
+                    :equalp
+                    :gethash
                     :in-package
                     :list
-                    :make-instance)
+                    :make-hash-table
+                    :make-instance
+                    :nth
+                    :push)
   (:import-from :ultraelf :x64-asm-instruction
                           :name
                           :operands
-                          :code-string
+                          :code-format
                           :arch-flags))
 
 (in-package :x64)
