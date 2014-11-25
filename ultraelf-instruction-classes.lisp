@@ -229,18 +229,6 @@
 (defgeneric repne (x86-string-instruction)
   (:documentation "emit repne xxx for the x86-string-instruction in question."))
 
-(defgeneric my-string (argument)
-  (:documentation "string that is converted to this instance."))
-
-(defmethod emit ((x86-8-bit-string-instruction x86-8-bit-string-instruction) &rest args)
-  (list (slot-value x86-8-bit-string-instruction 'op-code)))
-(defmethod emit ((x86-16-bit-string-instruction x86-16-bit-string-instruction) &rest args)
-  (list #x66 (slot-value x86-16-bit-string-instruction 'op-code)))
-(defmethod emit ((x86-32-bit-string-instruction x86-32-bit-string-instruction) &rest args)
-  (list (slot-value x86-32-bit-string-instruction 'op-code)))
-(defmethod emit ((x86-64-bit-string-instruction x86-64-bit-string-instruction) &rest args)
-  (append (emit-high-rex) (list (slot-value x86-64-bit-string-instruction 'op-code))))
-
 (defmethod emit ((x64-asm-instruction x64-asm-instruction) &rest args)
   (emit-with-format-and-operands
     (slot-value x64-asm-instruction 'code-format)
@@ -298,6 +286,3 @@
   (list #xf2 (slot-value x86-32-bit-string-instruction 'op-code)))
 (defmethod repne ((x86-64-bit-string-instruction x86-64-bit-string-instruction))
   (cons #xf2 (append (emit-high-rex) (list (slot-value x86-64-bit-string-instruction 'op-code)))))
-
-(defmethod my-string ((argument argument))
-  (slot-value argument 'name))

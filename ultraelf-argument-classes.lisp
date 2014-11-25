@@ -77,3 +77,9 @@
    (value
      :accessor value
      :initform nil)))
+
+(defgeneric my-string (argument)
+  (:documentation "string that is converted to this instance."))
+
+(defmethod my-string ((argument argument))
+  (slot-value argument 'name))

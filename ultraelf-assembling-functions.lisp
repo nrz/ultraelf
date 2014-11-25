@@ -148,6 +148,31 @@
     ((equal (first code-format) "[")
      ;; The encoding of this variant is constant, so just convert
      ;; the rest elements (hexadecimal numbers) to numbers in a list.
-     (loop for hex-string in (rest code-format)
-           collecting (parse-integer hex-string :radix 16)))
+     (loop for code-string in (rest code-format)
+           append (cond
+                    ((equal code-string "mustrep")
+                     ;; force REP prefix.
+                     ;; ultraELF assumes REP prefix as a port of instruction,
+                     ;; so eg. `rep xsha1` produces f3 f3 0f a6 c8 .
+                     (list #xf3))
+                    ((equal code-string "mustrepne")
+                     ;; force REPNZ prefix.
+                     ;; ultraELF assumes REPNZ prefix as a port of instruction,
+                     ;; so eg. `repnz xsha1` produces f2 f2 0f a6 c8 .
+                     (list #xf2))
+                    ((equal code-string "np")
+                     ;; no SSE prefix (LFENCE/MFENCE).
+                     nil)
+                    ((equal code-string "o16")
+                     (list #x66))
+                    ((equal code-string "o32")
+                     nil)
+                    ((equal code-string "o64")
+                     (emit-high-rex))
+                    ((equal code-string "repe") ; a string instruction (not REPE itself!).
+                     nil)
+                    ((equal code-string "wait")
+                     ;; FWAIT instruction or prefix.
+                     (list #x9b))
+                    (t (list (parse-integer code-string :radix 16))))))
     (t nil)))
