@@ -74,16 +74,6 @@
   "This function converts syntax tree to a list of strings of hexadecimal bytes."
   (print-hex (get-all-encodings-for-syntax-tree syntax-tree my-hash-table)))
 
-(defun get-all-encodings-for-x64-syntax-tree (syntax-tree)
-  "This function converts x64 syntax tree to a list of lists of lists of binary code bytes,
-   the encodings of each instruction on their own list,
-   the bytes of each encoding on their own list."
-  (get-all-encodings-for-syntax-tree syntax-tree *emit-function-hash-table-x64*))
-
-(defun get-all-encodings-for-x64-syntax-tree-and-print-hex (syntax-tree)
-  "This function converts x64 syntax tree to a list of strings of hexadecimal bytes."
-  (print-hex (get-all-encodings-for-syntax-tree syntax-tree *emit-function-hash-table-x64*)))
-
 (defun emit-binary-code-list (syntax-tree my-hash-table &key (emit-function-selector-function #'first))
   "This function converts syntax tree to a list of lists of binary code bytes,
    the bytes of each instruction are on their own list.
@@ -110,14 +100,6 @@
   "This function assembles code and prints in a hexadecimal string."
   (print-hex (assemble code my-hash-table)))
 
-(defun assemble-x64 (code)
-  "This function assembles x86-64 (x64) code."
-  (assemble code *emit-function-hash-table-x64*))
-
-(defun assemble-x64-and-print-hex (code)
-  "This function assembles x86-64 (x64) code and prints in a hexadecimal string."
-  (print-hex (assemble code *emit-function-hash-table-x64*)))
-
 (defun assemble-alternatives (code my-hash-table)
   "This function assembles code, all alternatives.
    Duplicates are removed."
@@ -129,50 +111,7 @@
   "This function assembles code, all alternatives, and prints in a hexadecimal string."
   (print-hex (get-all-encodings-for-syntax-tree (create-syntax-tree code) my-hash-table)))
 
-(defun assemble-alternatives-x64 (code)
-  "This function assembles x86-64 (x64) code, all alternatives."
-  (assemble-alternatives code *emit-function-hash-table-x64*))
-
-(defun assemble-alternatives-x64-and-print-hex (code)
-  "This function assembles x86-64 (x64) code, all alternatives, and prints in a hexadecimal string."
-  (print-hex (assemble-alternatives code *emit-function-hash-table-x64*)))
-
 (defun string-to-function (my-string)
   "This function converts a string to a function.
    http://stackoverflow.com/questions/2940267/call-function-based-on-a-string/2940347#2940347"
   (symbol-function (find-symbol (string-upcase my-string))))
-
-(defun emit-with-format-and-operands (code-format operands &rest args)
-  "This function emits code (list of binary code bytes) for one instruction variant."
-  (cond
-    ((equal (first code-format) "[")
-     ;; The encoding of this variant is constant, so just convert
-     ;; the rest elements (hexadecimal numbers) to numbers in a list.
-     (loop for code-string in (rest code-format)
-           append (cond
-                    ((equal code-string "mustrep")
-                     ;; force REP prefix.
-                     ;; ultraELF assumes REP prefix as a port of instruction,
-                     ;; so eg. `rep xsha1` produces f3 f3 0f a6 c8 .
-                     (list #xf3))
-                    ((equal code-string "mustrepne")
-                     ;; force REPNZ prefix.
-                     ;; ultraELF assumes REPNZ prefix as a port of instruction,
-                     ;; so eg. `repnz xsha1` produces f2 f2 0f a6 c8 .
-                     (list #xf2))
-                    ((equal code-string "np")
-                     ;; no SSE prefix (LFENCE/MFENCE).
-                     nil)
-                    ((equal code-string "o16")
-                     (list #x66))
-                    ((equal code-string "o32")
-                     nil)
-                    ((equal code-string "o64")
-                     (emit-high-rex))
-                    ((equal code-string "repe") ; a string instruction (not REPE itself!).
-                     nil)
-                    ((equal code-string "wait")
-                     ;; FWAIT instruction or prefix.
-                     (list #x9b))
-                    (t (list (parse-integer code-string :radix 16))))))
-    (t nil)))

@@ -50,10 +50,18 @@
                    (nth 2 base-index-and-scale))))
 
 (defun emit-modrm-byte (mod regmem reg)
-  "This function emits ModRM byte."
+  "This function emits ModRM byte for a given ModRM.mod, mod, register/memory object and register object.
+   Note: To get ModRM byte by combining known ModRM.mod, ModRM.reg, ModRM./m, use emit-modrm."
   (list (logior (r/m regmem)
                 (ash (r/m reg) 3)
                 (ash mod 6))))
+
+(defun emit-modrm (modrm.mod modrm.reg modrm.r/m)
+  "This function shifts the bits of ModRM.mod, ModRM.reg and ModRM.r/m appropriately and
+   combines them with a logical OR."
+  (list (logior modrm.r/m
+                (ash modrm.reg 3)
+                (ash modrm.mod 6))))
 
 (defun emit-modrm-byte-for-arithmetic-rm-imm (opcode-base mod arg1)
   "This function emits ModRM (?) byte for r/m,imm for arithmetic instructions."

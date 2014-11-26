@@ -170,8 +170,8 @@
 
 (defclass x86-addressing-form (addressing-form)
   ((r/m
-     :initarg :r/m
      :reader r/m
+     :initarg :r/m
      :initform (error "r/m must be specified")
      :documentation "r/m bits of ModRM byte")))
 
@@ -184,6 +184,11 @@
      :reader is-register-indirect
      :allocation :class
      :initform t)
+   (displacement-size
+     :reader displacement-size
+     :initarg :displacement-size
+     :initform 0
+     :documentation "Displacement size can be 0, 8 or 32 (bits). 0 is the default.")
    (is-memory-addressing
      :reader is-memory-addressing
      :allocation :class
@@ -621,3 +626,41 @@
 
 (defclass x86-new-register-indirect-does-not-need-sib (x86-new-register-indirect x86-register-indirect-does-not-need-sib)
   ())
+
+(defgeneric modrm.mod (x86-addressing-form)
+  (:documentation "mod bits (bits 6 and 7 of ModRM) specify the addressing mode for an operand.
+                   0b00 register-indirect: [rax], [rcx], [rdx], [rbx], SIB, disp32, [rsi], [rdi].
+                   0b01 register-indirect: [rax+disp8], [rcx+disp8], [rdx+disp8], [rbx+disp8], SIB+disp8, [rbp+disp8], [rsi+disp8], [rdi+disp8].
+                   0b10 register-indirect: [rax+dis32], [rcx+dis32], [rdx+dis32], [rbx+dis32], SIB+dis32, [rbp+dis32], [rsi+dis32], [rdi+dis32].
+                   0b11 register-direct:   any register-direct, see eg. AMD Architecture Programmers Manual Volume 3, Table 1-10."))
+
+(defgeneric modrm.r/m (x86-addressing-form)
+  (:documentation "r/m bits (bits 0 .. 2) of ModRM byte."))
+
+(defmethod modrm.mod ((x86-addressing-form x86-addressing-form))
+  (cond
+    ((slot-value x86-addressing-form 'is-reg)
+     #b11)
+    ((slot-value x86-addressing-form 'needs-sib)
+     ;; check the need for SIB first.
+     (cond
+       ((eql (slot-value x86-addressing-form 'displacement-size) 0)
+        #b00)
+       ((eql (slot-value x86-addressing-form 'displacement-size) 8)
+        #b01)
+       ((eql (slot-value x86-addressing-form 'displacement-size) 32)
+        #b10)
+       (t (error "error in defmethod modrm.mod."))))
+    ((slot-value x86-addressing-form 'is-register-indirect)
+     (cond
+       ((eql (slot-value x86-addressing-form 'displacement-size) 0)
+        #b00)
+       ((eql (slot-value x86-addressing-form 'displacement-size) 8)
+        #b01)
+       ((eql (slot-value x86-addressing-form 'displacement-size) 32)
+        #b10)
+       (t (error "error in defmethod modrm.mod."))))
+    (t (error "error in defmethod modrm.mod."))))
+
+(defmethod modrm.r/m ((x86-addressing-form x86-addressing-form))
+  (slot-value x86-addressing-form 'r/m))

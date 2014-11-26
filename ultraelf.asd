@@ -34,8 +34,13 @@
   :serial t
   :description "UltraELF system"
   :author "Antti Nuortimo"
-  :components ((:file "ultraelf-package")
-               (:file "ultraelf-compiling-macros")
+  :components ((:file "ultraelf-essentials")                       ; a package containing only some absolutely basic functions from `:cl`, to `:use` in others.
+               (:file "ultraelf-package")                          ; functions, variables and classes not going into one of the architecture-specific packages go here.
+               (:file "ultraelf-x16")                              ; instructions and arguments available in x16 (16-bit flavor of x86) and few basic essentials.
+               (:file "ultraelf-x32")                              ; instructions and arguments available in x32 (32-bit flavor of x86) and few basic essentials.
+               (:file "ultraelf-x64")                              ; instructions and arguments available in x64 (64-bit flavor of x86) and few basic essentials.
+               (:file "ultraelf-arm")                              ; instructions and arguments available in ARM and few basic essentials.
+               (:file "ultraelf-compiling-macros")                 ; `defmacro compile-ultraelf` & `defmacro c-u`.
                (:file "ultraelf-init")                             ; some `defparameter` variable definitions.
                (:file "ultraelf-string")                           ; string functions.
                (:file "ultraelf-printing")                         ; printing functions.
@@ -43,11 +48,12 @@
                (:file "ultraelf-numbers")                          ; number-handling functions.
                (:file "ultraelf-x64-rex")                          ; x64 "emit REX" functions.
                (:file "ultraelf-instruction-classes")              ; instruction classes.
+               (:file "ultraelf-x86-instruction-classes")          ; instruction classes.
+               (:file "ultraelf-x64-instruction-classes")          ; instruction classes.
+               (:file "ultraelf-arm-instruction-classes")          ; instruction classes.
                (:file "ultraelf-argument-classes")                 ; instruction argument classes except addressing form classes.
                (:file "ultraelf-addressing-form-classes")          ; addressing form classes.
-               (:file "ultraelf-argument-lists")                   ; lists of arguments belonging to each argument class (currently for each string instruction).
                (:file "ultraelf-addressing-form-lists")            ; lists of registers etc. belonging to each addressing form class.
-               (:file "ultraelf-create-argument-instances")        ; create instance for each argument (currently for each string instruction). uses emit REX functions.
                (:file "ultraelf-create-addressing-form-instances") ; create instance for each addressing form, including each register.
                (:file "ultraelf-elf-classes")                      ; ELF classes.
                (:file "ultraelf-asm-reader")                       ; Lisp assembly reader.
@@ -64,5 +70,6 @@
                (:file "ultraelf-instruction-hash-tables")          ; instruction hash tables for different architectures (currently x64).
                (:file "ultraelf-alt-code")                         ; alternative code used for metamorphic engine.
                (:file "ultraelf-assembling-functions")             ; general assembling functions.
+               (:file "ultraelf-x64-assembling-functions")         ; x64 assembling functions.
                (:file "ultraelf-test-x64-code"))                   ; x64 test code, used for testing.
   :depends-on (:parse-number))

@@ -173,61 +173,11 @@
      :reader is-arm-asm-instruction
      :initform t)))
 
-(defclass x86-string-instruction (x86-asm-instruction argument)
-  ((is-string-instruction
-     :reader is-string-instruction
-     :allocation :class
-     :initform t
-     :documentation "any string instruction")
-   (op-code
-     :initarg :op-code
-     :reader op-code
-     :initform (error "op-code must be specified"))))
-
-(defclass x86-8-bit-string-instruction (x86-string-instruction)
-  ((operand-size
-     :reader operand-size
-     :allocation :class
-     :initform 8)))
-
-(defclass x86-16-bit-string-instruction (x86-string-instruction)
-  ((operand-size
-     :reader operand-size
-     :allocation :class
-     :initform 16)))
-
-(defclass x86-32-bit-string-instruction (x86-string-instruction)
-  ((operand-size
-     :reader operand-size
-     :allocation :class
-     :initform 32)))
-
-(defclass x86-64-bit-string-instruction (x86-string-instruction)
-  ((operand-size
-     :reader operand-size
-     :allocation :class
-     :initform 64)))
-
 (defgeneric emit (asm-instruction &rest args)
   (:documentation "emit instruction without rep/repz/repe/repnz/repne."))
 
 (defgeneric emit-hex (asm-instruction &rest args)
   (:documentation "emit instruction without rep/repz/repe/repnz/repne and print in hexadecimal."))
-
-(defgeneric rep (x86-string-instruction)
-  (:documentation "emit rep xxx for the x86-string-instruction in question."))
-
-(defgeneric repz (x86-string-instruction)
-  (:documentation "emit repz xxx for the x86-string-instruction in question."))
-
-(defgeneric repe (x86-string-instruction)
-  (:documentation "emit repe xxx for the x86-string-instruction in question."))
-
-(defgeneric repnz (x86-string-instruction)
-  (:documentation "emit repnz xxx for the x86-string-instruction in question."))
-
-(defgeneric repne (x86-string-instruction)
-  (:documentation "emit repne xxx for the x86-string-instruction in question."))
 
 (defmethod emit ((x64-asm-instruction x64-asm-instruction) &rest args)
   (emit-with-format-and-operands
@@ -241,48 +191,3 @@
       (slot-value x64-asm-instruction 'code-format)
       (slot-value x64-asm-instruction 'operands)
       args)))
-
-(defmethod rep ((x86-8-bit-string-instruction x86-8-bit-string-instruction))
-  (list #xf3 (slot-value x86-8-bit-string-instruction 'op-code)))
-(defmethod rep ((x86-16-bit-string-instruction x86-16-bit-string-instruction))
-  (list #x66 #xf3 (slot-value x86-16-bit-string-instruction 'op-code)))
-(defmethod rep ((x86-32-bit-string-instruction x86-32-bit-string-instruction))
-  (list #xf3 (slot-value x86-32-bit-string-instruction 'op-code)))
-(defmethod rep ((x86-64-bit-string-instruction x86-64-bit-string-instruction))
-  (cons #xf3 (append (emit-high-rex) (list (slot-value x86-64-bit-string-instruction 'op-code)))))
-
-(defmethod repz ((x86-8-bit-string-instruction x86-8-bit-string-instruction))
-  (list #xf3 (slot-value x86-8-bit-string-instruction 'op-code)))
-(defmethod repz ((x86-16-bit-string-instruction x86-16-bit-string-instruction))
-  (list #x66 #xf3 (slot-value x86-16-bit-string-instruction 'op-code)))
-(defmethod repz ((x86-32-bit-string-instruction x86-32-bit-string-instruction))
-  (list #xf3 (slot-value x86-32-bit-string-instruction 'op-code)))
-(defmethod repz ((x86-64-bit-string-instruction x86-64-bit-string-instruction))
-  (cons #xf3 (append (emit-high-rex) (list (slot-value x86-64-bit-string-instruction 'op-code)))))
-
-(defmethod repe ((x86-8-bit-string-instruction x86-8-bit-string-instruction))
-  (list #xf3 (slot-value x86-8-bit-string-instruction 'op-code)))
-(defmethod repe ((x86-16-bit-string-instruction x86-16-bit-string-instruction))
-  (list #x66 #xf3 (slot-value x86-16-bit-string-instruction 'op-code)))
-(defmethod repe ((x86-32-bit-string-instruction x86-32-bit-string-instruction))
-  (list #xf3 (slot-value x86-32-bit-string-instruction 'op-code)))
-(defmethod repe ((x86-64-bit-string-instruction x86-64-bit-string-instruction))
-  (cons #xf3 (append (emit-high-rex) (list (slot-value x86-64-bit-string-instruction 'op-code)))))
-
-(defmethod repnz ((x86-8-bit-string-instruction x86-8-bit-string-instruction))
-  (list #xf2 (slot-value x86-8-bit-string-instruction 'op-code)))
-(defmethod repnz ((x86-16-bit-string-instruction x86-16-bit-string-instruction))
-  (list #x66 #xf2 (slot-value x86-16-bit-string-instruction 'op-code)))
-(defmethod repnz ((x86-32-bit-string-instruction x86-32-bit-string-instruction))
-  (list #xf2 (slot-value x86-32-bit-string-instruction 'op-code)))
-(defmethod repnz ((x86-64-bit-string-instruction x86-64-bit-string-instruction))
-  (cons #xf2 (append (emit-high-rex) (list (slot-value x86-64-bit-string-instruction 'op-code)))))
-
-(defmethod repne ((x86-8-bit-string-instruction x86-8-bit-string-instruction))
-  (list #xf2 (slot-value x86-8-bit-string-instruction 'op-code)))
-(defmethod repne ((x86-16-bit-string-instruction x86-16-bit-string-instruction))
-  (list #x66 #xf2 (slot-value x86-16-bit-string-instruction 'op-code)))
-(defmethod repne ((x86-32-bit-string-instruction x86-32-bit-string-instruction))
-  (list #xf2 (slot-value x86-32-bit-string-instruction 'op-code)))
-(defmethod repne ((x86-64-bit-string-instruction x86-64-bit-string-instruction))
-  (cons #xf2 (append (emit-high-rex) (list (slot-value x86-64-bit-string-instruction 'op-code)))))

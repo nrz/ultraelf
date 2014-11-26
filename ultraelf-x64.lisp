@@ -5,10 +5,10 @@
 
 (in-package :cl-user)
 
-(defpackage :ultraelf
-  (:use :cl)
-  (:shadow :type)
-  (:export
+(defpackage :x64
+  (:use :essentials)
+  (:import-from
+    :ultraelf
     :print-hex
     :emit
     :emit-hex
