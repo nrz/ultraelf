@@ -34,7 +34,7 @@
   :serial t
   :description "UltraELF system"
   :author "Antti Nuortimo"
-  :components ((:file "packages")
+  :components ((:file "ultraelf-package")
                (:file "ultraelf-compiling-macros")
                (:file "ultraelf-init")                             ; some `defparameter` variable definitions.
                (:file "ultraelf-string")                           ; string functions.
