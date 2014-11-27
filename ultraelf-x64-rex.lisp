@@ -57,3 +57,11 @@
   "This function emits a REX prefix 0x48 or 0x4a.
    Can be chosen randomly or at will."
   (list #x48))
+
+(defun emit-rex (rex.w rex.r rex.x rex.b)
+  "This function emits a REX prefix as requested."
+  (list (logior #x40
+                rex.b
+                (ash rex.x 1)
+                (ash rex.r 2)
+                (ash rex.w 3))))

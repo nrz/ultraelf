@@ -162,6 +162,8 @@
        ;; An extension of the opcode is in the reg field.
        (unless (eql (length my-list) 1)
          (error "[m: encoding requires exactly 1 argument."))
+       (when (notany #'(lambda (x) (equal x (first operands))) (allowed-targets (first my-list)))
+         (error "instruction's and operand's allowed targets do not match."))
        (handle-nasm-code-format (rest code-format) my-list))
       ((equal (first code-format) "[r:")
        ;; This variant has one register operand.
@@ -169,5 +171,7 @@
        ;; An extension of the opcode is in the reg field.
        (unless (eql (length my-list) 1)
          (error "[r: encoding requires exactly 1 argument."))
+       (when (notany #'(lambda (x) (equal x (first operands))) (allowed-targets (first my-list)))
+         (error "instruction's and operand's allowed targets do not match."))
        (handle-nasm-code-format (rest code-format) my-list))
       (t (error "encoding not yet implemented")))))

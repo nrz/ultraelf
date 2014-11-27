@@ -25,7 +25,7 @@
 ;; - x86-register-indirect-needs-sib (x86-needs-sib)
 ;;
 ;; x86-does-not-need-sib (x86-register-indirect)
-;; - x86-rip-relative (x86-does-not-need-sib)
+;; - x64-rip-relative (x86-does-not-need-sib)
 ;; - x86-register-indirect-does-not-need-sib (x86-does-not-need-sib)
 ;;
 ;; x86-modrm.mod-b00 (x86-addressing-form)
@@ -129,16 +129,16 @@
 ;;
 ;; x86-zmm-register (x86-register)
 ;;
-;; x86-rip-relative (x86-does-not-need-sib)
-;; - x86-rip-disp32-0 (x86-rip-relative)
-;; - x86-rip-disp32-1 (x86-rip-relative)
-;; - x86-rip-disp32 (x86-rip-relative)
+;; x64-rip-relative (x86-does-not-need-sib)
+;; - x86-rip-disp32-0 (x64-rip-relative)
+;; - x86-rip-disp32-1 (x64-rip-relative)
+;; - x86-rip-disp32 (x64-rip-relative)
 ;;
-;; x86-rip-disp32-0 (x86-rip-relative)
+;; x86-rip-disp32-0 (x64-rip-relative)
 ;;
-;; x86-rip-disp32-1 (x86-rip-relative)
+;; x86-rip-disp32-1 (x64-rip-relative)
 ;;
-;; x86-rip-disp32 (x86-rip-relative)
+;; x86-rip-disp32 (x64-rip-relative)
 ;;
 ;; x86-register-indirect-does-not-need-sib (x86-does-not-need-sib)
 ;; - x86-old-register-indirect-does-not-need-sib (x86-old-register-indirect x86-register-indirect-does-not-need-sib)
@@ -329,28 +329,48 @@
      :reader reg-size
      :allocation :class
      :initform 8
-     :documentation "register size in bits")))
+     :documentation "register size in bits")
+   (allowed-targets
+     :reader allowed-targets
+     :allocation :class
+     :initform (list "reg8" "rm8")
+     :documentation "allowed encodings in NASM's `insns.dat` syntax")))
 
 (defclass x86-16-bits-register (x86-register)
   ((reg-size
      :reader reg-size
      :allocation :class
      :initform 16
-     :documentation "register size in bits")))
+     :documentation "register size in bits")
+   (allowed-targets
+     :reader allowed-targets
+     :allocation :class
+     :initform (list "reg16" "rm16")
+     :documentation "allowed encodings in NASM's `insns.dat` syntax")))
 
 (defclass x86-32-bits-register (x86-register)
   ((reg-size
      :reader reg-size
      :allocation :class
      :initform 32
-     :documentation "register size in bits")))
+     :documentation "register size in bits")
+   (allowed-targets
+     :reader allowed-targets
+     :allocation :class
+     :initform (list "reg32" "rm32")
+     :documentation "allowed encodings in NASM's `insns.dat` syntax")))
 
 (defclass x86-64-bits-register (x86-register)
   ((reg-size
      :reader reg-size
      :allocation :class
      :initform 64
-     :documentation "register size in bits")))
+     :documentation "register size in bits")
+   (allowed-targets
+     :reader allowed-targets
+     :allocation :class
+     :initform (list "reg64" "rm64")
+     :documentation "allowed encodings in NASM's `insns.dat` syntax")))
 
 (defclass x86-old-8-bits-low-register (x86-old-register x86-8-bits-register)
   ((works-with-rex
@@ -571,7 +591,7 @@
 (defclass x86-new-zmm-register (x86-rex.r-1 x86-zmm-register)
   ())
 
-(defclass x86-rip-relative (x86-does-not-need-sib)
+(defclass x64-rip-relative (x86-does-not-need-sib)
   ((is-reg
      :reader is-reg
      :allocation :class
@@ -587,21 +607,21 @@
      :initform nil
      :documentation "RIP-relative addressing does not need REX.")))
 
-(defclass x86-rip-disp32-0 (x86-rip-relative)
+(defclass x86-rip-disp32-0 (x64-rip-relative)
   ((rex.b
      :reader rex.b
      :allocation :class
      :initform 0
      :documentation "REX.B = 0")))
 
-(defclass x86-rip-disp32-1 (x86-rip-relative)
+(defclass x86-rip-disp32-1 (x64-rip-relative)
   ((rex.b
      :reader rex.b
      :allocation :class
      :initform 1
      :documentation "REX.B = 1")))
 
-(defclass x86-rip-disp32 (x86-rip-relative)
+(defclass x86-rip-disp32 (x64-rip-relative)
   ((rex.b
      :reader rex.b
      :allocation :class
@@ -615,16 +635,55 @@
      :initform nil
      :documentation "[rax], [rcx], [rdx], [rbx], [rsi], [rdi], [r8], [r9], [r10], [r11], [r14] and [r15] do _not_ need SIB.")))
 
-(defclass x86-old-register-indirect-needs-sib (x86-old-register-indirect x86-register-indirect-needs-sib)
+(defclass x16-register-indirect ()
+  ((allowed-targets
+     :reader allowed-targets
+     :allocation :class
+     :initform (list "rm8" "rm16")
+     :documentation "allowed encodings in NASM's `insns.dat` syntax")))
+
+(defclass x16-register-indirect-needs-sib (x16-register-indirect x86-register-indirect-needs-sib)
   ())
 
-(defclass x86-old-register-indirect-does-not-need-sib (x86-old-register-indirect x86-register-indirect-does-not-need-sib)
+(defclass x16-register-indirect-does-not-need-sib (x16-register-indirect x86-register-indirect-does-not-need-sib)
   ())
 
-(defclass x86-new-register-indirect-needs-sib (x86-new-register-indirect x86-register-indirect-needs-sib)
+(defclass x32-register-indirect ()
+  ((allowed-targets
+     :reader allowed-targets
+     :allocation :class
+     :initform (list "rm8" "rm16" "rm32")
+     :documentation "allowed encodings in NASM's `insns.dat` syntax")))
+
+(defclass x32-register-indirect-needs-sib (x32-register-indirect x86-register-indirect-needs-sib)
   ())
 
-(defclass x86-new-register-indirect-does-not-need-sib (x86-new-register-indirect x86-register-indirect-does-not-need-sib)
+(defclass x32-register-indirect-does-not-need-sib (x32-register-indirect x86-register-indirect-does-not-need-sib)
+  ())
+
+(defclass x64-register-indirect ()
+  ((allowed-targets
+     :reader allowed-targets
+     :allocation :class
+     :initform (list "rm8" "rm16" "rm32" "rm64")
+     :documentation "allowed encodings in NASM's `insns.dat` syntax")))
+
+(defclass x64-register-indirect-needs-sib (x64-register-indirect x86-register-indirect-needs-sib)
+  ())
+
+(defclass x64-old-register-indirect-needs-sib (x86-old-register-indirect x64-register-indirect-needs-sib)
+  ())
+
+(defclass x64-new-register-indirect-needs-sib (x86-new-register-indirect x64-register-indirect-needs-sib)
+  ())
+
+(defclass x64-register-indirect-does-not-need-sib (x64-register-indirect x86-register-indirect-does-not-need-sib)
+  ())
+
+(defclass x64-old-register-indirect-does-not-need-sib (x86-old-register-indirect x64-register-indirect-does-not-need-sib)
+  ())
+
+(defclass x64-new-register-indirect-does-not-need-sib (x86-new-register-indirect x64-register-indirect-does-not-need-sib)
   ())
 
 (defgeneric modrm.mod (x86-addressing-form)
