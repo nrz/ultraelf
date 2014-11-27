@@ -31,6 +31,80 @@
   "This function assembles x86-64 (x64) code, all alternatives, and prints in a hexadecimal string."
   (print-hex (assemble-alternatives code *emit-function-hash-table-x64*)))
 
+(defun handle-nasm-code-format (code-format &rest args)
+  "This function handler one code-string (from NASM's `insns.dat`) and returns a list."
+  (let
+    ((arg1 (first (get-list args))))
+    (loop for code-string in code-format
+          append (cond
+                   ((equal code-string "/0")
+                    (emit-modrm (modrm.mod arg1)
+                                0 ; extension encoded in reg field.
+                                (modrm.r/m arg1)))
+                   ((equal code-string "/1")
+                    (emit-modrm (modrm.mod arg1)
+                                1 ; extension encoded in reg field.
+                                (modrm.r/m arg1)))
+                   ((equal code-string "/2")
+                    (emit-modrm (modrm.mod arg1)
+                                2 ; extension encoded in reg field.
+                                (modrm.r/m arg1)))
+                   ((equal code-string "/3")
+                    (emit-modrm (modrm.mod arg1)
+                                3 ; extension encoded in reg field.
+                                (modrm.r/m arg1)))
+                   ((equal code-string "/4")
+                    (emit-modrm (modrm.mod arg1)
+                                4 ; extension encoded in reg field.
+                                (modrm.r/m arg1)))
+                   ((equal code-string "/5")
+                    (emit-modrm (modrm.mod arg1)
+                                5 ; extension encoded in reg field.
+                                (modrm.r/m arg1)))
+                   ((equal code-string "/6")
+                    (emit-modrm (modrm.mod arg1)
+                                6 ; extension encoded in reg field.
+                                (modrm.r/m arg1)))
+                   ((equal code-string "/7")
+                    (emit-modrm (modrm.mod arg1)
+                                7 ; extension encoded in reg field.
+                                (modrm.r/m arg1)))
+                   ((equal code-string "o16")
+                    (list #x66))
+                   ((equal code-string "o32")
+                    nil)
+                   ((equal code-string "o64")
+                    (emit-high-rex))
+                   ((equal code-string "hle")
+                    ;; instruction takes XRELEASE with or without lock.
+                    nil)
+                   ((equal code-string "hlexr")
+                    ;; instruction takes XACQUIRE/XRELEASE with or without lock.
+                    nil)
+                   ((equal code-string "hlenl")
+                    ;; instruction takes XACQUIRE/XRELEASE with lock only.
+                    nil)
+                   ((equal code-string "mustrep")
+                    ;; force REP prefix.
+                    ;; ultraELF assumes REP prefix as a part of instruction,
+                    ;; so eg. `rep xsha1` produces f3 f3 0f a6 c8 .
+                    (list #xf3))
+                   ((equal code-string "mustrepne")
+                    ;; force REPNZ prefix.
+                    ;; ultraELF assumes REPNZ prefix as a part of instruction.
+                    ;; currently `"mustrepne"` flag is not in use (NASM 2.11.06).
+                    (list #xf2))
+                   ((equal code-string "np")
+                    ;; no SSE prefix (LFENCE/MFENCE).
+                    nil)
+                   ((equal code-string "repe")
+                    ;; a string instruction (not REPE itself!).
+                    nil)
+                   ((equal code-string "wait")
+                    ;; FWAIT instruction or prefix.
+                    (list #x9b))
+                   (t (list (parse-integer code-string :radix 16)))))))
+
 (defun emit-with-format-and-operands-x64 (code-format operands &rest args)
   "This function emits code (list of binary code bytes) for one x64 instruction variant."
   (let
@@ -41,96 +115,12 @@
          (error "[ encoding requires exactly 0 arguments."))
        ;; The encoding of this variant is constant, so just convert
        ;; the rest elements (hexadecimal numbers) to numbers in a list.
-       (loop for code-string in (rest code-format)
-             append (cond
-                      ((equal code-string "o16")
-                       (list #x66))
-                      ((equal code-string "o32")
-                       nil)
-                      ((equal code-string "o64")
-                       (emit-high-rex))
-                      ((equal code-string "repe")
-                       ;; a string instruction (not REPE itself!).
-                       nil)
-                      ((equal code-string "wait")
-                       ;; FWAIT instruction or prefix.
-                       (list #x9b))
-                      ((equal code-string "mustrep")
-                       ;; force REP prefix.
-                       ;; ultraELF assumes REP prefix as a part of instruction,
-                       ;; so eg. `rep xsha1` produces f3 f3 0f a6 c8 .
-                       (list #xf3))
-                      ((equal code-string "mustrepne")
-                       ;; force REPNZ prefix.
-                       ;; ultraELF assumes REPNZ prefix as a part of instruction.
-                       ;; currently `"mustrepne"` flag is not in use (NASM 2.11.06).
-                       (list #xf2))
-                      ((equal code-string "np")
-                       ;; no SSE prefix (LFENCE/MFENCE).
-                       nil)
-                      (t (list (parse-integer code-string :radix 16))))))
+       (handle-nasm-code-format (rest code-format)))
       ((equal (first code-format) "[m:")
-       ;; This variant has one operand.
+       ;; This variant has one 'memory' operand.
        ;; The operand is encoded in the r/m field.
        ;; An extension of the opcode is in the reg field.
        (unless (eql (length my-list) 1)
          (error "[m encoding requires exactly 1 argument."))
-       (let
-         ((arg1 (first my-list)))
-         (loop for code-string in (rest code-format)
-               append (cond
-                        ((equal code-string "o16")
-                         (list #x66))
-                        ((equal code-string "o32")
-                         nil)
-                        ((equal code-string "o64")
-                         (emit-high-rex))
-                        ((equal code-string "wait")
-                         ;; FWAIT instruction or prefix.
-                         (list #x9b))
-                        ((equal code-string "np")
-                         ;; no SSE prefix (LFENCE/MFENCE).
-                         nil)
-                        ((equal code-string "/0")
-                         (emit-modrm (modrm.mod arg1)
-                                     0 ; extension encoded in reg field.
-                                     (modrm.r/m arg1)))
-                        ((equal code-string "/1")
-                         (emit-modrm (modrm.mod arg1)
-                                     1 ; extension encoded in reg field.
-                                     (modrm.r/m arg1)))
-                        ((equal code-string "/2")
-                         (emit-modrm (modrm.mod arg1)
-                                     2 ; extension encoded in reg field.
-                                     (modrm.r/m arg1)))
-                        ((equal code-string "/3")
-                         (emit-modrm (modrm.mod arg1)
-                                     3 ; extension encoded in reg field.
-                                     (modrm.r/m arg1)))
-                        ((equal code-string "/4")
-                         (emit-modrm (modrm.mod arg1)
-                                     4 ; extension encoded in reg field.
-                                     (modrm.r/m arg1)))
-                        ((equal code-string "/5")
-                         (emit-modrm (modrm.mod arg1)
-                                     5 ; extension encoded in reg field.
-                                     (modrm.r/m arg1)))
-                        ((equal code-string "/6")
-                         (emit-modrm (modrm.mod arg1)
-                                     6 ; extension encoded in reg field.
-                                     (modrm.r/m arg1)))
-                        ((equal code-string "/7")
-                         (emit-modrm (modrm.mod arg1)
-                                     7 ; extension encoded in reg field.
-                                     (modrm.r/m arg1)))
-                        ((equal code-string "hle")
-                         ;; instruction takes XRELEASE with or without lock.
-                         nil)
-                        ((equal code-string "hlexr")
-                         ;; instruction takes XACQUIRE/XRELEASE with or without lock.
-                         nil)
-                        ((equal code-string "hlenl")
-                         ;; instruction takes XACQUIRE/XRELEASE with lock only.
-                         nil)
-                        (t (list (parse-integer code-string :radix 16)))))))
+       (handle-nasm-code-format (rest code-format) my-list))
       (t (error "encoding not yet implemented")))))
