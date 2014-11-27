@@ -13,8 +13,8 @@
                 :cond :loop
                 ;; define instructions.
                 :defun :defclass :defpackage :defparameter :defmethod
-                ;; equality functions.
-                :eq :eql :equal :equalp
+                ;; comparison functions.
+                :eq :eql :equal :equalp :null :listp
                 ;; error handling.
                 :error
                 ;; printing.
@@ -26,7 +26,9 @@
                 ;; variables.
                 :setf
                 ;; lists and other sequences.
-                :append :concatenate :list :nth :push :pushnew
+                :append :concatenate :list :nth :first :second :third :fourth :fifth :sixth :seventh :eighth :ninth :tenth :rest :push :pushnew
+                ;; numbers.
+                :parse-integer
                 ;; CLOS.
                 :make-instance :slot-value)
   (:export
@@ -36,8 +38,8 @@
     :cond :loop
     ;; define instructions.
     :defun :defclass :defpackage :defparameter :defmethod
-    ;; equality functions.
-    :eq :eql :equal :equalp
+    ;; comparison functions.
+    :eq :eql :equal :equalp :null :listp
     ;; error handling.
     :error
     ;; printing.
@@ -49,6 +51,8 @@
     ;; variables.
     :setf
     ;; lists and other sequences.
-    :append :concatenate :list :nth :push :pushnew
+    :append :concatenate :list :nth :first :second :third :fourth :fifth :sixth :seventh :eighth :ninth :tenth :rest :push :pushnew
+    ;; numbers.
+    :parse-integer
     ;; CLOS.
     :make-instance :slot-value))

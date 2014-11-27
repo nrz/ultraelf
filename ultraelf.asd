@@ -42,15 +42,19 @@
                (:file "ultraelf-arm")                              ; instructions and arguments available in ARM and few basic essentials.
                (:file "ultraelf-compiling-macros")                 ; `defmacro compile-ultraelf` & `defmacro c-u`.
                (:file "ultraelf-init")                             ; some `defparameter` variable definitions.
+               (:file "ultraelf-sequence")                         ; sequence functions.
                (:file "ultraelf-string")                           ; string functions.
                (:file "ultraelf-printing")                         ; printing functions.
                (:file "ultraelf-regex")                            ; regular expression functions.
                (:file "ultraelf-numbers")                          ; number-handling functions.
                (:file "ultraelf-x64-rex")                          ; x64 "emit REX" functions.
+               (:file "ultraelf-architecture-classes")             ; architecture classes.
                (:file "ultraelf-instruction-classes")              ; instruction classes.
-               (:file "ultraelf-x86-instruction-classes")          ; instruction classes.
-               (:file "ultraelf-x64-instruction-classes")          ; instruction classes.
-               (:file "ultraelf-arm-instruction-classes")          ; instruction classes.
+               (:file "ultraelf-x86-instruction-classes")          ; x86 instruction classes.
+               (:file "ultraelf-x16-instruction-classes")          ; x16 instruction classes and methods.
+               (:file "ultraelf-x32-instruction-classes")          ; x32 instruction classes and methods.
+               (:file "ultraelf-x64-instruction-classes")          ; x64 instruction classes and methods.
+               (:file "ultraelf-arm-instruction-classes")          ; ARM instruction classes and methods.
                (:file "ultraelf-argument-classes")                 ; instruction argument classes except addressing form classes.
                (:file "ultraelf-addressing-form-classes")          ; addressing form classes.
                (:file "ultraelf-addressing-form-lists")            ; lists of registers etc. belonging to each addressing form class.
@@ -70,6 +74,9 @@
                (:file "ultraelf-instruction-hash-tables")          ; instruction hash tables for different architectures (currently x64).
                (:file "ultraelf-alt-code")                         ; alternative code used for metamorphic engine.
                (:file "ultraelf-assembling-functions")             ; general assembling functions.
+               (:file "ultraelf-x16-assembling-functions")         ; x16 assembling functions.
+               (:file "ultraelf-x32-assembling-functions")         ; x32 assembling functions.
                (:file "ultraelf-x64-assembling-functions")         ; x64 assembling functions.
+               (:file "ultraelf-arm-assembling-functions")         ; ARM assembling functions.
                (:file "ultraelf-test-x64-code"))                   ; x64 test code, used for testing.
   :depends-on (:parse-number))

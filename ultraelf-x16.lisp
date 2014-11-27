@@ -11,11 +11,18 @@
     :ultraelf
     ;; printing functions.
     :print-hex
+    ;; list-handling functions.
+    :get-list
     ;; emit-code functions.
     :emit
     :emit-hex
-    ;; TODO: instruction class names.
-    ;; :x16-asm-instruction
+    :emit-modrm
+    :emit-modrm-byte
+    :assemble
+    :assemble-alternatives
+    :get-all-encodings-for-syntax-tree
+    ;; instruction class names.
+    :x16-asm-instruction
     ;; instruction classes' slots.
     :is-reg
     :reg-size

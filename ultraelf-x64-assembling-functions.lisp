@@ -31,17 +31,8 @@
   "This function assembles x86-64 (x64) code, all alternatives, and prints in a hexadecimal string."
   (print-hex (assemble-alternatives code *emit-function-hash-table-x64*)))
 
-(defun get-list (my-list)
-  "This function goes through list wrapped in a list... until the last list is found.
-   Works nice for &rest args passed through one or more functions."
-  (if (and
-        (listp (first my-list))
-        (not (null my-list)))
-    (get-list (first my-list))
-    my-list))
-
-(defun emit-with-format-and-operands (code-format operands &rest args)
-  "This function emits code (list of binary code bytes) for one instruction variant."
+(defun emit-with-format-and-operands-x64 (code-format operands &rest args)
+  "This function emits code (list of binary code bytes) for one x64 instruction variant."
   (let
     ((my-list (get-list args)))
     (cond

@@ -9,63 +9,6 @@
 ;; x86/x86-64: `insns.dat` from NASM source.
 ;; ARM:        `ARMTABLE.INC` from FASMARM source.
 
-(defclass architecture ()
-  ((is-x86-architecture
-     :reader is-x86-architecture
-     :initarg :is-x86-architecture
-     :initform nil)
-   (is-x16-architecture
-     :reader is-x16-architecture
-     :initarg :is-x16-architecture
-     :initform nil)
-   (is-x32-architecture
-     :reader is-x32-architecture
-     :initarg :is-x32-architecture
-     :initform nil)
-   (is-x64-architecture
-     :reader is-x64-architecture
-     :initarg :is-x64-architecture
-     :initform nil)
-   (is-arm-architecture
-     :reader is-arm-architecture
-     :initarg :is-arm-architecture
-     :initform nil)))
-
-(defclass x86-architecture (architecture)
-  ((is-x86-architecture
-     :reader is-x86-architecture
-     :allocation :class
-     :initarg :is-x86-architecture
-     :initform t)))
-
-(defclass x16-architecture (x86-architecture) ; 16-bit x86 architecture
-  ((is-x16-architecture
-     :reader is-x16-architecture
-     :allocation :class
-     :initarg :is-x16-architecture
-     :initform t)))
-
-(defclass x32-architecture (x86-architecture) ; 32-bit x86 architecture
-  ((is-x32-architecture
-     :reader is-x32-architecture
-     :allocation :class
-     :initarg :is-x32-architecture
-     :initform t)))
-
-(defclass x64-architecture (x86-architecture) ; 64-bit x86-64 architecture
-  ((is-x64-architecture
-     :reader is-x64-architecture
-     :allocation :class
-     :initarg :is-x64-architecture
-     :initform t)))
-
-(defclass arm-architecture (architecture) ; ARM architecture
-  ((is-arm-architecture
-     :reader is-arm-architecture
-     :allocation :class
-     :initarg :is-arm-architecture
-     :initform t)))
-
 (defclass asm-instruction ()
   ((name
      :reader name
@@ -144,6 +87,11 @@
      :reader alt-code
      :initform nil)))
 
+(defclass arm-asm-instruction (arm-architecture asm-instruction)
+  ((is-arm-asm-instruction
+     :reader is-arm-asm-instruction
+     :initform t)))
+
 (defclass x86-asm-instruction (x86-architecture asm-instruction)
   ((is-x86-asm-instruction
      :reader is-x86-asm-instruction
@@ -179,15 +127,54 @@
 (defgeneric emit-hex (asm-instruction &rest args)
   (:documentation "emit instruction without rep/repz/repe/repnz/repne and print in hexadecimal."))
 
+(defmethod emit ((x16-asm-instruction x16-asm-instruction) &rest args)
+  (emit-with-format-and-operands-x16
+    (slot-value x16-asm-instruction 'code-format)
+    (slot-value x16-asm-instruction 'operands)
+    args))
+
+(defmethod emit-hex ((x16-asm-instruction x16-asm-instruction) &rest args)
+  (print-hex
+    (emit-with-format-and-operands-x16
+      (slot-value x16-asm-instruction 'code-format)
+      (slot-value x16-asm-instruction 'operands)
+      args)))
+
+(defmethod emit ((x32-asm-instruction x32-asm-instruction) &rest args)
+  (emit-with-format-and-operands-x32
+    (slot-value x32-asm-instruction 'code-format)
+    (slot-value x32-asm-instruction 'operands)
+    args))
+
+(defmethod emit-hex ((x32-asm-instruction x32-asm-instruction) &rest args)
+  (print-hex
+    (emit-with-format-and-operands-x32
+      (slot-value x32-asm-instruction 'code-format)
+      (slot-value x32-asm-instruction 'operands)
+      args)))
+
 (defmethod emit ((x64-asm-instruction x64-asm-instruction) &rest args)
-  (emit-with-format-and-operands
+  (emit-with-format-and-operands-x64
     (slot-value x64-asm-instruction 'code-format)
     (slot-value x64-asm-instruction 'operands)
     args))
 
 (defmethod emit-hex ((x64-asm-instruction x64-asm-instruction) &rest args)
   (print-hex
-    (emit-with-format-and-operands
+    (emit-with-format-and-operands-x64
       (slot-value x64-asm-instruction 'code-format)
       (slot-value x64-asm-instruction 'operands)
+      args)))
+
+(defmethod emit ((arm-asm-instruction arm-asm-instruction) &rest args)
+  (emit-with-format-and-operands-arm
+    (slot-value arm-asm-instruction 'code-format)
+    (slot-value arm-asm-instruction 'operands)
+    args))
+
+(defmethod emit-hex ((arm-asm-instruction arm-asm-instruction) &rest args)
+  (print-hex
+    (emit-with-format-and-operands-arm
+      (slot-value arm-asm-instruction 'code-format)
+      (slot-value arm-asm-instruction 'operands)
       args)))

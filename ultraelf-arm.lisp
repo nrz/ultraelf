@@ -6,4 +6,18 @@
 (in-package :cl-user)
 
 (defpackage :arm
-  (:use :essentials))
+  (:use :essentials)
+  (:import-from
+    :ultraelf
+    ;; printing functions.
+    :print-hex
+    ;; list-handling functions.
+    :get-list
+    ;; emit-code functions.
+    :emit
+    :emit-hex
+    :assemble
+    :assemble-alternatives
+    :get-all-encodings-for-syntax-tree
+    ;; instruction class names.
+    :arm-asm-instruction))

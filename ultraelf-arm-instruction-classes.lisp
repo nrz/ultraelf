@@ -3,16 +3,23 @@
 ;;; ultraELF x86-64 assembler, disassembler and metamorphic engine.
 ;;; ultraELF packs and reconstructs ELF executables, maintaining original functionality.
 
-(in-package :arm)
-
-(defclass arm-architecture (architecture) ; ARM architecture
-  ((is-arm-architecture
-     :reader is-arm-architecture
-     :allocation :class
-     :initarg :is-arm-architecture
-     :initform t)))
+(in-package :ultraelf)
 
 (defclass arm-asm-instruction (arm-architecture asm-instruction)
   ((is-arm-asm-instruction
      :reader is-arm-asm-instruction
+     :allocation :class
      :initform t)))
+
+(defmethod emit ((arm-asm-instruction arm-asm-instruction) &rest args)
+  (emit-with-format-and-operands-arm
+    (slot-value arm-asm-instruction 'code-format)
+    (slot-value arm-asm-instruction 'operands)
+    args))
+
+(defmethod emit-hex ((arm-asm-instruction arm-asm-instruction) &rest args)
+  (print-hex
+    (emit-with-format-and-operands-arm
+      (slot-value arm-asm-instruction 'code-format)
+      (slot-value arm-asm-instruction 'operands)
+      args)))
