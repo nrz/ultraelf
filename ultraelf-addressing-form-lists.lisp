@@ -19,7 +19,7 @@
 (defparameter *new-reg64-list*             (list  "r8"  "r9"  "r10"  "r11"  "r12"  "r13"  "r14"  "r15"))
 
 ;; SIMD registers.
-(defparameter *mmx-reg-list*           (list "mmx0" "mmx1"  "mmx2"  "mmx3"  "mmx4"  "mmx5"  "mmx6"  "mmx7"))
+(defparameter *mmx-reg-list*           (list "mm0"   "mm1"   "mm2"   "mm3"   "mm4"   "mm5"   "mm6"   "mm7"))
 (defparameter *xmm-reg-list-from-xmm0* (list "xmm0" "xmm1"  "xmm2"  "xmm3"  "xmm4"  "xmm5"  "xmm6"  "xmm7"))
 (defparameter *xmm-reg-list-from-xmm8* (list "xmm8" "xmm9" "xmm10" "xmm11" "xmm12" "xmm13" "xmm14" "xmm15"))
 (defparameter *ymm-reg-list-from-ymm0* (list "ymm0" "ymm1"  "ymm2"  "ymm3"  "ymm4"  "ymm5"  "ymm6"  "ymm7"))
