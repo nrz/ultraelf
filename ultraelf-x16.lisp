@@ -6,4 +6,37 @@
 (in-package :cl-user)
 
 (defpackage :x16
-  (:use :essentials))
+  (:use :essentials)
+  (:import-from
+    :ultraelf
+    ;; printing functions.
+    :print-hex
+    ;; emit-code functions.
+    :emit
+    :emit-hex
+    ;; TODO: instruction class names.
+    ;; :x16-asm-instruction
+    ;; instruction classes' slots.
+    :is-reg
+    :reg-size
+    :register-name
+    :is-x86-register
+    :is-old-reg
+    :is-memory-addressing
+    :is-register-indirect
+    :code-format
+    :operands
+    :displacement-size
+    :needs-sib
+    :r/m
+    ;; instruction classes' methods.
+    :modrm.mod
+    :modrm.r/m
+    ;; x86 registers common to all x86.
+    :al  :cl  :dl   :bl
+    :ah  :ch  :dh   :bh
+    :ax  :cx  :dx   :bx
+    :sp  :bp  :si   :di
+    ;; TODO: x16 register indirects.
+    ;; :\[bx\] :\[bp\] :\[si\] :\[di\] ...
+    ))
