@@ -69,6 +69,46 @@
                     (emit-modrm (modrm.mod arg1)
                                 7 ; extension encoded in reg field.
                                 (modrm.r/m arg1)))
+                   ;; register-only encodings.
+                   ;; there are currently 18 encodings of this type in use.
+                   ;; to check `insns.dat` for new encodings of this type:
+                   ;; `$ grep '[0-9a-f]+' insns.dat | sed 's/\(^.*\)\([\t ][0-9a-f][0-9a-f]+\)\(.*$\)/\2/g' | sed 's/[\t ]*//g' | sort | uniq`
+                   ((equal code-string "40+r")
+                    (list (+ #x40 (modrm.r/m arg1))))
+                   ((equal code-string "48+r")
+                    (list (+ #x48 (modrm.r/m arg1))))
+                   ((equal code-string "50+r")
+                    (list (+ #x50 (modrm.r/m arg1))))
+                   ((equal code-string "58+r")
+                    (list (+ #x58 (modrm.r/m arg1))))
+                   ((equal code-string "70+r")
+                    (list (+ #x70 (modrm.r/m arg1))))
+                   ((equal code-string "71+r")
+                    (list (+ #x71 (modrm.r/m arg1))))
+                   ((equal code-string "80+r")
+                    (list (+ #x80 (modrm.r/m arg1))))
+                   ((equal code-string "90+r")
+                    (list (+ #x90 (modrm.r/m arg1))))
+                   ((equal code-string "b0+r")
+                    (list (+ #xb0 (modrm.r/m arg1))))
+                   ((equal code-string "b8+r")
+                    (list (+ #xb8 (modrm.r/m arg1))))
+                   ((equal code-string "c0+r")
+                    (list (+ #xc0 (modrm.r/m arg1))))
+                   ((equal code-string "c8+r")
+                    (list (+ #xc8 (modrm.r/m arg1))))
+                   ((equal code-string "d0+r")
+                    (list (+ #xd0 (modrm.r/m arg1))))
+                   ((equal code-string "d8+r")
+                    (list (+ #xd8 (modrm.r/m arg1))))
+                   ((equal code-string "e0+r")
+                    (list (+ #xe0 (modrm.r/m arg1))))
+                   ((equal code-string "e8+r")
+                    (list (+ #xe8 (modrm.r/m arg1))))
+                   ((equal code-string "f0+r")
+                    (list (+ #xf0 (modrm.r/m arg1))))
+                   ((equal code-string "f8+r")
+                    (list (+ #xf8 (modrm.r/m arg1))))
                    ((equal code-string "o16")
                     (list #x66))
                    ((equal code-string "o32")
@@ -117,10 +157,17 @@
        ;; the rest elements (hexadecimal numbers) to numbers in a list.
        (handle-nasm-code-format (rest code-format)))
       ((equal (first code-format) "[m:")
-       ;; This variant has one 'memory' operand.
+       ;; This variant has one 'memory' (can be register too) operand.
        ;; The operand is encoded in the r/m field.
        ;; An extension of the opcode is in the reg field.
        (unless (eql (length my-list) 1)
-         (error "[m encoding requires exactly 1 argument."))
+         (error "[m: encoding requires exactly 1 argument."))
+       (handle-nasm-code-format (rest code-format) my-list))
+      ((equal (first code-format) "[r:")
+       ;; This variant has one register operand.
+       ;; The operand is encoded in the r/m field.
+       ;; An extension of the opcode is in the reg field.
+       (unless (eql (length my-list) 1)
+         (error "[r: encoding requires exactly 1 argument."))
        (handle-nasm-code-format (rest code-format) my-list))
       (t (error "encoding not yet implemented")))))
