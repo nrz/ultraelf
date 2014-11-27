@@ -561,30 +561,6 @@
 (defun rcr-cl-x64 (arg1 &optional arg2 &rest args)
   (one-operand-x64 #xd2 #xd8 arg1 arg2))
 
-(defun rep-repz-x32-x64 (&optional arg1 &rest args)
-  (cond
-    ((null arg1)
-     (list #xf3))
-    ((is-string-instruction arg1)
-     (rep arg1))
-    ;; arg1 is unknown.
-    (t (cons #xf3 (emit-binary-code-for-one-instruction
-                    (loop for arg in (cons arg1 args)
-                          collect (my-string arg))
-                    *emit-function-hash-table-x64*)))))
-
-(defun repnz-x32-x64 (&optional arg1 &rest args)
-  (cond
-    ((null arg1)
-     (list #xf2))
-    ((is-string-instruction arg1)
-     (repnz arg1))
-    ;; arg1 is unknown.
-    (t (cons #xf2 (emit-binary-code-for-one-instruction
-                    (loop for arg in (cons arg1 args)
-                          collect (my-string arg))
-                    *emit-function-hash-table-x64*)))))
-
 (defun ret-x86 (&rest args)
   (list #xc3))
 
