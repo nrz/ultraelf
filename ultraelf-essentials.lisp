@@ -7,48 +7,48 @@
 
 (defpackage :essentials
   (:import-from :cl
-                :t
-                :nil
-                :if
-                :cond
-                :unless
-                :defun
-                :defclass
-                :defpackage
-                :defparameter
-                :defmethod
-                :equalp
-                :format
-                :gethash
+                ;; t, nil
+                :t :nil
+                ;; conditionals.
+                :cond :loop
+                ;; define instructions.
+                :defun :defclass :defpackage :defparameter :defmethod
+                ;; equality functions.
+                :eq :eql :equal :equalp
+                ;; error handling.
+                :error
+                ;; printing.
+                :format :princ :print
+                ;; hash tables.
+                :gethash :make-hash-table
+                ;; package handling.
                 :in-package
-                :list
-                :make-hash-table
-                :make-instance
-                :nth
-                :princ
-                :print
-                :push
+                ;; variables.
                 :setf
-                :slot-value)
-  (:export :t
-           :nil
-           :if
-           :cond
-           :unless
-           :defun
-           :defclass
-           :defpackage
-           :defparameter
-           :equalp
-           :format
-           :gethash
-           :in-package
-           :list
-           :make-hash-table
-           :make-instance
-           :nth
-           :princ
-           :print
-           :push
-           :setf
-           :slot-value))
+                ;; lists and other sequences.
+                :append :concatenate :list :nth :push :pushnew
+                ;; CLOS.
+                :make-instance :slot-value)
+  (:export
+    ;; t, nil
+    :t :nil
+    ;; conditionals.
+    :cond :loop
+    ;; define instructions.
+    :defun :defclass :defpackage :defparameter :defmethod
+    ;; equality functions.
+    :eq :eql :equal :equalp
+    ;; error handling.
+    :error
+    ;; printing.
+    :format :princ :print
+    ;; hash tables.
+    :gethash :make-hash-table
+    ;; package handling.
+    :in-package
+    ;; variables.
+    :setf
+    ;; lists and other sequences.
+    :append :concatenate :list :nth :push :pushnew
+    ;; CLOS.
+    :make-instance :slot-value))
