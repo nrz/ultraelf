@@ -209,14 +209,30 @@
                                      (list (+ #xf8 (modrm.r/m arg1))))
                                     (t (list (parse-integer code-string :radix 16))))))))))
 
+(defun check-args (operands args)
+  "This functions checks that input args match required operands."
+  (cond
+    ((and
+       (eql (length operands) 1)
+       (equal (first operands) "void"))
+     (unless (null args)
+       (error "void operand type requires exactly 0 input arguments.")))
+    ((eql (length operands) (length args))
+     (loop for i below (length operands)
+           if (notany #'(lambda (x)
+                          (equal x (nth i operands)))
+                      (allowed-targets (nth i args)))
+           do (error "instruction's and operand's allowed targets do not match.")))
+    (t (error "number of required operands and number of given arguments do not match."))))
+
 (defun emit-with-format-and-operands-x64 (code-format operands &rest args)
   "This function emits code (list of binary code bytes) for one x64 instruction variant."
-  (let
-    ((my-list (get-list args)))
+  (let*
+    ((my-args (get-list args))
+     (n-args (length my-args)))
+    (check-args operands my-args)
     (cond
       ((equal (first code-format) "[")
-       (unless (null my-list)
-         (error "[ encoding requires exactly 0 arguments."))
        ;; The encoding of this variant is constant, so just convert
        ;; the rest elements (hexadecimal numbers) to numbers in a list.
        (handle-nasm-code-format code-format operands))
@@ -224,18 +240,18 @@
        ;; This variant has one 'memory' (can be register too) operand.
        ;; The operand is encoded in the r/m field.
        ;; An extension of the opcode is in the reg field.
-       (unless (eql (length my-list) 1)
-         (error "[m: encoding requires exactly 1 argument."))
-       (when (notany #'(lambda (x) (equal x (first operands))) (allowed-targets (first my-list)))
-         (error "instruction's and operand's allowed targets do not match."))
-       (handle-nasm-code-format code-format operands :args my-list))
+       (handle-nasm-code-format code-format operands :args my-args))
       ((equal (first code-format) "[r:")
        ;; This variant has one register operand.
        ;; The operand is encoded in the r/m field.
        ;; An extension of the opcode is in the reg field.
-       (unless (eql (length my-list) 1)
-         (error "[r: encoding requires exactly 1 argument."))
-       (when (notany #'(lambda (x) (equal x (first operands))) (allowed-targets (first my-list)))
-         (error "instruction's and operand's allowed targets do not match."))
-       (handle-nasm-code-format code-format operands :args my-list))
+       (handle-nasm-code-format code-format operands :args my-args))
+      ((equal (first code-format) "[mr:")
+       ;; This variant has one memory operand and one register operand.
+       ;; The operands are encoded in corresponding ModRM fields.
+       (error "[mr: encoding not yet implemented"))
+      ((equal (first code-format) "[rm:")
+       ;; This variant has one register operand and one memory operand.
+       ;; The operands are encoded in corresponding ModRM fields.
+       (error "[rm: encoding not yet implemented"))
       (t (error "encoding not yet implemented")))))

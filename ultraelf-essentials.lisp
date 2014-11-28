@@ -9,12 +9,14 @@
   (:import-from :cl
                 ;; t, nil
                 :t :nil
-                ;; conditionals.
-                :cond :loop
+                ;; code flow macros.
+                :cond :loop :when :unless
+                ;; lambda.
+                :lambda
                 ;; define instructions.
                 :defun :defclass :defpackage :defparameter :defmethod
-                ;; comparison functions.
-                :eq :eql :equal :equalp :null :listp
+                ;; comparison functions and related stuff.
+                :eq :eql :equal :equalp :null :listp :not
                 ;; error handling.
                 :error
                 ;; printing.
@@ -23,6 +25,8 @@
                 :gethash :make-hash-table
                 ;; package handling.
                 :in-package
+                ;; symbols.
+                :intern
                 ;; variables.
                 :setf
                 ;; lists and other sequences.
@@ -38,12 +42,14 @@
   (:export
     ;; t, nil
     :t :nil
-    ;; conditionals.
-    :cond :loop
+    ;; code flow macros.
+    :cond :loop :when :unless
+    ;; lambda.
+    :lambda
     ;; define instructions.
     :defun :defclass :defpackage :defparameter :defmethod
-    ;; comparison functions.
-    :eq :eql :equal :equalp :null :listp
+    ;; comparison functions and related stuff.
+    :eq :eql :equal :equalp :null :listp :not
     ;; error handling.
     :error
     ;; printing.
@@ -52,6 +58,8 @@
     :gethash :make-hash-table
     ;; package handling.
     :in-package
+    ;; symbols.
+    :intern
     ;; variables.
     :setf
     ;; lists and other sequences.

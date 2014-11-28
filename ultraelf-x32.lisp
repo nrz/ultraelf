@@ -20,6 +20,7 @@
     :emit-modrm-byte
     :assemble
     :assemble-alternatives
+    :check-args
     :get-all-encodings-for-syntax-tree
     ;; instruction class names.
     :x32-asm-instruction
@@ -35,6 +36,7 @@
     :is-zmm-reg
     :is-memory-addressing
     :is-register-indirect
+    :allowed-targets
     :code-format
     :operands
     :displacement-size
