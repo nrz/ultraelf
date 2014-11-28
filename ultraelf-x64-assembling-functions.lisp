@@ -31,16 +31,62 @@
   "This function assembles x86-64 (x64) code, all alternatives, and prints in a hexadecimal string."
   (print-hex (assemble-alternatives code *emit-function-hash-table-x64*)))
 
+(defun emit-rex (encoding-type n-operands &key args (rex.w-value 0) (rex.r-value 0))
+  "This function emits REX according to encoding type and the operands.
+   rex.w-value : 0 for default operand size, 1 for 64-bit operand size."
+  (let*
+    ((my-args (get-list args))
+     (arg1 (first my-args))
+     (arg2 (second my-args)))
+    (cond
+      ((eql n-operands 1)
+       (emit-rex-byte rex.w-value    ; operand size.
+                      rex.r-value    ; number of arguments should be checked already.
+                      0              ; extension of the SIB index field, this should be
+                      (rex.b arg1))) ; checked when implementing SIB!
+      ((eql n-operands 2)
+       (cond
+         ((equal encoding-type "[mr:")
+          (emit-rex-byte rex.w-value    ; operand size.
+                         (rex.r arg2)   ; rex.r augments reg field, so it's from arg2 in `[mr:`.
+                         0              ; extension of the SIB index field, this should be
+                         (rex.b arg1))) ; rex.b augments r/m field, so it's from arg1 in `[mr:`.
+         ((equal encoding-type "[rm:")
+          (emit-rex-byte rex.w-value      ; operand size.
+                         (rex.r arg1)     ; rex.r augments reg field, so it's from arg1 in `[rm:`.
+                         0                ; extension of the SIB index field, this should be
+                         (rex.b arg2))))) ; rex.b augments r/m field, so it's from arg2 in `[mr:`.
+      (t (error "encoding not yet implemented")))))
+
 (defun handle-nasm-code-format (code-format operands &key args (rex.w-value 0) (rex.r-value 0) (rex.b-value 0))
   "This function handler one code-string (from NASM's `insns.dat`) and returns a list."
   (let*
-    ((arg1 (first (get-list args)))
+    ((encoding-type (first code-format))
+     (my-args (get-list args))
+     (arg1 (first my-args))  ; nil if list is too short.
+     (arg2 (second my-args)) ; nil if list is too short.
      (n-operands (length operands))
-     (do-args-require-rex (some #'needs-rex args))
+     (do-args-require-rex (some #'needs-rex my-args))
+     (do-args-work-with-rex (every #'works-with-rex my-args))
      (is-rex-already-encoded nil))
+    (when
+      (and do-args-require-rex (not do-args-work-with-rex))
+      (error "impossible combination of given arguments: some need REX and some don't work with REX"))
     (loop for code-string in (rest code-format)
           ;; before `"o32"`, `"o64"` or `"o64nw"` there can be `"hle"`.
           append (cond
+                   ((equal code-string "66")
+                    ;; in SIMD instructions used as a an instruction modifier,
+                    ;; encoded before possible REX.
+                    (list #x66))
+                   ((equal code-string "f2")
+                    ;; in SIMD instructions used as a an instruction modifier,
+                    ;; encoded before possible REX.
+                    (list #xf2))
+                   ((equal code-string "f3")
+                    ;; in SIMD instructions used as a an instruction modifier,
+                    ;; encoded before possible REX.
+                    (list #xf3))
                    ((equal code-string "hle")
                     ;; instruction takes XRELEASE with or without lock.
                     nil)
@@ -79,10 +125,7 @@
                        (cond
                          (do-args-require-rex
                            (setf is-rex-already-encoded t)
-                           (emit-rex 0                 ; default operand size.
-                                     rex.r-value       ; number of arguments should be checked already.
-                                     0                 ; extension of the SIB index field, this should be checked when implementing SIB!
-                                     (rex.b arg1)))
+                           (emit-rex encoding-type n-operands :args my-args :rex.r-value rex.r-value))
                          (t nil)))
                       ((eql n-operands 2)
                        (error "o32 encoding of 2 operands in not yet implemented"))
@@ -95,10 +138,7 @@
                        (error "o64 with n-operands 0 is an error"))
                       ((eql n-operands 1)
                        (setf is-rex-already-encoded t)
-                       (emit-rex 1                 ; 64-bit operand size.
-                                 rex.r-value       ; number of arguments should be checked already.
-                                 0                 ; extension of the SIB index field, this should be checked when implementing SIB!
-                                 (rex.b arg1)))
+                       (emit-rex encoding-type n-operands :args my-args :rex.w-value 1 :rex.r-value rex.r-value)) ; 64-bit operand size!
                       ((eql n-operands 2)
                        (error "o64 encoding of 2 operands in not yet implemented"))
                       ((eql n-operands 3)
@@ -112,12 +152,11 @@
                        (cond
                          (do-args-require-rex
                            (setf is-rex-already-encoded t)
+                           ;; here in REX.W it's possible to encode 1 bit of data because default operand size in `o64nw` is 64 bits,
+                           ;; and REX.W is encoded this way:
                            ;; 0 (default operand size) or 1 (64-bit operand size).
                            ;; 64-bit operand size is the default, so it's possible to encode 1 bit of information!!!
-                           (emit-rex rex.w-value     ; encode here 1 bit of information!
-                                     rex.r-value     ; number of arguments should be checked already.
-                                     0               ; extension of the SIB index field, this should be checked when implementing SIB!
-                                     (rex.b arg1)))
+                           (emit-rex encoding-type n-operands :args my-args :rex.w-value rex.w-value :rex.r-value rex.r-value))
                          (t nil)))
                       ((eql n-operands 2)
                        (error "o64nw encoding of 2 operands in not yet implemented"))
@@ -131,11 +170,26 @@
                                   (not is-rex-already-encoded))
                                 (progn
                                   (setf is-rex-already-encoded t)
-                                  (emit-rex 0                 ; default operand size.
-                                            rex.r-value      ; number of arguments should be checked already.
-                                            0                ; extension of the SIB index field, this should be
-                                            (rex.b arg1))))  ; checked when implementing SIB!
-                              (cond ((equal code-string "/0")
+                                  (cond
+                                    ((eql n-operands 1)
+                                     (emit-rex encoding-type n-operands :args my-args :rex.r-value rex.r-value))
+                                    ((eql n-operands 2)
+                                     (emit-rex encoding-type n-operands :args my-args :rex.r-value rex.r-value)) ; TODO: check if REX.W be used to encode data here!
+                                    (t (error "encoding not yet implemented")))))
+                              (cond ((equal code-string "/r")
+                                     (cond
+                                       ((equal encoding-type "[mr:")
+                                        ;; ok, arg1 goes to r/m field and arg2 goes to reg field.
+                                        (emit-modrm (modrm.mod arg1)
+                                                    (modrm.reg arg2)
+                                                    (modrm.r/m arg1)))
+                                       ((equal encoding-type "[rm:")
+                                        ;; ok, arg1 goes to reg field and arg2 goes to r/m field.
+                                        (emit-modrm (modrm.mod arg2)
+                                                    (modrm.reg arg1)
+                                                    (modrm.r/m arg2)))
+                                       (t (error "encoding not yet implemented"))))
+                                    ((equal code-string "/0")
                                      (emit-modrm (modrm.mod arg1)
                                                  0 ; extension encoded in reg field.
                                                  (modrm.r/m arg1)))
@@ -228,8 +282,7 @@
 (defun emit-with-format-and-operands-x64 (code-format operands &rest args)
   "This function emits code (list of binary code bytes) for one x64 instruction variant."
   (let*
-    ((my-args (get-list args))
-     (n-args (length my-args)))
+    ((my-args (get-list args)))
     (check-args operands my-args)
     (cond
       ((equal (first code-format) "[")
@@ -249,9 +302,9 @@
       ((equal (first code-format) "[mr:")
        ;; This variant has one memory operand and one register operand.
        ;; The operands are encoded in corresponding ModRM fields.
-       (error "[mr: encoding not yet implemented"))
+       (handle-nasm-code-format code-format operands :args my-args))
       ((equal (first code-format) "[rm:")
        ;; This variant has one register operand and one memory operand.
        ;; The operands are encoded in corresponding ModRM fields.
-       (error "[rm: encoding not yet implemented"))
+       (handle-nasm-code-format code-format operands :args my-args))
       (t (error "encoding not yet implemented")))))

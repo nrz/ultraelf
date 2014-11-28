@@ -12,6 +12,7 @@ my $mnemonic;
 my $operands;
 my $code_format;
 my $flags;
+my $encoding_type;
 
 my $object_name;
 my $arch_flags;
@@ -89,6 +90,15 @@ while (<FILE>)
             $object_name =~ s/\|/-/g;
             $object_name =~ s/,/./g;
             $object_name =~ s/:/./g;
+
+            # if variants `reg8,reg8`, `reg16,reg16`, `reg32,reg32`, `reg64,reg64`
+            # have always 2 different possible encodings: `mr` & `rm`.
+            # so we add a suffix `-mr` or `-rm` to the object in those cases.
+            if ($operands =~ /\breg(8|16|32|64),reg(8|16|32|64)\b/)
+            {
+                $encoding_type = substr($code_format, 0, 2);
+                $object_name = $object_name . "-" . $encoding_type;
+            }
 
             # add a square bracket in the beginning.
             # if first element in `:code-format` is `"["`, then the encoding is constant.

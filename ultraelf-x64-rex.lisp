@@ -58,7 +58,7 @@
    Can be chosen randomly or at will."
   (list #x48))
 
-(defun emit-rex (rex.w rex.r rex.x rex.b)
+(defun emit-rex-byte (rex.w rex.r rex.x rex.b)
   "This function emits a REX prefix as requested."
   (list (logior #x40
                 rex.b

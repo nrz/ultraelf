@@ -37,10 +37,10 @@
     :is-zmm-reg
     :is-memory-addressing
     :is-register-indirect
+    :displacement-size
     :allowed-targets
     :code-format
     :operands
-    :displacement-size
     :needs-sib
     :r/m
     :works-with-rex

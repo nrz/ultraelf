@@ -32,10 +32,10 @@
     :is-old-reg
     :is-memory-addressing
     :is-register-indirect
+    :displacement-size
     :allowed-targets
     :code-format
     :operands
-    :displacement-size
     :needs-sib
     :r/m
     ;; instruction classes' methods.

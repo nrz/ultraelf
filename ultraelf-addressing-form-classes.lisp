@@ -180,6 +180,10 @@
      :reader is-reg
      :allocation :class
      :initform nil)
+   (is-memory-addressing
+     :reader is-memory-addressing
+     :allocation :class
+     :initform t)
    (is-register-indirect
      :reader is-register-indirect
      :allocation :class
@@ -189,10 +193,11 @@
      :initarg :displacement-size
      :initform 0
      :documentation "Displacement size can be 0, 8 or 32 (bits). 0 is the default.")
-   (is-memory-addressing
-     :reader is-memory-addressing
+   (works-with-rex
+     :reader works-with-rex
      :allocation :class
-     :initform t)))
+     :initform t
+     :documentation "register indirects can always be used with REX")))
 
 (defclass x86-needs-sib (x86-register-indirect)
   ((needs-sib
@@ -484,34 +489,71 @@
      :documentation "REX is needed")))
 
 (defclass x86-mmx-register (x86-register)
-  ((is-mmx-reg
-     :reader is-mmx-reg
-     :allocation :class
-     :initform t)
-   (reg-size
+  ((reg-size
      :reader reg-size
      :allocation :class
      :initform 64
      :documentation "register size in bits")
+   (is-mmx-reg
+     :reader is-mmx-reg
+     :allocation :class
+     :initform t)
+   (allowed-targets
+     :reader allowed-targets
+     :allocation :class
+     :initform (list "mmxreg" "mmxrm" "mmxrm64")
+     :documentation "allowed encodings in NASM's `insns.dat` syntax")
+   (works-with-rex
+     :reader works-with-rex
+     :allocation :class
+     :initform t
+     :documentation "MMX registers can always be used with REX")
+   (needs-rex
+     :reader needs-rex
+     :allocation :class
+     :initform nil
+     :documentation "MMX registers never need REX")
+   (is-any-rex.r-ok
+     :reader is-any-rex.r-ok
+     :allocation :class
+     :initform t
+     :documentation "REX.R can be 0 or 1, no difference")
+   (is-any-rex.b-ok
+     :reader is-any-rex.b-ok
+     :allocation :class
+     :initform t
+     :documentation "REX.B can be 0 or 1, no difference")
    (rex.r
      :reader rex.r
-     :initform (list 0 1)
+     :allocation :class
+     :initform 0 ; TODO: encode here 1 bit of data (0/1)!
      :documentation "REX.R can be 0 or 1, no difference.")
    (rex.b
      :reader rex.b
-     :initform (list 0 1)
+     :allocation :class
+     :initform 0 ; TODO: encode here 1 bit of data (0/1)!
      :documentation "REX.B can be 0 or 1???")))
 
 (defclass x86-xmm-register (x86-register)
-  ((is-xmm-reg
-     :reader is-xmm-reg
-     :allocation :class
-     :initform t)
-   (reg-size
+  ((reg-size
      :reader reg-size
      :allocation :class
      :initform 128
-     :documentation "register size in bits")))
+     :documentation "register size in bits")
+   (is-xmm-reg
+     :reader is-xmm-reg
+     :allocation :class
+     :initform t)
+   (allowed-targets
+     :reader allowed-targets
+     :allocation :class
+     :initform (list "xmmreg" "xmmrm" "xmmrm32" "xmmrm64" "xmmrm128")
+     :documentation "allowed encodings in NASM's `insns.dat` syntax")
+   (works-with-rex
+     :reader works-with-rex
+     :allocation :class
+     :initform t
+     :documentation "XMM registers can always be used with REX")))
 
 (defclass x86-old-xmm-register (x86-rex.r-0 x86-rex.b-0 x86-xmm-register)
   ((needs-rex
@@ -528,15 +570,25 @@
      :documentation "xmm8, xmm9, xmm10, xmm11, xmm12, xmm13, xmm14 & xmm15 _do_ need REX.")))
 
 (defclass x86-ymm-register (x86-register)
-  ((is-ymm-reg
-     :reader is-ymm-reg
-     :allocation :class
-     :initform t)
-   (reg-size
+  ((reg-size
      :reader reg-size
      :allocation :class
      :initform 256
-     :documentation "register size in bits")))
+     :documentation "register size in bits")
+   (is-ymm-reg
+     :reader is-ymm-reg
+     :allocation :class
+     :initform t)
+   (allowed-targets
+     :reader allowed-targets
+     :allocation :class
+     :initform (list "ymmreg" "ymmrm256")
+     :documentation "allowed encodings in NASM's `insns.dat` syntax")
+   (works-with-rex
+     :reader works-with-rex
+     :allocation :class
+     :initform t
+     :documentation "YMM registers can always be used with REX")))
 
 (defclass x86-old-ymm-register (x86-rex.r-0 x86-rex.b-0 x86-ymm-register)
   ((needs-rex
@@ -553,15 +605,25 @@
      :documentation "ymm8, ymm9, ymm10, ymm11, ymm12, ymm13, ymm14 & ymm15 _do_ need REX.")))
 
 (defclass x86-zmm-register (x86-register)
-  ((is-zmm-reg
-     :reader is-ymm-reg
-     :allocation :class
-     :initform t)
-   (reg-size
+  ((reg-size
      :reader reg-size
      :allocation :class
      :initform 512
-     :documentation "register size in bits")))
+     :documentation "register size in bits")
+   (is-zmm-reg
+     :reader is-ymm-reg
+     :allocation :class
+     :initform t)
+   (allowed-targets
+     :reader allowed-targets
+     :allocation :class
+     :initform (list "zmmreg")
+     :documentation "allowed encodings in NASM's `insns.dat` syntax")
+   (works-with-rex
+     :reader works-with-rex
+     :allocation :class
+     :initform t
+     :documentation "ZMM registers can always be used with REX")))
 
 (defclass x86-old-zmm-register (x86-rex.b-0 x86-rex.r-0 x86-zmm-register)
   ())
@@ -617,7 +679,7 @@
   ((allowed-targets
      :reader allowed-targets
      :allocation :class
-     :initform (list "rm8" "rm16")
+     :initform (list "mem" "rm8" "rm16")
      :documentation "allowed encodings in NASM's `insns.dat` syntax")))
 
 (defclass x16-register-indirect-needs-sib (x16-register-indirect x86-register-indirect-needs-sib)
@@ -630,7 +692,7 @@
   ((allowed-targets
      :reader allowed-targets
      :allocation :class
-     :initform (list "rm8" "rm16" "rm32")
+     :initform (list "mem" "rm8" "rm16" "rm32")
      :documentation "allowed encodings in NASM's `insns.dat` syntax")))
 
 (defclass x32-register-indirect-needs-sib (x32-register-indirect x86-register-indirect-needs-sib)
@@ -643,7 +705,7 @@
   ((allowed-targets
      :reader allowed-targets
      :allocation :class
-     :initform (list "rm8" "rm16" "rm32" "rm64")
+     :initform (list "mem" "mem64" "mem128" "mem256" "mem512" "rm8" "rm16" "rm32" "rm64" "mmxrm" "mmxrm64" "xmmrm" "xmmrm32" "xmmrm64" "xmmrm128" "ymmrm256")
      :documentation "allowed encodings in NASM's `insns.dat` syntax")))
 
 (defclass x64-register-indirect-needs-sib (x64-register-indirect x86-register-indirect-needs-sib)
@@ -674,6 +736,9 @@
 (defgeneric modrm.r/m (x86-addressing-form)
   (:documentation "r/m bits (bits 0 .. 2) of ModRM byte."))
 
+(defgeneric modrm.reg (x86-register)
+  (:documentation "reg bits (bits 3 .. 5) of ModRM byte."))
+
 (defmethod modrm.mod ((x86-addressing-form x86-addressing-form))
   (cond
     ((slot-value x86-addressing-form 'is-reg)
@@ -701,3 +766,6 @@
 
 (defmethod modrm.r/m ((x86-addressing-form x86-addressing-form))
   (slot-value x86-addressing-form 'r/m))
+
+(defmethod modrm.reg ((x86-register x86-register))
+  (slot-value x86-register 'r/m))

@@ -125,12 +125,12 @@
 :arch-flags (list "8086" "SM" "LOCK")))
 (push ADC-mem.reg8 (gethash "ADC" *x64-instruction-variants-hash-table*))
 
-(defparameter ADC-reg8.reg8 (make-instance 'x64-asm-instruction
+(defparameter ADC-reg8.reg8-mr (make-instance 'x64-asm-instruction
 :name "ADC"
 :operands (list "reg8" "reg8")
 :code-format (list "[mr:" "10" "/r")
 :arch-flags (list "8086")))
-(push ADC-reg8.reg8 (gethash "ADC" *x64-instruction-variants-hash-table*))
+(push ADC-reg8.reg8-mr (gethash "ADC" *x64-instruction-variants-hash-table*))
 
 (defparameter ADC-mem.reg16 (make-instance 'x64-asm-instruction
 :name "ADC"
@@ -139,12 +139,12 @@
 :arch-flags (list "8086" "SM" "LOCK")))
 (push ADC-mem.reg16 (gethash "ADC" *x64-instruction-variants-hash-table*))
 
-(defparameter ADC-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter ADC-reg16.reg16-mr (make-instance 'x64-asm-instruction
 :name "ADC"
 :operands (list "reg16" "reg16")
 :code-format (list "[mr:" "o16" "11" "/r")
 :arch-flags (list "8086")))
-(push ADC-reg16.reg16 (gethash "ADC" *x64-instruction-variants-hash-table*))
+(push ADC-reg16.reg16-mr (gethash "ADC" *x64-instruction-variants-hash-table*))
 
 (defparameter ADC-mem.reg32 (make-instance 'x64-asm-instruction
 :name "ADC"
@@ -153,12 +153,12 @@
 :arch-flags (list "386" "SM" "LOCK")))
 (push ADC-mem.reg32 (gethash "ADC" *x64-instruction-variants-hash-table*))
 
-(defparameter ADC-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter ADC-reg32.reg32-mr (make-instance 'x64-asm-instruction
 :name "ADC"
 :operands (list "reg32" "reg32")
 :code-format (list "[mr:" "o32" "11" "/r")
 :arch-flags (list "386")))
-(push ADC-reg32.reg32 (gethash "ADC" *x64-instruction-variants-hash-table*))
+(push ADC-reg32.reg32-mr (gethash "ADC" *x64-instruction-variants-hash-table*))
 
 (defparameter ADC-mem.reg64 (make-instance 'x64-asm-instruction
 :name "ADC"
@@ -167,12 +167,12 @@
 :arch-flags (list "X64" "SM" "LOCK")))
 (push ADC-mem.reg64 (gethash "ADC" *x64-instruction-variants-hash-table*))
 
-(defparameter ADC-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter ADC-reg64.reg64-mr (make-instance 'x64-asm-instruction
 :name "ADC"
 :operands (list "reg64" "reg64")
 :code-format (list "[mr:" "o64" "11" "/r")
 :arch-flags (list "X64")))
-(push ADC-reg64.reg64 (gethash "ADC" *x64-instruction-variants-hash-table*))
+(push ADC-reg64.reg64-mr (gethash "ADC" *x64-instruction-variants-hash-table*))
 
 (defparameter ADC-reg8.mem (make-instance 'x64-asm-instruction
 :name "ADC"
@@ -181,12 +181,12 @@
 :arch-flags (list "8086" "SM")))
 (push ADC-reg8.mem (gethash "ADC" *x64-instruction-variants-hash-table*))
 
-(defparameter ADC-reg8.reg8 (make-instance 'x64-asm-instruction
+(defparameter ADC-reg8.reg8-rm (make-instance 'x64-asm-instruction
 :name "ADC"
 :operands (list "reg8" "reg8")
 :code-format (list "[rm:" "12" "/r")
 :arch-flags (list "8086")))
-(push ADC-reg8.reg8 (gethash "ADC" *x64-instruction-variants-hash-table*))
+(push ADC-reg8.reg8-rm (gethash "ADC" *x64-instruction-variants-hash-table*))
 
 (defparameter ADC-reg16.mem (make-instance 'x64-asm-instruction
 :name "ADC"
@@ -195,12 +195,12 @@
 :arch-flags (list "8086" "SM")))
 (push ADC-reg16.mem (gethash "ADC" *x64-instruction-variants-hash-table*))
 
-(defparameter ADC-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter ADC-reg16.reg16-rm (make-instance 'x64-asm-instruction
 :name "ADC"
 :operands (list "reg16" "reg16")
 :code-format (list "[rm:" "o16" "13" "/r")
 :arch-flags (list "8086")))
-(push ADC-reg16.reg16 (gethash "ADC" *x64-instruction-variants-hash-table*))
+(push ADC-reg16.reg16-rm (gethash "ADC" *x64-instruction-variants-hash-table*))
 
 (defparameter ADC-reg32.mem (make-instance 'x64-asm-instruction
 :name "ADC"
@@ -209,12 +209,12 @@
 :arch-flags (list "386" "SM")))
 (push ADC-reg32.mem (gethash "ADC" *x64-instruction-variants-hash-table*))
 
-(defparameter ADC-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter ADC-reg32.reg32-rm (make-instance 'x64-asm-instruction
 :name "ADC"
 :operands (list "reg32" "reg32")
 :code-format (list "[rm:" "o32" "13" "/r")
 :arch-flags (list "386")))
-(push ADC-reg32.reg32 (gethash "ADC" *x64-instruction-variants-hash-table*))
+(push ADC-reg32.reg32-rm (gethash "ADC" *x64-instruction-variants-hash-table*))
 
 (defparameter ADC-reg64.mem (make-instance 'x64-asm-instruction
 :name "ADC"
@@ -223,12 +223,12 @@
 :arch-flags (list "X64" "SM")))
 (push ADC-reg64.mem (gethash "ADC" *x64-instruction-variants-hash-table*))
 
-(defparameter ADC-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter ADC-reg64.reg64-rm (make-instance 'x64-asm-instruction
 :name "ADC"
 :operands (list "reg64" "reg64")
 :code-format (list "[rm:" "o64" "13" "/r")
 :arch-flags (list "X64")))
-(push ADC-reg64.reg64 (gethash "ADC" *x64-instruction-variants-hash-table*))
+(push ADC-reg64.reg64-rm (gethash "ADC" *x64-instruction-variants-hash-table*))
 
 (defparameter ADC-rm16.imm8 (make-instance 'x64-asm-instruction
 :name "ADC"
@@ -391,12 +391,12 @@
 :arch-flags (list "8086" "SM" "LOCK")))
 (push ADD-mem.reg8 (gethash "ADD" *x64-instruction-variants-hash-table*))
 
-(defparameter ADD-reg8.reg8 (make-instance 'x64-asm-instruction
+(defparameter ADD-reg8.reg8-mr (make-instance 'x64-asm-instruction
 :name "ADD"
 :operands (list "reg8" "reg8")
 :code-format (list "[mr:" "00" "/r")
 :arch-flags (list "8086")))
-(push ADD-reg8.reg8 (gethash "ADD" *x64-instruction-variants-hash-table*))
+(push ADD-reg8.reg8-mr (gethash "ADD" *x64-instruction-variants-hash-table*))
 
 (defparameter ADD-mem.reg16 (make-instance 'x64-asm-instruction
 :name "ADD"
@@ -405,12 +405,12 @@
 :arch-flags (list "8086" "SM" "LOCK")))
 (push ADD-mem.reg16 (gethash "ADD" *x64-instruction-variants-hash-table*))
 
-(defparameter ADD-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter ADD-reg16.reg16-mr (make-instance 'x64-asm-instruction
 :name "ADD"
 :operands (list "reg16" "reg16")
 :code-format (list "[mr:" "o16" "01" "/r")
 :arch-flags (list "8086")))
-(push ADD-reg16.reg16 (gethash "ADD" *x64-instruction-variants-hash-table*))
+(push ADD-reg16.reg16-mr (gethash "ADD" *x64-instruction-variants-hash-table*))
 
 (defparameter ADD-mem.reg32 (make-instance 'x64-asm-instruction
 :name "ADD"
@@ -419,12 +419,12 @@
 :arch-flags (list "386" "SM" "LOCK")))
 (push ADD-mem.reg32 (gethash "ADD" *x64-instruction-variants-hash-table*))
 
-(defparameter ADD-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter ADD-reg32.reg32-mr (make-instance 'x64-asm-instruction
 :name "ADD"
 :operands (list "reg32" "reg32")
 :code-format (list "[mr:" "o32" "01" "/r")
 :arch-flags (list "386")))
-(push ADD-reg32.reg32 (gethash "ADD" *x64-instruction-variants-hash-table*))
+(push ADD-reg32.reg32-mr (gethash "ADD" *x64-instruction-variants-hash-table*))
 
 (defparameter ADD-mem.reg64 (make-instance 'x64-asm-instruction
 :name "ADD"
@@ -433,12 +433,12 @@
 :arch-flags (list "X64" "SM" "LOCK")))
 (push ADD-mem.reg64 (gethash "ADD" *x64-instruction-variants-hash-table*))
 
-(defparameter ADD-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter ADD-reg64.reg64-mr (make-instance 'x64-asm-instruction
 :name "ADD"
 :operands (list "reg64" "reg64")
 :code-format (list "[mr:" "o64" "01" "/r")
 :arch-flags (list "X64")))
-(push ADD-reg64.reg64 (gethash "ADD" *x64-instruction-variants-hash-table*))
+(push ADD-reg64.reg64-mr (gethash "ADD" *x64-instruction-variants-hash-table*))
 
 (defparameter ADD-reg8.mem (make-instance 'x64-asm-instruction
 :name "ADD"
@@ -447,12 +447,12 @@
 :arch-flags (list "8086" "SM")))
 (push ADD-reg8.mem (gethash "ADD" *x64-instruction-variants-hash-table*))
 
-(defparameter ADD-reg8.reg8 (make-instance 'x64-asm-instruction
+(defparameter ADD-reg8.reg8-rm (make-instance 'x64-asm-instruction
 :name "ADD"
 :operands (list "reg8" "reg8")
 :code-format (list "[rm:" "02" "/r")
 :arch-flags (list "8086")))
-(push ADD-reg8.reg8 (gethash "ADD" *x64-instruction-variants-hash-table*))
+(push ADD-reg8.reg8-rm (gethash "ADD" *x64-instruction-variants-hash-table*))
 
 (defparameter ADD-reg16.mem (make-instance 'x64-asm-instruction
 :name "ADD"
@@ -461,12 +461,12 @@
 :arch-flags (list "8086" "SM")))
 (push ADD-reg16.mem (gethash "ADD" *x64-instruction-variants-hash-table*))
 
-(defparameter ADD-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter ADD-reg16.reg16-rm (make-instance 'x64-asm-instruction
 :name "ADD"
 :operands (list "reg16" "reg16")
 :code-format (list "[rm:" "o16" "03" "/r")
 :arch-flags (list "8086")))
-(push ADD-reg16.reg16 (gethash "ADD" *x64-instruction-variants-hash-table*))
+(push ADD-reg16.reg16-rm (gethash "ADD" *x64-instruction-variants-hash-table*))
 
 (defparameter ADD-reg32.mem (make-instance 'x64-asm-instruction
 :name "ADD"
@@ -475,12 +475,12 @@
 :arch-flags (list "386" "SM")))
 (push ADD-reg32.mem (gethash "ADD" *x64-instruction-variants-hash-table*))
 
-(defparameter ADD-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter ADD-reg32.reg32-rm (make-instance 'x64-asm-instruction
 :name "ADD"
 :operands (list "reg32" "reg32")
 :code-format (list "[rm:" "o32" "03" "/r")
 :arch-flags (list "386")))
-(push ADD-reg32.reg32 (gethash "ADD" *x64-instruction-variants-hash-table*))
+(push ADD-reg32.reg32-rm (gethash "ADD" *x64-instruction-variants-hash-table*))
 
 (defparameter ADD-reg64.mem (make-instance 'x64-asm-instruction
 :name "ADD"
@@ -489,12 +489,12 @@
 :arch-flags (list "X64" "SM")))
 (push ADD-reg64.mem (gethash "ADD" *x64-instruction-variants-hash-table*))
 
-(defparameter ADD-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter ADD-reg64.reg64-rm (make-instance 'x64-asm-instruction
 :name "ADD"
 :operands (list "reg64" "reg64")
 :code-format (list "[rm:" "o64" "03" "/r")
 :arch-flags (list "X64")))
-(push ADD-reg64.reg64 (gethash "ADD" *x64-instruction-variants-hash-table*))
+(push ADD-reg64.reg64-rm (gethash "ADD" *x64-instruction-variants-hash-table*))
 
 (defparameter ADD-rm16.imm8 (make-instance 'x64-asm-instruction
 :name "ADD"
@@ -657,12 +657,12 @@
 :arch-flags (list "8086" "SM" "LOCK")))
 (push AND-mem.reg8 (gethash "AND" *x64-instruction-variants-hash-table*))
 
-(defparameter AND-reg8.reg8 (make-instance 'x64-asm-instruction
+(defparameter AND-reg8.reg8-mr (make-instance 'x64-asm-instruction
 :name "AND"
 :operands (list "reg8" "reg8")
 :code-format (list "[mr:" "20" "/r")
 :arch-flags (list "8086")))
-(push AND-reg8.reg8 (gethash "AND" *x64-instruction-variants-hash-table*))
+(push AND-reg8.reg8-mr (gethash "AND" *x64-instruction-variants-hash-table*))
 
 (defparameter AND-mem.reg16 (make-instance 'x64-asm-instruction
 :name "AND"
@@ -671,12 +671,12 @@
 :arch-flags (list "8086" "SM" "LOCK")))
 (push AND-mem.reg16 (gethash "AND" *x64-instruction-variants-hash-table*))
 
-(defparameter AND-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter AND-reg16.reg16-mr (make-instance 'x64-asm-instruction
 :name "AND"
 :operands (list "reg16" "reg16")
 :code-format (list "[mr:" "o16" "21" "/r")
 :arch-flags (list "8086")))
-(push AND-reg16.reg16 (gethash "AND" *x64-instruction-variants-hash-table*))
+(push AND-reg16.reg16-mr (gethash "AND" *x64-instruction-variants-hash-table*))
 
 (defparameter AND-mem.reg32 (make-instance 'x64-asm-instruction
 :name "AND"
@@ -685,12 +685,12 @@
 :arch-flags (list "386" "SM" "LOCK")))
 (push AND-mem.reg32 (gethash "AND" *x64-instruction-variants-hash-table*))
 
-(defparameter AND-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter AND-reg32.reg32-mr (make-instance 'x64-asm-instruction
 :name "AND"
 :operands (list "reg32" "reg32")
 :code-format (list "[mr:" "o32" "21" "/r")
 :arch-flags (list "386")))
-(push AND-reg32.reg32 (gethash "AND" *x64-instruction-variants-hash-table*))
+(push AND-reg32.reg32-mr (gethash "AND" *x64-instruction-variants-hash-table*))
 
 (defparameter AND-mem.reg64 (make-instance 'x64-asm-instruction
 :name "AND"
@@ -699,12 +699,12 @@
 :arch-flags (list "X64" "SM" "LOCK")))
 (push AND-mem.reg64 (gethash "AND" *x64-instruction-variants-hash-table*))
 
-(defparameter AND-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter AND-reg64.reg64-mr (make-instance 'x64-asm-instruction
 :name "AND"
 :operands (list "reg64" "reg64")
 :code-format (list "[mr:" "o64" "21" "/r")
 :arch-flags (list "X64")))
-(push AND-reg64.reg64 (gethash "AND" *x64-instruction-variants-hash-table*))
+(push AND-reg64.reg64-mr (gethash "AND" *x64-instruction-variants-hash-table*))
 
 (defparameter AND-reg8.mem (make-instance 'x64-asm-instruction
 :name "AND"
@@ -713,12 +713,12 @@
 :arch-flags (list "8086" "SM")))
 (push AND-reg8.mem (gethash "AND" *x64-instruction-variants-hash-table*))
 
-(defparameter AND-reg8.reg8 (make-instance 'x64-asm-instruction
+(defparameter AND-reg8.reg8-rm (make-instance 'x64-asm-instruction
 :name "AND"
 :operands (list "reg8" "reg8")
 :code-format (list "[rm:" "22" "/r")
 :arch-flags (list "8086")))
-(push AND-reg8.reg8 (gethash "AND" *x64-instruction-variants-hash-table*))
+(push AND-reg8.reg8-rm (gethash "AND" *x64-instruction-variants-hash-table*))
 
 (defparameter AND-reg16.mem (make-instance 'x64-asm-instruction
 :name "AND"
@@ -727,12 +727,12 @@
 :arch-flags (list "8086" "SM")))
 (push AND-reg16.mem (gethash "AND" *x64-instruction-variants-hash-table*))
 
-(defparameter AND-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter AND-reg16.reg16-rm (make-instance 'x64-asm-instruction
 :name "AND"
 :operands (list "reg16" "reg16")
 :code-format (list "[rm:" "o16" "23" "/r")
 :arch-flags (list "8086")))
-(push AND-reg16.reg16 (gethash "AND" *x64-instruction-variants-hash-table*))
+(push AND-reg16.reg16-rm (gethash "AND" *x64-instruction-variants-hash-table*))
 
 (defparameter AND-reg32.mem (make-instance 'x64-asm-instruction
 :name "AND"
@@ -741,12 +741,12 @@
 :arch-flags (list "386" "SM")))
 (push AND-reg32.mem (gethash "AND" *x64-instruction-variants-hash-table*))
 
-(defparameter AND-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter AND-reg32.reg32-rm (make-instance 'x64-asm-instruction
 :name "AND"
 :operands (list "reg32" "reg32")
 :code-format (list "[rm:" "o32" "23" "/r")
 :arch-flags (list "386")))
-(push AND-reg32.reg32 (gethash "AND" *x64-instruction-variants-hash-table*))
+(push AND-reg32.reg32-rm (gethash "AND" *x64-instruction-variants-hash-table*))
 
 (defparameter AND-reg64.mem (make-instance 'x64-asm-instruction
 :name "AND"
@@ -755,12 +755,12 @@
 :arch-flags (list "X64" "SM")))
 (push AND-reg64.mem (gethash "AND" *x64-instruction-variants-hash-table*))
 
-(defparameter AND-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter AND-reg64.reg64-rm (make-instance 'x64-asm-instruction
 :name "AND"
 :operands (list "reg64" "reg64")
 :code-format (list "[rm:" "o64" "23" "/r")
 :arch-flags (list "X64")))
-(push AND-reg64.reg64 (gethash "AND" *x64-instruction-variants-hash-table*))
+(push AND-reg64.reg64-rm (gethash "AND" *x64-instruction-variants-hash-table*))
 
 (defparameter AND-rm16.imm8 (make-instance 'x64-asm-instruction
 :name "AND"
@@ -937,12 +937,12 @@
 :arch-flags (list "386" "SM")))
 (push BSF-reg16.mem (gethash "BSF" *x64-instruction-variants-hash-table*))
 
-(defparameter BSF-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter BSF-reg16.reg16-rm (make-instance 'x64-asm-instruction
 :name "BSF"
 :operands (list "reg16" "reg16")
 :code-format (list "[rm:" "o16" "nof3" "0f" "bc" "/r")
 :arch-flags (list "386")))
-(push BSF-reg16.reg16 (gethash "BSF" *x64-instruction-variants-hash-table*))
+(push BSF-reg16.reg16-rm (gethash "BSF" *x64-instruction-variants-hash-table*))
 
 (defparameter BSF-reg32.mem (make-instance 'x64-asm-instruction
 :name "BSF"
@@ -951,12 +951,12 @@
 :arch-flags (list "386" "SM")))
 (push BSF-reg32.mem (gethash "BSF" *x64-instruction-variants-hash-table*))
 
-(defparameter BSF-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter BSF-reg32.reg32-rm (make-instance 'x64-asm-instruction
 :name "BSF"
 :operands (list "reg32" "reg32")
 :code-format (list "[rm:" "o32" "nof3" "0f" "bc" "/r")
 :arch-flags (list "386")))
-(push BSF-reg32.reg32 (gethash "BSF" *x64-instruction-variants-hash-table*))
+(push BSF-reg32.reg32-rm (gethash "BSF" *x64-instruction-variants-hash-table*))
 
 (defparameter BSF-reg64.mem (make-instance 'x64-asm-instruction
 :name "BSF"
@@ -965,12 +965,12 @@
 :arch-flags (list "X64" "SM")))
 (push BSF-reg64.mem (gethash "BSF" *x64-instruction-variants-hash-table*))
 
-(defparameter BSF-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter BSF-reg64.reg64-rm (make-instance 'x64-asm-instruction
 :name "BSF"
 :operands (list "reg64" "reg64")
 :code-format (list "[rm:" "o64" "nof3" "0f" "bc" "/r")
 :arch-flags (list "X64")))
-(push BSF-reg64.reg64 (gethash "BSF" *x64-instruction-variants-hash-table*))
+(push BSF-reg64.reg64-rm (gethash "BSF" *x64-instruction-variants-hash-table*))
 
 (defparameter BSR-reg16.mem (make-instance 'x64-asm-instruction
 :name "BSR"
@@ -979,12 +979,12 @@
 :arch-flags (list "386" "SM")))
 (push BSR-reg16.mem (gethash "BSR" *x64-instruction-variants-hash-table*))
 
-(defparameter BSR-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter BSR-reg16.reg16-rm (make-instance 'x64-asm-instruction
 :name "BSR"
 :operands (list "reg16" "reg16")
 :code-format (list "[rm:" "o16" "nof3" "0f" "bd" "/r")
 :arch-flags (list "386")))
-(push BSR-reg16.reg16 (gethash "BSR" *x64-instruction-variants-hash-table*))
+(push BSR-reg16.reg16-rm (gethash "BSR" *x64-instruction-variants-hash-table*))
 
 (defparameter BSR-reg32.mem (make-instance 'x64-asm-instruction
 :name "BSR"
@@ -993,12 +993,12 @@
 :arch-flags (list "386" "SM")))
 (push BSR-reg32.mem (gethash "BSR" *x64-instruction-variants-hash-table*))
 
-(defparameter BSR-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter BSR-reg32.reg32-rm (make-instance 'x64-asm-instruction
 :name "BSR"
 :operands (list "reg32" "reg32")
 :code-format (list "[rm:" "o32" "nof3" "0f" "bd" "/r")
 :arch-flags (list "386")))
-(push BSR-reg32.reg32 (gethash "BSR" *x64-instruction-variants-hash-table*))
+(push BSR-reg32.reg32-rm (gethash "BSR" *x64-instruction-variants-hash-table*))
 
 (defparameter BSR-reg64.mem (make-instance 'x64-asm-instruction
 :name "BSR"
@@ -1007,12 +1007,12 @@
 :arch-flags (list "X64" "SM")))
 (push BSR-reg64.mem (gethash "BSR" *x64-instruction-variants-hash-table*))
 
-(defparameter BSR-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter BSR-reg64.reg64-rm (make-instance 'x64-asm-instruction
 :name "BSR"
 :operands (list "reg64" "reg64")
 :code-format (list "[rm:" "o64" "nof3" "0f" "bd" "/r")
 :arch-flags (list "X64")))
-(push BSR-reg64.reg64 (gethash "BSR" *x64-instruction-variants-hash-table*))
+(push BSR-reg64.reg64-rm (gethash "BSR" *x64-instruction-variants-hash-table*))
 
 (defparameter BSWAP-reg32 (make-instance 'x64-asm-instruction
 :name "BSWAP"
@@ -1035,12 +1035,12 @@
 :arch-flags (list "386" "SM")))
 (push BT-mem.reg16 (gethash "BT" *x64-instruction-variants-hash-table*))
 
-(defparameter BT-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter BT-reg16.reg16-mr (make-instance 'x64-asm-instruction
 :name "BT"
 :operands (list "reg16" "reg16")
 :code-format (list "[mr:" "o16" "0f" "a3" "/r")
 :arch-flags (list "386")))
-(push BT-reg16.reg16 (gethash "BT" *x64-instruction-variants-hash-table*))
+(push BT-reg16.reg16-mr (gethash "BT" *x64-instruction-variants-hash-table*))
 
 (defparameter BT-mem.reg32 (make-instance 'x64-asm-instruction
 :name "BT"
@@ -1049,12 +1049,12 @@
 :arch-flags (list "386" "SM")))
 (push BT-mem.reg32 (gethash "BT" *x64-instruction-variants-hash-table*))
 
-(defparameter BT-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter BT-reg32.reg32-mr (make-instance 'x64-asm-instruction
 :name "BT"
 :operands (list "reg32" "reg32")
 :code-format (list "[mr:" "o32" "0f" "a3" "/r")
 :arch-flags (list "386")))
-(push BT-reg32.reg32 (gethash "BT" *x64-instruction-variants-hash-table*))
+(push BT-reg32.reg32-mr (gethash "BT" *x64-instruction-variants-hash-table*))
 
 (defparameter BT-mem.reg64 (make-instance 'x64-asm-instruction
 :name "BT"
@@ -1063,12 +1063,12 @@
 :arch-flags (list "X64" "SM")))
 (push BT-mem.reg64 (gethash "BT" *x64-instruction-variants-hash-table*))
 
-(defparameter BT-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter BT-reg64.reg64-mr (make-instance 'x64-asm-instruction
 :name "BT"
 :operands (list "reg64" "reg64")
 :code-format (list "[mr:" "o64" "0f" "a3" "/r")
 :arch-flags (list "X64")))
-(push BT-reg64.reg64 (gethash "BT" *x64-instruction-variants-hash-table*))
+(push BT-reg64.reg64-mr (gethash "BT" *x64-instruction-variants-hash-table*))
 
 (defparameter BT-rm16.imm (make-instance 'x64-asm-instruction
 :name "BT"
@@ -1098,12 +1098,12 @@
 :arch-flags (list "386" "SM" "LOCK")))
 (push BTC-mem.reg16 (gethash "BTC" *x64-instruction-variants-hash-table*))
 
-(defparameter BTC-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter BTC-reg16.reg16-mr (make-instance 'x64-asm-instruction
 :name "BTC"
 :operands (list "reg16" "reg16")
 :code-format (list "[mr:" "o16" "0f" "bb" "/r")
 :arch-flags (list "386")))
-(push BTC-reg16.reg16 (gethash "BTC" *x64-instruction-variants-hash-table*))
+(push BTC-reg16.reg16-mr (gethash "BTC" *x64-instruction-variants-hash-table*))
 
 (defparameter BTC-mem.reg32 (make-instance 'x64-asm-instruction
 :name "BTC"
@@ -1112,12 +1112,12 @@
 :arch-flags (list "386" "SM" "LOCK")))
 (push BTC-mem.reg32 (gethash "BTC" *x64-instruction-variants-hash-table*))
 
-(defparameter BTC-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter BTC-reg32.reg32-mr (make-instance 'x64-asm-instruction
 :name "BTC"
 :operands (list "reg32" "reg32")
 :code-format (list "[mr:" "o32" "0f" "bb" "/r")
 :arch-flags (list "386")))
-(push BTC-reg32.reg32 (gethash "BTC" *x64-instruction-variants-hash-table*))
+(push BTC-reg32.reg32-mr (gethash "BTC" *x64-instruction-variants-hash-table*))
 
 (defparameter BTC-mem.reg64 (make-instance 'x64-asm-instruction
 :name "BTC"
@@ -1126,12 +1126,12 @@
 :arch-flags (list "X64" "SM" "LOCK")))
 (push BTC-mem.reg64 (gethash "BTC" *x64-instruction-variants-hash-table*))
 
-(defparameter BTC-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter BTC-reg64.reg64-mr (make-instance 'x64-asm-instruction
 :name "BTC"
 :operands (list "reg64" "reg64")
 :code-format (list "[mr:" "o64" "0f" "bb" "/r")
 :arch-flags (list "X64")))
-(push BTC-reg64.reg64 (gethash "BTC" *x64-instruction-variants-hash-table*))
+(push BTC-reg64.reg64-mr (gethash "BTC" *x64-instruction-variants-hash-table*))
 
 (defparameter BTC-rm16.imm (make-instance 'x64-asm-instruction
 :name "BTC"
@@ -1161,12 +1161,12 @@
 :arch-flags (list "386" "SM" "LOCK")))
 (push BTR-mem.reg16 (gethash "BTR" *x64-instruction-variants-hash-table*))
 
-(defparameter BTR-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter BTR-reg16.reg16-mr (make-instance 'x64-asm-instruction
 :name "BTR"
 :operands (list "reg16" "reg16")
 :code-format (list "[mr:" "o16" "0f" "b3" "/r")
 :arch-flags (list "386")))
-(push BTR-reg16.reg16 (gethash "BTR" *x64-instruction-variants-hash-table*))
+(push BTR-reg16.reg16-mr (gethash "BTR" *x64-instruction-variants-hash-table*))
 
 (defparameter BTR-mem.reg32 (make-instance 'x64-asm-instruction
 :name "BTR"
@@ -1175,12 +1175,12 @@
 :arch-flags (list "386" "SM" "LOCK")))
 (push BTR-mem.reg32 (gethash "BTR" *x64-instruction-variants-hash-table*))
 
-(defparameter BTR-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter BTR-reg32.reg32-mr (make-instance 'x64-asm-instruction
 :name "BTR"
 :operands (list "reg32" "reg32")
 :code-format (list "[mr:" "o32" "0f" "b3" "/r")
 :arch-flags (list "386")))
-(push BTR-reg32.reg32 (gethash "BTR" *x64-instruction-variants-hash-table*))
+(push BTR-reg32.reg32-mr (gethash "BTR" *x64-instruction-variants-hash-table*))
 
 (defparameter BTR-mem.reg64 (make-instance 'x64-asm-instruction
 :name "BTR"
@@ -1189,12 +1189,12 @@
 :arch-flags (list "X64" "SM" "LOCK")))
 (push BTR-mem.reg64 (gethash "BTR" *x64-instruction-variants-hash-table*))
 
-(defparameter BTR-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter BTR-reg64.reg64-mr (make-instance 'x64-asm-instruction
 :name "BTR"
 :operands (list "reg64" "reg64")
 :code-format (list "[mr:" "o64" "0f" "b3" "/r")
 :arch-flags (list "X64")))
-(push BTR-reg64.reg64 (gethash "BTR" *x64-instruction-variants-hash-table*))
+(push BTR-reg64.reg64-mr (gethash "BTR" *x64-instruction-variants-hash-table*))
 
 (defparameter BTR-rm16.imm (make-instance 'x64-asm-instruction
 :name "BTR"
@@ -1224,12 +1224,12 @@
 :arch-flags (list "386" "SM" "LOCK")))
 (push BTS-mem.reg16 (gethash "BTS" *x64-instruction-variants-hash-table*))
 
-(defparameter BTS-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter BTS-reg16.reg16-mr (make-instance 'x64-asm-instruction
 :name "BTS"
 :operands (list "reg16" "reg16")
 :code-format (list "[mr:" "o16" "0f" "ab" "/r")
 :arch-flags (list "386")))
-(push BTS-reg16.reg16 (gethash "BTS" *x64-instruction-variants-hash-table*))
+(push BTS-reg16.reg16-mr (gethash "BTS" *x64-instruction-variants-hash-table*))
 
 (defparameter BTS-mem.reg32 (make-instance 'x64-asm-instruction
 :name "BTS"
@@ -1238,12 +1238,12 @@
 :arch-flags (list "386" "SM" "LOCK")))
 (push BTS-mem.reg32 (gethash "BTS" *x64-instruction-variants-hash-table*))
 
-(defparameter BTS-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter BTS-reg32.reg32-mr (make-instance 'x64-asm-instruction
 :name "BTS"
 :operands (list "reg32" "reg32")
 :code-format (list "[mr:" "o32" "0f" "ab" "/r")
 :arch-flags (list "386")))
-(push BTS-reg32.reg32 (gethash "BTS" *x64-instruction-variants-hash-table*))
+(push BTS-reg32.reg32-mr (gethash "BTS" *x64-instruction-variants-hash-table*))
 
 (defparameter BTS-mem.reg64 (make-instance 'x64-asm-instruction
 :name "BTS"
@@ -1252,12 +1252,12 @@
 :arch-flags (list "X64" "SM" "LOCK")))
 (push BTS-mem.reg64 (gethash "BTS" *x64-instruction-variants-hash-table*))
 
-(defparameter BTS-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter BTS-reg64.reg64-mr (make-instance 'x64-asm-instruction
 :name "BTS"
 :operands (list "reg64" "reg64")
 :code-format (list "[mr:" "o64" "0f" "ab" "/r")
 :arch-flags (list "X64")))
-(push BTS-reg64.reg64 (gethash "BTS" *x64-instruction-variants-hash-table*))
+(push BTS-reg64.reg64-mr (gethash "BTS" *x64-instruction-variants-hash-table*))
 
 (defparameter BTS-rm16.imm (make-instance 'x64-asm-instruction
 :name "BTS"
@@ -1427,12 +1427,12 @@
 :arch-flags (list "8086" "SM")))
 (push CMP-mem.reg8 (gethash "CMP" *x64-instruction-variants-hash-table*))
 
-(defparameter CMP-reg8.reg8 (make-instance 'x64-asm-instruction
+(defparameter CMP-reg8.reg8-mr (make-instance 'x64-asm-instruction
 :name "CMP"
 :operands (list "reg8" "reg8")
 :code-format (list "[mr:" "38" "/r")
 :arch-flags (list "8086")))
-(push CMP-reg8.reg8 (gethash "CMP" *x64-instruction-variants-hash-table*))
+(push CMP-reg8.reg8-mr (gethash "CMP" *x64-instruction-variants-hash-table*))
 
 (defparameter CMP-mem.reg16 (make-instance 'x64-asm-instruction
 :name "CMP"
@@ -1441,12 +1441,12 @@
 :arch-flags (list "8086" "SM")))
 (push CMP-mem.reg16 (gethash "CMP" *x64-instruction-variants-hash-table*))
 
-(defparameter CMP-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter CMP-reg16.reg16-mr (make-instance 'x64-asm-instruction
 :name "CMP"
 :operands (list "reg16" "reg16")
 :code-format (list "[mr:" "o16" "39" "/r")
 :arch-flags (list "8086")))
-(push CMP-reg16.reg16 (gethash "CMP" *x64-instruction-variants-hash-table*))
+(push CMP-reg16.reg16-mr (gethash "CMP" *x64-instruction-variants-hash-table*))
 
 (defparameter CMP-mem.reg32 (make-instance 'x64-asm-instruction
 :name "CMP"
@@ -1455,12 +1455,12 @@
 :arch-flags (list "386" "SM")))
 (push CMP-mem.reg32 (gethash "CMP" *x64-instruction-variants-hash-table*))
 
-(defparameter CMP-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter CMP-reg32.reg32-mr (make-instance 'x64-asm-instruction
 :name "CMP"
 :operands (list "reg32" "reg32")
 :code-format (list "[mr:" "o32" "39" "/r")
 :arch-flags (list "386")))
-(push CMP-reg32.reg32 (gethash "CMP" *x64-instruction-variants-hash-table*))
+(push CMP-reg32.reg32-mr (gethash "CMP" *x64-instruction-variants-hash-table*))
 
 (defparameter CMP-mem.reg64 (make-instance 'x64-asm-instruction
 :name "CMP"
@@ -1469,12 +1469,12 @@
 :arch-flags (list "X64" "SM")))
 (push CMP-mem.reg64 (gethash "CMP" *x64-instruction-variants-hash-table*))
 
-(defparameter CMP-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter CMP-reg64.reg64-mr (make-instance 'x64-asm-instruction
 :name "CMP"
 :operands (list "reg64" "reg64")
 :code-format (list "[mr:" "o64" "39" "/r")
 :arch-flags (list "X64")))
-(push CMP-reg64.reg64 (gethash "CMP" *x64-instruction-variants-hash-table*))
+(push CMP-reg64.reg64-mr (gethash "CMP" *x64-instruction-variants-hash-table*))
 
 (defparameter CMP-reg8.mem (make-instance 'x64-asm-instruction
 :name "CMP"
@@ -1483,12 +1483,12 @@
 :arch-flags (list "8086" "SM")))
 (push CMP-reg8.mem (gethash "CMP" *x64-instruction-variants-hash-table*))
 
-(defparameter CMP-reg8.reg8 (make-instance 'x64-asm-instruction
+(defparameter CMP-reg8.reg8-rm (make-instance 'x64-asm-instruction
 :name "CMP"
 :operands (list "reg8" "reg8")
 :code-format (list "[rm:" "3a" "/r")
 :arch-flags (list "8086")))
-(push CMP-reg8.reg8 (gethash "CMP" *x64-instruction-variants-hash-table*))
+(push CMP-reg8.reg8-rm (gethash "CMP" *x64-instruction-variants-hash-table*))
 
 (defparameter CMP-reg16.mem (make-instance 'x64-asm-instruction
 :name "CMP"
@@ -1497,12 +1497,12 @@
 :arch-flags (list "8086" "SM")))
 (push CMP-reg16.mem (gethash "CMP" *x64-instruction-variants-hash-table*))
 
-(defparameter CMP-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter CMP-reg16.reg16-rm (make-instance 'x64-asm-instruction
 :name "CMP"
 :operands (list "reg16" "reg16")
 :code-format (list "[rm:" "o16" "3b" "/r")
 :arch-flags (list "8086")))
-(push CMP-reg16.reg16 (gethash "CMP" *x64-instruction-variants-hash-table*))
+(push CMP-reg16.reg16-rm (gethash "CMP" *x64-instruction-variants-hash-table*))
 
 (defparameter CMP-reg32.mem (make-instance 'x64-asm-instruction
 :name "CMP"
@@ -1511,12 +1511,12 @@
 :arch-flags (list "386" "SM")))
 (push CMP-reg32.mem (gethash "CMP" *x64-instruction-variants-hash-table*))
 
-(defparameter CMP-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter CMP-reg32.reg32-rm (make-instance 'x64-asm-instruction
 :name "CMP"
 :operands (list "reg32" "reg32")
 :code-format (list "[rm:" "o32" "3b" "/r")
 :arch-flags (list "386")))
-(push CMP-reg32.reg32 (gethash "CMP" *x64-instruction-variants-hash-table*))
+(push CMP-reg32.reg32-rm (gethash "CMP" *x64-instruction-variants-hash-table*))
 
 (defparameter CMP-reg64.mem (make-instance 'x64-asm-instruction
 :name "CMP"
@@ -1525,12 +1525,12 @@
 :arch-flags (list "X64" "SM")))
 (push CMP-reg64.mem (gethash "CMP" *x64-instruction-variants-hash-table*))
 
-(defparameter CMP-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter CMP-reg64.reg64-rm (make-instance 'x64-asm-instruction
 :name "CMP"
 :operands (list "reg64" "reg64")
 :code-format (list "[rm:" "o64" "3b" "/r")
 :arch-flags (list "X64")))
-(push CMP-reg64.reg64 (gethash "CMP" *x64-instruction-variants-hash-table*))
+(push CMP-reg64.reg64-rm (gethash "CMP" *x64-instruction-variants-hash-table*))
 
 (defparameter CMP-rm16.imm8 (make-instance 'x64-asm-instruction
 :name "CMP"
@@ -1721,12 +1721,12 @@
 :arch-flags (list "PENT" "SM" "LOCK")))
 (push CMPXCHG-mem.reg8 (gethash "CMPXCHG" *x64-instruction-variants-hash-table*))
 
-(defparameter CMPXCHG-reg8.reg8 (make-instance 'x64-asm-instruction
+(defparameter CMPXCHG-reg8.reg8-mr (make-instance 'x64-asm-instruction
 :name "CMPXCHG"
 :operands (list "reg8" "reg8")
 :code-format (list "[mr:" "0f" "b0" "/r")
 :arch-flags (list "PENT")))
-(push CMPXCHG-reg8.reg8 (gethash "CMPXCHG" *x64-instruction-variants-hash-table*))
+(push CMPXCHG-reg8.reg8-mr (gethash "CMPXCHG" *x64-instruction-variants-hash-table*))
 
 (defparameter CMPXCHG-mem.reg16 (make-instance 'x64-asm-instruction
 :name "CMPXCHG"
@@ -1735,12 +1735,12 @@
 :arch-flags (list "PENT" "SM" "LOCK")))
 (push CMPXCHG-mem.reg16 (gethash "CMPXCHG" *x64-instruction-variants-hash-table*))
 
-(defparameter CMPXCHG-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter CMPXCHG-reg16.reg16-mr (make-instance 'x64-asm-instruction
 :name "CMPXCHG"
 :operands (list "reg16" "reg16")
 :code-format (list "[mr:" "o16" "0f" "b1" "/r")
 :arch-flags (list "PENT")))
-(push CMPXCHG-reg16.reg16 (gethash "CMPXCHG" *x64-instruction-variants-hash-table*))
+(push CMPXCHG-reg16.reg16-mr (gethash "CMPXCHG" *x64-instruction-variants-hash-table*))
 
 (defparameter CMPXCHG-mem.reg32 (make-instance 'x64-asm-instruction
 :name "CMPXCHG"
@@ -1749,12 +1749,12 @@
 :arch-flags (list "PENT" "SM" "LOCK")))
 (push CMPXCHG-mem.reg32 (gethash "CMPXCHG" *x64-instruction-variants-hash-table*))
 
-(defparameter CMPXCHG-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter CMPXCHG-reg32.reg32-mr (make-instance 'x64-asm-instruction
 :name "CMPXCHG"
 :operands (list "reg32" "reg32")
 :code-format (list "[mr:" "o32" "0f" "b1" "/r")
 :arch-flags (list "PENT")))
-(push CMPXCHG-reg32.reg32 (gethash "CMPXCHG" *x64-instruction-variants-hash-table*))
+(push CMPXCHG-reg32.reg32-mr (gethash "CMPXCHG" *x64-instruction-variants-hash-table*))
 
 (defparameter CMPXCHG-mem.reg64 (make-instance 'x64-asm-instruction
 :name "CMPXCHG"
@@ -1763,12 +1763,12 @@
 :arch-flags (list "X64" "SM" "LOCK")))
 (push CMPXCHG-mem.reg64 (gethash "CMPXCHG" *x64-instruction-variants-hash-table*))
 
-(defparameter CMPXCHG-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter CMPXCHG-reg64.reg64-mr (make-instance 'x64-asm-instruction
 :name "CMPXCHG"
 :operands (list "reg64" "reg64")
 :code-format (list "[mr:" "o64" "0f" "b1" "/r")
 :arch-flags (list "X64")))
-(push CMPXCHG-reg64.reg64 (gethash "CMPXCHG" *x64-instruction-variants-hash-table*))
+(push CMPXCHG-reg64.reg64-mr (gethash "CMPXCHG" *x64-instruction-variants-hash-table*))
 
 (defparameter CMPXCHG486-mem.reg8 (make-instance 'x64-asm-instruction
 :name "CMPXCHG486"
@@ -1777,12 +1777,12 @@
 :arch-flags (list "486" "SM" "UNDOC" "ND" "LOCK")))
 (push CMPXCHG486-mem.reg8 (gethash "CMPXCHG486" *x64-instruction-variants-hash-table*))
 
-(defparameter CMPXCHG486-reg8.reg8 (make-instance 'x64-asm-instruction
+(defparameter CMPXCHG486-reg8.reg8-mr (make-instance 'x64-asm-instruction
 :name "CMPXCHG486"
 :operands (list "reg8" "reg8")
 :code-format (list "[mr:" "0f" "a6" "/r")
 :arch-flags (list "486" "UNDOC" "ND")))
-(push CMPXCHG486-reg8.reg8 (gethash "CMPXCHG486" *x64-instruction-variants-hash-table*))
+(push CMPXCHG486-reg8.reg8-mr (gethash "CMPXCHG486" *x64-instruction-variants-hash-table*))
 
 (defparameter CMPXCHG486-mem.reg16 (make-instance 'x64-asm-instruction
 :name "CMPXCHG486"
@@ -1791,12 +1791,12 @@
 :arch-flags (list "486" "SM" "UNDOC" "ND" "LOCK")))
 (push CMPXCHG486-mem.reg16 (gethash "CMPXCHG486" *x64-instruction-variants-hash-table*))
 
-(defparameter CMPXCHG486-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter CMPXCHG486-reg16.reg16-mr (make-instance 'x64-asm-instruction
 :name "CMPXCHG486"
 :operands (list "reg16" "reg16")
 :code-format (list "[mr:" "o16" "0f" "a7" "/r")
 :arch-flags (list "486" "UNDOC" "ND")))
-(push CMPXCHG486-reg16.reg16 (gethash "CMPXCHG486" *x64-instruction-variants-hash-table*))
+(push CMPXCHG486-reg16.reg16-mr (gethash "CMPXCHG486" *x64-instruction-variants-hash-table*))
 
 (defparameter CMPXCHG486-mem.reg32 (make-instance 'x64-asm-instruction
 :name "CMPXCHG486"
@@ -1805,12 +1805,12 @@
 :arch-flags (list "486" "SM" "UNDOC" "ND" "LOCK")))
 (push CMPXCHG486-mem.reg32 (gethash "CMPXCHG486" *x64-instruction-variants-hash-table*))
 
-(defparameter CMPXCHG486-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter CMPXCHG486-reg32.reg32-mr (make-instance 'x64-asm-instruction
 :name "CMPXCHG486"
 :operands (list "reg32" "reg32")
 :code-format (list "[mr:" "o32" "0f" "a7" "/r")
 :arch-flags (list "486" "UNDOC" "ND")))
-(push CMPXCHG486-reg32.reg32 (gethash "CMPXCHG486" *x64-instruction-variants-hash-table*))
+(push CMPXCHG486-reg32.reg32-mr (gethash "CMPXCHG486" *x64-instruction-variants-hash-table*))
 
 (defparameter CMPXCHG8B-mem (make-instance 'x64-asm-instruction
 :name "CMPXCHG8B"
@@ -3499,12 +3499,12 @@
 :arch-flags (list "386" "SW" "UNDOC" "ND")))
 (push IBTS-mem.reg16 (gethash "IBTS" *x64-instruction-variants-hash-table*))
 
-(defparameter IBTS-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter IBTS-reg16.reg16-mr (make-instance 'x64-asm-instruction
 :name "IBTS"
 :operands (list "reg16" "reg16")
 :code-format (list "[mr:" "o16" "0f" "a7" "/r")
 :arch-flags (list "386" "UNDOC" "ND")))
-(push IBTS-reg16.reg16 (gethash "IBTS" *x64-instruction-variants-hash-table*))
+(push IBTS-reg16.reg16-mr (gethash "IBTS" *x64-instruction-variants-hash-table*))
 
 (defparameter IBTS-mem.reg32 (make-instance 'x64-asm-instruction
 :name "IBTS"
@@ -3513,12 +3513,12 @@
 :arch-flags (list "386" "SD" "UNDOC" "ND")))
 (push IBTS-mem.reg32 (gethash "IBTS" *x64-instruction-variants-hash-table*))
 
-(defparameter IBTS-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter IBTS-reg32.reg32-mr (make-instance 'x64-asm-instruction
 :name "IBTS"
 :operands (list "reg32" "reg32")
 :code-format (list "[mr:" "o32" "0f" "a7" "/r")
 :arch-flags (list "386" "UNDOC" "ND")))
-(push IBTS-reg32.reg32 (gethash "IBTS" *x64-instruction-variants-hash-table*))
+(push IBTS-reg32.reg32-mr (gethash "IBTS" *x64-instruction-variants-hash-table*))
 
 (defparameter ICEBP-void (make-instance 'x64-asm-instruction
 :name "ICEBP"
@@ -3590,12 +3590,12 @@
 :arch-flags (list "386" "SM")))
 (push IMUL-reg16.mem (gethash "IMUL" *x64-instruction-variants-hash-table*))
 
-(defparameter IMUL-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter IMUL-reg16.reg16-rm (make-instance 'x64-asm-instruction
 :name "IMUL"
 :operands (list "reg16" "reg16")
 :code-format (list "[rm:" "o16" "0f" "af" "/r")
 :arch-flags (list "386")))
-(push IMUL-reg16.reg16 (gethash "IMUL" *x64-instruction-variants-hash-table*))
+(push IMUL-reg16.reg16-rm (gethash "IMUL" *x64-instruction-variants-hash-table*))
 
 (defparameter IMUL-reg32.mem (make-instance 'x64-asm-instruction
 :name "IMUL"
@@ -3604,12 +3604,12 @@
 :arch-flags (list "386" "SM")))
 (push IMUL-reg32.mem (gethash "IMUL" *x64-instruction-variants-hash-table*))
 
-(defparameter IMUL-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter IMUL-reg32.reg32-rm (make-instance 'x64-asm-instruction
 :name "IMUL"
 :operands (list "reg32" "reg32")
 :code-format (list "[rm:" "o32" "0f" "af" "/r")
 :arch-flags (list "386")))
-(push IMUL-reg32.reg32 (gethash "IMUL" *x64-instruction-variants-hash-table*))
+(push IMUL-reg32.reg32-rm (gethash "IMUL" *x64-instruction-variants-hash-table*))
 
 (defparameter IMUL-reg64.mem (make-instance 'x64-asm-instruction
 :name "IMUL"
@@ -3618,12 +3618,12 @@
 :arch-flags (list "X64" "SM")))
 (push IMUL-reg64.mem (gethash "IMUL" *x64-instruction-variants-hash-table*))
 
-(defparameter IMUL-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter IMUL-reg64.reg64-rm (make-instance 'x64-asm-instruction
 :name "IMUL"
 :operands (list "reg64" "reg64")
 :code-format (list "[rm:" "o64" "0f" "af" "/r")
 :arch-flags (list "X64")))
-(push IMUL-reg64.reg64 (gethash "IMUL" *x64-instruction-variants-hash-table*))
+(push IMUL-reg64.reg64-rm (gethash "IMUL" *x64-instruction-variants-hash-table*))
 
 (defparameter IMUL-reg16.mem.imm8 (make-instance 'x64-asm-instruction
 :name "IMUL"
@@ -3653,33 +3653,33 @@
 :arch-flags (list "186" "SM" "ND")))
 (push IMUL-reg16.mem.imm (gethash "IMUL" *x64-instruction-variants-hash-table*))
 
-(defparameter IMUL-reg16.reg16.imm8 (make-instance 'x64-asm-instruction
+(defparameter IMUL-reg16.reg16.imm8-rm (make-instance 'x64-asm-instruction
 :name "IMUL"
 :operands (list "reg16" "reg16" "imm8")
 :code-format (list "[rmi:" "o16" "6b" "/r" "ib,s")
 :arch-flags (list "186")))
-(push IMUL-reg16.reg16.imm8 (gethash "IMUL" *x64-instruction-variants-hash-table*))
+(push IMUL-reg16.reg16.imm8-rm (gethash "IMUL" *x64-instruction-variants-hash-table*))
 
-(defparameter IMUL-reg16.reg16.sbyteword (make-instance 'x64-asm-instruction
+(defparameter IMUL-reg16.reg16.sbyteword-rm (make-instance 'x64-asm-instruction
 :name "IMUL"
 :operands (list "reg16" "reg16" "sbyteword")
 :code-format (list "[rmi:" "o16" "6b" "/r" "ib,s")
 :arch-flags (list "186" "SM" "ND")))
-(push IMUL-reg16.reg16.sbyteword (gethash "IMUL" *x64-instruction-variants-hash-table*))
+(push IMUL-reg16.reg16.sbyteword-rm (gethash "IMUL" *x64-instruction-variants-hash-table*))
 
-(defparameter IMUL-reg16.reg16.imm16 (make-instance 'x64-asm-instruction
+(defparameter IMUL-reg16.reg16.imm16-rm (make-instance 'x64-asm-instruction
 :name "IMUL"
 :operands (list "reg16" "reg16" "imm16")
 :code-format (list "[rmi:" "o16" "69" "/r" "iw")
 :arch-flags (list "186")))
-(push IMUL-reg16.reg16.imm16 (gethash "IMUL" *x64-instruction-variants-hash-table*))
+(push IMUL-reg16.reg16.imm16-rm (gethash "IMUL" *x64-instruction-variants-hash-table*))
 
-(defparameter IMUL-reg16.reg16.imm (make-instance 'x64-asm-instruction
+(defparameter IMUL-reg16.reg16.imm-rm (make-instance 'x64-asm-instruction
 :name "IMUL"
 :operands (list "reg16" "reg16" "imm")
 :code-format (list "[rmi:" "o16" "69" "/r" "iw")
 :arch-flags (list "186" "SM" "ND")))
-(push IMUL-reg16.reg16.imm (gethash "IMUL" *x64-instruction-variants-hash-table*))
+(push IMUL-reg16.reg16.imm-rm (gethash "IMUL" *x64-instruction-variants-hash-table*))
 
 (defparameter IMUL-reg32.mem.imm8 (make-instance 'x64-asm-instruction
 :name "IMUL"
@@ -3709,33 +3709,33 @@
 :arch-flags (list "386" "SM" "ND")))
 (push IMUL-reg32.mem.imm (gethash "IMUL" *x64-instruction-variants-hash-table*))
 
-(defparameter IMUL-reg32.reg32.imm8 (make-instance 'x64-asm-instruction
+(defparameter IMUL-reg32.reg32.imm8-rm (make-instance 'x64-asm-instruction
 :name "IMUL"
 :operands (list "reg32" "reg32" "imm8")
 :code-format (list "[rmi:" "o32" "6b" "/r" "ib,s")
 :arch-flags (list "386")))
-(push IMUL-reg32.reg32.imm8 (gethash "IMUL" *x64-instruction-variants-hash-table*))
+(push IMUL-reg32.reg32.imm8-rm (gethash "IMUL" *x64-instruction-variants-hash-table*))
 
-(defparameter IMUL-reg32.reg32.sbytedword (make-instance 'x64-asm-instruction
+(defparameter IMUL-reg32.reg32.sbytedword-rm (make-instance 'x64-asm-instruction
 :name "IMUL"
 :operands (list "reg32" "reg32" "sbytedword")
 :code-format (list "[rmi:" "o32" "6b" "/r" "ib,s")
 :arch-flags (list "386" "SM" "ND")))
-(push IMUL-reg32.reg32.sbytedword (gethash "IMUL" *x64-instruction-variants-hash-table*))
+(push IMUL-reg32.reg32.sbytedword-rm (gethash "IMUL" *x64-instruction-variants-hash-table*))
 
-(defparameter IMUL-reg32.reg32.imm32 (make-instance 'x64-asm-instruction
+(defparameter IMUL-reg32.reg32.imm32-rm (make-instance 'x64-asm-instruction
 :name "IMUL"
 :operands (list "reg32" "reg32" "imm32")
 :code-format (list "[rmi:" "o32" "69" "/r" "id")
 :arch-flags (list "386")))
-(push IMUL-reg32.reg32.imm32 (gethash "IMUL" *x64-instruction-variants-hash-table*))
+(push IMUL-reg32.reg32.imm32-rm (gethash "IMUL" *x64-instruction-variants-hash-table*))
 
-(defparameter IMUL-reg32.reg32.imm (make-instance 'x64-asm-instruction
+(defparameter IMUL-reg32.reg32.imm-rm (make-instance 'x64-asm-instruction
 :name "IMUL"
 :operands (list "reg32" "reg32" "imm")
 :code-format (list "[rmi:" "o32" "69" "/r" "id")
 :arch-flags (list "386" "SM" "ND")))
-(push IMUL-reg32.reg32.imm (gethash "IMUL" *x64-instruction-variants-hash-table*))
+(push IMUL-reg32.reg32.imm-rm (gethash "IMUL" *x64-instruction-variants-hash-table*))
 
 (defparameter IMUL-reg64.mem.imm8 (make-instance 'x64-asm-instruction
 :name "IMUL"
@@ -3765,33 +3765,33 @@
 :arch-flags (list "X64" "SM" "ND")))
 (push IMUL-reg64.mem.imm (gethash "IMUL" *x64-instruction-variants-hash-table*))
 
-(defparameter IMUL-reg64.reg64.imm8 (make-instance 'x64-asm-instruction
+(defparameter IMUL-reg64.reg64.imm8-rm (make-instance 'x64-asm-instruction
 :name "IMUL"
 :operands (list "reg64" "reg64" "imm8")
 :code-format (list "[rmi:" "o64" "6b" "/r" "ib,s")
 :arch-flags (list "X64")))
-(push IMUL-reg64.reg64.imm8 (gethash "IMUL" *x64-instruction-variants-hash-table*))
+(push IMUL-reg64.reg64.imm8-rm (gethash "IMUL" *x64-instruction-variants-hash-table*))
 
-(defparameter IMUL-reg64.reg64.sbytedword (make-instance 'x64-asm-instruction
+(defparameter IMUL-reg64.reg64.sbytedword-rm (make-instance 'x64-asm-instruction
 :name "IMUL"
 :operands (list "reg64" "reg64" "sbytedword")
 :code-format (list "[rmi:" "o64" "6b" "/r" "ib,s")
 :arch-flags (list "X64" "SM" "ND")))
-(push IMUL-reg64.reg64.sbytedword (gethash "IMUL" *x64-instruction-variants-hash-table*))
+(push IMUL-reg64.reg64.sbytedword-rm (gethash "IMUL" *x64-instruction-variants-hash-table*))
 
-(defparameter IMUL-reg64.reg64.imm32 (make-instance 'x64-asm-instruction
+(defparameter IMUL-reg64.reg64.imm32-rm (make-instance 'x64-asm-instruction
 :name "IMUL"
 :operands (list "reg64" "reg64" "imm32")
 :code-format (list "[rmi:" "o64" "69" "/r" "id")
 :arch-flags (list "X64")))
-(push IMUL-reg64.reg64.imm32 (gethash "IMUL" *x64-instruction-variants-hash-table*))
+(push IMUL-reg64.reg64.imm32-rm (gethash "IMUL" *x64-instruction-variants-hash-table*))
 
-(defparameter IMUL-reg64.reg64.imm (make-instance 'x64-asm-instruction
+(defparameter IMUL-reg64.reg64.imm-rm (make-instance 'x64-asm-instruction
 :name "IMUL"
 :operands (list "reg64" "reg64" "imm")
 :code-format (list "[rmi:" "o64" "69" "/r" "id,s")
 :arch-flags (list "X64" "SM" "ND")))
-(push IMUL-reg64.reg64.imm (gethash "IMUL" *x64-instruction-variants-hash-table*))
+(push IMUL-reg64.reg64.imm-rm (gethash "IMUL" *x64-instruction-variants-hash-table*))
 
 (defparameter IMUL-reg16.imm8 (make-instance 'x64-asm-instruction
 :name "IMUL"
@@ -4241,26 +4241,26 @@
 :arch-flags (list "286" "PROT" "SW")))
 (push LAR-reg16.mem (gethash "LAR" *x64-instruction-variants-hash-table*))
 
-(defparameter LAR-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter LAR-reg16.reg16-rm (make-instance 'x64-asm-instruction
 :name "LAR"
 :operands (list "reg16" "reg16")
 :code-format (list "[rm:" "o16" "0f" "02" "/r")
 :arch-flags (list "286" "PROT")))
-(push LAR-reg16.reg16 (gethash "LAR" *x64-instruction-variants-hash-table*))
+(push LAR-reg16.reg16-rm (gethash "LAR" *x64-instruction-variants-hash-table*))
 
-(defparameter LAR-reg16.reg32 (make-instance 'x64-asm-instruction
+(defparameter LAR-reg16.reg32-rm (make-instance 'x64-asm-instruction
 :name "LAR"
 :operands (list "reg16" "reg32")
 :code-format (list "[rm:" "o16" "0f" "02" "/r")
 :arch-flags (list "386" "PROT")))
-(push LAR-reg16.reg32 (gethash "LAR" *x64-instruction-variants-hash-table*))
+(push LAR-reg16.reg32-rm (gethash "LAR" *x64-instruction-variants-hash-table*))
 
-(defparameter LAR-reg16.reg64 (make-instance 'x64-asm-instruction
+(defparameter LAR-reg16.reg64-rm (make-instance 'x64-asm-instruction
 :name "LAR"
 :operands (list "reg16" "reg64")
 :code-format (list "[rm:" "o16" "o64nw" "0f" "02" "/r")
 :arch-flags (list "X64" "PROT" "ND")))
-(push LAR-reg16.reg64 (gethash "LAR" *x64-instruction-variants-hash-table*))
+(push LAR-reg16.reg64-rm (gethash "LAR" *x64-instruction-variants-hash-table*))
 
 (defparameter LAR-reg32.mem (make-instance 'x64-asm-instruction
 :name "LAR"
@@ -4269,26 +4269,26 @@
 :arch-flags (list "386" "PROT" "SW")))
 (push LAR-reg32.mem (gethash "LAR" *x64-instruction-variants-hash-table*))
 
-(defparameter LAR-reg32.reg16 (make-instance 'x64-asm-instruction
+(defparameter LAR-reg32.reg16-rm (make-instance 'x64-asm-instruction
 :name "LAR"
 :operands (list "reg32" "reg16")
 :code-format (list "[rm:" "o32" "0f" "02" "/r")
 :arch-flags (list "386" "PROT")))
-(push LAR-reg32.reg16 (gethash "LAR" *x64-instruction-variants-hash-table*))
+(push LAR-reg32.reg16-rm (gethash "LAR" *x64-instruction-variants-hash-table*))
 
-(defparameter LAR-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter LAR-reg32.reg32-rm (make-instance 'x64-asm-instruction
 :name "LAR"
 :operands (list "reg32" "reg32")
 :code-format (list "[rm:" "o32" "0f" "02" "/r")
 :arch-flags (list "386" "PROT")))
-(push LAR-reg32.reg32 (gethash "LAR" *x64-instruction-variants-hash-table*))
+(push LAR-reg32.reg32-rm (gethash "LAR" *x64-instruction-variants-hash-table*))
 
-(defparameter LAR-reg32.reg64 (make-instance 'x64-asm-instruction
+(defparameter LAR-reg32.reg64-rm (make-instance 'x64-asm-instruction
 :name "LAR"
 :operands (list "reg32" "reg64")
 :code-format (list "[rm:" "o32" "o64nw" "0f" "02" "/r")
 :arch-flags (list "X64" "PROT" "ND")))
-(push LAR-reg32.reg64 (gethash "LAR" *x64-instruction-variants-hash-table*))
+(push LAR-reg32.reg64-rm (gethash "LAR" *x64-instruction-variants-hash-table*))
 
 (defparameter LAR-reg64.mem (make-instance 'x64-asm-instruction
 :name "LAR"
@@ -4297,26 +4297,26 @@
 :arch-flags (list "X64" "PROT" "SW")))
 (push LAR-reg64.mem (gethash "LAR" *x64-instruction-variants-hash-table*))
 
-(defparameter LAR-reg64.reg16 (make-instance 'x64-asm-instruction
+(defparameter LAR-reg64.reg16-rm (make-instance 'x64-asm-instruction
 :name "LAR"
 :operands (list "reg64" "reg16")
 :code-format (list "[rm:" "o64" "0f" "02" "/r")
 :arch-flags (list "X64" "PROT")))
-(push LAR-reg64.reg16 (gethash "LAR" *x64-instruction-variants-hash-table*))
+(push LAR-reg64.reg16-rm (gethash "LAR" *x64-instruction-variants-hash-table*))
 
-(defparameter LAR-reg64.reg32 (make-instance 'x64-asm-instruction
+(defparameter LAR-reg64.reg32-rm (make-instance 'x64-asm-instruction
 :name "LAR"
 :operands (list "reg64" "reg32")
 :code-format (list "[rm:" "o64" "0f" "02" "/r")
 :arch-flags (list "X64" "PROT")))
-(push LAR-reg64.reg32 (gethash "LAR" *x64-instruction-variants-hash-table*))
+(push LAR-reg64.reg32-rm (gethash "LAR" *x64-instruction-variants-hash-table*))
 
-(defparameter LAR-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter LAR-reg64.reg64-rm (make-instance 'x64-asm-instruction
 :name "LAR"
 :operands (list "reg64" "reg64")
 :code-format (list "[rm:" "o64" "0f" "02" "/r")
 :arch-flags (list "X64" "PROT")))
-(push LAR-reg64.reg64 (gethash "LAR" *x64-instruction-variants-hash-table*))
+(push LAR-reg64.reg64-rm (gethash "LAR" *x64-instruction-variants-hash-table*))
 
 (defparameter LEA-reg16.mem (make-instance 'x64-asm-instruction
 :name "LEA"
@@ -4605,26 +4605,26 @@
 :arch-flags (list "286" "PROT" "SW")))
 (push LSL-reg16.mem (gethash "LSL" *x64-instruction-variants-hash-table*))
 
-(defparameter LSL-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter LSL-reg16.reg16-rm (make-instance 'x64-asm-instruction
 :name "LSL"
 :operands (list "reg16" "reg16")
 :code-format (list "[rm:" "o16" "0f" "03" "/r")
 :arch-flags (list "286" "PROT")))
-(push LSL-reg16.reg16 (gethash "LSL" *x64-instruction-variants-hash-table*))
+(push LSL-reg16.reg16-rm (gethash "LSL" *x64-instruction-variants-hash-table*))
 
-(defparameter LSL-reg16.reg32 (make-instance 'x64-asm-instruction
+(defparameter LSL-reg16.reg32-rm (make-instance 'x64-asm-instruction
 :name "LSL"
 :operands (list "reg16" "reg32")
 :code-format (list "[rm:" "o16" "0f" "03" "/r")
 :arch-flags (list "386" "PROT")))
-(push LSL-reg16.reg32 (gethash "LSL" *x64-instruction-variants-hash-table*))
+(push LSL-reg16.reg32-rm (gethash "LSL" *x64-instruction-variants-hash-table*))
 
-(defparameter LSL-reg16.reg64 (make-instance 'x64-asm-instruction
+(defparameter LSL-reg16.reg64-rm (make-instance 'x64-asm-instruction
 :name "LSL"
 :operands (list "reg16" "reg64")
 :code-format (list "[rm:" "o16" "o64nw" "0f" "03" "/r")
 :arch-flags (list "X64" "PROT" "ND")))
-(push LSL-reg16.reg64 (gethash "LSL" *x64-instruction-variants-hash-table*))
+(push LSL-reg16.reg64-rm (gethash "LSL" *x64-instruction-variants-hash-table*))
 
 (defparameter LSL-reg32.mem (make-instance 'x64-asm-instruction
 :name "LSL"
@@ -4633,26 +4633,26 @@
 :arch-flags (list "386" "PROT" "SW")))
 (push LSL-reg32.mem (gethash "LSL" *x64-instruction-variants-hash-table*))
 
-(defparameter LSL-reg32.reg16 (make-instance 'x64-asm-instruction
+(defparameter LSL-reg32.reg16-rm (make-instance 'x64-asm-instruction
 :name "LSL"
 :operands (list "reg32" "reg16")
 :code-format (list "[rm:" "o32" "0f" "03" "/r")
 :arch-flags (list "386" "PROT")))
-(push LSL-reg32.reg16 (gethash "LSL" *x64-instruction-variants-hash-table*))
+(push LSL-reg32.reg16-rm (gethash "LSL" *x64-instruction-variants-hash-table*))
 
-(defparameter LSL-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter LSL-reg32.reg32-rm (make-instance 'x64-asm-instruction
 :name "LSL"
 :operands (list "reg32" "reg32")
 :code-format (list "[rm:" "o32" "0f" "03" "/r")
 :arch-flags (list "386" "PROT")))
-(push LSL-reg32.reg32 (gethash "LSL" *x64-instruction-variants-hash-table*))
+(push LSL-reg32.reg32-rm (gethash "LSL" *x64-instruction-variants-hash-table*))
 
-(defparameter LSL-reg32.reg64 (make-instance 'x64-asm-instruction
+(defparameter LSL-reg32.reg64-rm (make-instance 'x64-asm-instruction
 :name "LSL"
 :operands (list "reg32" "reg64")
 :code-format (list "[rm:" "o32" "o64nw" "0f" "03" "/r")
 :arch-flags (list "X64" "PROT" "ND")))
-(push LSL-reg32.reg64 (gethash "LSL" *x64-instruction-variants-hash-table*))
+(push LSL-reg32.reg64-rm (gethash "LSL" *x64-instruction-variants-hash-table*))
 
 (defparameter LSL-reg64.mem (make-instance 'x64-asm-instruction
 :name "LSL"
@@ -4661,26 +4661,26 @@
 :arch-flags (list "X64" "PROT" "SW")))
 (push LSL-reg64.mem (gethash "LSL" *x64-instruction-variants-hash-table*))
 
-(defparameter LSL-reg64.reg16 (make-instance 'x64-asm-instruction
+(defparameter LSL-reg64.reg16-rm (make-instance 'x64-asm-instruction
 :name "LSL"
 :operands (list "reg64" "reg16")
 :code-format (list "[rm:" "o64" "0f" "03" "/r")
 :arch-flags (list "X64" "PROT")))
-(push LSL-reg64.reg16 (gethash "LSL" *x64-instruction-variants-hash-table*))
+(push LSL-reg64.reg16-rm (gethash "LSL" *x64-instruction-variants-hash-table*))
 
-(defparameter LSL-reg64.reg32 (make-instance 'x64-asm-instruction
+(defparameter LSL-reg64.reg32-rm (make-instance 'x64-asm-instruction
 :name "LSL"
 :operands (list "reg64" "reg32")
 :code-format (list "[rm:" "o64" "0f" "03" "/r")
 :arch-flags (list "X64" "PROT")))
-(push LSL-reg64.reg32 (gethash "LSL" *x64-instruction-variants-hash-table*))
+(push LSL-reg64.reg32-rm (gethash "LSL" *x64-instruction-variants-hash-table*))
 
-(defparameter LSL-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter LSL-reg64.reg64-rm (make-instance 'x64-asm-instruction
 :name "LSL"
 :operands (list "reg64" "reg64")
 :code-format (list "[rm:" "o64" "0f" "03" "/r")
 :arch-flags (list "X64" "PROT")))
-(push LSL-reg64.reg64 (gethash "LSL" *x64-instruction-variants-hash-table*))
+(push LSL-reg64.reg64-rm (gethash "LSL" *x64-instruction-variants-hash-table*))
 
 (defparameter LSS-reg16.mem (make-instance 'x64-asm-instruction
 :name "LSS"
@@ -4920,12 +4920,12 @@
 :arch-flags (list "8086" "SM")))
 (push MOV-mem.reg8 (gethash "MOV" *x64-instruction-variants-hash-table*))
 
-(defparameter MOV-reg8.reg8 (make-instance 'x64-asm-instruction
+(defparameter MOV-reg8.reg8-mr (make-instance 'x64-asm-instruction
 :name "MOV"
 :operands (list "reg8" "reg8")
 :code-format (list "[mr:" "88" "/r")
 :arch-flags (list "8086")))
-(push MOV-reg8.reg8 (gethash "MOV" *x64-instruction-variants-hash-table*))
+(push MOV-reg8.reg8-mr (gethash "MOV" *x64-instruction-variants-hash-table*))
 
 (defparameter MOV-mem.reg16 (make-instance 'x64-asm-instruction
 :name "MOV"
@@ -4934,12 +4934,12 @@
 :arch-flags (list "8086" "SM")))
 (push MOV-mem.reg16 (gethash "MOV" *x64-instruction-variants-hash-table*))
 
-(defparameter MOV-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter MOV-reg16.reg16-mr (make-instance 'x64-asm-instruction
 :name "MOV"
 :operands (list "reg16" "reg16")
 :code-format (list "[mr:" "o16" "89" "/r")
 :arch-flags (list "8086")))
-(push MOV-reg16.reg16 (gethash "MOV" *x64-instruction-variants-hash-table*))
+(push MOV-reg16.reg16-mr (gethash "MOV" *x64-instruction-variants-hash-table*))
 
 (defparameter MOV-mem.reg32 (make-instance 'x64-asm-instruction
 :name "MOV"
@@ -4948,12 +4948,12 @@
 :arch-flags (list "386" "SM")))
 (push MOV-mem.reg32 (gethash "MOV" *x64-instruction-variants-hash-table*))
 
-(defparameter MOV-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter MOV-reg32.reg32-mr (make-instance 'x64-asm-instruction
 :name "MOV"
 :operands (list "reg32" "reg32")
 :code-format (list "[mr:" "o32" "89" "/r")
 :arch-flags (list "386")))
-(push MOV-reg32.reg32 (gethash "MOV" *x64-instruction-variants-hash-table*))
+(push MOV-reg32.reg32-mr (gethash "MOV" *x64-instruction-variants-hash-table*))
 
 (defparameter MOV-mem.reg64 (make-instance 'x64-asm-instruction
 :name "MOV"
@@ -4962,12 +4962,12 @@
 :arch-flags (list "X64" "SM")))
 (push MOV-mem.reg64 (gethash "MOV" *x64-instruction-variants-hash-table*))
 
-(defparameter MOV-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter MOV-reg64.reg64-mr (make-instance 'x64-asm-instruction
 :name "MOV"
 :operands (list "reg64" "reg64")
 :code-format (list "[mr:" "o64" "89" "/r")
 :arch-flags (list "X64")))
-(push MOV-reg64.reg64 (gethash "MOV" *x64-instruction-variants-hash-table*))
+(push MOV-reg64.reg64-mr (gethash "MOV" *x64-instruction-variants-hash-table*))
 
 (defparameter MOV-reg8.mem (make-instance 'x64-asm-instruction
 :name "MOV"
@@ -4976,12 +4976,12 @@
 :arch-flags (list "8086" "SM")))
 (push MOV-reg8.mem (gethash "MOV" *x64-instruction-variants-hash-table*))
 
-(defparameter MOV-reg8.reg8 (make-instance 'x64-asm-instruction
+(defparameter MOV-reg8.reg8-rm (make-instance 'x64-asm-instruction
 :name "MOV"
 :operands (list "reg8" "reg8")
 :code-format (list "[rm:" "8a" "/r")
 :arch-flags (list "8086")))
-(push MOV-reg8.reg8 (gethash "MOV" *x64-instruction-variants-hash-table*))
+(push MOV-reg8.reg8-rm (gethash "MOV" *x64-instruction-variants-hash-table*))
 
 (defparameter MOV-reg16.mem (make-instance 'x64-asm-instruction
 :name "MOV"
@@ -4990,12 +4990,12 @@
 :arch-flags (list "8086" "SM")))
 (push MOV-reg16.mem (gethash "MOV" *x64-instruction-variants-hash-table*))
 
-(defparameter MOV-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter MOV-reg16.reg16-rm (make-instance 'x64-asm-instruction
 :name "MOV"
 :operands (list "reg16" "reg16")
 :code-format (list "[rm:" "o16" "8b" "/r")
 :arch-flags (list "8086")))
-(push MOV-reg16.reg16 (gethash "MOV" *x64-instruction-variants-hash-table*))
+(push MOV-reg16.reg16-rm (gethash "MOV" *x64-instruction-variants-hash-table*))
 
 (defparameter MOV-reg32.mem (make-instance 'x64-asm-instruction
 :name "MOV"
@@ -5004,12 +5004,12 @@
 :arch-flags (list "386" "SM")))
 (push MOV-reg32.mem (gethash "MOV" *x64-instruction-variants-hash-table*))
 
-(defparameter MOV-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter MOV-reg32.reg32-rm (make-instance 'x64-asm-instruction
 :name "MOV"
 :operands (list "reg32" "reg32")
 :code-format (list "[rm:" "o32" "8b" "/r")
 :arch-flags (list "386")))
-(push MOV-reg32.reg32 (gethash "MOV" *x64-instruction-variants-hash-table*))
+(push MOV-reg32.reg32-rm (gethash "MOV" *x64-instruction-variants-hash-table*))
 
 (defparameter MOV-reg64.mem (make-instance 'x64-asm-instruction
 :name "MOV"
@@ -5018,12 +5018,12 @@
 :arch-flags (list "X64" "SM")))
 (push MOV-reg64.mem (gethash "MOV" *x64-instruction-variants-hash-table*))
 
-(defparameter MOV-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter MOV-reg64.reg64-rm (make-instance 'x64-asm-instruction
 :name "MOV"
 :operands (list "reg64" "reg64")
 :code-format (list "[rm:" "o64" "8b" "/r")
 :arch-flags (list "X64")))
-(push MOV-reg64.reg64 (gethash "MOV" *x64-instruction-variants-hash-table*))
+(push MOV-reg64.reg64-rm (gethash "MOV" *x64-instruction-variants-hash-table*))
 
 (defparameter MOV-reg8.imm (make-instance 'x64-asm-instruction
 :name "MOV"
@@ -5214,12 +5214,12 @@
 :arch-flags (list "386" "SB")))
 (push MOVSX-reg16.mem (gethash "MOVSX" *x64-instruction-variants-hash-table*))
 
-(defparameter MOVSX-reg16.reg8 (make-instance 'x64-asm-instruction
+(defparameter MOVSX-reg16.reg8-rm (make-instance 'x64-asm-instruction
 :name "MOVSX"
 :operands (list "reg16" "reg8")
 :code-format (list "[rm:" "o16" "0f" "be" "/r")
 :arch-flags (list "386")))
-(push MOVSX-reg16.reg8 (gethash "MOVSX" *x64-instruction-variants-hash-table*))
+(push MOVSX-reg16.reg8-rm (gethash "MOVSX" *x64-instruction-variants-hash-table*))
 
 (defparameter MOVSX-reg32.rm8 (make-instance 'x64-asm-instruction
 :name "MOVSX"
@@ -5270,12 +5270,12 @@
 :arch-flags (list "386" "SB")))
 (push MOVZX-reg16.mem (gethash "MOVZX" *x64-instruction-variants-hash-table*))
 
-(defparameter MOVZX-reg16.reg8 (make-instance 'x64-asm-instruction
+(defparameter MOVZX-reg16.reg8-rm (make-instance 'x64-asm-instruction
 :name "MOVZX"
 :operands (list "reg16" "reg8")
 :code-format (list "[rm:" "o16" "0f" "b6" "/r")
 :arch-flags (list "386")))
-(push MOVZX-reg16.reg8 (gethash "MOVZX" *x64-instruction-variants-hash-table*))
+(push MOVZX-reg16.reg8-rm (gethash "MOVZX" *x64-instruction-variants-hash-table*))
 
 (defparameter MOVZX-reg32.rm8 (make-instance 'x64-asm-instruction
 :name "MOVZX"
@@ -5438,12 +5438,12 @@
 :arch-flags (list "8086" "SM" "LOCK")))
 (push OR-mem.reg8 (gethash "OR" *x64-instruction-variants-hash-table*))
 
-(defparameter OR-reg8.reg8 (make-instance 'x64-asm-instruction
+(defparameter OR-reg8.reg8-mr (make-instance 'x64-asm-instruction
 :name "OR"
 :operands (list "reg8" "reg8")
 :code-format (list "[mr:" "08" "/r")
 :arch-flags (list "8086")))
-(push OR-reg8.reg8 (gethash "OR" *x64-instruction-variants-hash-table*))
+(push OR-reg8.reg8-mr (gethash "OR" *x64-instruction-variants-hash-table*))
 
 (defparameter OR-mem.reg16 (make-instance 'x64-asm-instruction
 :name "OR"
@@ -5452,12 +5452,12 @@
 :arch-flags (list "8086" "SM" "LOCK")))
 (push OR-mem.reg16 (gethash "OR" *x64-instruction-variants-hash-table*))
 
-(defparameter OR-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter OR-reg16.reg16-mr (make-instance 'x64-asm-instruction
 :name "OR"
 :operands (list "reg16" "reg16")
 :code-format (list "[mr:" "o16" "09" "/r")
 :arch-flags (list "8086")))
-(push OR-reg16.reg16 (gethash "OR" *x64-instruction-variants-hash-table*))
+(push OR-reg16.reg16-mr (gethash "OR" *x64-instruction-variants-hash-table*))
 
 (defparameter OR-mem.reg32 (make-instance 'x64-asm-instruction
 :name "OR"
@@ -5466,12 +5466,12 @@
 :arch-flags (list "386" "SM" "LOCK")))
 (push OR-mem.reg32 (gethash "OR" *x64-instruction-variants-hash-table*))
 
-(defparameter OR-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter OR-reg32.reg32-mr (make-instance 'x64-asm-instruction
 :name "OR"
 :operands (list "reg32" "reg32")
 :code-format (list "[mr:" "o32" "09" "/r")
 :arch-flags (list "386")))
-(push OR-reg32.reg32 (gethash "OR" *x64-instruction-variants-hash-table*))
+(push OR-reg32.reg32-mr (gethash "OR" *x64-instruction-variants-hash-table*))
 
 (defparameter OR-mem.reg64 (make-instance 'x64-asm-instruction
 :name "OR"
@@ -5480,12 +5480,12 @@
 :arch-flags (list "X64" "SM" "LOCK")))
 (push OR-mem.reg64 (gethash "OR" *x64-instruction-variants-hash-table*))
 
-(defparameter OR-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter OR-reg64.reg64-mr (make-instance 'x64-asm-instruction
 :name "OR"
 :operands (list "reg64" "reg64")
 :code-format (list "[mr:" "o64" "09" "/r")
 :arch-flags (list "X64")))
-(push OR-reg64.reg64 (gethash "OR" *x64-instruction-variants-hash-table*))
+(push OR-reg64.reg64-mr (gethash "OR" *x64-instruction-variants-hash-table*))
 
 (defparameter OR-reg8.mem (make-instance 'x64-asm-instruction
 :name "OR"
@@ -5494,12 +5494,12 @@
 :arch-flags (list "8086" "SM")))
 (push OR-reg8.mem (gethash "OR" *x64-instruction-variants-hash-table*))
 
-(defparameter OR-reg8.reg8 (make-instance 'x64-asm-instruction
+(defparameter OR-reg8.reg8-rm (make-instance 'x64-asm-instruction
 :name "OR"
 :operands (list "reg8" "reg8")
 :code-format (list "[rm:" "0a" "/r")
 :arch-flags (list "8086")))
-(push OR-reg8.reg8 (gethash "OR" *x64-instruction-variants-hash-table*))
+(push OR-reg8.reg8-rm (gethash "OR" *x64-instruction-variants-hash-table*))
 
 (defparameter OR-reg16.mem (make-instance 'x64-asm-instruction
 :name "OR"
@@ -5508,12 +5508,12 @@
 :arch-flags (list "8086" "SM")))
 (push OR-reg16.mem (gethash "OR" *x64-instruction-variants-hash-table*))
 
-(defparameter OR-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter OR-reg16.reg16-rm (make-instance 'x64-asm-instruction
 :name "OR"
 :operands (list "reg16" "reg16")
 :code-format (list "[rm:" "o16" "0b" "/r")
 :arch-flags (list "8086")))
-(push OR-reg16.reg16 (gethash "OR" *x64-instruction-variants-hash-table*))
+(push OR-reg16.reg16-rm (gethash "OR" *x64-instruction-variants-hash-table*))
 
 (defparameter OR-reg32.mem (make-instance 'x64-asm-instruction
 :name "OR"
@@ -5522,12 +5522,12 @@
 :arch-flags (list "386" "SM")))
 (push OR-reg32.mem (gethash "OR" *x64-instruction-variants-hash-table*))
 
-(defparameter OR-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter OR-reg32.reg32-rm (make-instance 'x64-asm-instruction
 :name "OR"
 :operands (list "reg32" "reg32")
 :code-format (list "[rm:" "o32" "0b" "/r")
 :arch-flags (list "386")))
-(push OR-reg32.reg32 (gethash "OR" *x64-instruction-variants-hash-table*))
+(push OR-reg32.reg32-rm (gethash "OR" *x64-instruction-variants-hash-table*))
 
 (defparameter OR-reg64.mem (make-instance 'x64-asm-instruction
 :name "OR"
@@ -5536,12 +5536,12 @@
 :arch-flags (list "X64" "SM")))
 (push OR-reg64.mem (gethash "OR" *x64-instruction-variants-hash-table*))
 
-(defparameter OR-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter OR-reg64.reg64-rm (make-instance 'x64-asm-instruction
 :name "OR"
 :operands (list "reg64" "reg64")
 :code-format (list "[rm:" "o64" "0b" "/r")
 :arch-flags (list "X64")))
-(push OR-reg64.reg64 (gethash "OR" *x64-instruction-variants-hash-table*))
+(push OR-reg64.reg64-rm (gethash "OR" *x64-instruction-variants-hash-table*))
 
 (defparameter OR-rm16.imm8 (make-instance 'x64-asm-instruction
 :name "OR"
@@ -7181,12 +7181,12 @@
 :arch-flags (list "8086" "SM" "LOCK")))
 (push SBB-mem.reg8 (gethash "SBB" *x64-instruction-variants-hash-table*))
 
-(defparameter SBB-reg8.reg8 (make-instance 'x64-asm-instruction
+(defparameter SBB-reg8.reg8-mr (make-instance 'x64-asm-instruction
 :name "SBB"
 :operands (list "reg8" "reg8")
 :code-format (list "[mr:" "18" "/r")
 :arch-flags (list "8086")))
-(push SBB-reg8.reg8 (gethash "SBB" *x64-instruction-variants-hash-table*))
+(push SBB-reg8.reg8-mr (gethash "SBB" *x64-instruction-variants-hash-table*))
 
 (defparameter SBB-mem.reg16 (make-instance 'x64-asm-instruction
 :name "SBB"
@@ -7195,12 +7195,12 @@
 :arch-flags (list "8086" "SM" "LOCK")))
 (push SBB-mem.reg16 (gethash "SBB" *x64-instruction-variants-hash-table*))
 
-(defparameter SBB-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter SBB-reg16.reg16-mr (make-instance 'x64-asm-instruction
 :name "SBB"
 :operands (list "reg16" "reg16")
 :code-format (list "[mr:" "o16" "19" "/r")
 :arch-flags (list "8086")))
-(push SBB-reg16.reg16 (gethash "SBB" *x64-instruction-variants-hash-table*))
+(push SBB-reg16.reg16-mr (gethash "SBB" *x64-instruction-variants-hash-table*))
 
 (defparameter SBB-mem.reg32 (make-instance 'x64-asm-instruction
 :name "SBB"
@@ -7209,12 +7209,12 @@
 :arch-flags (list "386" "SM" "LOCK")))
 (push SBB-mem.reg32 (gethash "SBB" *x64-instruction-variants-hash-table*))
 
-(defparameter SBB-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter SBB-reg32.reg32-mr (make-instance 'x64-asm-instruction
 :name "SBB"
 :operands (list "reg32" "reg32")
 :code-format (list "[mr:" "o32" "19" "/r")
 :arch-flags (list "386")))
-(push SBB-reg32.reg32 (gethash "SBB" *x64-instruction-variants-hash-table*))
+(push SBB-reg32.reg32-mr (gethash "SBB" *x64-instruction-variants-hash-table*))
 
 (defparameter SBB-mem.reg64 (make-instance 'x64-asm-instruction
 :name "SBB"
@@ -7223,12 +7223,12 @@
 :arch-flags (list "X64" "SM" "LOCK")))
 (push SBB-mem.reg64 (gethash "SBB" *x64-instruction-variants-hash-table*))
 
-(defparameter SBB-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter SBB-reg64.reg64-mr (make-instance 'x64-asm-instruction
 :name "SBB"
 :operands (list "reg64" "reg64")
 :code-format (list "[mr:" "o64" "19" "/r")
 :arch-flags (list "X64")))
-(push SBB-reg64.reg64 (gethash "SBB" *x64-instruction-variants-hash-table*))
+(push SBB-reg64.reg64-mr (gethash "SBB" *x64-instruction-variants-hash-table*))
 
 (defparameter SBB-reg8.mem (make-instance 'x64-asm-instruction
 :name "SBB"
@@ -7237,12 +7237,12 @@
 :arch-flags (list "8086" "SM")))
 (push SBB-reg8.mem (gethash "SBB" *x64-instruction-variants-hash-table*))
 
-(defparameter SBB-reg8.reg8 (make-instance 'x64-asm-instruction
+(defparameter SBB-reg8.reg8-rm (make-instance 'x64-asm-instruction
 :name "SBB"
 :operands (list "reg8" "reg8")
 :code-format (list "[rm:" "1a" "/r")
 :arch-flags (list "8086")))
-(push SBB-reg8.reg8 (gethash "SBB" *x64-instruction-variants-hash-table*))
+(push SBB-reg8.reg8-rm (gethash "SBB" *x64-instruction-variants-hash-table*))
 
 (defparameter SBB-reg16.mem (make-instance 'x64-asm-instruction
 :name "SBB"
@@ -7251,12 +7251,12 @@
 :arch-flags (list "8086" "SM")))
 (push SBB-reg16.mem (gethash "SBB" *x64-instruction-variants-hash-table*))
 
-(defparameter SBB-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter SBB-reg16.reg16-rm (make-instance 'x64-asm-instruction
 :name "SBB"
 :operands (list "reg16" "reg16")
 :code-format (list "[rm:" "o16" "1b" "/r")
 :arch-flags (list "8086")))
-(push SBB-reg16.reg16 (gethash "SBB" *x64-instruction-variants-hash-table*))
+(push SBB-reg16.reg16-rm (gethash "SBB" *x64-instruction-variants-hash-table*))
 
 (defparameter SBB-reg32.mem (make-instance 'x64-asm-instruction
 :name "SBB"
@@ -7265,12 +7265,12 @@
 :arch-flags (list "386" "SM")))
 (push SBB-reg32.mem (gethash "SBB" *x64-instruction-variants-hash-table*))
 
-(defparameter SBB-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter SBB-reg32.reg32-rm (make-instance 'x64-asm-instruction
 :name "SBB"
 :operands (list "reg32" "reg32")
 :code-format (list "[rm:" "o32" "1b" "/r")
 :arch-flags (list "386")))
-(push SBB-reg32.reg32 (gethash "SBB" *x64-instruction-variants-hash-table*))
+(push SBB-reg32.reg32-rm (gethash "SBB" *x64-instruction-variants-hash-table*))
 
 (defparameter SBB-reg64.mem (make-instance 'x64-asm-instruction
 :name "SBB"
@@ -7279,12 +7279,12 @@
 :arch-flags (list "X64" "SM")))
 (push SBB-reg64.mem (gethash "SBB" *x64-instruction-variants-hash-table*))
 
-(defparameter SBB-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter SBB-reg64.reg64-rm (make-instance 'x64-asm-instruction
 :name "SBB"
 :operands (list "reg64" "reg64")
 :code-format (list "[rm:" "o64" "1b" "/r")
 :arch-flags (list "X64")))
-(push SBB-reg64.reg64 (gethash "SBB" *x64-instruction-variants-hash-table*))
+(push SBB-reg64.reg64-rm (gethash "SBB" *x64-instruction-variants-hash-table*))
 
 (defparameter SBB-rm16.imm8 (make-instance 'x64-asm-instruction
 :name "SBB"
@@ -7573,12 +7573,12 @@
 :arch-flags (list "386" "SM2" "SB" "AR2")))
 (push SHLD-mem.reg16.imm (gethash "SHLD" *x64-instruction-variants-hash-table*))
 
-(defparameter SHLD-reg16.reg16.imm (make-instance 'x64-asm-instruction
+(defparameter SHLD-reg16.reg16.imm-mr (make-instance 'x64-asm-instruction
 :name "SHLD"
 :operands (list "reg16" "reg16" "imm")
 :code-format (list "[mri:" "o16" "0f" "a4" "/r" "ib,u")
 :arch-flags (list "386" "SM2" "SB" "AR2")))
-(push SHLD-reg16.reg16.imm (gethash "SHLD" *x64-instruction-variants-hash-table*))
+(push SHLD-reg16.reg16.imm-mr (gethash "SHLD" *x64-instruction-variants-hash-table*))
 
 (defparameter SHLD-mem.reg32.imm (make-instance 'x64-asm-instruction
 :name "SHLD"
@@ -7587,12 +7587,12 @@
 :arch-flags (list "386" "SM2" "SB" "AR2")))
 (push SHLD-mem.reg32.imm (gethash "SHLD" *x64-instruction-variants-hash-table*))
 
-(defparameter SHLD-reg32.reg32.imm (make-instance 'x64-asm-instruction
+(defparameter SHLD-reg32.reg32.imm-mr (make-instance 'x64-asm-instruction
 :name "SHLD"
 :operands (list "reg32" "reg32" "imm")
 :code-format (list "[mri:" "o32" "0f" "a4" "/r" "ib,u")
 :arch-flags (list "386" "SM2" "SB" "AR2")))
-(push SHLD-reg32.reg32.imm (gethash "SHLD" *x64-instruction-variants-hash-table*))
+(push SHLD-reg32.reg32.imm-mr (gethash "SHLD" *x64-instruction-variants-hash-table*))
 
 (defparameter SHLD-mem.reg64.imm (make-instance 'x64-asm-instruction
 :name "SHLD"
@@ -7601,12 +7601,12 @@
 :arch-flags (list "X64" "SM2" "SB" "AR2")))
 (push SHLD-mem.reg64.imm (gethash "SHLD" *x64-instruction-variants-hash-table*))
 
-(defparameter SHLD-reg64.reg64.imm (make-instance 'x64-asm-instruction
+(defparameter SHLD-reg64.reg64.imm-mr (make-instance 'x64-asm-instruction
 :name "SHLD"
 :operands (list "reg64" "reg64" "imm")
 :code-format (list "[mri:" "o64" "0f" "a4" "/r" "ib,u")
 :arch-flags (list "X64" "SM2" "SB" "AR2")))
-(push SHLD-reg64.reg64.imm (gethash "SHLD" *x64-instruction-variants-hash-table*))
+(push SHLD-reg64.reg64.imm-mr (gethash "SHLD" *x64-instruction-variants-hash-table*))
 
 (defparameter SHLD-mem.reg16.reg_cl (make-instance 'x64-asm-instruction
 :name "SHLD"
@@ -7615,12 +7615,12 @@
 :arch-flags (list "386" "SM")))
 (push SHLD-mem.reg16.reg_cl (gethash "SHLD" *x64-instruction-variants-hash-table*))
 
-(defparameter SHLD-reg16.reg16.reg_cl (make-instance 'x64-asm-instruction
+(defparameter SHLD-reg16.reg16.reg_cl-mr (make-instance 'x64-asm-instruction
 :name "SHLD"
 :operands (list "reg16" "reg16" "reg_cl")
 :code-format (list "[mr-:" "o16" "0f" "a5" "/r")
 :arch-flags (list "386")))
-(push SHLD-reg16.reg16.reg_cl (gethash "SHLD" *x64-instruction-variants-hash-table*))
+(push SHLD-reg16.reg16.reg_cl-mr (gethash "SHLD" *x64-instruction-variants-hash-table*))
 
 (defparameter SHLD-mem.reg32.reg_cl (make-instance 'x64-asm-instruction
 :name "SHLD"
@@ -7629,12 +7629,12 @@
 :arch-flags (list "386" "SM")))
 (push SHLD-mem.reg32.reg_cl (gethash "SHLD" *x64-instruction-variants-hash-table*))
 
-(defparameter SHLD-reg32.reg32.reg_cl (make-instance 'x64-asm-instruction
+(defparameter SHLD-reg32.reg32.reg_cl-mr (make-instance 'x64-asm-instruction
 :name "SHLD"
 :operands (list "reg32" "reg32" "reg_cl")
 :code-format (list "[mr-:" "o32" "0f" "a5" "/r")
 :arch-flags (list "386")))
-(push SHLD-reg32.reg32.reg_cl (gethash "SHLD" *x64-instruction-variants-hash-table*))
+(push SHLD-reg32.reg32.reg_cl-mr (gethash "SHLD" *x64-instruction-variants-hash-table*))
 
 (defparameter SHLD-mem.reg64.reg_cl (make-instance 'x64-asm-instruction
 :name "SHLD"
@@ -7643,12 +7643,12 @@
 :arch-flags (list "X64" "SM")))
 (push SHLD-mem.reg64.reg_cl (gethash "SHLD" *x64-instruction-variants-hash-table*))
 
-(defparameter SHLD-reg64.reg64.reg_cl (make-instance 'x64-asm-instruction
+(defparameter SHLD-reg64.reg64.reg_cl-mr (make-instance 'x64-asm-instruction
 :name "SHLD"
 :operands (list "reg64" "reg64" "reg_cl")
 :code-format (list "[mr-:" "o64" "0f" "a5" "/r")
 :arch-flags (list "X64")))
-(push SHLD-reg64.reg64.reg_cl (gethash "SHLD" *x64-instruction-variants-hash-table*))
+(push SHLD-reg64.reg64.reg_cl-mr (gethash "SHLD" *x64-instruction-variants-hash-table*))
 
 (defparameter SHR-rm8.unity (make-instance 'x64-asm-instruction
 :name "SHR"
@@ -7741,12 +7741,12 @@
 :arch-flags (list "386" "SM2" "SB" "AR2")))
 (push SHRD-mem.reg16.imm (gethash "SHRD" *x64-instruction-variants-hash-table*))
 
-(defparameter SHRD-reg16.reg16.imm (make-instance 'x64-asm-instruction
+(defparameter SHRD-reg16.reg16.imm-mr (make-instance 'x64-asm-instruction
 :name "SHRD"
 :operands (list "reg16" "reg16" "imm")
 :code-format (list "[mri:" "o16" "0f" "ac" "/r" "ib,u")
 :arch-flags (list "386" "SM2" "SB" "AR2")))
-(push SHRD-reg16.reg16.imm (gethash "SHRD" *x64-instruction-variants-hash-table*))
+(push SHRD-reg16.reg16.imm-mr (gethash "SHRD" *x64-instruction-variants-hash-table*))
 
 (defparameter SHRD-mem.reg32.imm (make-instance 'x64-asm-instruction
 :name "SHRD"
@@ -7755,12 +7755,12 @@
 :arch-flags (list "386" "SM2" "SB" "AR2")))
 (push SHRD-mem.reg32.imm (gethash "SHRD" *x64-instruction-variants-hash-table*))
 
-(defparameter SHRD-reg32.reg32.imm (make-instance 'x64-asm-instruction
+(defparameter SHRD-reg32.reg32.imm-mr (make-instance 'x64-asm-instruction
 :name "SHRD"
 :operands (list "reg32" "reg32" "imm")
 :code-format (list "[mri:" "o32" "0f" "ac" "/r" "ib,u")
 :arch-flags (list "386" "SM2" "SB" "AR2")))
-(push SHRD-reg32.reg32.imm (gethash "SHRD" *x64-instruction-variants-hash-table*))
+(push SHRD-reg32.reg32.imm-mr (gethash "SHRD" *x64-instruction-variants-hash-table*))
 
 (defparameter SHRD-mem.reg64.imm (make-instance 'x64-asm-instruction
 :name "SHRD"
@@ -7769,12 +7769,12 @@
 :arch-flags (list "X64" "SM2" "SB" "AR2")))
 (push SHRD-mem.reg64.imm (gethash "SHRD" *x64-instruction-variants-hash-table*))
 
-(defparameter SHRD-reg64.reg64.imm (make-instance 'x64-asm-instruction
+(defparameter SHRD-reg64.reg64.imm-mr (make-instance 'x64-asm-instruction
 :name "SHRD"
 :operands (list "reg64" "reg64" "imm")
 :code-format (list "[mri:" "o64" "0f" "ac" "/r" "ib,u")
 :arch-flags (list "X64" "SM2" "SB" "AR2")))
-(push SHRD-reg64.reg64.imm (gethash "SHRD" *x64-instruction-variants-hash-table*))
+(push SHRD-reg64.reg64.imm-mr (gethash "SHRD" *x64-instruction-variants-hash-table*))
 
 (defparameter SHRD-mem.reg16.reg_cl (make-instance 'x64-asm-instruction
 :name "SHRD"
@@ -7783,12 +7783,12 @@
 :arch-flags (list "386" "SM")))
 (push SHRD-mem.reg16.reg_cl (gethash "SHRD" *x64-instruction-variants-hash-table*))
 
-(defparameter SHRD-reg16.reg16.reg_cl (make-instance 'x64-asm-instruction
+(defparameter SHRD-reg16.reg16.reg_cl-mr (make-instance 'x64-asm-instruction
 :name "SHRD"
 :operands (list "reg16" "reg16" "reg_cl")
 :code-format (list "[mr-:" "o16" "0f" "ad" "/r")
 :arch-flags (list "386")))
-(push SHRD-reg16.reg16.reg_cl (gethash "SHRD" *x64-instruction-variants-hash-table*))
+(push SHRD-reg16.reg16.reg_cl-mr (gethash "SHRD" *x64-instruction-variants-hash-table*))
 
 (defparameter SHRD-mem.reg32.reg_cl (make-instance 'x64-asm-instruction
 :name "SHRD"
@@ -7797,12 +7797,12 @@
 :arch-flags (list "386" "SM")))
 (push SHRD-mem.reg32.reg_cl (gethash "SHRD" *x64-instruction-variants-hash-table*))
 
-(defparameter SHRD-reg32.reg32.reg_cl (make-instance 'x64-asm-instruction
+(defparameter SHRD-reg32.reg32.reg_cl-mr (make-instance 'x64-asm-instruction
 :name "SHRD"
 :operands (list "reg32" "reg32" "reg_cl")
 :code-format (list "[mr-:" "o32" "0f" "ad" "/r")
 :arch-flags (list "386")))
-(push SHRD-reg32.reg32.reg_cl (gethash "SHRD" *x64-instruction-variants-hash-table*))
+(push SHRD-reg32.reg32.reg_cl-mr (gethash "SHRD" *x64-instruction-variants-hash-table*))
 
 (defparameter SHRD-mem.reg64.reg_cl (make-instance 'x64-asm-instruction
 :name "SHRD"
@@ -7811,12 +7811,12 @@
 :arch-flags (list "X64" "SM")))
 (push SHRD-mem.reg64.reg_cl (gethash "SHRD" *x64-instruction-variants-hash-table*))
 
-(defparameter SHRD-reg64.reg64.reg_cl (make-instance 'x64-asm-instruction
+(defparameter SHRD-reg64.reg64.reg_cl-mr (make-instance 'x64-asm-instruction
 :name "SHRD"
 :operands (list "reg64" "reg64" "reg_cl")
 :code-format (list "[mr-:" "o64" "0f" "ad" "/r")
 :arch-flags (list "X64")))
-(push SHRD-reg64.reg64.reg_cl (gethash "SHRD" *x64-instruction-variants-hash-table*))
+(push SHRD-reg64.reg64.reg_cl-mr (gethash "SHRD" *x64-instruction-variants-hash-table*))
 
 (defparameter SIDT-mem (make-instance 'x64-asm-instruction
 :name "SIDT"
@@ -8014,12 +8014,12 @@
 :arch-flags (list "8086" "SM" "LOCK")))
 (push SUB-mem.reg8 (gethash "SUB" *x64-instruction-variants-hash-table*))
 
-(defparameter SUB-reg8.reg8 (make-instance 'x64-asm-instruction
+(defparameter SUB-reg8.reg8-mr (make-instance 'x64-asm-instruction
 :name "SUB"
 :operands (list "reg8" "reg8")
 :code-format (list "[mr:" "28" "/r")
 :arch-flags (list "8086")))
-(push SUB-reg8.reg8 (gethash "SUB" *x64-instruction-variants-hash-table*))
+(push SUB-reg8.reg8-mr (gethash "SUB" *x64-instruction-variants-hash-table*))
 
 (defparameter SUB-mem.reg16 (make-instance 'x64-asm-instruction
 :name "SUB"
@@ -8028,12 +8028,12 @@
 :arch-flags (list "8086" "SM" "LOCK")))
 (push SUB-mem.reg16 (gethash "SUB" *x64-instruction-variants-hash-table*))
 
-(defparameter SUB-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter SUB-reg16.reg16-mr (make-instance 'x64-asm-instruction
 :name "SUB"
 :operands (list "reg16" "reg16")
 :code-format (list "[mr:" "o16" "29" "/r")
 :arch-flags (list "8086")))
-(push SUB-reg16.reg16 (gethash "SUB" *x64-instruction-variants-hash-table*))
+(push SUB-reg16.reg16-mr (gethash "SUB" *x64-instruction-variants-hash-table*))
 
 (defparameter SUB-mem.reg32 (make-instance 'x64-asm-instruction
 :name "SUB"
@@ -8042,12 +8042,12 @@
 :arch-flags (list "386" "SM" "LOCK")))
 (push SUB-mem.reg32 (gethash "SUB" *x64-instruction-variants-hash-table*))
 
-(defparameter SUB-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter SUB-reg32.reg32-mr (make-instance 'x64-asm-instruction
 :name "SUB"
 :operands (list "reg32" "reg32")
 :code-format (list "[mr:" "o32" "29" "/r")
 :arch-flags (list "386")))
-(push SUB-reg32.reg32 (gethash "SUB" *x64-instruction-variants-hash-table*))
+(push SUB-reg32.reg32-mr (gethash "SUB" *x64-instruction-variants-hash-table*))
 
 (defparameter SUB-mem.reg64 (make-instance 'x64-asm-instruction
 :name "SUB"
@@ -8056,12 +8056,12 @@
 :arch-flags (list "X64" "SM" "LOCK")))
 (push SUB-mem.reg64 (gethash "SUB" *x64-instruction-variants-hash-table*))
 
-(defparameter SUB-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter SUB-reg64.reg64-mr (make-instance 'x64-asm-instruction
 :name "SUB"
 :operands (list "reg64" "reg64")
 :code-format (list "[mr:" "o64" "29" "/r")
 :arch-flags (list "X64")))
-(push SUB-reg64.reg64 (gethash "SUB" *x64-instruction-variants-hash-table*))
+(push SUB-reg64.reg64-mr (gethash "SUB" *x64-instruction-variants-hash-table*))
 
 (defparameter SUB-reg8.mem (make-instance 'x64-asm-instruction
 :name "SUB"
@@ -8070,12 +8070,12 @@
 :arch-flags (list "8086" "SM")))
 (push SUB-reg8.mem (gethash "SUB" *x64-instruction-variants-hash-table*))
 
-(defparameter SUB-reg8.reg8 (make-instance 'x64-asm-instruction
+(defparameter SUB-reg8.reg8-rm (make-instance 'x64-asm-instruction
 :name "SUB"
 :operands (list "reg8" "reg8")
 :code-format (list "[rm:" "2a" "/r")
 :arch-flags (list "8086")))
-(push SUB-reg8.reg8 (gethash "SUB" *x64-instruction-variants-hash-table*))
+(push SUB-reg8.reg8-rm (gethash "SUB" *x64-instruction-variants-hash-table*))
 
 (defparameter SUB-reg16.mem (make-instance 'x64-asm-instruction
 :name "SUB"
@@ -8084,12 +8084,12 @@
 :arch-flags (list "8086" "SM")))
 (push SUB-reg16.mem (gethash "SUB" *x64-instruction-variants-hash-table*))
 
-(defparameter SUB-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter SUB-reg16.reg16-rm (make-instance 'x64-asm-instruction
 :name "SUB"
 :operands (list "reg16" "reg16")
 :code-format (list "[rm:" "o16" "2b" "/r")
 :arch-flags (list "8086")))
-(push SUB-reg16.reg16 (gethash "SUB" *x64-instruction-variants-hash-table*))
+(push SUB-reg16.reg16-rm (gethash "SUB" *x64-instruction-variants-hash-table*))
 
 (defparameter SUB-reg32.mem (make-instance 'x64-asm-instruction
 :name "SUB"
@@ -8098,12 +8098,12 @@
 :arch-flags (list "386" "SM")))
 (push SUB-reg32.mem (gethash "SUB" *x64-instruction-variants-hash-table*))
 
-(defparameter SUB-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter SUB-reg32.reg32-rm (make-instance 'x64-asm-instruction
 :name "SUB"
 :operands (list "reg32" "reg32")
 :code-format (list "[rm:" "o32" "2b" "/r")
 :arch-flags (list "386")))
-(push SUB-reg32.reg32 (gethash "SUB" *x64-instruction-variants-hash-table*))
+(push SUB-reg32.reg32-rm (gethash "SUB" *x64-instruction-variants-hash-table*))
 
 (defparameter SUB-reg64.mem (make-instance 'x64-asm-instruction
 :name "SUB"
@@ -8112,12 +8112,12 @@
 :arch-flags (list "X64" "SM")))
 (push SUB-reg64.mem (gethash "SUB" *x64-instruction-variants-hash-table*))
 
-(defparameter SUB-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter SUB-reg64.reg64-rm (make-instance 'x64-asm-instruction
 :name "SUB"
 :operands (list "reg64" "reg64")
 :code-format (list "[rm:" "o64" "2b" "/r")
 :arch-flags (list "X64")))
-(push SUB-reg64.reg64 (gethash "SUB" *x64-instruction-variants-hash-table*))
+(push SUB-reg64.reg64-rm (gethash "SUB" *x64-instruction-variants-hash-table*))
 
 (defparameter SUB-rm16.imm8 (make-instance 'x64-asm-instruction
 :name "SUB"
@@ -8336,12 +8336,12 @@
 :arch-flags (list "8086" "SM")))
 (push TEST-mem.reg8 (gethash "TEST" *x64-instruction-variants-hash-table*))
 
-(defparameter TEST-reg8.reg8 (make-instance 'x64-asm-instruction
+(defparameter TEST-reg8.reg8-mr (make-instance 'x64-asm-instruction
 :name "TEST"
 :operands (list "reg8" "reg8")
 :code-format (list "[mr:" "84" "/r")
 :arch-flags (list "8086")))
-(push TEST-reg8.reg8 (gethash "TEST" *x64-instruction-variants-hash-table*))
+(push TEST-reg8.reg8-mr (gethash "TEST" *x64-instruction-variants-hash-table*))
 
 (defparameter TEST-mem.reg16 (make-instance 'x64-asm-instruction
 :name "TEST"
@@ -8350,12 +8350,12 @@
 :arch-flags (list "8086" "SM")))
 (push TEST-mem.reg16 (gethash "TEST" *x64-instruction-variants-hash-table*))
 
-(defparameter TEST-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter TEST-reg16.reg16-mr (make-instance 'x64-asm-instruction
 :name "TEST"
 :operands (list "reg16" "reg16")
 :code-format (list "[mr:" "o16" "85" "/r")
 :arch-flags (list "8086")))
-(push TEST-reg16.reg16 (gethash "TEST" *x64-instruction-variants-hash-table*))
+(push TEST-reg16.reg16-mr (gethash "TEST" *x64-instruction-variants-hash-table*))
 
 (defparameter TEST-mem.reg32 (make-instance 'x64-asm-instruction
 :name "TEST"
@@ -8364,12 +8364,12 @@
 :arch-flags (list "386" "SM")))
 (push TEST-mem.reg32 (gethash "TEST" *x64-instruction-variants-hash-table*))
 
-(defparameter TEST-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter TEST-reg32.reg32-mr (make-instance 'x64-asm-instruction
 :name "TEST"
 :operands (list "reg32" "reg32")
 :code-format (list "[mr:" "o32" "85" "/r")
 :arch-flags (list "386")))
-(push TEST-reg32.reg32 (gethash "TEST" *x64-instruction-variants-hash-table*))
+(push TEST-reg32.reg32-mr (gethash "TEST" *x64-instruction-variants-hash-table*))
 
 (defparameter TEST-mem.reg64 (make-instance 'x64-asm-instruction
 :name "TEST"
@@ -8378,12 +8378,12 @@
 :arch-flags (list "X64" "SM")))
 (push TEST-mem.reg64 (gethash "TEST" *x64-instruction-variants-hash-table*))
 
-(defparameter TEST-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter TEST-reg64.reg64-mr (make-instance 'x64-asm-instruction
 :name "TEST"
 :operands (list "reg64" "reg64")
 :code-format (list "[mr:" "o64" "85" "/r")
 :arch-flags (list "X64")))
-(push TEST-reg64.reg64 (gethash "TEST" *x64-instruction-variants-hash-table*))
+(push TEST-reg64.reg64-mr (gethash "TEST" *x64-instruction-variants-hash-table*))
 
 (defparameter TEST-reg8.mem (make-instance 'x64-asm-instruction
 :name "TEST"
@@ -8532,12 +8532,12 @@
 :arch-flags (list "386" "UNDOC" "SM" "ND")))
 (push UMOV-mem.reg8 (gethash "UMOV" *x64-instruction-variants-hash-table*))
 
-(defparameter UMOV-reg8.reg8 (make-instance 'x64-asm-instruction
+(defparameter UMOV-reg8.reg8-mr (make-instance 'x64-asm-instruction
 :name "UMOV"
 :operands (list "reg8" "reg8")
 :code-format (list "[mr:" "np" "0f" "10" "/r")
 :arch-flags (list "386" "UNDOC" "ND")))
-(push UMOV-reg8.reg8 (gethash "UMOV" *x64-instruction-variants-hash-table*))
+(push UMOV-reg8.reg8-mr (gethash "UMOV" *x64-instruction-variants-hash-table*))
 
 (defparameter UMOV-mem.reg16 (make-instance 'x64-asm-instruction
 :name "UMOV"
@@ -8546,12 +8546,12 @@
 :arch-flags (list "386" "UNDOC" "SM" "ND")))
 (push UMOV-mem.reg16 (gethash "UMOV" *x64-instruction-variants-hash-table*))
 
-(defparameter UMOV-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter UMOV-reg16.reg16-mr (make-instance 'x64-asm-instruction
 :name "UMOV"
 :operands (list "reg16" "reg16")
 :code-format (list "[mr:" "np" "o16" "0f" "11" "/r")
 :arch-flags (list "386" "UNDOC" "ND")))
-(push UMOV-reg16.reg16 (gethash "UMOV" *x64-instruction-variants-hash-table*))
+(push UMOV-reg16.reg16-mr (gethash "UMOV" *x64-instruction-variants-hash-table*))
 
 (defparameter UMOV-mem.reg32 (make-instance 'x64-asm-instruction
 :name "UMOV"
@@ -8560,12 +8560,12 @@
 :arch-flags (list "386" "UNDOC" "SM" "ND")))
 (push UMOV-mem.reg32 (gethash "UMOV" *x64-instruction-variants-hash-table*))
 
-(defparameter UMOV-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter UMOV-reg32.reg32-mr (make-instance 'x64-asm-instruction
 :name "UMOV"
 :operands (list "reg32" "reg32")
 :code-format (list "[mr:" "np" "o32" "0f" "11" "/r")
 :arch-flags (list "386" "UNDOC" "ND")))
-(push UMOV-reg32.reg32 (gethash "UMOV" *x64-instruction-variants-hash-table*))
+(push UMOV-reg32.reg32-mr (gethash "UMOV" *x64-instruction-variants-hash-table*))
 
 (defparameter UMOV-reg8.mem (make-instance 'x64-asm-instruction
 :name "UMOV"
@@ -8574,12 +8574,12 @@
 :arch-flags (list "386" "UNDOC" "SM" "ND")))
 (push UMOV-reg8.mem (gethash "UMOV" *x64-instruction-variants-hash-table*))
 
-(defparameter UMOV-reg8.reg8 (make-instance 'x64-asm-instruction
+(defparameter UMOV-reg8.reg8-rm (make-instance 'x64-asm-instruction
 :name "UMOV"
 :operands (list "reg8" "reg8")
 :code-format (list "[rm:" "np" "0f" "12" "/r")
 :arch-flags (list "386" "UNDOC" "ND")))
-(push UMOV-reg8.reg8 (gethash "UMOV" *x64-instruction-variants-hash-table*))
+(push UMOV-reg8.reg8-rm (gethash "UMOV" *x64-instruction-variants-hash-table*))
 
 (defparameter UMOV-reg16.mem (make-instance 'x64-asm-instruction
 :name "UMOV"
@@ -8588,12 +8588,12 @@
 :arch-flags (list "386" "UNDOC" "SM" "ND")))
 (push UMOV-reg16.mem (gethash "UMOV" *x64-instruction-variants-hash-table*))
 
-(defparameter UMOV-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter UMOV-reg16.reg16-rm (make-instance 'x64-asm-instruction
 :name "UMOV"
 :operands (list "reg16" "reg16")
 :code-format (list "[rm:" "np" "o16" "0f" "13" "/r")
 :arch-flags (list "386" "UNDOC" "ND")))
-(push UMOV-reg16.reg16 (gethash "UMOV" *x64-instruction-variants-hash-table*))
+(push UMOV-reg16.reg16-rm (gethash "UMOV" *x64-instruction-variants-hash-table*))
 
 (defparameter UMOV-reg32.mem (make-instance 'x64-asm-instruction
 :name "UMOV"
@@ -8602,12 +8602,12 @@
 :arch-flags (list "386" "UNDOC" "SM" "ND")))
 (push UMOV-reg32.mem (gethash "UMOV" *x64-instruction-variants-hash-table*))
 
-(defparameter UMOV-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter UMOV-reg32.reg32-rm (make-instance 'x64-asm-instruction
 :name "UMOV"
 :operands (list "reg32" "reg32")
 :code-format (list "[rm:" "np" "o32" "0f" "13" "/r")
 :arch-flags (list "386" "UNDOC" "ND")))
-(push UMOV-reg32.reg32 (gethash "UMOV" *x64-instruction-variants-hash-table*))
+(push UMOV-reg32.reg32-rm (gethash "UMOV" *x64-instruction-variants-hash-table*))
 
 (defparameter VERR-mem (make-instance 'x64-asm-instruction
 :name "VERR"
@@ -8686,12 +8686,12 @@
 :arch-flags (list "486" "SM" "LOCK")))
 (push XADD-mem.reg8 (gethash "XADD" *x64-instruction-variants-hash-table*))
 
-(defparameter XADD-reg8.reg8 (make-instance 'x64-asm-instruction
+(defparameter XADD-reg8.reg8-mr (make-instance 'x64-asm-instruction
 :name "XADD"
 :operands (list "reg8" "reg8")
 :code-format (list "[mr:" "0f" "c0" "/r")
 :arch-flags (list "486")))
-(push XADD-reg8.reg8 (gethash "XADD" *x64-instruction-variants-hash-table*))
+(push XADD-reg8.reg8-mr (gethash "XADD" *x64-instruction-variants-hash-table*))
 
 (defparameter XADD-mem.reg16 (make-instance 'x64-asm-instruction
 :name "XADD"
@@ -8700,12 +8700,12 @@
 :arch-flags (list "486" "SM" "LOCK")))
 (push XADD-mem.reg16 (gethash "XADD" *x64-instruction-variants-hash-table*))
 
-(defparameter XADD-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter XADD-reg16.reg16-mr (make-instance 'x64-asm-instruction
 :name "XADD"
 :operands (list "reg16" "reg16")
 :code-format (list "[mr:" "o16" "0f" "c1" "/r")
 :arch-flags (list "486")))
-(push XADD-reg16.reg16 (gethash "XADD" *x64-instruction-variants-hash-table*))
+(push XADD-reg16.reg16-mr (gethash "XADD" *x64-instruction-variants-hash-table*))
 
 (defparameter XADD-mem.reg32 (make-instance 'x64-asm-instruction
 :name "XADD"
@@ -8714,12 +8714,12 @@
 :arch-flags (list "486" "SM" "LOCK")))
 (push XADD-mem.reg32 (gethash "XADD" *x64-instruction-variants-hash-table*))
 
-(defparameter XADD-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter XADD-reg32.reg32-mr (make-instance 'x64-asm-instruction
 :name "XADD"
 :operands (list "reg32" "reg32")
 :code-format (list "[mr:" "o32" "0f" "c1" "/r")
 :arch-flags (list "486")))
-(push XADD-reg32.reg32 (gethash "XADD" *x64-instruction-variants-hash-table*))
+(push XADD-reg32.reg32-mr (gethash "XADD" *x64-instruction-variants-hash-table*))
 
 (defparameter XADD-mem.reg64 (make-instance 'x64-asm-instruction
 :name "XADD"
@@ -8728,12 +8728,12 @@
 :arch-flags (list "X64" "SM" "LOCK")))
 (push XADD-mem.reg64 (gethash "XADD" *x64-instruction-variants-hash-table*))
 
-(defparameter XADD-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter XADD-reg64.reg64-mr (make-instance 'x64-asm-instruction
 :name "XADD"
 :operands (list "reg64" "reg64")
 :code-format (list "[mr:" "o64" "0f" "c1" "/r")
 :arch-flags (list "X64")))
-(push XADD-reg64.reg64 (gethash "XADD" *x64-instruction-variants-hash-table*))
+(push XADD-reg64.reg64-mr (gethash "XADD" *x64-instruction-variants-hash-table*))
 
 (defparameter XBTS-reg16.mem (make-instance 'x64-asm-instruction
 :name "XBTS"
@@ -8742,12 +8742,12 @@
 :arch-flags (list "386" "SW" "UNDOC" "ND")))
 (push XBTS-reg16.mem (gethash "XBTS" *x64-instruction-variants-hash-table*))
 
-(defparameter XBTS-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter XBTS-reg16.reg16-rm (make-instance 'x64-asm-instruction
 :name "XBTS"
 :operands (list "reg16" "reg16")
 :code-format (list "[rm:" "o16" "0f" "a6" "/r")
 :arch-flags (list "386" "UNDOC" "ND")))
-(push XBTS-reg16.reg16 (gethash "XBTS" *x64-instruction-variants-hash-table*))
+(push XBTS-reg16.reg16-rm (gethash "XBTS" *x64-instruction-variants-hash-table*))
 
 (defparameter XBTS-reg32.mem (make-instance 'x64-asm-instruction
 :name "XBTS"
@@ -8756,12 +8756,12 @@
 :arch-flags (list "386" "SD" "UNDOC" "ND")))
 (push XBTS-reg32.mem (gethash "XBTS" *x64-instruction-variants-hash-table*))
 
-(defparameter XBTS-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter XBTS-reg32.reg32-rm (make-instance 'x64-asm-instruction
 :name "XBTS"
 :operands (list "reg32" "reg32")
 :code-format (list "[rm:" "o32" "0f" "a6" "/r")
 :arch-flags (list "386" "UNDOC" "ND")))
-(push XBTS-reg32.reg32 (gethash "XBTS" *x64-instruction-variants-hash-table*))
+(push XBTS-reg32.reg32-rm (gethash "XBTS" *x64-instruction-variants-hash-table*))
 
 (defparameter XCHG-reg_ax.reg16 (make-instance 'x64-asm-instruction
 :name "XCHG"
@@ -8812,12 +8812,12 @@
 :arch-flags (list "8086" "SM" "LOCK")))
 (push XCHG-reg8.mem (gethash "XCHG" *x64-instruction-variants-hash-table*))
 
-(defparameter XCHG-reg8.reg8 (make-instance 'x64-asm-instruction
+(defparameter XCHG-reg8.reg8-rm (make-instance 'x64-asm-instruction
 :name "XCHG"
 :operands (list "reg8" "reg8")
 :code-format (list "[rm:" "86" "/r")
 :arch-flags (list "8086")))
-(push XCHG-reg8.reg8 (gethash "XCHG" *x64-instruction-variants-hash-table*))
+(push XCHG-reg8.reg8-rm (gethash "XCHG" *x64-instruction-variants-hash-table*))
 
 (defparameter XCHG-reg16.mem (make-instance 'x64-asm-instruction
 :name "XCHG"
@@ -8826,12 +8826,12 @@
 :arch-flags (list "8086" "SM" "LOCK")))
 (push XCHG-reg16.mem (gethash "XCHG" *x64-instruction-variants-hash-table*))
 
-(defparameter XCHG-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter XCHG-reg16.reg16-rm (make-instance 'x64-asm-instruction
 :name "XCHG"
 :operands (list "reg16" "reg16")
 :code-format (list "[rm:" "o16" "87" "/r")
 :arch-flags (list "8086")))
-(push XCHG-reg16.reg16 (gethash "XCHG" *x64-instruction-variants-hash-table*))
+(push XCHG-reg16.reg16-rm (gethash "XCHG" *x64-instruction-variants-hash-table*))
 
 (defparameter XCHG-reg32.mem (make-instance 'x64-asm-instruction
 :name "XCHG"
@@ -8840,12 +8840,12 @@
 :arch-flags (list "386" "SM" "LOCK")))
 (push XCHG-reg32.mem (gethash "XCHG" *x64-instruction-variants-hash-table*))
 
-(defparameter XCHG-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter XCHG-reg32.reg32-rm (make-instance 'x64-asm-instruction
 :name "XCHG"
 :operands (list "reg32" "reg32")
 :code-format (list "[rm:" "o32" "87" "/r")
 :arch-flags (list "386")))
-(push XCHG-reg32.reg32 (gethash "XCHG" *x64-instruction-variants-hash-table*))
+(push XCHG-reg32.reg32-rm (gethash "XCHG" *x64-instruction-variants-hash-table*))
 
 (defparameter XCHG-reg64.mem (make-instance 'x64-asm-instruction
 :name "XCHG"
@@ -8854,12 +8854,12 @@
 :arch-flags (list "X64" "SM" "LOCK")))
 (push XCHG-reg64.mem (gethash "XCHG" *x64-instruction-variants-hash-table*))
 
-(defparameter XCHG-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter XCHG-reg64.reg64-rm (make-instance 'x64-asm-instruction
 :name "XCHG"
 :operands (list "reg64" "reg64")
 :code-format (list "[rm:" "o64" "87" "/r")
 :arch-flags (list "X64")))
-(push XCHG-reg64.reg64 (gethash "XCHG" *x64-instruction-variants-hash-table*))
+(push XCHG-reg64.reg64-rm (gethash "XCHG" *x64-instruction-variants-hash-table*))
 
 (defparameter XCHG-mem.reg8 (make-instance 'x64-asm-instruction
 :name "XCHG"
@@ -8868,12 +8868,12 @@
 :arch-flags (list "8086" "SM" "LOCK")))
 (push XCHG-mem.reg8 (gethash "XCHG" *x64-instruction-variants-hash-table*))
 
-(defparameter XCHG-reg8.reg8 (make-instance 'x64-asm-instruction
+(defparameter XCHG-reg8.reg8-mr (make-instance 'x64-asm-instruction
 :name "XCHG"
 :operands (list "reg8" "reg8")
 :code-format (list "[mr:" "86" "/r")
 :arch-flags (list "8086")))
-(push XCHG-reg8.reg8 (gethash "XCHG" *x64-instruction-variants-hash-table*))
+(push XCHG-reg8.reg8-mr (gethash "XCHG" *x64-instruction-variants-hash-table*))
 
 (defparameter XCHG-mem.reg16 (make-instance 'x64-asm-instruction
 :name "XCHG"
@@ -8882,12 +8882,12 @@
 :arch-flags (list "8086" "SM" "LOCK")))
 (push XCHG-mem.reg16 (gethash "XCHG" *x64-instruction-variants-hash-table*))
 
-(defparameter XCHG-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter XCHG-reg16.reg16-mr (make-instance 'x64-asm-instruction
 :name "XCHG"
 :operands (list "reg16" "reg16")
 :code-format (list "[mr:" "o16" "87" "/r")
 :arch-flags (list "8086")))
-(push XCHG-reg16.reg16 (gethash "XCHG" *x64-instruction-variants-hash-table*))
+(push XCHG-reg16.reg16-mr (gethash "XCHG" *x64-instruction-variants-hash-table*))
 
 (defparameter XCHG-mem.reg32 (make-instance 'x64-asm-instruction
 :name "XCHG"
@@ -8896,12 +8896,12 @@
 :arch-flags (list "386" "SM" "LOCK")))
 (push XCHG-mem.reg32 (gethash "XCHG" *x64-instruction-variants-hash-table*))
 
-(defparameter XCHG-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter XCHG-reg32.reg32-mr (make-instance 'x64-asm-instruction
 :name "XCHG"
 :operands (list "reg32" "reg32")
 :code-format (list "[mr:" "o32" "87" "/r")
 :arch-flags (list "386")))
-(push XCHG-reg32.reg32 (gethash "XCHG" *x64-instruction-variants-hash-table*))
+(push XCHG-reg32.reg32-mr (gethash "XCHG" *x64-instruction-variants-hash-table*))
 
 (defparameter XCHG-mem.reg64 (make-instance 'x64-asm-instruction
 :name "XCHG"
@@ -8910,12 +8910,12 @@
 :arch-flags (list "X64" "SM" "LOCK")))
 (push XCHG-mem.reg64 (gethash "XCHG" *x64-instruction-variants-hash-table*))
 
-(defparameter XCHG-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter XCHG-reg64.reg64-mr (make-instance 'x64-asm-instruction
 :name "XCHG"
 :operands (list "reg64" "reg64")
 :code-format (list "[mr:" "o64" "87" "/r")
 :arch-flags (list "X64")))
-(push XCHG-reg64.reg64 (gethash "XCHG" *x64-instruction-variants-hash-table*))
+(push XCHG-reg64.reg64-mr (gethash "XCHG" *x64-instruction-variants-hash-table*))
 
 (defparameter XLATB-void (make-instance 'x64-asm-instruction
 :name "XLATB"
@@ -8938,12 +8938,12 @@
 :arch-flags (list "8086" "SM" "LOCK")))
 (push XOR-mem.reg8 (gethash "XOR" *x64-instruction-variants-hash-table*))
 
-(defparameter XOR-reg8.reg8 (make-instance 'x64-asm-instruction
+(defparameter XOR-reg8.reg8-mr (make-instance 'x64-asm-instruction
 :name "XOR"
 :operands (list "reg8" "reg8")
 :code-format (list "[mr:" "30" "/r")
 :arch-flags (list "8086")))
-(push XOR-reg8.reg8 (gethash "XOR" *x64-instruction-variants-hash-table*))
+(push XOR-reg8.reg8-mr (gethash "XOR" *x64-instruction-variants-hash-table*))
 
 (defparameter XOR-mem.reg16 (make-instance 'x64-asm-instruction
 :name "XOR"
@@ -8952,12 +8952,12 @@
 :arch-flags (list "8086" "SM" "LOCK")))
 (push XOR-mem.reg16 (gethash "XOR" *x64-instruction-variants-hash-table*))
 
-(defparameter XOR-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter XOR-reg16.reg16-mr (make-instance 'x64-asm-instruction
 :name "XOR"
 :operands (list "reg16" "reg16")
 :code-format (list "[mr:" "o16" "31" "/r")
 :arch-flags (list "8086")))
-(push XOR-reg16.reg16 (gethash "XOR" *x64-instruction-variants-hash-table*))
+(push XOR-reg16.reg16-mr (gethash "XOR" *x64-instruction-variants-hash-table*))
 
 (defparameter XOR-mem.reg32 (make-instance 'x64-asm-instruction
 :name "XOR"
@@ -8966,12 +8966,12 @@
 :arch-flags (list "386" "SM" "LOCK")))
 (push XOR-mem.reg32 (gethash "XOR" *x64-instruction-variants-hash-table*))
 
-(defparameter XOR-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter XOR-reg32.reg32-mr (make-instance 'x64-asm-instruction
 :name "XOR"
 :operands (list "reg32" "reg32")
 :code-format (list "[mr:" "o32" "31" "/r")
 :arch-flags (list "386")))
-(push XOR-reg32.reg32 (gethash "XOR" *x64-instruction-variants-hash-table*))
+(push XOR-reg32.reg32-mr (gethash "XOR" *x64-instruction-variants-hash-table*))
 
 (defparameter XOR-mem.reg64 (make-instance 'x64-asm-instruction
 :name "XOR"
@@ -8980,12 +8980,12 @@
 :arch-flags (list "X64" "SM" "LOCK")))
 (push XOR-mem.reg64 (gethash "XOR" *x64-instruction-variants-hash-table*))
 
-(defparameter XOR-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter XOR-reg64.reg64-mr (make-instance 'x64-asm-instruction
 :name "XOR"
 :operands (list "reg64" "reg64")
 :code-format (list "[mr:" "o64" "31" "/r")
 :arch-flags (list "X64")))
-(push XOR-reg64.reg64 (gethash "XOR" *x64-instruction-variants-hash-table*))
+(push XOR-reg64.reg64-mr (gethash "XOR" *x64-instruction-variants-hash-table*))
 
 (defparameter XOR-reg8.mem (make-instance 'x64-asm-instruction
 :name "XOR"
@@ -8994,12 +8994,12 @@
 :arch-flags (list "8086" "SM")))
 (push XOR-reg8.mem (gethash "XOR" *x64-instruction-variants-hash-table*))
 
-(defparameter XOR-reg8.reg8 (make-instance 'x64-asm-instruction
+(defparameter XOR-reg8.reg8-rm (make-instance 'x64-asm-instruction
 :name "XOR"
 :operands (list "reg8" "reg8")
 :code-format (list "[rm:" "32" "/r")
 :arch-flags (list "8086")))
-(push XOR-reg8.reg8 (gethash "XOR" *x64-instruction-variants-hash-table*))
+(push XOR-reg8.reg8-rm (gethash "XOR" *x64-instruction-variants-hash-table*))
 
 (defparameter XOR-reg16.mem (make-instance 'x64-asm-instruction
 :name "XOR"
@@ -9008,12 +9008,12 @@
 :arch-flags (list "8086" "SM")))
 (push XOR-reg16.mem (gethash "XOR" *x64-instruction-variants-hash-table*))
 
-(defparameter XOR-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter XOR-reg16.reg16-rm (make-instance 'x64-asm-instruction
 :name "XOR"
 :operands (list "reg16" "reg16")
 :code-format (list "[rm:" "o16" "33" "/r")
 :arch-flags (list "8086")))
-(push XOR-reg16.reg16 (gethash "XOR" *x64-instruction-variants-hash-table*))
+(push XOR-reg16.reg16-rm (gethash "XOR" *x64-instruction-variants-hash-table*))
 
 (defparameter XOR-reg32.mem (make-instance 'x64-asm-instruction
 :name "XOR"
@@ -9022,12 +9022,12 @@
 :arch-flags (list "386" "SM")))
 (push XOR-reg32.mem (gethash "XOR" *x64-instruction-variants-hash-table*))
 
-(defparameter XOR-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter XOR-reg32.reg32-rm (make-instance 'x64-asm-instruction
 :name "XOR"
 :operands (list "reg32" "reg32")
 :code-format (list "[rm:" "o32" "33" "/r")
 :arch-flags (list "386")))
-(push XOR-reg32.reg32 (gethash "XOR" *x64-instruction-variants-hash-table*))
+(push XOR-reg32.reg32-rm (gethash "XOR" *x64-instruction-variants-hash-table*))
 
 (defparameter XOR-reg64.mem (make-instance 'x64-asm-instruction
 :name "XOR"
@@ -9036,12 +9036,12 @@
 :arch-flags (list "X64" "SM")))
 (push XOR-reg64.mem (gethash "XOR" *x64-instruction-variants-hash-table*))
 
-(defparameter XOR-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter XOR-reg64.reg64-rm (make-instance 'x64-asm-instruction
 :name "XOR"
 :operands (list "reg64" "reg64")
 :code-format (list "[rm:" "o64" "33" "/r")
 :arch-flags (list "X64")))
-(push XOR-reg64.reg64 (gethash "XOR" *x64-instruction-variants-hash-table*))
+(push XOR-reg64.reg64-rm (gethash "XOR" *x64-instruction-variants-hash-table*))
 
 (defparameter XOR-rm16.imm8 (make-instance 'x64-asm-instruction
 :name "XOR"
@@ -9204,12 +9204,12 @@
 :arch-flags (list "P6" "SM")))
 (push CMOVcc-reg16.mem (gethash "CMOVcc" *x64-instruction-variants-hash-table*))
 
-(defparameter CMOVcc-reg16.reg16 (make-instance 'x64-asm-instruction
+(defparameter CMOVcc-reg16.reg16-rm (make-instance 'x64-asm-instruction
 :name "CMOVcc"
 :operands (list "reg16" "reg16")
 :code-format (list "[rm:" "o16" "0f" "40+c" "/r")
 :arch-flags (list "P6")))
-(push CMOVcc-reg16.reg16 (gethash "CMOVcc" *x64-instruction-variants-hash-table*))
+(push CMOVcc-reg16.reg16-rm (gethash "CMOVcc" *x64-instruction-variants-hash-table*))
 
 (defparameter CMOVcc-reg32.mem (make-instance 'x64-asm-instruction
 :name "CMOVcc"
@@ -9218,12 +9218,12 @@
 :arch-flags (list "P6" "SM")))
 (push CMOVcc-reg32.mem (gethash "CMOVcc" *x64-instruction-variants-hash-table*))
 
-(defparameter CMOVcc-reg32.reg32 (make-instance 'x64-asm-instruction
+(defparameter CMOVcc-reg32.reg32-rm (make-instance 'x64-asm-instruction
 :name "CMOVcc"
 :operands (list "reg32" "reg32")
 :code-format (list "[rm:" "o32" "0f" "40+c" "/r")
 :arch-flags (list "P6")))
-(push CMOVcc-reg32.reg32 (gethash "CMOVcc" *x64-instruction-variants-hash-table*))
+(push CMOVcc-reg32.reg32-rm (gethash "CMOVcc" *x64-instruction-variants-hash-table*))
 
 (defparameter CMOVcc-reg64.mem (make-instance 'x64-asm-instruction
 :name "CMOVcc"
@@ -9232,12 +9232,12 @@
 :arch-flags (list "X64" "SM")))
 (push CMOVcc-reg64.mem (gethash "CMOVcc" *x64-instruction-variants-hash-table*))
 
-(defparameter CMOVcc-reg64.reg64 (make-instance 'x64-asm-instruction
+(defparameter CMOVcc-reg64.reg64-rm (make-instance 'x64-asm-instruction
 :name "CMOVcc"
 :operands (list "reg64" "reg64")
 :code-format (list "[rm:" "o64" "0f" "40+c" "/r")
 :arch-flags (list "X64")))
-(push CMOVcc-reg64.reg64 (gethash "CMOVcc" *x64-instruction-variants-hash-table*))
+(push CMOVcc-reg64.reg64-rm (gethash "CMOVcc" *x64-instruction-variants-hash-table*))
 
 (defparameter Jcc-imm-near (make-instance 'x64-asm-instruction
 :name "Jcc"
@@ -21482,19 +21482,19 @@
 :arch-flags (list "FUTURE" "HLE" "RTM")))
 (push XTEST-void (gethash "XTEST" *x64-instruction-variants-hash-table*))
 
-(defparameter ANDN-reg32.reg32.rm32 (make-instance 'x64-asm-instruction
+(defparameter ANDN-reg32.reg32.rm32-rv (make-instance 'x64-asm-instruction
 :name "ANDN"
 :operands (list "reg32" "reg32" "rm32")
 :code-format (list "[rvm:" "vex.nds.lz.0f38.w0" "f2" "/r")
 :arch-flags (list "FUTURE" "BMI1")))
-(push ANDN-reg32.reg32.rm32 (gethash "ANDN" *x64-instruction-variants-hash-table*))
+(push ANDN-reg32.reg32.rm32-rv (gethash "ANDN" *x64-instruction-variants-hash-table*))
 
-(defparameter ANDN-reg64.reg64.rm64 (make-instance 'x64-asm-instruction
+(defparameter ANDN-reg64.reg64.rm64-rv (make-instance 'x64-asm-instruction
 :name "ANDN"
 :operands (list "reg64" "reg64" "rm64")
 :code-format (list "[rvm:" "vex.nds.lz.0f38.w1" "f2" "/r")
 :arch-flags (list "LONG" "FUTURE" "BMI1")))
-(push ANDN-reg64.reg64.rm64 (gethash "ANDN" *x64-instruction-variants-hash-table*))
+(push ANDN-reg64.reg64.rm64-rv (gethash "ANDN" *x64-instruction-variants-hash-table*))
 
 (defparameter BEXTR-reg32.rm32.reg32 (make-instance 'x64-asm-instruction
 :name "BEXTR"
@@ -21678,47 +21678,47 @@
 :arch-flags (list "LONG" "FUTURE" "BMI2")))
 (push BZHI-reg64.rm64.reg64 (gethash "BZHI" *x64-instruction-variants-hash-table*))
 
-(defparameter MULX-reg32.reg32.rm32 (make-instance 'x64-asm-instruction
+(defparameter MULX-reg32.reg32.rm32-rv (make-instance 'x64-asm-instruction
 :name "MULX"
 :operands (list "reg32" "reg32" "rm32")
 :code-format (list "[rvm:" "vex.ndd.lz.f2.0f38.w0" "f6" "/r")
 :arch-flags (list "FUTURE" "BMI2")))
-(push MULX-reg32.reg32.rm32 (gethash "MULX" *x64-instruction-variants-hash-table*))
+(push MULX-reg32.reg32.rm32-rv (gethash "MULX" *x64-instruction-variants-hash-table*))
 
-(defparameter MULX-reg64.reg64.rm64 (make-instance 'x64-asm-instruction
+(defparameter MULX-reg64.reg64.rm64-rv (make-instance 'x64-asm-instruction
 :name "MULX"
 :operands (list "reg64" "reg64" "rm64")
 :code-format (list "[rvm:" "vex.ndd.lz.f2.0f38.w1" "f6" "/r")
 :arch-flags (list "LONG" "FUTURE" "BMI2")))
-(push MULX-reg64.reg64.rm64 (gethash "MULX" *x64-instruction-variants-hash-table*))
+(push MULX-reg64.reg64.rm64-rv (gethash "MULX" *x64-instruction-variants-hash-table*))
 
-(defparameter PDEP-reg32.reg32.rm32 (make-instance 'x64-asm-instruction
+(defparameter PDEP-reg32.reg32.rm32-rv (make-instance 'x64-asm-instruction
 :name "PDEP"
 :operands (list "reg32" "reg32" "rm32")
 :code-format (list "[rvm:" "vex.nds.lz.f2.0f38.w0" "f5" "/r")
 :arch-flags (list "FUTURE" "BMI2")))
-(push PDEP-reg32.reg32.rm32 (gethash "PDEP" *x64-instruction-variants-hash-table*))
+(push PDEP-reg32.reg32.rm32-rv (gethash "PDEP" *x64-instruction-variants-hash-table*))
 
-(defparameter PDEP-reg64.reg64.rm64 (make-instance 'x64-asm-instruction
+(defparameter PDEP-reg64.reg64.rm64-rv (make-instance 'x64-asm-instruction
 :name "PDEP"
 :operands (list "reg64" "reg64" "rm64")
 :code-format (list "[rvm:" "vex.nds.lz.f2.0f38.w1" "f5" "/r")
 :arch-flags (list "LONG" "FUTURE" "BMI2")))
-(push PDEP-reg64.reg64.rm64 (gethash "PDEP" *x64-instruction-variants-hash-table*))
+(push PDEP-reg64.reg64.rm64-rv (gethash "PDEP" *x64-instruction-variants-hash-table*))
 
-(defparameter PEXT-reg32.reg32.rm32 (make-instance 'x64-asm-instruction
+(defparameter PEXT-reg32.reg32.rm32-rv (make-instance 'x64-asm-instruction
 :name "PEXT"
 :operands (list "reg32" "reg32" "rm32")
 :code-format (list "[rvm:" "vex.nds.lz.f3.0f38.w0" "f5" "/r")
 :arch-flags (list "FUTURE" "BMI2")))
-(push PEXT-reg32.reg32.rm32 (gethash "PEXT" *x64-instruction-variants-hash-table*))
+(push PEXT-reg32.reg32.rm32-rv (gethash "PEXT" *x64-instruction-variants-hash-table*))
 
-(defparameter PEXT-reg64.reg64.rm64 (make-instance 'x64-asm-instruction
+(defparameter PEXT-reg64.reg64.rm64-rv (make-instance 'x64-asm-instruction
 :name "PEXT"
 :operands (list "reg64" "reg64" "rm64")
 :code-format (list "[rvm:" "vex.nds.lz.f3.0f38.w1" "f5" "/r")
 :arch-flags (list "LONG" "FUTURE" "BMI2")))
-(push PEXT-reg64.reg64.rm64 (gethash "PEXT" *x64-instruction-variants-hash-table*))
+(push PEXT-reg64.reg64.rm64-rv (gethash "PEXT" *x64-instruction-variants-hash-table*))
 
 (defparameter RORX-reg32.rm32.imm8 (make-instance 'x64-asm-instruction
 :name "RORX"

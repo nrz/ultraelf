@@ -57,7 +57,7 @@
     (list #b000 *new-reg16-list*                       'x86-new-16-bits-register)
     (list #b000 *new-reg32-list*                       'x86-new-32-bits-register)
     (list #b000 *new-reg64-list*                       'x86-new-64-bits-register)
-    (list #b000 *xmm-reg-list-from-xmm0*               'x86-mmx-register)
+    (list #b000 *mmx-reg-list*                         'x86-mmx-register)
     (list #b000 *xmm-reg-list-from-xmm0*               'x86-old-xmm-register)
     (list #b000 *xmm-reg-list-from-xmm8*               'x86-new-xmm-register)
     (list #b000 *ymm-reg-list-from-ymm0*               'x86-old-ymm-register)
