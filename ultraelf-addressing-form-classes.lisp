@@ -36,7 +36,7 @@
 ;;
 ;; x86-modrm.mod-b11 (x86-addressing-form)
 ;;
-;; x86-rex.b-0  (x86-addressing-form)
+;; x86-rex.b-0 (x86-addressing-form)
 ;; - x86-sib-0 (x86-rex.b-0 x86-needs-sib)
 ;; - x86-old-register-indirect (x86-rex.b-0 x86-register-indirect)
 ;;
@@ -260,10 +260,10 @@
      :initform 1
      :documentation "REX.B = 1")))
 
-(defclass x86-sib-0 (x86-rex.b-0 x86-needs-sib)
+(defclass x86-sib-0 (x86-rex.r-0 x86-rex.b-0 x86-needs-sib)
   ())
 
-(defclass x86-sib-1 (x86-rex.b-1 x86-needs-sib)
+(defclass x86-sib-1 (x86-rex.r-1 x86-rex.b-1 x86-needs-sib)
   ())
 
 (defclass x86-sib (x86-needs-sib)
@@ -275,14 +275,14 @@
 (defclass x86-register-indirect-needs-sib (x86-needs-sib)
   ())
 
-(defclass x86-old-register-indirect (x86-rex.b-0 x86-register-indirect)
+(defclass x86-old-register-indirect (x86-rex.r-0 x86-rex.b-0 x86-register-indirect)
   ((needs-rex
      :reader needs-rex
      :allocation :class
      :initform nil
      :documentation "[rax], [rcx], [rdx], [rbx], [rsi] & [rdi] do _not_ need REX.")))
 
-(defclass x86-new-register-indirect (x86-rex.b-1 x86-register-indirect)
+(defclass x86-new-register-indirect (x86-rex.r-1 x86-rex.b-1 x86-register-indirect)
   ((needs-rex
      :reader needs-rex
      :allocation :class
@@ -295,7 +295,7 @@
      :allocation :class
      :initform t)))
 
-(defclass x86-old-register (x86-register)
+(defclass x86-old-register (x86-rex.r-0 x86-rex.b-0 x86-register)
   ((is-old-reg
      :reader is-old-reg
      :allocation :class
@@ -305,12 +305,7 @@
      :reader is-new-reg
      :allocation :class
      :initform nil
-     :documentation "new registers are all registers which can _not_ be accessed without REX")
-   (rex.r
-     :reader rex.r
-     :allocation :class
-     :initform 0
-     :documentation "REX.R must be 0 for all old registers.")))
+     :documentation "new registers are all registers which can _not_ be accessed without REX")))
 
 (defclass x86-new-register (x86-register)
   ((is-old-reg
@@ -429,8 +424,8 @@
    (needs-rex
      :reader needs-rex
      :allocation :class
-     :initform t
-     :documentation "REX is needed (but see special cases such as jmp!)")))
+     :initform nil
+     :documentation "REX is usually needed (o64), but not always (o64nw).")))
 
 (defclass x86-new-8-bits-register (x86-new-register x86-8-bits-register)
   ((works-with-rex
@@ -444,21 +439,15 @@
      :initform t
      :documentation "REX is needed")))
 
-(defclass x86-new-8-bits-register-rex.r-0 (x86-rex.r-0 x86-new-8-bits-register)
-  ((rex.r
-     :reader rex.r
-     :allocation :class
-     :initform 0
-     :documentation "Only spl, bpl, sil & dil belong to this class.")))
+(defclass x86-new-8-bits-register-rex.r-0 (x86-rex.r-0 x86-rex.b-0 x86-new-8-bits-register)
+  ;;"Only spl, bpl, sil & dil belong to this class."
+  ())
 
-(defclass x86-new-8-bits-register-rex.r-1 (x86-rex.r-1 x86-new-8-bits-register)
-  ((rex.r
-     :reader rex.r
-     :allocation :class
-     :initform 1
-     :documentation "r8b, r9b, r10b, r11b, r12b, r13b, r14b & r15b belong to this class.")))
+(defclass x86-new-8-bits-register-rex.r-1 (x86-rex.r-1 x86-rex.b-1 x86-new-8-bits-register)
+  ;; r8b, r9b, r10b, r11b, r12b, r13b, r14b & r15b belong to this class.
+  ())
 
-(defclass x86-new-16-bits-register (x86-new-register x86-16-bits-register)
+(defclass x86-new-16-bits-register (x86-rex.r-1 x86-rex.b-1 x86-new-register x86-16-bits-register)
   ((works-with-rex
      :reader works-with-rex
      :allocation :class
@@ -468,14 +457,9 @@
      :reader needs-rex
      :allocation :class
      :initform t
-     :documentation "REX is needed")
-   (rex.r
-     :reader rex.r
-     :allocation :class
-     :initform 1
-     :documentation "REX.R must be 1")))
+     :documentation "REX is needed")))
 
-(defclass x86-new-32-bits-register (x86-new-register x86-32-bits-register)
+(defclass x86-new-32-bits-register (x86-rex.r-1 x86-rex.b-1 x86-new-register x86-32-bits-register)
   ((works-with-rex
      :reader works-with-rex
      :allocation :class
@@ -485,14 +469,9 @@
      :reader needs-rex
      :allocation :class
      :initform t
-     :documentation "REX is needed")
-   (rex.r
-     :reader rex.r
-     :allocation :class
-     :initform 1
-     :documentation "REX.R must be 1")))
+     :documentation "REX is needed")))
 
-(defclass x86-new-64-bits-register (x86-new-register x86-64-bits-register)
+(defclass x86-new-64-bits-register (x86-rex.r-1 x86-rex.b-1 x86-new-register x86-64-bits-register)
   ((works-with-rex
      :reader works-with-rex
      :allocation :class
@@ -502,12 +481,7 @@
      :reader needs-rex
      :allocation :class
      :initform t
-     :documentation "REX is needed")
-   (rex.r
-     :reader rex.r
-     :allocation :class
-     :initform 1
-     :documentation "REX.R must be 1")))
+     :documentation "REX is needed")))
 
 (defclass x86-mmx-register (x86-register)
   ((is-mmx-reg
@@ -522,7 +496,11 @@
    (rex.r
      :reader rex.r
      :initform (list 0 1)
-     :documentation "REX.R can be 0 or 1, no difference.")))
+     :documentation "REX.R can be 0 or 1, no difference.")
+   (rex.b
+     :reader rex.b
+     :initform (list 0 1)
+     :documentation "REX.B can be 0 or 1???")))
 
 (defclass x86-xmm-register (x86-register)
   ((is-xmm-reg
@@ -535,14 +513,14 @@
      :initform 128
      :documentation "register size in bits")))
 
-(defclass x86-old-xmm-register (x86-rex.r-0 x86-xmm-register)
+(defclass x86-old-xmm-register (x86-rex.r-0 x86-rex.b-0 x86-xmm-register)
   ((needs-rex
      :reader needs-rex
      :allocation :class
      :initform nil
      :documentation "xmm0, xmm1, xmm2, xmm3, xmm4, xmm5, xmm6 & xmm7 do not need REX.")))
 
-(defclass x86-new-xmm-register (x86-rex.r-1 x86-xmm-register)
+(defclass x86-new-xmm-register (x86-rex.r-1 x86-rex.b-1 x86-xmm-register)
   ((needs-rex
      :reader needs-rex
      :allocation :class
@@ -560,14 +538,14 @@
      :initform 256
      :documentation "register size in bits")))
 
-(defclass x86-old-ymm-register (x86-rex.r-0 x86-ymm-register)
+(defclass x86-old-ymm-register (x86-rex.r-0 x86-rex.b-0 x86-ymm-register)
   ((needs-rex
      :reader needs-rex
      :allocation :class
      :initform nil
      :documentation "ymm0, ymm1, ymm2, ymm3, ymm4, ymm5, ymm6 & ymm7 do not need REX.")))
 
-(defclass x86-new-ymm-register (x86-rex.r-1 x86-ymm-register)
+(defclass x86-new-ymm-register (x86-rex.r-1 x86-rex.b-1 x86-ymm-register)
   ((needs-rex
      :reader needs-rex
      :allocation :class
@@ -585,10 +563,10 @@
      :initform 512
      :documentation "register size in bits")))
 
-(defclass x86-old-zmm-register (x86-rex.r-0 x86-zmm-register)
+(defclass x86-old-zmm-register (x86-rex.b-0 x86-rex.r-0 x86-zmm-register)
   ())
 
-(defclass x86-new-zmm-register (x86-rex.r-1 x86-zmm-register)
+(defclass x86-new-zmm-register (x86-rex.b-1 x86-rex.r-1 x86-zmm-register)
   ())
 
 (defclass x64-rip-relative (x86-does-not-need-sib)

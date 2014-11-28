@@ -26,7 +26,11 @@
                 ;; variables.
                 :setf
                 ;; lists and other sequences.
-                :append :concatenate :list :nth :first :second :third :fourth :fifth :sixth :seventh :eighth :ninth :tenth :rest :push :pushnew
+                :every :some :notevery :notany
+                :append :concatenate
+                :list
+                :nth :first :second :third :fourth :fifth :sixth :seventh :eighth :ninth :tenth :rest
+                :push :pushnew
                 ;; numbers.
                 :parse-integer
                 ;; CLOS.
@@ -51,7 +55,11 @@
     ;; variables.
     :setf
     ;; lists and other sequences.
-    :append :concatenate :list :nth :first :second :third :fourth :fifth :sixth :seventh :eighth :ninth :tenth :rest :push :pushnew
+    :every :some :notevery :notany
+    :append :concatenate
+    :list
+    :nth :first :second :third :fourth :fifth :sixth :seventh :eighth :ninth :tenth :rest
+    :push :pushnew
     ;; numbers.
     :parse-integer
     ;; CLOS.

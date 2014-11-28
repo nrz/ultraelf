@@ -42,7 +42,7 @@
     :needs-sib
     :r/m
     :works-with-rex
-    :needs-nex
+    :needs-rex
     :rex.r
     :rex.b
     ;; instruction classes' methods.

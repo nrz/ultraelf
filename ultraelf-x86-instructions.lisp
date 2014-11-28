@@ -114,9 +114,6 @@
 (defun cwde-x32-x64 (&rest args)
   (list #x98))
 
-(defun dec-x64 (arg1 &optional arg2 &rest args)
-  (one-operand-x64 #xfe #xc8 arg1 arg2))
-
 (defun hlt-x86 (&rest args)
   (list #xf4))
 
@@ -135,9 +132,6 @@
        (equalp (name arg2) "dx"))
      (list #xed))
     (t nil)))
-
-(defun inc-x64 (arg1 &optional arg2 &rest args)
-  (one-operand-x64 #xfe #xc0 arg1 arg2))
 
 (defun insb-x86 (&rest args)
   (list #x6c))
@@ -460,14 +454,8 @@
 (defun movsq-4f-x64 (&rest args)
   (list #x4f #xa5))
 
-(defun neg-x64 (arg1 &optional arg2 &rest args)
-  (one-operand-x64 #xf6 #xd8 arg1 arg2))
-
 (defun nop-x86 (&rest args)
   (list #x90))
-
-(defun not-x64 (arg1 &optional arg2 &rest args)
-  (one-operand-x64 #xf6 #xd0 arg1 arg2))
 
 (defun or-reg-rm-x64 (arg1 arg2 &optional arg3 &rest args)
   (arithmetic-reg-rm-x64 #x08 arg1 arg2 arg3))
@@ -549,38 +537,8 @@
      (append (emit-odd-rex) (list (logior #x50 (r/m arg1)))))
     (t nil)))
 
-(defun rcl-1-x64 (arg1 &optional arg2 &rest args)
-  (one-operand-x64 #xd0 #xd0 arg1 arg2))
-
-(defun rcl-cl-x64 (arg1 &optional arg2 &rest args)
-  (one-operand-x64 #xd2 #xd0 arg1 arg2))
-
-(defun rcr-1-x64 (arg1 &optional arg2 &rest args)
-  (one-operand-x64 #xd0 #xd8 arg1 arg2))
-
-(defun rcr-cl-x64 (arg1 &optional arg2 &rest args)
-  (one-operand-x64 #xd2 #xd8 arg1 arg2))
-
 (defun ret-x86 (&rest args)
   (list #xc3))
-
-(defun rol-1-x64 (arg1 &optional arg2 &rest args)
-  (one-operand-x64 #xd0 #xc0 arg1 arg2))
-
-(defun rol-cl-x64 (arg1 &optional arg2 &rest args)
-  (one-operand-x64 #xd2 #xc0 arg1 arg2))
-
-(defun ror-1-x64 (arg1 &optional arg2 &rest args)
-  (one-operand-x64 #xd0 #xc8 arg1 arg2))
-
-(defun ror-cl-x64 (arg1 &optional arg2 &rest args)
-  (one-operand-x64 #xd2 #xc8 arg1 arg2))
-
-(defun sar-1-x64 (arg1 &optional arg2 &rest args)
-  (one-operand-x64 #xd0 #xf8 arg1 arg2))
-
-(defun sar-cl-x64 (arg1 &optional arg2 &rest args)
-  (one-operand-x64 #xd2 #xf8 arg1 arg2))
 
 (defun sbb-reg-rm-x64 (arg1 arg2 &optional arg3 &rest args)
   (arithmetic-reg-rm-x64 #x18 arg1 arg2 arg3))
@@ -613,18 +571,6 @@
   (list #x4e #xaf))
 (defun scasq-4f-x64 (&rest args)
   (list #x4f #xaf))
-
-(defun shl-1-x64 (arg1 &optional arg2 &rest args)
-  (one-operand-x64 #xd0 #xe0 arg1 arg2))
-
-(defun shl-cl-x64 (arg1 &optional arg2 &rest args)
-  (one-operand-x64 #xd2 #xe0 arg1 arg2))
-
-(defun shr-1-x64 (arg1 &optional arg2 &rest args)
-  (one-operand-x64 #xd0 #xe8 arg1 arg2))
-
-(defun shr-cl-x64 (arg1 &optional arg2 &rest args)
-  (one-operand-x64 #xd2 #xe8 arg1 arg2))
 
 (defun stc-x86 (&rest args)
   (list #xf9))
