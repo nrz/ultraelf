@@ -133,7 +133,7 @@
        (emit-modrm-byte-for-arithmetic-reg-imm opcode-base arg1)
        (string-to-8-bit-little-endian (name arg2))))
     ((and
-       (is-register-indirect arg1)
+       (is-reg-indirect arg1)
        (not (needs-sib arg1))
        (parse-integer (name arg2) :junk-allowed t))
      (append
@@ -141,7 +141,7 @@
        (emit-modrm-byte-for-arithmetic-rm-imm opcode-base #x00 arg1)
        (string-to-8-bit-little-endian (name arg2))))
     ((and
-       (is-register-indirect arg1)
+       (is-reg-indirect arg1)
        (not (needs-sib arg1))
        (equalp (name arg2) "byte"))
      (append
@@ -161,7 +161,7 @@
        (emit-modrm-byte-for-arithmetic-reg-imm opcode-base arg1)
        (string-to-16-bit-little-endian (name arg2))))
     ((and
-       (is-register-indirect arg1)
+       (is-reg-indirect arg1)
        (not (needs-sib arg1))
        (parse-integer (name arg2) :junk-allowed t))
      (append
@@ -169,7 +169,7 @@
        (emit-modrm-byte-for-arithmetic-rm-imm opcode-base #x00 arg1)
        (string-to-16-bit-little-endian (name arg2))))
     ((and
-       (is-register-indirect arg1)
+       (is-reg-indirect arg1)
        (not (needs-sib arg1))
        (equalp (name arg2) "word"))
      (append
@@ -189,7 +189,7 @@
        (emit-modrm-byte-for-arithmetic-reg-imm opcode-base arg1)
        (string-to-32-bit-little-endian (name arg2))))
     ((and
-       (is-register-indirect arg1)
+       (is-reg-indirect arg1)
        (not (needs-sib arg1))
        (parse-integer (name arg2) :junk-allowed t))
      (append
@@ -197,7 +197,7 @@
        (emit-modrm-byte-for-arithmetic-rm-imm opcode-base #x00 arg1)
        (string-to-32-bit-little-endian (name arg2))))
     ((and
-       (is-register-indirect arg1)
+       (is-reg-indirect arg1)
        (not (needs-sib arg1))
        (equalp (name arg2) "dword"))
      (append
@@ -248,21 +248,21 @@
        (is-reg arg1)
        (not (needs-rex arg1))
        (eql (reg-size arg1) 8)
-       (is-register-indirect arg2)
+       (is-reg-indirect arg2)
        (not (needs-sib arg2)))
      (cons (+ opcode-base 2) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
     ((and
        (is-reg arg1)
        (not (needs-rex arg1))
        (eql (reg-size arg1) 16)
-       (is-register-indirect arg2)
+       (is-reg-indirect arg2)
        (not (needs-sib arg2)))
      (append (list #x66 (+ opcode-base 3)) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
     ((and
        (is-reg arg1)
        (not (needs-rex arg1))
        (eql (reg-size arg1) 32)
-       (is-register-indirect arg2)
+       (is-reg-indirect arg2)
        (not (needs-sib arg2)))
      (cons (+ opcode-base 3) (emit-modrm-byte-for-indirect-without-SIB arg2 arg1)))
     (t nil)))
@@ -306,21 +306,21 @@
      ;; 0x03: add r32, r/m32
      (cons (1+ opcode-base) (emit-modrm-byte-for-reg-reg arg1 arg2)))
     ((and
-       (is-register-indirect arg1)
+       (is-reg-indirect arg1)
        (not (needs-sib arg1))
        (is-reg arg2)
        (not (needs-rex arg2))
        (eql (reg-size arg2) 8))
      (cons opcode-base (emit-modrm-byte-for-indirect-without-SIB arg1 arg2)))
     ((and
-       (is-register-indirect arg1)
+       (is-reg-indirect arg1)
        (not (needs-sib arg1))
        (is-reg arg2)
        (not (needs-rex arg2))
        (eql (reg-size arg2) 16))
      (append (list #x66 (1+ opcode-base)) (emit-modrm-byte-for-indirect-without-SIB arg1 arg2)))
     ((and
-       (is-register-indirect arg1)
+       (is-reg-indirect arg1)
        (not (needs-sib arg1))
        (is-reg arg2)
        (not (needs-rex arg2))
@@ -344,12 +344,12 @@
      (arithmetic-rm-reg-x64 opcode-base arg1 arg2))
     ((and
        (is-reg arg1)
-       (is-register-indirect arg2)
+       (is-reg-indirect arg2)
        (not (needs-sib arg2)))
      ;; no alternatives available here, except using SIB.
      (arithmetic-reg-rm-x64 opcode-base arg1 arg2))
     ((and
-       (is-register-indirect arg1)
+       (is-reg-indirect arg1)
        (not (needs-sib arg1))
        (is-reg arg2))
      ;; no alternatives available here, except using SIB.
@@ -418,7 +418,7 @@
     ((and
        (or
          (and
-           (is-register-indirect arg1)
+           (is-reg-indirect arg1)
            (not (needs-sib arg1)))
          (and
            (is-reg arg1)
@@ -430,7 +430,7 @@
     ((and
        (or
          (and
-           (is-register-indirect arg1)
+           (is-reg-indirect arg1)
            (not (needs-sib arg1)))
          (and
            (is-reg arg1)
@@ -442,7 +442,7 @@
     ((and
        (or
          (and
-           (is-register-indirect arg1)
+           (is-reg-indirect arg1)
            (not (needs-sib arg1)))
          (and
            (is-reg arg1)

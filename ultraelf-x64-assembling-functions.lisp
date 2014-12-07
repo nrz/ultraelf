@@ -31,14 +31,26 @@
   "This function assembles x86-64 (x64) code, all alternatives, and prints in a hexadecimal string."
   (print-hex (assemble-alternatives code *emit-function-hash-table-x64*)))
 
-(defun emit-rex (encoding-type n-operands &key args (rex.w-value 0) (rex.r-value 0))
+(defun emit-rex (encoding-type n-operands &key args (rex.w-value 0) (rex.r-value 0) (rex.x-value 0) (rex.b-value 0))
   "This function emits REX according to encoding type and the operands.
-   rex.w-value : 0 for default operand size, 1 for 64-bit operand size."
+   rex.w-value : 0 for default operand size, 1 for 64-bit operand size.
+   `emit-rex` does not handle steganographic or variable encoding in any
+   particular way, it just encodes a REX byte with required bits as needed
+   and optional bits according to `rex.w-value`, `rex.r-value`,
+   `rex.x-value` and `rex.b-value. Using default values (0) for all REX
+   bits produces REX bytes identical to those produced by NASM.
+   For steganographic or variable encoding `emit-rex` must be called with
+   appropriate values for the mentioned keyword arguments."
   (let*
     ((my-args (get-list args))
      (arg1 (first my-args))
      (arg2 (second my-args)))
     (cond
+      ((eql n-operands 0)
+       (emit-rex-byte rex.w-value   ; operand size.
+                      rex.r-value   ; TODO: encode here 1 bit of data!
+                      rex.x-value   ; TODO: encode here 1 bit of data!
+                      rex.b-value)) ; TODO: encode here 1 bit of data!
       ((eql n-operands 1)
        (emit-rex-byte rex.w-value    ; operand size.
                       rex.r-value    ; number of arguments should be checked already.
@@ -58,17 +70,24 @@
                          (rex.b arg2))))) ; rex.b augments r/m field, so it's from arg2 in `[mr:`.
       (t (error "encoding not yet implemented")))))
 
-(defun handle-nasm-code-format (code-format operands &key args (rex.w-value 0) (rex.r-value 0) (rex.b-value 0))
-  "This function handler one code-string (from NASM's `insns.dat`) and returns a list."
+(defun handle-nasm-code-format-x64 (code-format operands &key args msg (rex.w-value 0) (rex.r-value 0) (rex.b-value 0))
+  "This function handles one code-string (from NASM's `insns.dat`) and returns the following:
+   0. the encoding as a list
+   1. number of bits of `msg` encoded."
   (let*
     ((encoding-type (first code-format))
      (my-args (get-list args))
      (arg1 (first my-args))  ; nil if list is too short.
      (arg2 (second my-args)) ; nil if list is too short.
-     (n-operands (length operands))
      (do-args-require-rex (some #'needs-rex my-args))
      (do-args-work-with-rex (every #'works-with-rex my-args))
-     (is-rex-already-encoded nil))
+     (is-rex-already-encoded nil)
+     (msg-i 0) ; index to message sequence.
+     (n-operands (cond
+                   ((and (eql (length operands) 1)
+                         (equal (first operands) "void"))
+                   0)
+                   (t (length operands)))))
     (when
       (and do-args-require-rex (not do-args-work-with-rex))
       (error "impossible combination of given arguments: some need REX and some don't work with REX"))
@@ -128,14 +147,18 @@
                            (emit-rex encoding-type n-operands :args my-args :rex.r-value rex.r-value))
                          (t nil)))
                       ((eql n-operands 2)
-                       (error "o32 encoding of 2 operands in not yet implemented"))
+                       (cond
+                         (do-args-require-rex
+                           (setf is-rex-already-encoded t)
+                           (emit-rex encoding-type n-operands :args my-args :rex.r-value rex.r-value))
+                         (t nil)))
                       ((eql n-operands 3)
                        (error "o32 encoding of 3 operands in not yet implemented"))
                       (t (error "over 3 operands is an error"))))
                    ((equal code-string "o64")
                     (cond
                       ((eql n-operands 0)
-                       (error "o64 with n-operands 0 is an error"))
+                       (emit-rex encoding-type n-operands :args my-args :rex.w-value 1 :rex.r-value rex.r-value)) ; 64-bit operand size!
                       ((eql n-operands 1)
                        (setf is-rex-already-encoded t)
                        (emit-rex encoding-type n-operands :args my-args :rex.w-value 1 :rex.r-value rex.r-value)) ; 64-bit operand size!
@@ -263,48 +286,33 @@
                                      (list (+ #xf8 (modrm.r/m arg1))))
                                     (t (list (parse-integer code-string :radix 16))))))))))
 
-(defun check-args (operands args)
-  "This functions checks that input args match required operands."
-  (cond
-    ((and
-       (eql (length operands) 1)
-       (equal (first operands) "void"))
-     (unless (null args)
-       (error "void operand type requires exactly 0 input arguments.")))
-    ((eql (length operands) (length args))
-     (loop for i below (length operands)
-           if (notany #'(lambda (x)
-                          (equal x (nth i operands)))
-                      (allowed-targets (nth i args)))
-           do (error "instruction's and operand's allowed targets do not match.")))
-    (t (error "number of required operands and number of given arguments do not match."))))
-
-(defun emit-with-format-and-operands-x64 (code-format operands &rest args)
+(defun emit-with-format-and-operands-x64 (&key code-format operands args msg)
   "This function emits code (list of binary code bytes) for one x64 instruction variant."
   (let*
-    ((my-args (get-list args)))
-    (check-args operands my-args)
+    ((my-args (get-list args))
+     (my-operands (get-list operands)))
+    (check-args my-operands my-args)
     (cond
       ((equal (first code-format) "[")
        ;; The encoding of this variant is constant, so just convert
        ;; the rest elements (hexadecimal numbers) to numbers in a list.
-       (handle-nasm-code-format code-format operands))
+       (handle-nasm-code-format-x64 code-format my-operands :msg msg))
       ((equal (first code-format) "[m:")
        ;; This variant has one 'memory' (can be register too) operand.
        ;; The operand is encoded in the r/m field.
        ;; An extension of the opcode is in the reg field.
-       (handle-nasm-code-format code-format operands :args my-args))
+       (handle-nasm-code-format-x64 code-format my-operands :args my-args :msg msg))
       ((equal (first code-format) "[r:")
        ;; This variant has one register operand.
        ;; The operand is encoded in the r/m field.
        ;; An extension of the opcode is in the reg field.
-       (handle-nasm-code-format code-format operands :args my-args))
+       (handle-nasm-code-format-x64 code-format my-operands :args my-args :msg msg))
       ((equal (first code-format) "[mr:")
        ;; This variant has one memory operand and one register operand.
        ;; The operands are encoded in corresponding ModRM fields.
-       (handle-nasm-code-format code-format operands :args my-args))
+       (handle-nasm-code-format-x64 code-format my-operands :args my-args :msg msg))
       ((equal (first code-format) "[rm:")
        ;; This variant has one register operand and one memory operand.
        ;; The operands are encoded in corresponding ModRM fields.
-       (handle-nasm-code-format code-format operands :args my-args))
+       (handle-nasm-code-format-x64 code-format my-operands :args my-args :msg msg))
       (t (error "encoding not yet implemented")))))

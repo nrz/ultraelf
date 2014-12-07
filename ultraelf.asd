@@ -36,6 +36,8 @@
   :author "Antti Nuortimo"
   :components ((:file "ultraelf-essentials")                       ; a package containing only some absolutely basic functions from `:cl`, to `:use` in others.
                (:file "ultraelf-package")                          ; functions, variables and classes not going into one of the architecture-specific packages go here.
+               (:file "ultraelf-x86")                              ; instructions and arguments available to all x86 flavors (x16, x32, and x64).
+               (:file "ultraelf-x86-modern")                       ; instructions and arguments available to both x32 and x64 flavors.
                (:file "ultraelf-x16")                              ; instructions and arguments available in x16 (16-bit flavor of x86) and few basic essentials.
                (:file "ultraelf-x32")                              ; instructions and arguments available in x32 (32-bit flavor of x86) and few basic essentials.
                (:file "ultraelf-x64")                              ; instructions and arguments available in x64 (64-bit flavor of x86) and few basic essentials.

@@ -115,3 +115,30 @@
   "This function converts a string to a function.
    http://stackoverflow.com/questions/2940267/call-function-based-on-a-string/2940347#2940347"
   (symbol-function (find-symbol (string-upcase my-string))))
+
+(defun check-args (operands args)
+  "This functions checks that input args match required operands."
+  (cond
+    ((and
+       (eql (length operands) 1)
+       (equal (first operands) "void"))
+     (unless (null args)
+       (error "void operand type requires exactly 0 input arguments.")))
+    ((eql (length operands) (length args))
+     (loop for i below (length operands)
+           if (notany #'(lambda (x)
+                          (equal x (nth i operands)))
+                      (allowed-targets (nth i args)))
+           do (error "instruction's and operand's allowed targets do not match.")))
+    (t (error "number of required operands and number of given arguments do not match."))))
+
+(defun get-msg-bit (msg msg-i &key (filler 0))
+  "This function returns the bit 0 (the lowest bit) of the corresponding element.
+   `msg` should be a sequence of zeros and ones.
+   Bits higher than bit 0 of `msg` are ignored.
+   If `(nth msg-i msg)` is `nil`, then `filler` is returned."
+  (let
+    ((msg-bit (nth msg-i msg)))
+    (if (null msg-bit)
+      filler
+      (logand (nth msg-i msg) 1))))

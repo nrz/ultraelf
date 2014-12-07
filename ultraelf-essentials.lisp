@@ -38,37 +38,7 @@
                 ;; numbers.
                 :parse-integer
                 ;; CLOS.
-                :make-instance :slot-value)
-  (:export
-    ;; t, nil
-    :t :nil
-    ;; code flow macros.
-    :cond :loop :when :unless
-    ;; lambda.
-    :lambda
-    ;; define instructions.
-    :defun :defclass :defpackage :defparameter :defmethod
-    ;; comparison functions and related stuff.
-    :eq :eql :equal :equalp :null :listp :not
-    ;; error handling.
-    :error
-    ;; printing.
-    :format :princ :print
-    ;; hash tables.
-    :gethash :make-hash-table
-    ;; package handling.
-    :in-package
-    ;; symbols.
-    :intern
-    ;; variables.
-    :setf
-    ;; lists and other sequences.
-    :every :some :notevery :notany
-    :append :concatenate
-    :list
-    :nth :first :second :third :fourth :fifth :sixth :seventh :eighth :ninth :tenth :rest
-    :push :pushnew
-    ;; numbers.
-    :parse-integer
-    ;; CLOS.
-    :make-instance :slot-value))
+                :make-instance :slot-value))
+
+(in-package :essentials)
+(cl-user::do-symbols (essentials-sym (cl-user::find-package :essentials)) (cl-user::export essentials-sym))

@@ -32,8 +32,8 @@
      :initform nil
      :allocation :class
      :documentation "registers are _not_ unknown.")
-   (is-register-indirect
-     :reader is-register-indirect
+   (is-reg-indirect
+     :reader is-reg-indirect
      :allocation :class
      :initform nil
      :documentation "register indirects are _not_ unknown.")
@@ -62,8 +62,8 @@
      :reader is-reg
      :allocation :class
      :initform nil)
-   (is-register-indirect
-     :reader is-register-indirect
+   (is-reg-indirect
+     :reader is-reg-indirect
      :allocation :class
      :initform nil)
    (is-address

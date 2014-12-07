@@ -129,52 +129,52 @@
 
 (defmethod emit ((x16-asm-instruction x16-asm-instruction) &rest args)
   (emit-with-format-and-operands-x16
-    (slot-value x16-asm-instruction 'code-format)
-    (slot-value x16-asm-instruction 'operands)
-    args))
+    :code-format (slot-value x16-asm-instruction 'code-format)
+    :operands (slot-value x16-asm-instruction 'operands)
+    :args args))
 
 (defmethod emit-hex ((x16-asm-instruction x16-asm-instruction) &rest args)
   (print-hex
     (emit-with-format-and-operands-x16
-      (slot-value x16-asm-instruction 'code-format)
-      (slot-value x16-asm-instruction 'operands)
-      args)))
+      :code-format (slot-value x16-asm-instruction 'code-format)
+      :operands (slot-value x16-asm-instruction 'operands)
+      :args args)))
 
 (defmethod emit ((x32-asm-instruction x32-asm-instruction) &rest args)
   (emit-with-format-and-operands-x32
-    (slot-value x32-asm-instruction 'code-format)
-    (slot-value x32-asm-instruction 'operands)
-    args))
+    :code-format (slot-value x32-asm-instruction 'code-format)
+    :operands (slot-value x32-asm-instruction 'operands)
+    :args args))
 
 (defmethod emit-hex ((x32-asm-instruction x32-asm-instruction) &rest args)
   (print-hex
     (emit-with-format-and-operands-x32
-      (slot-value x32-asm-instruction 'code-format)
-      (slot-value x32-asm-instruction 'operands)
-      args)))
+      :code-format (slot-value x32-asm-instruction 'code-format)
+      :operands (slot-value x32-asm-instruction 'operands)
+      :args args)))
 
 (defmethod emit ((x64-asm-instruction x64-asm-instruction) &rest args)
   (emit-with-format-and-operands-x64
-    (slot-value x64-asm-instruction 'code-format)
-    (slot-value x64-asm-instruction 'operands)
-    args))
+    :code-format (slot-value x64-asm-instruction 'code-format)
+    :operands (slot-value x64-asm-instruction 'operands)
+    :args args))
 
 (defmethod emit-hex ((x64-asm-instruction x64-asm-instruction) &rest args)
   (print-hex
     (emit-with-format-and-operands-x64
-      (slot-value x64-asm-instruction 'code-format)
-      (slot-value x64-asm-instruction 'operands)
-      args)))
+      :code-format (slot-value x64-asm-instruction 'code-format)
+      :operands (slot-value x64-asm-instruction 'operands)
+      :args args)))
 
 (defmethod emit ((arm-asm-instruction arm-asm-instruction) &rest args)
   (emit-with-format-and-operands-arm
-    (slot-value arm-asm-instruction 'code-format)
-    (slot-value arm-asm-instruction 'operands)
-    args))
+    :code-format (slot-value arm-asm-instruction 'code-format)
+    :operands (slot-value arm-asm-instruction 'operands)
+    :args args))
 
 (defmethod emit-hex ((arm-asm-instruction arm-asm-instruction) &rest args)
   (print-hex
     (emit-with-format-and-operands-arm
-      (slot-value arm-asm-instruction 'code-format)
-      (slot-value arm-asm-instruction 'operands)
-      args)))
+      :code-format (slot-value arm-asm-instruction 'code-format)
+      :operands (slot-value arm-asm-instruction 'operands)
+      :args args)))
