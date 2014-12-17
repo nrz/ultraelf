@@ -81,4 +81,4 @@
                (:file "ultraelf-x64-assembling-functions")         ; x64 assembling functions.
                (:file "ultraelf-arm-assembling-functions")         ; ARM assembling functions.
                (:file "ultraelf-test-x64-code"))                   ; x64 test code, used for testing.
-  :depends-on (:parse-number))
+  :depends-on (:parse-number :screamer))
