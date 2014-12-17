@@ -128,7 +128,7 @@ while (<FILE>)
 close(FILE);
 
 # print the code to create a hash table.
-printf("(defparameter *x64-instruction-variants-hash-table* (make-hash-table :test #'equalp))\n");
+printf("(defparameter *x64-instruction-variants-hash-table* (make-hash-table :test #'equalp :size 2048))\n");
 
 # print the code to create each instruction + operands combination object and to push them to hash table.
 
