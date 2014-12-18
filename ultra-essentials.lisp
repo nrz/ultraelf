@@ -15,6 +15,8 @@
                 :cond :loop :when :unless
                 ;; define instructions.
                 :defun :defclass :defpackage :defparameter :defmethod
+                ;; function calls.
+                :apply :funcall
                 ;; comparison functions and related stuff.
                 :eq :eql :equal :equalp :null :listp :not
                 ;; error handling.
