@@ -9,10 +9,10 @@
   (:import-from :cl
                 ;; t, nil
                 :t :nil
+                ;; Lisp basics.
+                :cons :eval :lambda :read
                 ;; code flow macros.
                 :cond :loop :when :unless
-                ;; lambda.
-                :lambda
                 ;; define instructions.
                 :defun :defclass :defpackage :defparameter :defmethod
                 ;; comparison functions and related stuff.
