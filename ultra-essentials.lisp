@@ -30,7 +30,7 @@
                 ;; variables.
                 :setf
                 ;; lists and other sequences.
-                :every :some :notevery :notany
+                :every :some :notevery :notany :mapcan :mapcar
                 :append :concatenate
                 :list
                 :nth :first :second :third :fourth :fifth :sixth :seventh :eighth :ninth :tenth :rest
