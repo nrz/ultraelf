@@ -19,10 +19,18 @@
     :emit-hex
     :emit-modrm
     :emit-modrm-byte
+    :create-syntax-tree
+    :emit-binary-code-for-one-instruction
+    :emit-binary-code-list
+    :emit-binary-code
+    :emit-binary-code-and-print-hex
     :assemble
+    :assemble-and-print-hex
     :assemble-alternatives
+    :assemble-alternatives-and-print-hex
     :check-args
     :get-all-encodings-for-syntax-tree
+    :get-all-encodings-for-syntax-tree-and-print-hex
     :get-msg-bit
     ;; instruction classes' slots.
     :allowed-targets
