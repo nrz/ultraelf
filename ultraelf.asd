@@ -34,51 +34,51 @@
   :serial t
   :description "UltraELF system"
   :author "Antti Nuortimo"
-  :components ((:file "ultraelf-essentials")                       ; a package containing only some absolutely basic functions from `:cl`, to `:use` in others.
-               (:file "ultraelf-package")                          ; functions, variables and classes not going into one of the architecture-specific packages go here.
-               (:file "ultraelf-x86")                              ; instructions and arguments available to all x86 flavors (x16, x32, and x64).
-               (:file "ultraelf-x86-modern")                       ; instructions and arguments available to both x32 and x64 flavors.
-               (:file "ultraelf-x16")                              ; instructions and arguments available in x16 (16-bit flavor of x86) and few basic essentials.
-               (:file "ultraelf-x32")                              ; instructions and arguments available in x32 (32-bit flavor of x86) and few basic essentials.
-               (:file "ultraelf-x64")                              ; instructions and arguments available in x64 (64-bit flavor of x86) and few basic essentials.
-               (:file "ultraelf-arm")                              ; instructions and arguments available in ARM and few basic essentials.
-               (:file "ultraelf-compiling-macros")                 ; `defmacro compile-ultraelf` & `defmacro c-u`.
-               (:file "ultraelf-init")                             ; some `defparameter` variable definitions.
-               (:file "ultraelf-sequence")                         ; sequence functions.
-               (:file "ultraelf-string")                           ; string functions.
-               (:file "ultraelf-printing")                         ; printing functions.
-               (:file "ultraelf-regex")                            ; regular expression functions.
-               (:file "ultraelf-numbers")                          ; number-handling functions.
-               (:file "ultraelf-x64-rex")                          ; x64 "emit REX" functions.
-               (:file "ultraelf-architecture-classes")             ; architecture classes.
-               (:file "ultraelf-instruction-classes")              ; instruction classes.
-               (:file "ultraelf-x86-instruction-classes")          ; x86 instruction classes.
-               (:file "ultraelf-x16-instruction-classes")          ; x16 instruction classes and methods.
-               (:file "ultraelf-x32-instruction-classes")          ; x32 instruction classes and methods.
-               (:file "ultraelf-x64-instruction-classes")          ; x64 instruction classes and methods.
-               (:file "ultraelf-arm-instruction-classes")          ; ARM instruction classes and methods.
-               (:file "ultraelf-argument-classes")                 ; instruction argument classes except addressing form classes.
-               (:file "ultraelf-addressing-form-classes")          ; addressing form classes.
-               (:file "ultraelf-addressing-form-lists")            ; lists of registers etc. belonging to each addressing form class.
-               (:file "ultraelf-create-addressing-form-instances") ; create instance for each addressing form, including each register.
-               (:file "ultraelf-elf-classes")                      ; ELF classes.
-               (:file "ultraelf-asm-reader")                       ; Lisp assembly reader.
-               (:file "ultraelf-general-emit-functions")           ; general emit functions, needed for assembling and pseudo-ops.
-               (:file "ultraelf-asm-pseudo-ops")                   ; asm pseudo-ops.
-               (:file "ultraelf-sib")                              ; x86 SIB byte scale values hash table.
-               (:file "ultraelf-sreg2")                            ; x86 SREG2 segment register values hash table.
-               (:file "ultraelf-sreg3")                            ; x86 SREG3 segment register values hash table.
-               (:file "ultraelf-arm-instructions")                 ; instruction-specific ARM emit-code functions.
-               (:file "ultraelf-x86-general-emit-functions")       ; general x86 emit-code functions.
-               (:file "ultraelf-x86-instructions")                 ; instruction-specific x86 emit-code functions.
-               (:file "ultraelf-create-instruction-instances")     ; create instance for each x64 instruction+operands combination. converted from NASM's `insns.dat`.
-               (:file "ultraelf-x87-instructions")                 ; instruction-specific x87 emit-code functions.
-               (:file "ultraelf-instruction-hash-tables")          ; instruction hash tables for different architectures (currently x64).
-               (:file "ultraelf-alt-code")                         ; alternative code used for metamorphic engine.
-               (:file "ultraelf-assembling-functions")             ; general assembling functions.
-               (:file "ultraelf-x16-assembling-functions")         ; x16 assembling functions.
-               (:file "ultraelf-x32-assembling-functions")         ; x32 assembling functions.
-               (:file "ultraelf-x64-assembling-functions")         ; x64 assembling functions.
-               (:file "ultraelf-arm-assembling-functions")         ; ARM assembling functions.
-               (:file "ultraelf-test-x64-code"))                   ; x64 test code, used for testing.
+  :components ((:file "ultra-essentials")                       ; a package containing only some absolutely basic functions from `:cl`, to `:use` in others.
+               (:file "ultra-package")                          ; functions, variables and classes not going into one of the architecture-specific packages go here.
+               (:file "ultra-x86")                              ; instructions and arguments available to all x86 flavors (x16, x32, and x64).
+               (:file "ultra-x86-modern")                       ; instructions and arguments available to both x32 and x64 flavors.
+               (:file "ultra-x16")                              ; instructions and arguments available in x16 (16-bit flavor of x86) and few basic essentials.
+               (:file "ultra-x32")                              ; instructions and arguments available in x32 (32-bit flavor of x86) and few basic essentials.
+               (:file "ultra-x64")                              ; instructions and arguments available in x64 (64-bit flavor of x86) and few basic essentials.
+               (:file "ultra-arm")                              ; instructions and arguments available in ARM and few basic essentials.
+               (:file "ultra-compiling-macros")                 ; `defmacro compile-ultraelf` & `defmacro c-u`.
+               (:file "ultra-init")                             ; some `defparameter` variable definitions.
+               (:file "ultra-sequence")                         ; sequence functions.
+               (:file "ultra-string")                           ; string functions.
+               (:file "ultra-printing")                         ; printing functions.
+               (:file "ultra-regex")                            ; regular expression functions.
+               (:file "ultra-numbers")                          ; number-handling functions.
+               (:file "ultra-x64-rex")                          ; x64 "emit REX" functions.
+               (:file "ultra-architecture-classes")             ; architecture classes.
+               (:file "ultra-instruction-classes")              ; instruction classes.
+               (:file "ultra-x86-instruction-classes")          ; x86 instruction classes.
+               (:file "ultra-x16-instruction-classes")          ; x16 instruction classes and methods.
+               (:file "ultra-x32-instruction-classes")          ; x32 instruction classes and methods.
+               (:file "ultra-x64-instruction-classes")          ; x64 instruction classes and methods.
+               (:file "ultra-arm-instruction-classes")          ; ARM instruction classes and methods.
+               (:file "ultra-argument-classes")                 ; instruction argument classes except addressing form classes.
+               (:file "ultra-addressing-form-classes")          ; addressing form classes.
+               (:file "ultra-addressing-form-lists")            ; lists of registers etc. belonging to each addressing form class.
+               (:file "ultra-create-addressing-form-instances") ; create instance for each addressing form, including each register.
+               (:file "ultra-elf-classes")                      ; ELF classes.
+               (:file "ultra-asm-reader")                       ; Lisp assembly reader.
+               (:file "ultra-general-emit-functions")           ; general emit functions, needed for assembling and pseudo-ops.
+               (:file "ultra-asm-pseudo-ops")                   ; asm pseudo-ops.
+               (:file "ultra-sib")                              ; x86 SIB byte scale values hash table.
+               (:file "ultra-sreg2")                            ; x86 SREG2 segment register values hash table.
+               (:file "ultra-sreg3")                            ; x86 SREG3 segment register values hash table.
+               (:file "ultra-arm-instructions")                 ; instruction-specific ARM emit-code functions.
+               (:file "ultra-x86-general-emit-functions")       ; general x86 emit-code functions.
+               (:file "ultra-x86-instructions")                 ; instruction-specific x86 emit-code functions.
+               (:file "ultra-create-instruction-instances")     ; create instance for each x64 instruction+operands combination. converted from NASM's `insns.dat`.
+               (:file "ultra-x87-instructions")                 ; instruction-specific x87 emit-code functions.
+               (:file "ultra-instruction-hash-tables")          ; instruction hash tables for different architectures (currently x64).
+               (:file "ultra-alt-code")                         ; alternative code used for metamorphic engine.
+               (:file "ultra-assembling-functions")             ; general assembling functions.
+               (:file "ultra-x16-assembling-functions")         ; x16 assembling functions.
+               (:file "ultra-x32-assembling-functions")         ; x32 assembling functions.
+               (:file "ultra-x64-assembling-functions")         ; x64 assembling functions.
+               (:file "ultra-arm-assembling-functions")         ; ARM assembling functions.
+               (:file "ultra-test-x64-code"))                   ; x64 test code, used for testing.
   :depends-on (:parse-number :screamer))
