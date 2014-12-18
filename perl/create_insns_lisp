@@ -149,7 +149,7 @@ for my $i (0 .. $#mnemonic_array)
         $operands,
         $code_format,
         $flags);
-    printf("(setf (gethash \"%s\" *x64-instruction-variants-hash-table*) %s)\n",
+    printf("(setf (gethash \"%s\" *x64-instruction-variants-hash-table*) (list %s))\n",
         $object_name,
         $object_name);
     printf("(push %s (gethash \"%s\" *x64-instruction-variants-hash-table*))",
