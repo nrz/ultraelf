@@ -5,7 +5,7 @@
 
 (in-package :ultraelf)
 
-;; create addressing form instances.
+;; create register and register-indirect addressing form instances.
 ;; note: indirect addressing form that use `[` & `]` need backslash in SBCL REPL,
 ;; eg: ULTRAELF> \[rax\]
 (loop for register-list in *create-addressing-form-instances-list*
