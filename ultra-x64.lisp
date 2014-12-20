@@ -8,14 +8,19 @@
 (defpackage :x64
   (:use :x86-modern :essentials)
   (:import-from
+    :cl
+    :nil)
+  (:import-from
     :ultraelf
     ;; addressing form classes' slots.
     :is-old-reg
     :is-new-reg
     :works-with-rex
     :needs-rex
-    :rex.r
-    :rex.b
+    :rex-w
+    :rex-r
+    :rex-x
+    :rex-b
     ;; x64 registers.
     :rax :rcx :rdx  :rbx
     :rsp :rbp :rsi  :rdi
@@ -35,4 +40,6 @@
     ;; ZMM registers.
     :zmm8 :zmm9 :zmm10 :zmm11 :zmm12 :zmm13 :zmm14 :zmm15
     ;; instruction class names.
-    :x64-asm-instruction))
+    :x64-asm-instruction)
+  (:export
+    :emit-with-format-and-operands-x64))

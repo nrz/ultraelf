@@ -12,14 +12,16 @@
      :initform t)))
 
 (defmethod emit ((arm-asm-instruction arm-asm-instruction) &rest args)
-  (emit-with-format-and-operands-arm
+  (arm:emit-with-format-and-operands-arm
     (slot-value arm-asm-instruction 'code-format)
     (slot-value arm-asm-instruction 'operands)
-    args))
+    :args args
+    :msg nil))
 
 (defmethod emit-hex ((arm-asm-instruction arm-asm-instruction) &rest args)
   (print-hex
-    (emit-with-format-and-operands-arm
+    (arm:emit-with-format-and-operands-arm
       (slot-value arm-asm-instruction 'code-format)
       (slot-value arm-asm-instruction 'operands)
-      args)))
+      :args args
+      :msg nil)))

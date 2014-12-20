@@ -3,7 +3,7 @@
 ;;; ultraELF x86-16, x86-32, x86-64 & ARM assembler, disassembler and metamorphic engine.
 ;;; ultraELF packs and reconstructs ELF executables, maintaining original functionality.
 
-(in-package :ultraelf)
+(in-package :x64)
 
 (defun emit-low-rex ()
   "This function emits a low REX prefix:
@@ -58,10 +58,10 @@
    Can be chosen randomly or at will."
   (list #x48))
 
-(defun emit-rex-byte (rex.w rex.r rex.x rex.b)
+(defun emit-rex-byte (rex-w rex-r rex-x rex-b)
   "This function emits a REX prefix as requested."
   (list (logior #x40
-                rex.b
-                (ash rex.x 1)
-                (ash rex.r 2)
-                (ash rex.w 3))))
+                rex-b
+                (ash rex-x 1)
+                (ash rex-r 2)
+                (ash rex-w 3))))

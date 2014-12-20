@@ -13,17 +13,17 @@
 ;;                                                                                                           slots with _fixed_ values (fixed values should
 ;;                                                                                                           have `:allocation :class`) values and slots with
 ;;                                                                                                           _required_ values  (the required values should have
-;;                                                                                                           `:initarg :foo` and 
+;;                                                                                                           `:initarg :foo` and
 ;;                                                                                                           `:initform (error "foo must be specified")`.
 ;;                                                                                                           this list of defined slots is still incomplete!
 ;;                                                                                                           TODO: fill in the missing slot documentation below!
 ;; classes that are only used to define some variable values, do not have parents.
 ;;
-;; x64-rex.r-0 ()                                                                                            `rex.r 0`.
-;; x64-rex.r-1 ()                                                                                            `rex.r 1`.
-;; 
-;; x64-rex.b-0 ()                                                                                            `rex.b 0`.
-;; x64-rex.b-1 ()                                                                                            `rex.b 1`.
+;; x64-rex-r-0 ()                                                                                            `rex-r 0`.
+;; x64-rex-r-1 ()                                                                                            `rex-r 1`.
+;;
+;; x64-rex-b-0 ()                                                                                            `rex-b 0`.
+;; x64-rex-b-1 ()                                                                                            `rex-b 1`.
 ;;
 ;; `argument` class and classes that inherit it.
 ;;
@@ -33,7 +33,7 @@
 ;;     ...                                                                                                   `is-abs-addressing nil`, `is-pc-relative nil`, ...
 ;;     ...                                                                                                   `is-reg-indirect nil`, `displacement-size 0`,
 ;;     ...                                                                                                   `r/m` (required).
-;;   3 arm-addressing-form (addressing-form)                                                                 
+;;   3 arm-addressing-form (addressing-form)
 ;;   3 memory-addressing (addressing-form)                                                                   `is-memory-addressing  t`.
 ;;     4 abs-addressing (memory-addressing)
 ;;       5 x86-abs-addressing (abs-addressing x86-memory-addressing)
@@ -44,14 +44,14 @@
 ;;       5 ^ arm-abs-addressing (memory-addressing arm-addressing-form) ^ see above ^
 ;;       5 arm-literal-addressing (pc-relative arm-memory-addressing)
 ;;       5 arm-reg-indirect (reg-indirect arm-memory-addressing)                                             `works-with-rex t`.
-;;     4 pc-relative (memory-addressing)                                                                     
-;;       5 ^ arm-literal-addressing (pc-relative arm-memory-addressing) ^ see above ^                        
+;;     4 pc-relative (memory-addressing)
+;;       5 ^ arm-literal-addressing (pc-relative arm-memory-addressing) ^ see above ^
 ;;       5 x64-rip-relative (pc-relative x86-memory-addressing)                                              `displacement-size 32`, `needs-sib nil`, `needs-rex nil`.
-;;         6 x86-rip-disp32 (x64-rip-relative)                                                               
-;;         6 x86-rip-disp32-0 (x64-rex.b-0 x64-rip-relative)                                                 
-;;         6 x86-rip-disp32-1 (x64-rex.b-1 x64-rip-relative)                                                 
-;;     4 reg-indirect (memory-addressing)                                                               
-;;       5 ^ arm-reg-indirect (reg-indirect arm-memory-addressing) ^ see above ^                   
+;;         6 x86-rip-disp32 (x64-rip-relative)
+;;         6 x86-rip-disp32-0 (x64-rex-b-0 x64-rip-relative)
+;;         6 x86-rip-disp32-1 (x64-rex-b-1 x64-rip-relative)
+;;     4 reg-indirect (memory-addressing)
+;;       5 ^ arm-reg-indirect (reg-indirect arm-memory-addressing) ^ see above ^
 ;;       5 x86-reg-indirect (reg-indirect x86-memory-addressing)                                             `works-with-rex t`.
 ;;         6 x16-reg-indirect (x86-reg-indirect)
 ;;           7 x16-reg-indirect-does-not-need-sib (x16-reg-indirect)
@@ -75,8 +75,8 @@
 ;;           7 x64-reg-indirect-needs-sib (needs-sib x64-reg-indirect)
 ;;             8 ^ x64-new-reg-indirect-needs-sib (needs-sib x64-new-reg-indirect) ^ see above ^
 ;;             8 ^ x64-old-reg-indirect-needs-sib (needs-sib x64-old-reg-indirect) ^ see above ^
-;;         6 x86-new-reg-indirect (x64-rex.r-1 x64-rex.b-1 x86-reg-indirect)
-;;         6 x86-old-reg-indirect (x64-rex.r-0 x64-rex.b-0 x86-reg-indirect)
+;;         6 x86-new-reg-indirect (x64-rex-r-1 x64-rex-b-1 x86-reg-indirect)
+;;         6 x86-old-reg-indirect (x64-rex-r-0 x64-rex-b-0 x86-reg-indirect)
 ;;         6 x86-reg-indirect-disp0 (x86-reg-indirect)                                                       `displacement-size 0`
 ;;         6 x86-reg-indirect-disp8 (x86-reg-indirect)                                                       `displacement-size 8`
 ;;         6 x86-reg-indirect-disp32 (x86-reg-indirect)                                                      `displacement-size 32`
@@ -91,71 +91,71 @@
 ;;     4 x86-reg (reg x86-addressing-form)
 ;;       5 x86-8-bits-reg (x86-reg)
 ;;         6 x86-new-8-bits-reg (x86-new-reg x86-8-bits-reg)
-;;           7 x86-new-8-bits-reg-rex.r-0 (x64-rex.r-0 x64-rex.b-0 x86-new-8-bits-reg)
-;;           7 x86-new-8-bits-reg-rex.r-1 (x64-rex.r-1 x64-rex.b-1 x86-new-8-bits-reg)
+;;           7 x86-new-8-bits-reg-rex-r-0 (x64-rex-r-0 x64-rex-b-0 x86-new-8-bits-reg)
+;;           7 x86-new-8-bits-reg-rex-r-1 (x64-rex-r-1 x64-rex-b-1 x86-new-8-bits-reg)
 ;;         6 x86-old-8-bits-high-reg (x86-old-reg x86-8-bits-reg)
 ;;         6 x86-old-8-bits-low-reg (x86-old-reg x86-8-bits-reg)
 ;;       5 x86-16-bits-reg (x86-reg)
 ;;         6 x86-old-16-bits-reg (x86-old-reg x86-16-bits-reg)
-;;         6 x86-new-16-bits-reg (x64-rex.r-1 x64-rex.b-1 x86-new-reg x86-16-bits-reg)
+;;         6 x86-new-16-bits-reg (x64-rex-r-1 x64-rex-b-1 x86-new-reg x86-16-bits-reg)
 ;;       5 x86-32-bits-reg (x86-reg)
-;;         6 x86-new-32-bits-reg (x64-rex.r-1 x64-rex.b-1 x86-new-reg x86-32-bits-reg)
+;;         6 x86-new-32-bits-reg (x64-rex-r-1 x64-rex-b-1 x86-new-reg x86-32-bits-reg)
 ;;         6 x86-old-32-bits-reg (x86-old-reg x86-32-bits-reg)
 ;;       5 x86-64-bits-reg (x86-reg)
-;;         6 x86-new-64-bits-reg (x64-rex.r-1 x64-rex.b-1 x86-new-reg x86-64-bits-reg)
+;;         6 x86-new-64-bits-reg (x64-rex-r-1 x64-rex-b-1 x86-new-reg x86-64-bits-reg)
 ;;         6 x86-old-64-bits-reg (x86-old-reg x86-64-bits-reg)
 ;;       5 x86-mmx-reg (x86-reg)
 ;;       5 x86-new-reg (x86-reg)
 ;;         6 ^ x86-new-8-bits-reg (x86-new-reg x86-8-bits-reg) ^ see above ^
-;;         6 ^ x86-new-16-bits-reg (x64-rex.r-1 x64-rex.b-1 x86-new-reg x86-16-bits-reg) ^ see above ^
-;;         6 ^ x86-new-32-bits-reg (x64-rex.r-1 x64-rex.b-1 x86-new-reg x86-32-bits-reg) ^ see above ^
-;;         6 ^ x86-new-64-bits-reg (x64-rex.r-1 x64-rex.b-1 x86-new-reg x86-64-bits-reg) ^ see above ^
-;;         6 x86-new-xmm-reg (x64-rex.r-1 x64-rex.b-1 x86-xmm-reg)
-;;         6 x86-new-ymm-reg (x64-rex.r-1 x64-rex.b-1 x86-ymm-reg)
-;;         6 x86-new-zmm-reg (x64-rex.b-1 x64-rex.r-1 x86-zmm-reg)
-;;       5 x86-old-reg (x64-rex.r-0 x64-rex.b-0 x86-reg)
+;;         6 ^ x86-new-16-bits-reg (x64-rex-r-1 x64-rex-b-1 x86-new-reg x86-16-bits-reg) ^ see above ^
+;;         6 ^ x86-new-32-bits-reg (x64-rex-r-1 x64-rex-b-1 x86-new-reg x86-32-bits-reg) ^ see above ^
+;;         6 ^ x86-new-64-bits-reg (x64-rex-r-1 x64-rex-b-1 x86-new-reg x86-64-bits-reg) ^ see above ^
+;;         6 x86-new-xmm-reg (x64-rex-r-1 x64-rex-b-1 x86-xmm-reg)
+;;         6 x86-new-ymm-reg (x64-rex-r-1 x64-rex-b-1 x86-ymm-reg)
+;;         6 x86-new-zmm-reg (x64-rex-b-1 x64-rex-r-1 x86-zmm-reg)
+;;       5 x86-old-reg (x64-rex-r-0 x64-rex-b-0 x86-reg)
 ;;         6 ^ x86-old-8-bits-low-reg (x86-old-reg x86-8-bits-reg) ^ see above ^
 ;;         6 ^ x86-old-8-bits-high-reg (x86-old-reg x86-8-bits-reg) ^ see above ^
 ;;         6 ^ x86-old-16-bits-reg (x86-old-reg x86-16-bits-reg) ^ see above ^
 ;;         6 ^ x86-old-32-bits-reg (x86-old-reg x86-32-bits-reg) ^ see above ^
 ;;         6 ^ x86-old-64-bits-reg (x86-old-reg x86-64-bits-reg) ^ see above ^
-;;         6 x86-old-xmm-reg (x64-rex.r-0 x64-rex.b-0 x86-xmm-reg)
-;;         6 x86-old-ymm-reg (x64-rex.r-0 x64-rex.b-0 x86-ymm-reg)
-;;         6 x86-old-zmm-reg (x64-rex.b-0 x64-rex.r-0 x86-zmm-reg)
+;;         6 x86-old-xmm-reg (x64-rex-r-0 x64-rex-b-0 x86-xmm-reg)
+;;         6 x86-old-ymm-reg (x64-rex-r-0 x64-rex-b-0 x86-ymm-reg)
+;;         6 x86-old-zmm-reg (x64-rex-b-0 x64-rex-r-0 x86-zmm-reg)
 ;;       5 x86-xmm-reg (x86-reg)
-;;         6 ^ x86-old-xmm-reg (x64-rex.r-0 x64-rex.b-0 x86-xmm-reg) ^ see above ^
-;;         6 ^ x86-new-xmm-reg (x64-rex.r-1 x64-rex.b-1 x86-xmm-reg) ^ see above ^
+;;         6 ^ x86-old-xmm-reg (x64-rex-r-0 x64-rex-b-0 x86-xmm-reg) ^ see above ^
+;;         6 ^ x86-new-xmm-reg (x64-rex-r-1 x64-rex-b-1 x86-xmm-reg) ^ see above ^
 ;;       5 x86-ymm-reg (x86-reg)
-;;         6 ^ x86-new-ymm-reg (x64-rex.r-1 x64-rex.b-1 x86-ymm-reg) ^ see above ^
-;;         6 ^ x86-old-ymm-reg (x64-rex.r-0 x64-rex.b-0 x86-ymm-reg) ^ see above ^
+;;         6 ^ x86-new-ymm-reg (x64-rex-r-1 x64-rex-b-1 x86-ymm-reg) ^ see above ^
+;;         6 ^ x86-old-ymm-reg (x64-rex-r-0 x64-rex-b-0 x86-ymm-reg) ^ see above ^
 ;;       5 x86-zmm-reg (x86-reg)
-;;         6 ^ x86-new-zmm-reg (x64-rex.b-1 x64-rex.r-1 x86-zmm-reg) ^ see above ^
-;;         6 ^ x86-old-zmm-reg (x64-rex.b-0 x64-rex.r-0 x86-zmm-reg) ^ see above ^
+;;         6 ^ x86-new-zmm-reg (x64-rex-b-1 x64-rex-r-1 x86-zmm-reg) ^ see above ^
+;;         6 ^ x86-old-zmm-reg (x64-rex-b-0 x64-rex-r-0 x86-zmm-reg) ^ see above ^
 ;;   3 x86-addressing-form (addressing-form)                                                                 `r/m` (required), `is-old-reg nil`, `is-new-reg nil`,
 ;;         ...                                                                                               `needs-sib nil`, `needs-rex nil`, `works-with-rex` nil.
 ;;     4 ^ x86-reg (reg x86-addressing-form) ^ see above ^
 
-(defclass modrm.mod-b00 ()
-  ((modrm.mod
-     :reader modrm.mod
+(defclass modrm-mod-b00 ()
+  ((modrm-mod
+     :reader modrm-mod
      :allocation :class
      :initform #b00)))
 
-(defclass modrm.mod-b01 ()
-  ((modrm.mod
-     :reader modrm.mod
+(defclass modrm-mod-b01 ()
+  ((modrm-mod
+     :reader modrm-mod
      :allocation :class
      :initform #b01)))
 
-(defclass modrm.mod-b10 ()
-  ((modrm.mod
-     :reader modrm.mod
+(defclass modrm-mod-b10 ()
+  ((modrm-mod
+     :reader modrm-mod
      :allocation :class
      :initform #b10)))
 
-(defclass modrm.mod-b11 ()
-  ((modrm.mod
-     :reader modrm.mod
+(defclass modrm-mod-b11 ()
+  ((modrm-mod
+     :reader modrm-mod
      :allocation :class
      :initform #b11)))
 
@@ -166,30 +166,30 @@
      :initform t
      :documentation "[bp+disp], [ebp+disp], [rbp+disp], [base+index] and [base+scale*index] addressing forms do need SIB. there is no [bp], [ebp] or [rbp] w/o disp")))
 
-(defclass x64-rex.r-0 ()
-  ((rex.r
-     :reader rex.r
+(defclass x64-rex-r-0 ()
+  ((rex-r
+     :reader rex-r
      :allocation :class
      :initform 0
      :documentation "REX.R = 0")))
 
-(defclass x64-rex.r-1 ()
-  ((rex.r
-     :reader rex.r
+(defclass x64-rex-r-1 ()
+  ((rex-r
+     :reader rex-r
      :allocation :class
      :initform 1
      :documentation "REX.R = 1")))
 
-(defclass x64-rex.b-0 ()
-  ((rex.b
-     :reader rex.b
+(defclass x64-rex-b-0 ()
+  ((rex-b
+     :reader rex-b
      :allocation :class
      :initform 0
      :documentation "REX.B = 0")))
 
-(defclass x64-rex.b-1 ()
-  ((rex.b
-     :reader rex.b
+(defclass x64-rex-b-1 ()
+  ((rex-b
+     :reader rex-b
      :allocation :class
      :initform 1
      :documentation "REX.B = 1")))
@@ -447,23 +447,23 @@
      :allocation :class
      :initform t
      :documentation "MMX registers can always be used with REX")
-   (is-any-rex.r-ok
-     :reader is-any-rex.r-ok
+   (is-any-rex-r-ok
+     :reader is-any-rex-r-ok
      :allocation :class
      :initform t
      :documentation "REX.R can be 0 or 1, no difference")
-   (is-any-rex.b-ok
-     :reader is-any-rex.b-ok
+   (is-any-rex-b-ok
+     :reader is-any-rex-b-ok
      :allocation :class
      :initform t
      :documentation "REX.B can be 0 or 1, no difference")
-   (rex.r
-     :reader rex.r
+   (rex-r
+     :reader rex-r
      :allocation :class
      :initform 0 ; TODO: encode here 1 bit of data (0/1)!
      :documentation "REX.R can be 0 or 1, no difference.")
-   (rex.b
-     :reader rex.b
+   (rex-b
+     :reader rex-b
      :allocation :class
      :initform 0 ; TODO: encode here 1 bit of data (0/1)!
      :documentation "REX.B can be 0 or 1???")))
@@ -475,7 +475,7 @@
      :initform t
      :documentation "new registers are all registers which can _not_ be accessed without REX")))
 
-(defclass x86-old-reg (x64-rex.r-0 x64-rex.b-0 x86-reg)
+(defclass x86-old-reg (x64-rex-r-0 x64-rex-b-0 x86-reg)
   ((is-old-reg
      :reader is-old-reg
      :allocation :class
@@ -556,16 +556,16 @@
 ;; subclasses of `x64-rip-relative` begin here (they have hierarchy level 6).
 
 (defclass x86-rip-disp32 (x64-rip-relative)
-  ((rex.b
-     :reader rex.b
+  ((rex-b
+     :reader rex-b
      :allocation :class
      :initform nil
      :documentation "REX.B can be 0 or 1")))
 
-(defclass x86-rip-disp32-0 (x64-rex.b-0 x64-rip-relative)
+(defclass x86-rip-disp32-0 (x64-rex-b-0 x64-rip-relative)
   ())
 
-(defclass x86-rip-disp32-1 (x64-rex.b-1 x64-rip-relative)
+(defclass x86-rip-disp32-1 (x64-rex-b-1 x64-rip-relative)
   ())
 
 ;; subclasses of `x86-reg-indirect` begin here (they have hierarchy level 6).
@@ -591,14 +591,14 @@
      :initform (list "mem" "mem64" "mem128" "mem256" "mem512" "rm8" "rm16" "rm32" "rm64" "mmxrm" "mmxrm64" "xmmrm" "xmmrm32" "xmmrm64" "xmmrm128" "ymmrm256")
      :documentation "allowed encodings in NASM's `insns.dat` syntax")))
 
-(defclass x86-new-reg-indirect (x64-rex.r-1 x64-rex.b-1 x86-reg-indirect)
+(defclass x86-new-reg-indirect (x64-rex-r-1 x64-rex-b-1 x86-reg-indirect)
   ((needs-rex
      :reader needs-rex
      :allocation :class
      :initform t
      :documentation "[r8], [r9], [r10], [r11], [r14] & [r15] do need REX.")))
 
-(defclass x86-old-reg-indirect (x64-rex.r-0 x64-rex.b-0 x86-reg-indirect)
+(defclass x86-old-reg-indirect (x64-rex-r-0 x64-rex-b-0 x86-reg-indirect)
   ;; [rax], [rcx], [rdx], [rbx], [rsi] & [rdi] do _not_ need REX.
   ())
 
@@ -655,7 +655,7 @@
 
 ;; subclasses of `x86-16-bits-reg` begin here (they have hierarchy level 6).
 
-(defclass x86-new-16-bits-reg (x64-rex.r-1 x64-rex.b-1 x86-new-reg x86-16-bits-reg)
+(defclass x86-new-16-bits-reg (x64-rex-r-1 x64-rex-b-1 x86-new-reg x86-16-bits-reg)
   ;; new 16-bit registers (r8w, r9w, r10w, r11w, r12w, r13w, r14w, r15w) require REX.
   ((works-with-rex
      :reader works-with-rex
@@ -678,7 +678,7 @@
 
 ;; subclasses of `x86-32-bits-reg` begin here (they have hierarchy level 6).
 
-(defclass x86-new-32-bits-reg (x64-rex.r-1 x64-rex.b-1 x86-new-reg x86-32-bits-reg)
+(defclass x86-new-32-bits-reg (x64-rex-r-1 x64-rex-b-1 x86-new-reg x86-32-bits-reg)
   ;; new 32-bit registers (r8d, r9d, r10d, r11d, r12d, r13d, r14d, r15d) require REX.
   ((works-with-rex
      :reader works-with-rex
@@ -701,7 +701,7 @@
 
 ;; subclasses of `x86-64-bits-reg` begin here (they have hierarchy level 6).
 
-(defclass x86-new-64-bits-reg (x64-rex.r-1 x64-rex.b-1 x86-new-reg x86-64-bits-reg)
+(defclass x86-new-64-bits-reg (x64-rex-r-1 x64-rex-b-1 x86-new-reg x86-64-bits-reg)
   ;; new 64-bit registers (r8, r9, r10, r11, r12, r13, r14, r15) require REX.
   ((works-with-rex
      :reader works-with-rex
@@ -727,27 +727,27 @@
 
 ;; ^ (defclass x86-new-8-bits-reg (x86-new-reg x86-8-bits-reg) ^ see above ^
 
-;; ^ (defclass x86-new-16-bits-reg (x64-rex.r-1 x64-rex.b-1 x86-new-reg x86-16-bits-reg) ^ see above ^
+;; ^ (defclass x86-new-16-bits-reg (x64-rex-r-1 x64-rex-b-1 x86-new-reg x86-16-bits-reg) ^ see above ^
 
-;; ^ (defclass x86-new-32-bits-reg (x64-rex.r-1 x64-rex.b-1 x86-new-reg x86-32-bits-reg) ^ see above ^
+;; ^ (defclass x86-new-32-bits-reg (x64-rex-r-1 x64-rex-b-1 x86-new-reg x86-32-bits-reg) ^ see above ^
 
-;; ^ (defclass x86-new-64-bits-reg (x64-rex.r-1 x64-rex.b-1 x86-new-reg x86-64-bits-reg) ^ see above ^
+;; ^ (defclass x86-new-64-bits-reg (x64-rex-r-1 x64-rex-b-1 x86-new-reg x86-64-bits-reg) ^ see above ^
 
-(defclass x86-new-xmm-reg (x64-rex.r-1 x64-rex.b-1 x86-xmm-reg)
+(defclass x86-new-xmm-reg (x64-rex-r-1 x64-rex-b-1 x86-xmm-reg)
   ((needs-rex
      :reader needs-rex
      :allocation :class
      :initform t
      :documentation "xmm8, xmm9, xmm10, xmm11, xmm12, xmm13, xmm14 & xmm15 _do_ need REX.")))
 
-(defclass x86-new-ymm-reg (x64-rex.r-1 x64-rex.b-1 x86-ymm-reg)
+(defclass x86-new-ymm-reg (x64-rex-r-1 x64-rex-b-1 x86-ymm-reg)
   ((needs-rex
      :reader needs-rex
      :allocation :class
      :initform t
      :documentation "ymm8, ymm9, ymm10, ymm11, ymm12, ymm13, ymm14 & ymm15 _do_ need REX.")))
 
-(defclass x86-new-zmm-reg (x64-rex.b-1 x64-rex.r-1 x86-zmm-reg)
+(defclass x86-new-zmm-reg (x64-rex-b-1 x64-rex-r-1 x86-zmm-reg)
   ((needs-rex
      :reader needs-rex
      :allocation :class
@@ -770,14 +770,14 @@
   ;; xmm0, xmm1, xmm2, xmm3, xmm4, xmm5, xmm6 & xmm7 do not need REX.
   ())
 
-(defclass x86-old-ymm-reg (x64-rex.r-0 x64-rex.b-0 x86-ymm-reg)
+(defclass x86-old-ymm-reg (x64-rex-r-0 x64-rex-b-0 x86-ymm-reg)
   ((needs-rex
      :reader needs-rex
      :allocation :class
      :initform nil
      :documentation "ymm0, ymm1, ymm2, ymm3, ymm4, ymm5, ymm6 & ymm7 do not need REX.")))
 
-(defclass x86-old-zmm-reg (x64-rex.b-0 x64-rex.r-0 x86-zmm-reg)
+(defclass x86-old-zmm-reg (x64-rex-b-0 x64-rex-r-0 x86-zmm-reg)
   ())
 
 ;; subclasses of `x16-reg-indirect` begin here (they have hierarchy level 7).
@@ -812,11 +812,11 @@
 
 ;; subclasses of `x86-new-8-bits-reg` begin here (they have hierarchy level 7).
 
-(defclass x86-new-8-bits-reg-rex.r-0 (x64-rex.r-0 x64-rex.b-0 x86-new-8-bits-reg)
+(defclass x86-new-8-bits-reg-rex-r-0 (x64-rex-r-0 x64-rex-b-0 x86-new-8-bits-reg)
   ;;"Only spl, bpl, sil & dil belong to this class."
   ())
 
-(defclass x86-new-8-bits-reg-rex.r-1 (x64-rex.r-1 x64-rex.b-1 x86-new-8-bits-reg)
+(defclass x86-new-8-bits-reg-rex-r-1 (x64-rex-r-1 x64-rex-b-1 x86-new-8-bits-reg)
   ;; r8b, r9b, r10b, r11b, r12b, r13b, r14b & r15b belong to this class.
   ())
 
@@ -858,7 +858,7 @@
      :reader displacement-size
      :allocation :class
      :initform 8)))
-  
+
 (defclass x64-new-reg-indirect-sib-with-disp32 (x64-new-reg-indirect-needs-sib)
   ((displacement-size
      :reader displacement-size
@@ -867,22 +867,22 @@
 
 ;; generic functions begin here.
 
-(defgeneric modrm.mod (x86-addressing-form)
+(defgeneric modrm-mod (x86-addressing-form)
   (:documentation "mod bits (bits 6 and 7 of ModRM) specify the addressing mode for an operand.
                    0b00 reg-indirect: [rax], [rcx], [rdx], [rbx], SIB, disp32, [rsi], [rdi].
                    0b01 reg-indirect: [rax+disp8], [rcx+disp8], [rdx+disp8], [rbx+disp8], SIB+disp8, [rbp+disp8], [rsi+disp8], [rdi+disp8].
                    0b10 reg-indirect: [rax+dis32], [rcx+dis32], [rdx+dis32], [rbx+dis32], SIB+dis32, [rbp+dis32], [rsi+dis32], [rdi+dis32].
                    0b11 register-direct:   any register-direct, see eg. AMD Architecture Programmers Manual Volume 3, Table 1-10."))
 
-(defgeneric modrm.r/m (x86-addressing-form)
+(defgeneric modrm-r/m (x86-addressing-form)
   (:documentation "r/m bits (bits 0 .. 2) of ModRM byte."))
 
-(defgeneric modrm.reg (x86-reg)
+(defgeneric modrm-reg (x86-reg)
   (:documentation "reg bits (bits 3 .. 5) of ModRM byte."))
 
 ;; methods begin here.
 
-(defmethod modrm.mod ((x86-addressing-form x86-addressing-form))
+(defmethod modrm-mod ((x86-addressing-form x86-addressing-form))
   (cond
     ((slot-value x86-addressing-form 'is-reg)
      #b11)
@@ -895,7 +895,7 @@
         #b01)
        ((eql (slot-value x86-addressing-form 'displacement-size) 32)
         #b10)
-       (t (error "error in defmethod modrm.mod."))))
+       (t (error "error in defmethod modrm-mod."))))
     ((slot-value x86-addressing-form 'is-reg-indirect)
      (cond
        ((eql (slot-value x86-addressing-form 'displacement-size) 0)
@@ -904,11 +904,11 @@
         #b01)
        ((eql (slot-value x86-addressing-form 'displacement-size) 32)
         #b10)
-       (t (error "error in defmethod modrm.mod."))))
-    (t (error "error in defmethod modrm.mod."))))
+       (t (error "error in defmethod modrm-mod."))))
+    (t (error "error in defmethod modrm-mod."))))
 
-(defmethod modrm.r/m ((x86-addressing-form x86-addressing-form))
+(defmethod modrm-r/m ((x86-addressing-form x86-addressing-form))
   (slot-value x86-addressing-form 'r/m))
 
-(defmethod modrm.reg ((x86-reg x86-reg))
+(defmethod modrm-reg ((x86-reg x86-reg))
   (slot-value x86-reg 'r/m))

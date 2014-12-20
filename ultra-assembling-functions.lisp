@@ -47,9 +47,17 @@
   "This function converts a syntax list of one instruction to a list of binary code bytes,
    `emit-function-selector-function` can be eg. `#'first` or `#'(lambda (x) (first (last x)))`."
   (let*
-    ((emit-functions-list (gethash (first syntax-list) my-hash-table))
-     (binary-code (apply (funcall emit-function-selector-function emit-functions-list)
-                         (loop for arg in (rest syntax-list) collect (convert-string-to-symbol-if-symbol-exists arg)))))
+    ((instruction-instances-list (gethash (first syntax-list) my-hash-table))
+     (binary-code (funcall emit-function-selector-function
+                           (remove nil
+                                   (loop for instruction-instance in instruction-instances-list
+                                         collect (handler-case
+                                                   (funcall #'emit
+                                                            instruction-instance
+                                                            (loop for arg in (rest syntax-list)
+                                                                  collect (convert-string-to-symbol-if-symbol-exists arg)))
+                                                   (common-lisp:simple-error ()
+                                                                             nil)))))))
     (when (boundp '*global-offset*)
       (progn
         (incf *global-offset* (length binary-code))
@@ -67,8 +75,9 @@
   (let
     ((syntax-list-of-lists (eval syntax-tree)))
     (loop for syntax-list in syntax-list-of-lists
-          collect (loop for emit-function-i below (length (gethash (first syntax-list) my-hash-table))
-                        collect (emit-binary-code-for-one-instruction syntax-list my-hash-table :emit-function-selector-function (get-nth emit-function-i))))))
+          collect (remove nil
+                          (loop for emit-function-i below (length (gethash (first syntax-list) my-hash-table))
+                                collect (emit-binary-code-for-one-instruction syntax-list my-hash-table :emit-function-selector-function (get-nth emit-function-i)))))))
 
 (defun get-all-encodings-for-syntax-tree-and-print-hex (syntax-tree my-hash-table)
   "This function converts syntax tree to a list of strings of hexadecimal bytes."

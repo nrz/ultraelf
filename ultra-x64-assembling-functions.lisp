@@ -3,41 +3,41 @@
 ;;; ultraELF x86-16, x86-32, x86-64 & ARM assembler, disassembler and metamorphic engine.
 ;;; ultraELF packs and reconstructs ELF executables, maintaining original functionality.
 
-(in-package :ultraelf)
+(in-package :x64)
 
 (defun get-all-encodings-for-x64-syntax-tree (syntax-tree)
   "This function converts x64 syntax tree to a list of lists of lists of binary code bytes,
    the encodings of each instruction on their own list,
    the bytes of each encoding on their own list."
-  (get-all-encodings-for-syntax-tree syntax-tree *emit-function-hash-table-x64*))
+  (get-all-encodings-for-syntax-tree syntax-tree *x64-instruction-variants-hash-table*))
 
 (defun get-all-encodings-for-x64-syntax-tree-and-print-hex (syntax-tree)
   "This function converts x64 syntax tree to a list of strings of hexadecimal bytes."
-  (print-hex (get-all-encodings-for-syntax-tree syntax-tree *emit-function-hash-table-x64*)))
+  (print-hex (get-all-encodings-for-syntax-tree syntax-tree *x64-instruction-variants-hash-table*)))
 
 (defun assemble-x64 (code)
   "This function assembles x86-64 (x64) code."
-  (assemble code *emit-function-hash-table-x64*))
+  (assemble code *x64-instruction-variants-hash-table*))
 
 (defun assemble-x64-and-print-hex (code)
   "This function assembles x86-64 (x64) code and prints in a hexadecimal string."
-  (print-hex (assemble code *emit-function-hash-table-x64*)))
+  (print-hex (assemble code *x64-instruction-variants-hash-table*)))
 
 (defun assemble-alternatives-x64 (code)
   "This function assembles x86-64 (x64) code, all alternatives."
-  (assemble-alternatives code *emit-function-hash-table-x64*))
+  (assemble-alternatives code *x64-instruction-variants-hash-table*))
 
 (defun assemble-alternatives-x64-and-print-hex (code)
   "This function assembles x86-64 (x64) code, all alternatives, and prints in a hexadecimal string."
-  (print-hex (assemble-alternatives code *emit-function-hash-table-x64*)))
+  (print-hex (assemble-alternatives code *x64-instruction-variants-hash-table*)))
 
-(defun emit-rex (encoding-type n-operands &key args (rex.w-value 0) (rex.r-value 0) (rex.x-value 0) (rex.b-value 0))
+(defun emit-rex (encoding-type n-operands &key args (rex-w-value 0) (rex-r-value 0) (rex-x-value 0) (rex-b-value 0))
   "This function emits REX according to encoding type and the operands.
-   rex.w-value : 0 for default operand size, 1 for 64-bit operand size.
+   rex-w-value : 0 for default operand size, 1 for 64-bit operand size.
    `emit-rex` does not handle steganographic or variable encoding in any
    particular way, it just encodes a REX byte with required bits as needed
-   and optional bits according to `rex.w-value`, `rex.r-value`,
-   `rex.x-value` and `rex.b-value. Using default values (0) for all REX
+   and optional bits according to `rex-w-value`, `rex-r-value`,
+   `rex-x-value` and `rex-b-value. Using default values (0) for all REX
    bits produces REX bytes identical to those produced by NASM.
    For steganographic or variable encoding `emit-rex` must be called with
    appropriate values for the mentioned keyword arguments."
@@ -47,30 +47,30 @@
      (arg2 (second my-args)))
     (cond
       ((eql n-operands 0)
-       (emit-rex-byte rex.w-value   ; operand size.
-                      rex.r-value   ; TODO: encode here 1 bit of data!
-                      rex.x-value   ; TODO: encode here 1 bit of data!
-                      rex.b-value)) ; TODO: encode here 1 bit of data!
+       (emit-rex-byte rex-w-value   ; operand size.
+                      rex-r-value   ; TODO: encode here 1 bit of data!
+                      rex-x-value   ; TODO: encode here 1 bit of data!
+                      rex-b-value)) ; TODO: encode here 1 bit of data!
       ((eql n-operands 1)
-       (emit-rex-byte rex.w-value    ; operand size.
-                      rex.r-value    ; number of arguments should be checked already.
+       (emit-rex-byte rex-w-value    ; operand size.
+                      rex-r-value    ; number of arguments should be checked already.
                       0              ; extension of the SIB index field, this should be
-                      (rex.b arg1))) ; checked when implementing SIB!
+                      (rex-b arg1))) ; checked when implementing SIB!
       ((eql n-operands 2)
        (cond
          ((equal encoding-type "[mr:")
-          (emit-rex-byte rex.w-value    ; operand size.
-                         (rex.r arg2)   ; rex.r augments reg field, so it's from arg2 in `[mr:`.
+          (emit-rex-byte rex-w-value    ; operand size.
+                         (rex-r arg2)   ; rex-r augments reg field, so it's from arg2 in `[mr:`.
                          0              ; extension of the SIB index field, this should be
-                         (rex.b arg1))) ; rex.b augments r/m field, so it's from arg1 in `[mr:`.
+                         (rex-b arg1))) ; rex-b augments r/m field, so it's from arg1 in `[mr:`.
          ((equal encoding-type "[rm:")
-          (emit-rex-byte rex.w-value      ; operand size.
-                         (rex.r arg1)     ; rex.r augments reg field, so it's from arg1 in `[rm:`.
+          (emit-rex-byte rex-w-value      ; operand size.
+                         (rex-r arg1)     ; rex-r augments reg field, so it's from arg1 in `[rm:`.
                          0                ; extension of the SIB index field, this should be
-                         (rex.b arg2))))) ; rex.b augments r/m field, so it's from arg2 in `[mr:`.
+                         (rex-b arg2))))) ; rex-b augments r/m field, so it's from arg2 in `[mr:`.
       (t (error "encoding not yet implemented")))))
 
-(defun handle-nasm-code-format-x64 (code-format operands &key args msg (rex.w-value 0) (rex.r-value 0) (rex.b-value 0))
+(defun handle-nasm-code-format-x64 (code-format operands &key args msg (rex-w-value 0) (rex-r-value 0) (rex-b-value 0))
   "This function handles one code-string (from NASM's `insns.dat`) and returns the following:
    0. the encoding as a list
    1. number of bits of `msg` encoded."
@@ -144,13 +144,13 @@
                        (cond
                          (do-args-require-rex
                            (setf is-rex-already-encoded t)
-                           (emit-rex encoding-type n-operands :args my-args :rex.r-value rex.r-value))
+                           (emit-rex encoding-type n-operands :args my-args :rex-r-value rex-r-value))
                          (t nil)))
                       ((eql n-operands 2)
                        (cond
                          (do-args-require-rex
                            (setf is-rex-already-encoded t)
-                           (emit-rex encoding-type n-operands :args my-args :rex.r-value rex.r-value))
+                           (emit-rex encoding-type n-operands :args my-args :rex-r-value rex-r-value))
                          (t nil)))
                       ((eql n-operands 3)
                        (error "o32 encoding of 3 operands in not yet implemented"))
@@ -158,10 +158,10 @@
                    ((equal code-string "o64")
                     (cond
                       ((eql n-operands 0)
-                       (emit-rex encoding-type n-operands :args my-args :rex.w-value 1 :rex.r-value rex.r-value)) ; 64-bit operand size!
+                       (emit-rex encoding-type n-operands :args my-args :rex-w-value 1 :rex-r-value rex-r-value)) ; 64-bit operand size!
                       ((eql n-operands 1)
                        (setf is-rex-already-encoded t)
-                       (emit-rex encoding-type n-operands :args my-args :rex.w-value 1 :rex.r-value rex.r-value)) ; 64-bit operand size!
+                       (emit-rex encoding-type n-operands :args my-args :rex-w-value 1 :rex-r-value rex-r-value)) ; 64-bit operand size!
                       ((eql n-operands 2)
                        (error "o64 encoding of 2 operands in not yet implemented"))
                       ((eql n-operands 3)
@@ -179,7 +179,7 @@
                            ;; and REX.W is encoded this way:
                            ;; 0 (default operand size) or 1 (64-bit operand size).
                            ;; 64-bit operand size is the default, so it's possible to encode 1 bit of information!!!
-                           (emit-rex encoding-type n-operands :args my-args :rex.w-value rex.w-value :rex.r-value rex.r-value))
+                           (emit-rex encoding-type n-operands :args my-args :rex-w-value rex-w-value :rex-r-value rex-r-value))
                          (t nil)))
                       ((eql n-operands 2)
                        (error "o64nw encoding of 2 operands in not yet implemented"))
@@ -195,98 +195,98 @@
                                   (setf is-rex-already-encoded t)
                                   (cond
                                     ((eql n-operands 1)
-                                     (emit-rex encoding-type n-operands :args my-args :rex.r-value rex.r-value))
+                                     (emit-rex encoding-type n-operands :args my-args :rex-r-value rex-r-value))
                                     ((eql n-operands 2)
-                                     (emit-rex encoding-type n-operands :args my-args :rex.r-value rex.r-value)) ; TODO: check if REX.W be used to encode data here!
+                                     (emit-rex encoding-type n-operands :args my-args :rex-r-value rex-r-value)) ; TODO: check if REX.W be used to encode data here!
                                     (t (error "encoding not yet implemented")))))
                               (cond ((equal code-string "/r")
                                      (cond
                                        ((equal encoding-type "[mr:")
                                         ;; ok, arg1 goes to r/m field and arg2 goes to reg field.
-                                        (emit-modrm (modrm.mod arg1)
-                                                    (modrm.reg arg2)
-                                                    (modrm.r/m arg1)))
+                                        (emit-modrm (modrm-mod arg1)
+                                                    (modrm-reg arg2)
+                                                    (modrm-r/m arg1)))
                                        ((equal encoding-type "[rm:")
                                         ;; ok, arg1 goes to reg field and arg2 goes to r/m field.
-                                        (emit-modrm (modrm.mod arg2)
-                                                    (modrm.reg arg1)
-                                                    (modrm.r/m arg2)))
+                                        (emit-modrm (modrm-mod arg2)
+                                                    (modrm-reg arg1)
+                                                    (modrm-r/m arg2)))
                                        (t (error "encoding not yet implemented"))))
                                     ((equal code-string "/0")
-                                     (emit-modrm (modrm.mod arg1)
+                                     (emit-modrm (modrm-mod arg1)
                                                  0 ; extension encoded in reg field.
-                                                 (modrm.r/m arg1)))
+                                                 (modrm-r/m arg1)))
                                     ((equal code-string "/1")
-                                     (emit-modrm (modrm.mod arg1)
+                                     (emit-modrm (modrm-mod arg1)
                                                  1 ; extension encoded in reg field.
-                                                 (modrm.r/m arg1)))
+                                                 (modrm-r/m arg1)))
                                     ((equal code-string "/2")
-                                     (emit-modrm (modrm.mod arg1)
+                                     (emit-modrm (modrm-mod arg1)
                                                  2 ; extension encoded in reg field.
-                                                 (modrm.r/m arg1)))
+                                                 (modrm-r/m arg1)))
                                     ((equal code-string "/3")
-                                     (emit-modrm (modrm.mod arg1)
+                                     (emit-modrm (modrm-mod arg1)
                                                  3 ; extension encoded in reg field.
-                                                 (modrm.r/m arg1)))
+                                                 (modrm-r/m arg1)))
                                     ((equal code-string "/4")
-                                     (emit-modrm (modrm.mod arg1)
+                                     (emit-modrm (modrm-mod arg1)
                                                  4 ; extension encoded in reg field.
-                                                 (modrm.r/m arg1)))
+                                                 (modrm-r/m arg1)))
                                     ((equal code-string "/5")
-                                     (emit-modrm (modrm.mod arg1)
+                                     (emit-modrm (modrm-mod arg1)
                                                  5 ; extension encoded in reg field.
-                                                 (modrm.r/m arg1)))
+                                                 (modrm-r/m arg1)))
                                     ((equal code-string "/6")
-                                     (emit-modrm (modrm.mod arg1)
+                                     (emit-modrm (modrm-mod arg1)
                                                  6 ; extension encoded in reg field.
-                                                 (modrm.r/m arg1)))
+                                                 (modrm-r/m arg1)))
                                     ((equal code-string "/7")
-                                     (emit-modrm (modrm.mod arg1)
+                                     (emit-modrm (modrm-mod arg1)
                                                  7 ; extension encoded in reg field.
-                                                 (modrm.r/m arg1)))
+                                                 (modrm-r/m arg1)))
                                     ;; register-only encodings.
                                     ;; there are currently 18 encodings of this type in use.
                                     ;; to check `insns.dat` for new encodings of this type:
                                     ;; `$ grep '[0-9a-f]+' insns.dat | sed 's/\(^.*\)\([\t ][0-9a-f][0-9a-f]+\)\(.*$\)/\2/g' | sed 's/[\t ]*//g' | sort | uniq`
                                     ((equal code-string "40+r")
-                                     (list (+ #x40 (modrm.r/m arg1))))
+                                     (list (+ #x40 (modrm-r/m arg1))))
                                     ((equal code-string "48+r")
-                                     (list (+ #x48 (modrm.r/m arg1))))
+                                     (list (+ #x48 (modrm-r/m arg1))))
                                     ((equal code-string "50+r")
-                                     (list (+ #x50 (modrm.r/m arg1))))
+                                     (list (+ #x50 (modrm-r/m arg1))))
                                     ((equal code-string "58+r")
-                                     (list (+ #x58 (modrm.r/m arg1))))
+                                     (list (+ #x58 (modrm-r/m arg1))))
                                     ((equal code-string "70+r")
-                                     (list (+ #x70 (modrm.r/m arg1))))
+                                     (list (+ #x70 (modrm-r/m arg1))))
                                     ((equal code-string "71+r")
-                                     (list (+ #x71 (modrm.r/m arg1))))
+                                     (list (+ #x71 (modrm-r/m arg1))))
                                     ((equal code-string "80+r")
-                                     (list (+ #x80 (modrm.r/m arg1))))
+                                     (list (+ #x80 (modrm-r/m arg1))))
                                     ((equal code-string "90+r")
-                                     (list (+ #x90 (modrm.r/m arg1))))
+                                     (list (+ #x90 (modrm-r/m arg1))))
                                     ((equal code-string "b0+r")
-                                     (list (+ #xb0 (modrm.r/m arg1))))
+                                     (list (+ #xb0 (modrm-r/m arg1))))
                                     ((equal code-string "b8+r")
-                                     (list (+ #xb8 (modrm.r/m arg1))))
+                                     (list (+ #xb8 (modrm-r/m arg1))))
                                     ((equal code-string "c0+r")
-                                     (list (+ #xc0 (modrm.r/m arg1))))
+                                     (list (+ #xc0 (modrm-r/m arg1))))
                                     ((equal code-string "c8+r")
-                                     (list (+ #xc8 (modrm.r/m arg1))))
+                                     (list (+ #xc8 (modrm-r/m arg1))))
                                     ((equal code-string "d0+r")
-                                     (list (+ #xd0 (modrm.r/m arg1))))
+                                     (list (+ #xd0 (modrm-r/m arg1))))
                                     ((equal code-string "d8+r")
-                                     (list (+ #xd8 (modrm.r/m arg1))))
+                                     (list (+ #xd8 (modrm-r/m arg1))))
                                     ((equal code-string "e0+r")
-                                     (list (+ #xe0 (modrm.r/m arg1))))
+                                     (list (+ #xe0 (modrm-r/m arg1))))
                                     ((equal code-string "e8+r")
-                                     (list (+ #xe8 (modrm.r/m arg1))))
+                                     (list (+ #xe8 (modrm-r/m arg1))))
                                     ((equal code-string "f0+r")
-                                     (list (+ #xf0 (modrm.r/m arg1))))
+                                     (list (+ #xf0 (modrm-r/m arg1))))
                                     ((equal code-string "f8+r")
-                                     (list (+ #xf8 (modrm.r/m arg1))))
+                                     (list (+ #xf8 (modrm-r/m arg1))))
                                     (t (list (parse-integer code-string :radix 16))))))))))
 
-(defun emit-with-format-and-operands-x64 (&key code-format operands args msg)
+(defun emit-with-format-and-operands-x64 (code-format operands &key args msg)
   "This function emits code (list of binary code bytes) for one x64 instruction variant."
   (let*
     ((my-args (get-list args))

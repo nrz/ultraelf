@@ -8,8 +8,13 @@
 (defpackage :x16
   (:use :x86 :essentials)
   (:import-from
+    :cl
+    :nil)
+  (:import-from
     :ultraelf
     ;; TODO: x16 register indirects.
     ;; :\[bx\] :\[bp\] :\[si\] :\[di\] ...
     ;; instruction class names.
-    :x16-asm-instruction))
+    :x16-asm-instruction)
+  (:export
+    :emit-with-format-and-operands-x16))

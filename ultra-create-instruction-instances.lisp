@@ -5,7 +5,7 @@
 
 (in-package :x64)
 
-(defparameter *x64-instruction-variants-hash-table* (make-hash-table :test #'equalp :size 8192))
+(defparameter *x64-instruction-variants-hash-table* (make-hash-table :test #'equalp :size 32768))
 (defparameter DB-ignore (make-instance 'x64-asm-instruction
 :name "DB"
 :operands (list "ignore")

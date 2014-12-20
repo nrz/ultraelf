@@ -8,6 +8,9 @@
 (defpackage :arm
   (:use :essentials)
   (:import-from
+    :cl
+    :nil)
+  (:import-from
     :ultraelf
     ;; printing functions.
     :print-hex
@@ -27,5 +30,9 @@
     :assemble-alternatives-and-print-hex
     :get-all-encodings-for-syntax-tree
     :get-all-encodings-for-syntax-tree-and-print-hex
+    ;; symbols.
+    :convert-string-to-symbol-if-symbol-exists
     ;; instruction class names.
-    :arm-asm-instruction))
+    :arm-asm-instruction)
+  (:export
+    :emit-with-format-and-operands-arm))

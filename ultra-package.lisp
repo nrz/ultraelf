@@ -32,6 +32,8 @@
     :get-all-encodings-for-syntax-tree
     :get-all-encodings-for-syntax-tree-and-print-hex
     :get-msg-bit
+    ;; symbols.
+    :convert-string-to-symbol-if-symbol-exists
     ;; instruction classes' slots.
     :allowed-targets
     :code-format
@@ -47,8 +49,9 @@
     :needs-sib
     :r/m
     ;; addressing form classes' methods.
-    :modrm.mod
-    :modrm.r/m
+    :modrm-mod
+    :modrm-reg
+    :modrm-r/m
     ;; x86 registers common to all x86.
     :al :cl :dl :bl
     :ah :ch :dh :bh
@@ -79,8 +82,10 @@
     :is-new-reg
     :works-with-rex
     :needs-rex
-    :rex.r
-    :rex.b
+    :rex-w
+    :rex-r
+    :rex-x
+    :rex-b
     ;; TODO: x16 register indirects. availabte only to x16.
     ;; :\[bx\] :\[bp\] :\[si\] :\[di\] ...
     ;; TODO: x32 register indirects. availabte only to x32.

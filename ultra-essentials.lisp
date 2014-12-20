@@ -7,16 +7,22 @@
 
 (defpackage :essentials
   (:import-from :cl
-                ;; t, nil
-                :t :nil
+                ;; t.
+                :t
                 ;; Lisp basics.
-                :cons :eval :lambda :read
+                :cons :eval :lambda :read :progn :let :let*
+                ;; logical operators.
+                :and :or :not
+                ;; mathematics.
+                :+ :- :* :/ :ash :logand :logior :logxor :lognot
                 ;; code flow macros.
                 :cond :loop :when :unless
                 ;; define instructions.
                 :defun :defclass :defpackage :defparameter :defmethod
                 ;; function calls.
                 :apply :funcall
+                ;; function definitions.
+                :&key :&optional :&rest
                 ;; comparison functions and related stuff.
                 :eq :eql :equal :equalp :null :listp :not
                 ;; error handling.
@@ -32,8 +38,10 @@
                 ;; variables.
                 :setf
                 ;; lists and other sequences.
-                :every :some :notevery :notany :mapcan :mapcar
-                :append :concatenate
+                :every :some :notevery :notany
+                :length
+                :mapcan :mapcar
+                :append :concatenate :nconc
                 :list
                 :nth :first :second :third :fourth :fifth :sixth :seventh :eighth :ninth :tenth :rest
                 :push :pushnew

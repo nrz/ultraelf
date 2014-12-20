@@ -6,14 +6,16 @@
 (in-package :ultraelf)
 
 (defmethod emit ((x32-asm-instruction x32-asm-instruction) &rest args)
-  (emit-with-format-and-operands-x32
+  (x32:emit-with-format-and-operands-x32
     (slot-value x32-asm-instruction 'code-format)
     (slot-value x32-asm-instruction 'operands)
-    args))
+    :args args
+    :msg nil))
 
 (defmethod emit-hex ((x32-asm-instruction x32-asm-instruction) &rest args)
   (print-hex
-    (emit-with-format-and-operands-x32
+    (x32:emit-with-format-and-operands-x32
       (slot-value x32-asm-instruction 'code-format)
       (slot-value x32-asm-instruction 'operands)
-      args)))
+      :args args
+      :msg nil)))
