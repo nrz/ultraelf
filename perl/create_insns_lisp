@@ -13,15 +13,20 @@ my $operands;
 my $code_format;
 my $flags;
 my $encoding_type;
+my $mnemonic_of_current_mnemonic_array;
+my $mnemonic_i;
 
 my $object_name;
 my $arch_flags;
+my $object_names_string;
 
 my @object_name_array = ();
 my @mnemonic_array = ();
 my @operands_array = ();
 my @code_format_array = ();
 my @flags_array = ();
+my @instruction_variants_for_current_instruction_array;
+my @instruction_variants_array;
 
 my @each_mnemonic_only_once_array = ();
 
@@ -37,6 +42,8 @@ while (<FILE>)
 close(FILE);
 
 open(FILE, 'insns.dat');
+
+$mnemonic_of_current_mnemonic_array = "";
 
 # read one line at once.
 while (<FILE>)
@@ -121,6 +128,31 @@ while (<FILE>)
             push @operands_array, $operands;
             push @code_format_array, $code_format;
             push @flags_array, $arch_flags;
+
+            if ($mnemonic eq $mnemonic_of_current_mnemonic_array)
+            {
+                # ok, same mnemonic as the previous one,
+                # so the current object name goes to the list.
+                push @instruction_variants_for_current_instruction_array, $object_name;
+            }
+            else
+            {
+                # ok, this is a new mnemonic.
+                # so we'll mark this as current mnemonic.
+                $mnemonic_of_current_mnemonic_array = $mnemonic;
+                push @each_mnemonic_only_once_array, $mnemonic;
+
+                # we first push the old array (unless it's empty), then clear it,
+                # and then push the current object name to the cleared array.
+
+                if (@instruction_variants_for_current_instruction_array)
+                {
+                    # push the variants array, unless it's empty.
+                    push @instruction_variants_array, [ @instruction_variants_for_current_instruction_array ];
+                }
+                @instruction_variants_for_current_instruction_array = ();
+                push @instruction_variants_for_current_instruction_array, $object_name;
+            }
         }
     }
 }
@@ -152,14 +184,38 @@ for my $i (0 .. $#mnemonic_array)
     printf("(setf (gethash \"%s\" *x64-instruction-variants-hash-table*) (list %s))\n",
         $object_name,
         $object_name);
-    printf("(push %s (gethash \"%s\" *x64-instruction-variants-hash-table*))",
-        $object_name,
-        $mnemonic);
-
     if ($i < $#mnemonic_array)
     {
-        printf("\n\n");
+        printf("\n");
     }
+}
+
+printf("\n");
+
+$mnemonic_of_current_mnemonic_array = "";
+$mnemonic_i = 0;
+
+for my $i (0 .. $#instruction_variants_array)
+{
+    $mnemonic = $each_mnemonic_only_once_array[$mnemonic_i];
+
+    if (!($mnemonic eq $mnemonic_of_current_mnemonic_array))
+    {
+        $mnemonic_of_current_mnemonic_array = $mnemonic;
+        $mnemonic_i++;
+    }
+
+    $object_names_string = "";
+
+    for my $j (0 .. $#{$instruction_variants_array[$i]})
+    {
+        $object_names_string = $object_names_string . "\n" . $instruction_variants_array[$i][$j];
+    }
+
+    # print the code to create a 
+    printf("(setf (gethash \"%s\" *x64-instruction-variants-hash-table*) (list%s))\n\n",
+        $mnemonic,
+        $object_names_string);
 }
 
 exit;
