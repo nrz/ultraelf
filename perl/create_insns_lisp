@@ -63,7 +63,7 @@ while (<FILE>)
         # fieldname in ultraELF     example
         # :mnemonic                 `"MOV"`
         # :operands                 `"mem,reg_sreg"`
-        # :code-string              `"[mr:	8c /r]"`
+        # :code-string              `"[mr: 8c /r]"`
         # :flags                    `(list "8086" "SW")`
         $mnemonic =~ s/[\t ]+/ /g;
         $operands =~ s/[\t ]+/ /g;
@@ -135,10 +135,10 @@ printf("(defparameter *x64-instruction-variants-hash-table* (make-hash-table :te
 for my $i (0 .. $#mnemonic_array)
 {
     $object_name = $object_name_array[$i];
-    $mnemonic         = $mnemonic_array[$i];
-    $operands         = $operands_array[$i];
-    $code_format      = $code_format_array[$i];
-    $flags            = $flags_array[$i];
+    $mnemonic    = $mnemonic_array[$i];
+    $operands    = $operands_array[$i];
+    $code_format = $code_format_array[$i];
+    $flags       = $flags_array[$i];
 
     # print the code to create a variant object.
     # each object here is a variant of a single instruction (or a single mnemonic).
