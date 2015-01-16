@@ -15819,12 +15819,12 @@
 :arch-flags (list "AVX" "SANDYBRIDGE")))
 (setf (gethash "VMOVNTPS-mem128.xmmreg" *x64-instruction-variants-hash-table*) (list VMOVNTPS-mem128.xmmreg))
 
-(defparameter VMOVNTPS-mem128.ymmreg (make-instance 'x64-asm-instruction
+(defparameter VMOVNTPS-mem256.ymmreg (make-instance 'x64-asm-instruction
 :name "VMOVNTPS"
-:operands (list "mem128" "ymmreg")
+:operands (list "mem256" "ymmreg")
 :code-format (list "[mr:" "vex.256.0f" "2b" "/r")
 :arch-flags (list "AVX" "SANDYBRIDGE")))
-(setf (gethash "VMOVNTPS-mem128.ymmreg" *x64-instruction-variants-hash-table*) (list VMOVNTPS-mem128.ymmreg))
+(setf (gethash "VMOVNTPS-mem256.ymmreg" *x64-instruction-variants-hash-table*) (list VMOVNTPS-mem256.ymmreg))
 
 (defparameter VMOVSD-xmmreg.xmmreg*.xmmreg (make-instance 'x64-asm-instruction
 :name "VMOVSD"
@@ -38842,7 +38842,7 @@ VMOVNTPD-mem256.ymmreg))
 
 (setf (gethash "VMOVNTPS" *x64-instruction-variants-hash-table*) (list
 VMOVNTPS-mem128.xmmreg
-VMOVNTPS-mem128.ymmreg))
+VMOVNTPS-mem256.ymmreg))
 
 (setf (gethash "VMOVSD" *x64-instruction-variants-hash-table*) (list
 VMOVSD-xmmreg.xmmreg*.xmmreg
