@@ -92,7 +92,7 @@
       (and do-args-require-rex (not do-args-work-with-rex))
       (error "impossible combination of given arguments: some need REX and some don't work with REX"))
     (loop for code-string in (rest code-format)
-          ;; before `"o32"`, `"o64"` or `"o64nw"` there can be `"hle"`.
+          ;; before `"o32"`, `"o64"` or `"o64nw"` there can be `"hle"`, `"hlenl"` or `"hlexr"`.
           append (cond
                    ((equal code-string "66")
                     ;; in SIMD instructions used as a an instruction modifier,
