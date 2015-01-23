@@ -31,7 +31,7 @@
   "This function assembles x86-64 (x64) code, all alternatives, and prints in a hexadecimal string."
   (print-hex (assemble-alternatives code *x64-instruction-variants-hash-table*)))
 
-(defun emit-rex (encoding-type n-operands &key args (rex-w-value 0) (rex-r-value 0) (rex-x-value 0) (rex-b-value 0))
+(defun emit-rex (encoding-type n-operands &key given-operands (rex-w-value 0) (rex-r-value 0) (rex-x-value 0) (rex-b-value 0))
   "This function emits REX according to encoding type and the operands.
    rex-w-value : 0 for default operand size, 1 for 64-bit operand size.
    `emit-rex` does not handle steganographic or variable encoding in any
@@ -70,7 +70,7 @@
                          (rex-b arg2))))) ; rex-b augments r/m field, so it's from arg2 in `[mr:`.
       (t (error "encoding not yet implemented")))))
 
-(defun handle-nasm-code-format-x64 (code-format req-operands &key args msg (rex-w-value 0) (rex-r-value 0) (rex-b-value 0))
+(defun handle-nasm-code-format-x64 (code-format req-operands &key given-operands msg (rex-w-value 0) (rex-r-value 0) (rex-b-value 0))
   "This function handles one code-string (from NASM's `insns.dat`) and returns the following:
    0. the encoding as a list
    1. number of bits of `msg` encoded."
@@ -286,7 +286,7 @@
                                      (list (+ #xf8 (modrm-r/m arg1))))
                                     (t (list (parse-integer code-string :radix 16))))))))))
 
-(defun emit-with-format-and-operands-x64 (code-format req-operands &key args msg)
+(defun emit-with-format-and-operands-x64 (code-format req-operands &key given-operands msg)
   "This function emits code (list of binary code bytes) for one x64 instruction variant."
   (let*
     ((my-args (get-list args))
