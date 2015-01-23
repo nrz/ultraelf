@@ -125,19 +125,19 @@
    http://stackoverflow.com/questions/2940267/call-function-based-on-a-string/2940347#2940347"
   (symbol-function (find-symbol (string-upcase my-string))))
 
-(defun check-args (operands args)
-  "This functions checks that input args match required operands."
+(defun check-args (operands given-operands)
+  "This functions checks that given operands match required operands."
   (cond
     ((and
        (eql (length operands) 1)
        (equal (first operands) "void"))
-     (unless (null args)
+     (unless (null given-operands)
        (error "void operand type requires exactly 0 input arguments.")))
-    ((eql (length operands) (length args))
+    ((eql (length operands) (length given-operands))
      (loop for i below (length operands)
            if (notany #'(lambda (x)
                           (equal x (nth i operands)))
-                      (allowed-targets (nth i args)))
+                      (allowed-targets (nth i given-operands)))
            do (error "instruction's and operand's allowed targets do not match.")))
     (t (error "number of required operands and number of given arguments do not match."))))
 
