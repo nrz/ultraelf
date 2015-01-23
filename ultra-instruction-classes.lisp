@@ -15,9 +15,9 @@
      :initarg :name
      :initform (error "name must be specified")
      :documentation "The instruction mnemonic.")
-   (operands
-     :reader operands
-     :initarg :operands
+   (req-operands
+     :reader req-operands
+     :initarg :req-operands
      :documentation "A string defining the operands of this instruction object.")
    (code-format
      :reader code-format
