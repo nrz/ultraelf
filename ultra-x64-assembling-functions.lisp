@@ -301,18 +301,18 @@
        ;; This variant has one 'memory' (can be register too) operand.
        ;; The operand is encoded in the r/m field.
        ;; An extension of the opcode is in the reg field.
-       (handle-nasm-code-format-x64 code-format my-operands :args my-args :msg msg))
+       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
       ((equal (first code-format) "[r:")
        ;; This variant has one register operand.
        ;; The operand is encoded in the r/m field.
        ;; An extension of the opcode is in the reg field.
-       (handle-nasm-code-format-x64 code-format my-operands :args my-args :msg msg))
+       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
       ((equal (first code-format) "[mr:")
        ;; This variant has one memory operand and one register operand.
        ;; The operands are encoded in corresponding ModRM fields.
-       (handle-nasm-code-format-x64 code-format my-operands :args my-args :msg msg))
+       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
       ((equal (first code-format) "[rm:")
        ;; This variant has one register operand and one memory operand.
        ;; The operands are encoded in corresponding ModRM fields.
-       (handle-nasm-code-format-x64 code-format my-operands :args my-args :msg msg))
+       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
       (t (error "encoding not yet implemented")))))
