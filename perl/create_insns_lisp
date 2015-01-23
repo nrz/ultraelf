@@ -149,7 +149,7 @@ for my $i (0 .. $#mnemonic_array)
     # print the code to create a variant object.
     # each object here is a variant of a single instruction (or a single mnemonic).
     # actually printed as 5 lines to make it easier to read (for us humans, I mean), with an empty line in the end.
-    printf("(defparameter %s (make-instance 'x64-asm-instruction\n:name \"%s\"\n:operands %s\n:code-format %s\n:arch-flags %s))\n\n",
+    printf("(defparameter %s (make-instance 'x64-asm-instruction\n:name \"%s\"\n:req-operands %s\n:code-format %s\n:arch-flags %s))\n\n",
         $object_name,
         $mnemonic,
         $operands,
