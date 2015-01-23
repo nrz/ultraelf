@@ -84,10 +84,10 @@
      (is-rex-already-encoded nil)
      (msg-i 0) ; index to message sequence.
      (n-operands (cond
-                   ((and (eql (length operands) 1)
-                         (equal (first operands) "void"))
+                   ((and (eql (length req-operands) 1)
+                         (equal (first req-operands) "void"))
                    0)
-                   (t (length operands)))))
+                   (t (length req-operands)))))
     (when
       (and do-args-require-rex (not do-args-work-with-rex))
       (error "impossible combination of given arguments: some need REX and some don't work with REX"))
@@ -290,7 +290,7 @@
   "This function emits code (list of binary code bytes) for one x64 instruction variant."
   (let*
     ((my-args (get-list args))
-     (my-operands (get-list operands)))
+     (my-operands (get-list req-operands)))
     (check-args my-operands my-args)
     (cond
       ((equal (first code-format) "[")
