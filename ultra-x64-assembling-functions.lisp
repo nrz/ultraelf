@@ -42,7 +42,7 @@
    For steganographic or variable encoding `emit-rex` must be called with
    appropriate values for the mentioned keyword arguments."
   (let*
-    ((my-args (get-list args))
+    ((my-args (get-list given-operands))
      (arg1 (first my-args))
      (arg2 (second my-args)))
     (cond
@@ -76,7 +76,7 @@
    1. number of bits of `msg` encoded."
   (let*
     ((encoding-type (first code-format))
-     (my-args (get-list args))
+     (my-args (get-list given-operands))
      (arg1 (first my-args))  ; nil if list is too short.
      (arg2 (second my-args)) ; nil if list is too short.
      (do-args-require-rex (some #'needs-rex my-args))
@@ -289,7 +289,7 @@
 (defun emit-with-format-and-operands-x64 (code-format req-operands &key given-operands msg)
   "This function emits code (list of binary code bytes) for one x64 instruction variant."
   (let*
-    ((my-args (get-list args))
+    ((my-args (get-list given-operands))
      (my-operands (get-list req-operands)))
     (check-args my-operands my-args)
     (cond
