@@ -86,7 +86,7 @@
      (n-operands (cond
                    ((and (eql (length req-operands) 1)
                          (equal (first req-operands) "void"))
-                   0)
+                    0)
                    (t (length req-operands)))))
     (when
       (and do-args-require-rex (not do-args-work-with-rex))
@@ -139,7 +139,7 @@
                    ((equal code-string "o32")
                     (cond
                       ((eql n-operands 0)
-                       (error "o32 with n-operands 0 is an error"))
+                       nil)
                       ((eql n-operands 1)
                        (cond
                          (do-args-require-rex
