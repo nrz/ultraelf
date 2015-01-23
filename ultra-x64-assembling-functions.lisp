@@ -70,7 +70,7 @@
                          (rex-b arg2))))) ; rex-b augments r/m field, so it's from arg2 in `[mr:`.
       (t (error "encoding not yet implemented")))))
 
-(defun handle-nasm-code-format-x64 (code-format operands &key args msg (rex-w-value 0) (rex-r-value 0) (rex-b-value 0))
+(defun handle-nasm-code-format-x64 (code-format req-operands &key args msg (rex-w-value 0) (rex-r-value 0) (rex-b-value 0))
   "This function handles one code-string (from NASM's `insns.dat`) and returns the following:
    0. the encoding as a list
    1. number of bits of `msg` encoded."
@@ -286,7 +286,7 @@
                                      (list (+ #xf8 (modrm-r/m arg1))))
                                     (t (list (parse-integer code-string :radix 16))))))))))
 
-(defun emit-with-format-and-operands-x64 (code-format operands &key args msg)
+(defun emit-with-format-and-operands-x64 (code-format req-operands &key args msg)
   "This function emits code (list of binary code bytes) for one x64 instruction variant."
   (let*
     ((my-args (get-list args))

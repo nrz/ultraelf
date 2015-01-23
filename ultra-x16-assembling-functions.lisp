@@ -5,6 +5,6 @@
 
 (in-package :x16)
 
-(defun emit-with-format-and-operands-x16 (code-format operands &rest args)
+(defun emit-with-format-and-operands-x16 (code-format req-operands &rest args)
   "This function emits code (list of binary code bytes) for one x16 instruction variant."
   (error "x16 encoding not yet implemented"))

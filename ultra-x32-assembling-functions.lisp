@@ -5,6 +5,6 @@
 
 (in-package :x32)
 
-(defun emit-with-format-and-operands-x32 (code-format operands &rest args)
+(defun emit-with-format-and-operands-x32 (code-format req-operands &rest args)
   "This function emits code (list of binary code bytes) for one x32 instruction variant."
   (error "x32 encoding not yet implemented"))
