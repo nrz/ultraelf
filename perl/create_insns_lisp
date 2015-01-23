@@ -13,22 +13,17 @@ my $operands;
 my $code_format;
 my $flags;
 my $encoding_type;
-my $mnemonic_of_current_mnemonic_array;
-my $mnemonic_i;
-
 my $object_name;
 my $arch_flags;
-my $object_names_string;
 
 my @object_name_array = ();
 my @mnemonic_array = ();
 my @operands_array = ();
 my @code_format_array = ();
 my @flags_array = ();
-my @instruction_variants_for_current_instruction_array;
-my @instruction_variants_array;
+my @sorted_keys_array = ();
 
-my @each_mnemonic_only_once_array = ();
+my %instruction_variants_hash_table;
 
 # print the header.
 open(FILE, 'ultraelf-lisp-file-header.lisp');
@@ -42,8 +37,6 @@ while (<FILE>)
 close(FILE);
 
 open(FILE, 'insns.dat');
-
-$mnemonic_of_current_mnemonic_array = "";
 
 # read one line at once.
 while (<FILE>)
@@ -85,9 +78,9 @@ while (<FILE>)
         {
             # ok, the content of each field is now filtered,
             # let's convert them to a suitable Common Lisp format.
-            
+
             $object_name = $mnemonic . "-" . $operands;
-            
+
             # in Common Lisp object names `|`, `,`, and `:` must be escaped with a backslash `\`,
             # but that would get too complicated.
             # so we'll simply replace them:
@@ -118,41 +111,22 @@ while (<FILE>)
             # let's convert code format to Common Lisp list syntax.
             $code_format =~ s/ +/\" \"/g;
             $code_format = "(list \"" . $code_format . "\")";
-            
+
             $arch_flags = "\"" . $flags . "\"";        # add first and last double quotes.
             $arch_flags =~ s/,/" "/g;                  # make each flag its own Common Lisp string.
             $arch_flags = "(list " . $arch_flags. ")"; # convert to `list` syntax.
-            
+
             push @object_name_array, $object_name;
             push @mnemonic_array, $mnemonic;
             push @operands_array, $operands;
             push @code_format_array, $code_format;
             push @flags_array, $arch_flags;
 
-            if ($mnemonic eq $mnemonic_of_current_mnemonic_array)
-            {
-                # ok, same mnemonic as the previous one,
-                # so the current object name goes to the list.
-                push @instruction_variants_for_current_instruction_array, $object_name;
-            }
-            else
-            {
-                # ok, this is a new mnemonic.
-                # so we'll mark this as current mnemonic.
-                $mnemonic_of_current_mnemonic_array = $mnemonic;
-                push @each_mnemonic_only_once_array, $mnemonic;
+            # eg. "MOVSD-VOID".
+            push @{$instruction_variants_hash_table{$object_name}}, $object_name;
 
-                # we first push the old array (unless it's empty), then clear it,
-                # and then push the current object name to the cleared array.
-
-                if (@instruction_variants_for_current_instruction_array)
-                {
-                    # push the variants array, unless it's empty.
-                    push @instruction_variants_array, [ @instruction_variants_for_current_instruction_array ];
-                }
-                @instruction_variants_for_current_instruction_array = ();
-                push @instruction_variants_for_current_instruction_array, $object_name;
-            }
+            # eg. "MOVSD".
+            push @{$instruction_variants_hash_table{$mnemonic}}, $object_name;
         }
     }
 }
@@ -175,47 +149,32 @@ for my $i (0 .. $#mnemonic_array)
     # print the code to create a variant object.
     # each object here is a variant of a single instruction (or a single mnemonic).
     # actually printed as 5 lines to make it easier to read (for us humans, I mean), with an empty line in the end.
-    printf("(defparameter %s (make-instance 'x64-asm-instruction\n:name \"%s\"\n:operands %s\n:code-format %s\n:arch-flags %s))\n",
+    printf("(defparameter %s (make-instance 'x64-asm-instruction\n:name \"%s\"\n:operands %s\n:code-format %s\n:arch-flags %s))\n\n",
         $object_name,
         $mnemonic,
         $operands,
         $code_format,
         $flags);
-    printf("(setf (gethash \"%s\" *x64-instruction-variants-hash-table*) (list %s))\n",
-        $object_name,
-        $object_name);
-    if ($i < $#mnemonic_array)
-    {
-        printf("\n");
-    }
 }
 
-printf("\n");
 
-$mnemonic_of_current_mnemonic_array = "";
-$mnemonic_i = 0;
+@sorted_keys_array = sort keys %instruction_variants_hash_table;
 
-for my $i (0 .. $#instruction_variants_array)
+foreach my $mnemonic (@sorted_keys_array)
 {
-    $mnemonic = $each_mnemonic_only_once_array[$mnemonic_i];
+    printf("(setf (gethash \"%s\" *x64-instruction-variants-hash-table*) (list", $mnemonic);
 
-    if (!($mnemonic eq $mnemonic_of_current_mnemonic_array))
+    for my $i (0 .. $#{$instruction_variants_hash_table{$mnemonic}})
     {
-        $mnemonic_of_current_mnemonic_array = $mnemonic;
-        $mnemonic_i++;
+        printf("\n%s", $instruction_variants_hash_table{$mnemonic}[$i]);
     }
+    print("))\n");
 
-    $object_names_string = "";
-
-    for my $j (0 .. $#{$instruction_variants_array[$i]})
+    # If this is not the last mnemonic, print a newline.
+    if (!($mnemonic eq $sorted_keys_array[-1]))
     {
-        $object_names_string = $object_names_string . "\n" . $instruction_variants_array[$i][$j];
+        print("\n");
     }
-
-    # print the code to create a 
-    printf("(setf (gethash \"%s\" *x64-instruction-variants-hash-table*) (list%s))\n\n",
-        $mnemonic,
-        $object_names_string);
 }
 
 exit;
