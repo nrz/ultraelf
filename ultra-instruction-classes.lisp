@@ -121,8 +121,8 @@
      :reader is-arm-asm-instruction
      :initform t)))
 
-(defgeneric emit (asm-instruction &rest args)
+(defgeneric emit (asm-instruction &rest given-operands)
   (:documentation "emit instruction without rep/repz/repe/repnz/repne."))
 
-(defgeneric emit-hex (asm-instruction &rest args)
+(defgeneric emit-hex (asm-instruction &rest given-operands)
   (:documentation "emit instruction without rep/repz/repe/repnz/repne and print in hexadecimal."))
