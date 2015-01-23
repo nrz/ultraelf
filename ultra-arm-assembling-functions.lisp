@@ -5,6 +5,6 @@
 
 (in-package :arm)
 
-(defun emit-with-format-and-operands-arm (code-format req-operands &rest args)
+(defun emit-with-format-and-operands-arm (code-format req-operands &rest given-operands)
   "This function emits code (list of binary code bytes) for one ARM instruction variant."
   (error "ARM encoding not yet implemented"))
