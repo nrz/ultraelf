@@ -14,7 +14,7 @@
 (defmethod emit ((arm-asm-instruction arm-asm-instruction) &rest args)
   (arm:emit-with-format-and-operands-arm
     (slot-value arm-asm-instruction 'code-format)
-    (slot-value arm-asm-instruction 'operands)
+    (slot-value arm-asm-instruction 'req-operands)
     :args args
     :msg nil))
 
@@ -22,6 +22,6 @@
   (print-hex
     (arm:emit-with-format-and-operands-arm
       (slot-value arm-asm-instruction 'code-format)
-      (slot-value arm-asm-instruction 'operands)
+      (slot-value arm-asm-instruction 'req-operands)
       :args args
       :msg nil)))

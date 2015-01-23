@@ -8,7 +8,7 @@
 (defmethod emit ((x64-asm-instruction x64-asm-instruction) &rest args)
   (x64:emit-with-format-and-operands-x64
     (slot-value x64-asm-instruction 'code-format)
-    (slot-value x64-asm-instruction 'operands)
+    (slot-value x64-asm-instruction 'req-operands)
     :args args
     :msg nil))
 
@@ -16,6 +16,6 @@
   (print-hex
     (x64:emit-with-format-and-operands-x64
       (slot-value x64-asm-instruction 'code-format)
-      (slot-value x64-asm-instruction 'operands)
+      (slot-value x64-asm-instruction 'req-operands)
       :args args
       :msg nil)))
