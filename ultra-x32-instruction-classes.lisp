@@ -9,7 +9,7 @@
   (x32:emit-with-format-and-operands-x32
     (slot-value x32-asm-instruction 'code-format)
     (slot-value x32-asm-instruction 'req-operands)
-    :args args
+    :given-operands given-operands
     :msg nil))
 
 (defmethod emit-hex ((x32-asm-instruction x32-asm-instruction) &rest given-operands)
@@ -17,5 +17,5 @@
     (x32:emit-with-format-and-operands-x32
       (slot-value x32-asm-instruction 'code-format)
       (slot-value x32-asm-instruction 'req-operands)
-      :args args
+      :given-operands given-operands
       :msg nil)))
