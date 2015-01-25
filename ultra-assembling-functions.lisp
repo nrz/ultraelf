@@ -73,7 +73,7 @@
   "This function returns a function that gets the nth value of a list."
   #'(lambda (my-list) (nth n my-list)))
 
-(defun get-all-encodings-for-syntax-tree (syntax-tree my-hash-table)
+(defun get-all-encodings-for-syntax-tree (syntax-tree my-hash-table &key (skip-errors t))
   "This function converts syntax tree to a list of lists of lists of binary code bytes,
    the encodings of each instruction on their own list,
    the bytes of each encoding on their own list."
@@ -82,48 +82,56 @@
     (loop for syntax-list in syntax-list-of-lists
           collect (remove nil
                           (loop for emit-function-i below (length (gethash (first syntax-list) my-hash-table))
-                                collect (emit-binary-code-for-one-instruction syntax-list my-hash-table :emit-function-selector-function (get-nth emit-function-i)))))))
+                                collect (emit-binary-code-for-one-instruction
+                                          syntax-list
+                                          my-hash-table
+                                          :emit-function-selector-function (get-nth emit-function-i)
+                                          :skip-errors skip-errors))))))
 
-(defun get-all-encodings-for-syntax-tree-and-print-hex (syntax-tree my-hash-table)
+(defun get-all-encodings-for-syntax-tree-and-print-hex (syntax-tree my-hash-table &key (skip-errors t))
   "This function converts syntax tree to a list of strings of hexadecimal bytes."
-  (print-hex (get-all-encodings-for-syntax-tree syntax-tree my-hash-table)))
+  (print-hex (get-all-encodings-for-syntax-tree syntax-tree my-hash-table :skip-errors skip-errors)))
 
-(defun emit-binary-code-list (syntax-tree my-hash-table &key (emit-function-selector-function #'first))
+(defun emit-binary-code-list (syntax-tree my-hash-table &key (emit-function-selector-function #'first) (skip-errors t))
   "This function converts syntax tree to a list of lists of binary code bytes,
    the bytes of each instruction are on their own list.
    `emit-function-selector-function` can be eg. `#'first` or `#'(lambda (x) (first (last x)))`."
   (mapcar #'(lambda (x)
-              (emit-binary-code-for-one-instruction x my-hash-table :emit-function-selector-function emit-function-selector-function))
+              (emit-binary-code-for-one-instruction
+                x
+                my-hash-table
+                :emit-function-selector-function emit-function-selector-function
+                :skip-errors skip-errors))
           (eval syntax-tree)))
 
-(defun emit-binary-code (syntax-tree my-hash-table)
+(defun emit-binary-code (syntax-tree my-hash-table &key (skip-errors t))
   "This function produces a single list of binary code bytes."
   (defparameter *global-offset* 0)
   (defparameter $ (make-instance 'address :name (write-to-string *global-offset*) :value *global-offset*))
-  (apply #'append (emit-binary-code-list syntax-tree my-hash-table)))
+  (apply #'append (emit-binary-code-list syntax-tree my-hash-table :skip-errors skip-errors)))
 
-(defun emit-binary-code-and-print-hex (syntax-tree my-hash-table)
+(defun emit-binary-code-and-print-hex (syntax-tree my-hash-table &key (skip-errors t))
   "This function converts syntax tree to a string of hexadecimal bytes."
-  (print-hex (emit-binary-code syntax-tree my-hash-table)))
+  (print-hex (emit-binary-code syntax-tree my-hash-table :skip-errors skip-errors)))
 
-(defun assemble (code my-hash-table)
+(defun assemble (code my-hash-table &key (skip-errors t))
   "This function assembles code."
-  (emit-binary-code (create-syntax-tree code) my-hash-table))
+  (emit-binary-code (create-syntax-tree code) my-hash-table :skip-errors skip-errors))
 
-(defun assemble-and-print-hex (code my-hash-table)
+(defun assemble-and-print-hex (code my-hash-table &key (skip-errors t))
   "This function assembles code and prints in a hexadecimal string."
-  (print-hex (assemble code my-hash-table)))
+  (print-hex (assemble code my-hash-table :skip-errors skip-errors)))
 
-(defun assemble-alternatives (code my-hash-table)
+(defun assemble-alternatives (code my-hash-table &key (skip-errors t))
   "This function assembles code, all alternatives.
    Duplicates are removed."
   (mapcar #'(lambda (x)
               (remove-duplicates x :test #'equal))
-          (get-all-encodings-for-syntax-tree (create-syntax-tree code) my-hash-table)))
+          (get-all-encodings-for-syntax-tree (create-syntax-tree code) my-hash-table :skip-errors skip-errors)))
 
-(defun assemble-alternatives-and-print-hex (code my-hash-table)
+(defun assemble-alternatives-and-print-hex (code my-hash-table &key (skip-errors t))
   "This function assembles code, all alternatives, and prints in a hexadecimal string."
-  (print-hex (get-all-encodings-for-syntax-tree (create-syntax-tree code) my-hash-table)))
+  (print-hex (get-all-encodings-for-syntax-tree (create-syntax-tree code) my-hash-table :skip-errors skip-errors)))
 
 (defun string-to-function (my-string)
   "This function converts a string to a function.
