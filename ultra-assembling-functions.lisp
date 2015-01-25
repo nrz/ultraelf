@@ -43,7 +43,7 @@
      (symbol-value (intern (string-upcase my-string))))
     (t (make-instance 'unknown :name my-string :value (parse-number my-string)))))
 
-(defun emit-binary-code-for-one-instruction (syntax-list my-hash-table &key (emit-function-selector-function #'first))
+(defun emit-binary-code-for-one-instruction (syntax-list my-hash-table &key (emit-function-selector-function #'first) (skip-errors t))
   "This function converts a syntax list of one instruction to a list of binary code bytes,
    `emit-function-selector-function` can be eg. `#'first` or `#'(lambda (x) (first (last x)))`."
   (let*
@@ -51,13 +51,18 @@
      (binary-code (funcall emit-function-selector-function
                            (remove nil
                                    (loop for instruction-instance in instruction-instances-list
-                                         collect (handler-case
-                                                   (funcall #'emit
-                                                            instruction-instance
-                                                            (loop for arg in (rest syntax-list)
-                                                                  collect (convert-string-to-symbol-if-symbol-exists arg)))
-                                                   (common-lisp:simple-error ()
-                                                                             nil)))))))
+                                         collect (cond
+                                                   (skip-errors (handler-case
+                                                                  (funcall #'emit
+                                                                           instruction-instance
+                                                                           (loop for arg in (rest syntax-list)
+                                                                                 collect (convert-string-to-symbol-if-symbol-exists arg)))
+                                                                  (common-lisp:simple-error ()
+                                                                                            nil)))
+                                                   (t (funcall #'emit
+                                                               instruction-instance
+                                                               (loop for arg in (rest syntax-list)
+                                                                     collect (convert-string-to-symbol-if-symbol-exists arg))))))))))
     (when (boundp '*global-offset*)
       (progn
         (incf *global-offset* (length binary-code))
