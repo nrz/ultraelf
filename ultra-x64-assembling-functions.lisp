@@ -300,6 +300,8 @@
                                      (list (+ #xf0 (modrm-r/m arg1))))
                                     ((equal code-string "f8+r")
                                      (list (+ #xf8 (modrm-r/m arg1))))
+                                    ((equal code-string "nof3")
+                                     nil)
                                     (t (list (parse-integer code-string :radix 16))))))))))
 
 (defun emit-with-format-and-operands-x64 (code-format req-operands &key given-operands msg)
