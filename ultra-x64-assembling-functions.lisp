@@ -92,7 +92,10 @@
       (and do-args-require-rex (not do-args-work-with-rex))
       (error "impossible combination of given arguments: some need REX and some don't work with REX"))
     (loop for code-string in (rest code-format)
-          ;; before `"o32"`, `"o64"` or `"o64nw"` there can be `"hle"`, `"hlenl"` or `"hlexr"`.
+          ;; before `"o32"`, `"o64"` or `"o64nw"` there can be:
+          ;; `"66"`, `"f2"`, `"f3"`, `"hle"`, `"hlenl"`, `"hlexr"`, `"mustrep"`, `"mustrepne"`,
+          ;; `"norexb"`, `"norexr"`, `"norexw"`, `"norexx"`,
+          ;; `"np"`, `"repe"`, `"wait"`.
           append (cond
                    ((equal code-string "66")
                     ;; in SIMD instructions used as a an instruction modifier,
@@ -125,6 +128,18 @@
                     ;; ultraELF assumes REPNZ prefix as a part of instruction.
                     ;; currently `"mustrepne"` flag is not in use (NASM 2.11.06).
                     (list #xf2))
+                   ((equal code-string "norexb")
+                    ;; invalid with REX.B.
+                    nil)
+                   ((equal code-string "norexr")
+                    ;; invalid with REX.R.
+                    nil)
+                   ((equal code-string "norexw")
+                    ;; invalid with REX.W.
+                    nil)
+                   ((equal code-string "norexx")
+                    ;; invalid with REX.X.
+                    nil)
                    ((equal code-string "np")
                     ;; no SSE prefix (LFENCE/MFENCE).
                     nil)
