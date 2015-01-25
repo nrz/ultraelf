@@ -179,7 +179,8 @@
                        (setf is-rex-already-encoded t)
                        (emit-rex encoding-type n-operands :given-operands my-args :rex-w-value 1 :rex-r-value rex-r-value)) ; 64-bit operand size!
                       ((eql n-operands 2)
-                       (error "o64 encoding of 2 operands in not yet implemented"))
+                       (setf is-rex-already-encoded t)
+                       (emit-rex encoding-type n-operands :given-operands my-args :rex-w-value 1 :rex-r-value rex-r-value)) ; 64-bit operand size!
                       ((eql n-operands 3)
                        (error "o64 encoding of 3 operands in not yet implemented"))
                       (t (error "over 3 operands is an error"))))
