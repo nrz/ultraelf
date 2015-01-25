@@ -158,6 +158,7 @@
                    ((equal code-string "o64")
                     (cond
                       ((eql n-operands 0)
+                       (setf is-rex-already-encoded t)
                        (emit-rex encoding-type n-operands :given-operands my-args :rex-w-value 1 :rex-r-value rex-r-value)) ; 64-bit operand size!
                       ((eql n-operands 1)
                        (setf is-rex-already-encoded t)
