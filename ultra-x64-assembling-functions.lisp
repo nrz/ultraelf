@@ -5,31 +5,31 @@
 
 (in-package :x64)
 
-(defun get-all-encodings-for-x64-syntax-tree (syntax-tree)
+(defun get-all-encodings-for-x64-syntax-tree (syntax-tree &key (skip-errors t))
   "This function converts x64 syntax tree to a list of lists of lists of binary code bytes,
    the encodings of each instruction on their own list,
    the bytes of each encoding on their own list."
-  (get-all-encodings-for-syntax-tree syntax-tree *x64-instruction-variants-hash-table*))
+  (get-all-encodings-for-syntax-tree syntax-tree *x64-instruction-variants-hash-table* :skip-errors skip-errors))
 
-(defun get-all-encodings-for-x64-syntax-tree-and-print-hex (syntax-tree)
+(defun get-all-encodings-for-x64-syntax-tree-and-print-hex (syntax-tree &key (skip-errors t))
   "This function converts x64 syntax tree to a list of strings of hexadecimal bytes."
-  (print-hex (get-all-encodings-for-syntax-tree syntax-tree *x64-instruction-variants-hash-table*)))
+  (print-hex (get-all-encodings-for-syntax-tree syntax-tree *x64-instruction-variants-hash-table* :skip-errors skip-errors)))
 
-(defun assemble-x64 (code)
+(defun assemble-x64 (code &key (skip-errors t))
   "This function assembles x86-64 (x64) code."
-  (assemble code *x64-instruction-variants-hash-table*))
+  (assemble code *x64-instruction-variants-hash-table* :skip-errors skip-errors))
 
-(defun assemble-x64-and-print-hex (code)
+(defun assemble-x64-and-print-hex (code &key (skip-errors t))
   "This function assembles x86-64 (x64) code and prints in a hexadecimal string."
-  (print-hex (assemble code *x64-instruction-variants-hash-table*)))
+  (print-hex (assemble code *x64-instruction-variants-hash-table* :skip-errors skip-errors)))
 
-(defun assemble-alternatives-x64 (code)
+(defun assemble-alternatives-x64 (code &key (skip-errors t))
   "This function assembles x86-64 (x64) code, all alternatives."
-  (assemble-alternatives code *x64-instruction-variants-hash-table*))
+  (assemble-alternatives code *x64-instruction-variants-hash-table* :skip-errors skip-errors))
 
-(defun assemble-alternatives-x64-and-print-hex (code)
+(defun assemble-alternatives-x64-and-print-hex (code &key (skip-errors t))
   "This function assembles x86-64 (x64) code, all alternatives, and prints in a hexadecimal string."
-  (print-hex (assemble-alternatives code *x64-instruction-variants-hash-table*)))
+  (print-hex (assemble-alternatives code *x64-instruction-variants-hash-table* :skip-errors skip-errors)))
 
 (defun emit-rex (encoding-type n-operands &key given-operands (rex-w-value 0) (rex-r-value 0) (rex-x-value 0) (rex-b-value 0))
   "This function emits REX according to encoding type and the operands.
