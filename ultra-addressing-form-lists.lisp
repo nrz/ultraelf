@@ -47,46 +47,46 @@
                                                            "[rsp+rbx]" "[rbp+rbx]" "[rsi+rbx]" "[rdi+rbx]")) ; [rxx+rbx]
 
 ; begins from 0b00101000
-(defparameter *reg64-sib-list-no-scale-from-rax-rbx* (list "[rax+rbp]" "[rcx+rbp]" "[rdx+rbp]" "[rbx+rbp]" "[rsp+rbp]" "[rbp+rbp]" "[rsi+rbp]" "[rdi+rbp]"   ; [rxx+rbp]
+(defparameter *reg64-sib-list-no-scale-from-rax-rbp* (list "[rax+rbp]" "[rcx+rbp]" "[rdx+rbp]" "[rbx+rbp]" "[rsp+rbp]" "[rbp+rbp]" "[rsi+rbp]" "[rdi+rbp]"   ; [rxx+rbp]
                                                            "[rax+rsi]" "[rcx+rsi]" "[rdx+rsi]" "[rbx+rsi]" "[rsp+rsi]" "[rbp+rsi]" "[rsi+rsi]" "[rdi+rsi]"   ; [rxx+rsi]
                                                            "[rax+rdi]" "[rcx+rdi]" "[rdx+rdi]" "[rbx+rdi]" "[rsp+rdi]" "[rbp+rdi]" "[rsi+rdi]" "[rdi+rdi]")) ; [rxx+rdi]
 ; begins from 0b00000000
-(defparameter *reg64-sib-list-no-scale-from-rax-1-times-rax* (list "[rax+1*rax]" "[rcx+1*rax]" "[rdx+1*rax]" "[rbx+1*rax]"
-                                                                   "[rsp+1*rax]" "[rbp+1*rax]" "[rsi+1*rax]" "[rdi+1*rax]"   ; [rxx+1*rax]
-                                                                   "[rax+1*rcx]" "[rcx+1*rcx]" "[rdx+1*rcx]" "[rbx+1*rcx]"
-                                                                   "[rsp+1*rcx]" "[rbp+1*rcx]" "[rsi+1*rcx]" "[rdi+1*rcx]"   ; [rxx+1*rcx]
-                                                                   "[rax+1*rdx]" "[rcx+1*rdx]" "[rdx+1*rdx]" "[rbx+1*rdx]"
-                                                                   "[rsp+1*rdx]" "[rbp+1*rdx]" "[rsi+1*rdx]" "[rdi+1*rdx]"   ; [rxx+1*rdx]
-                                                                   "[rax+1*rbx]" "[rcx+1*rbx]" "[rdx+1*rbx]" "[rbx+1*rbx]"
-                                                                   "[rsp+1*rbx]" "[rbp+1*rbx]" "[rsi+1*rbx]" "[rdi+1*rbx]")) ; [rxx+1*rbx]
+(defparameter *reg64-sib-list-scale-1-from-rax-1-times-rax* (list "[rax+1*rax]" "[rcx+1*rax]" "[rdx+1*rax]" "[rbx+1*rax]"
+                                                                  "[rsp+1*rax]" "[rbp+1*rax]" "[rsi+1*rax]" "[rdi+1*rax]"   ; [rxx+1*rax]
+                                                                  "[rax+1*rcx]" "[rcx+1*rcx]" "[rdx+1*rcx]" "[rbx+1*rcx]"
+                                                                  "[rsp+1*rcx]" "[rbp+1*rcx]" "[rsi+1*rcx]" "[rdi+1*rcx]"   ; [rxx+1*rcx]
+                                                                  "[rax+1*rdx]" "[rcx+1*rdx]" "[rdx+1*rdx]" "[rbx+1*rdx]"
+                                                                  "[rsp+1*rdx]" "[rbp+1*rdx]" "[rsi+1*rdx]" "[rdi+1*rdx]"   ; [rxx+1*rdx]
+                                                                  "[rax+1*rbx]" "[rcx+1*rbx]" "[rdx+1*rbx]" "[rbx+1*rbx]"
+                                                                  "[rsp+1*rbx]" "[rbp+1*rbx]" "[rsi+1*rbx]" "[rdi+1*rbx]")) ; [rxx+1*rbx]
 ; begins from 0b01000000
-(defparameter *reg64-sib-list-no-scale-from-rax-2-times-rax* (list "[rax+2*rax]" "[rcx+2*rax]" "[rdx+2*rax]" "[rbx+2*rax]"
-                                                                   "[rsp+2*rax]" "[rbp+2*rax]" "[rsi+2*rax]" "[rdi+2*rax]"   ; [rxx+2*rax]
-                                                                   "[rax+2*rcx]" "[rcx+2*rcx]" "[rdx+2*rcx]" "[rbx+2*rcx]"
-                                                                   "[rsp+2*rcx]" "[rbp+2*rcx]" "[rsi+2*rcx]" "[rdi+2*rcx]"   ; [rxx+2*rcx]
-                                                                   "[rax+2*rdx]" "[rcx+2*rdx]" "[rdx+2*rdx]" "[rbx+2*rdx]"
-                                                                   "[rsp+2*rdx]" "[rbp+2*rdx]" "[rsi+2*rdx]" "[rdi+2*rdx]"   ; [rxx+2*rdx]
-                                                                   "[rax+2*rbx]" "[rcx+2*rbx]" "[rdx+2*rbx]" "[rbx+2*rbx]"
-                                                                   "[rsp+2*rbx]" "[rbp+2*rbx]" "[rsi+2*rbx]" "[rdi+2*rbx]")) ; [rxx+2*rbx]
+(defparameter *reg64-sib-list-scale-2-from-rax-2-times-rax* (list "[rax+2*rax]" "[rcx+2*rax]" "[rdx+2*rax]" "[rbx+2*rax]"
+                                                                  "[rsp+2*rax]" "[rbp+2*rax]" "[rsi+2*rax]" "[rdi+2*rax]"   ; [rxx+2*rax]
+                                                                  "[rax+2*rcx]" "[rcx+2*rcx]" "[rdx+2*rcx]" "[rbx+2*rcx]"
+                                                                  "[rsp+2*rcx]" "[rbp+2*rcx]" "[rsi+2*rcx]" "[rdi+2*rcx]"   ; [rxx+2*rcx]
+                                                                  "[rax+2*rdx]" "[rcx+2*rdx]" "[rdx+2*rdx]" "[rbx+2*rdx]"
+                                                                  "[rsp+2*rdx]" "[rbp+2*rdx]" "[rsi+2*rdx]" "[rdi+2*rdx]"   ; [rxx+2*rdx]
+                                                                  "[rax+2*rbx]" "[rcx+2*rbx]" "[rdx+2*rbx]" "[rbx+2*rbx]"
+                                                                  "[rsp+2*rbx]" "[rbp+2*rbx]" "[rsi+2*rbx]" "[rdi+2*rbx]")) ; [rxx+2*rbx]
 ; begins from 0b10000000
-(defparameter *reg64-sib-list-no-scale-from-rax-1-times-rax* (list "[rax+4*rax]" "[rcx+4*rax]" "[rdx+4*rax]" "[rbx+4*rax]"
-                                                                   "[rsp+4*rax]" "[rbp+4*rax]" "[rsi+4*rax]" "[rdi+4*rax]"   ; [rxx+4*rax]
-                                                                   "[rax+4*rcx]" "[rcx+4*rcx]" "[rdx+4*rcx]" "[rbx+4*rcx]"
-                                                                   "[rsp+4*rcx]" "[rbp+4*rcx]" "[rsi+4*rcx]" "[rdi+4*rcx]"   ; [rxx+4*rcx]
-                                                                   "[rax+4*rdx]" "[rcx+4*rdx]" "[rdx+4*rdx]" "[rbx+4*rdx]"
-                                                                   "[rsp+4*rdx]" "[rbp+4*rdx]" "[rsi+4*rdx]" "[rdi+4*rdx]"   ; [rxx+4*rdx]
-                                                                   "[rax+4*rbx]" "[rcx+4*rbx]" "[rdx+4*rbx]" "[rbx+4*rbx]"
-                                                                   "[rsp+4*rbx]" "[rbp+4*rbx]" "[rsi+4*rbx]" "[rdi+4*rbx]")) ; [rxx+4*rbx]
+(defparameter *reg64-sib-list-scale-4-from-rax-4-times-rax* (list "[rax+4*rax]" "[rcx+4*rax]" "[rdx+4*rax]" "[rbx+4*rax]"
+                                                                  "[rsp+4*rax]" "[rbp+4*rax]" "[rsi+4*rax]" "[rdi+4*rax]"   ; [rxx+4*rax]
+                                                                  "[rax+4*rcx]" "[rcx+4*rcx]" "[rdx+4*rcx]" "[rbx+4*rcx]"
+                                                                  "[rsp+4*rcx]" "[rbp+4*rcx]" "[rsi+4*rcx]" "[rdi+4*rcx]"   ; [rxx+4*rcx]
+                                                                  "[rax+4*rdx]" "[rcx+4*rdx]" "[rdx+4*rdx]" "[rbx+4*rdx]"
+                                                                  "[rsp+4*rdx]" "[rbp+4*rdx]" "[rsi+4*rdx]" "[rdi+4*rdx]"   ; [rxx+4*rdx]
+                                                                  "[rax+4*rbx]" "[rcx+4*rbx]" "[rdx+4*rbx]" "[rbx+4*rbx]"
+                                                                  "[rsp+4*rbx]" "[rbp+4*rbx]" "[rsi+4*rbx]" "[rdi+4*rbx]")) ; [rxx+4*rbx]
 
 ; begins from 0b11000000
-(defparameter *reg64-sib-list-no-scale-from-rax-1-times-rax* (list "[rax+8*rax]" "[rcx+8*rax]" "[rdx+8*rax]" "[rbx+8*rax]"
-                                                                   "[rsp+8*rax]" "[rbp+8*rax]" "[rsi+8*rax]" "[rdi+8*rax]"   ; [rxx+8*rax]
-                                                                   "[rax+8*rcx]" "[rcx+8*rcx]" "[rdx+8*rcx]" "[rbx+8*rcx]"
-                                                                   "[rsp+8*rcx]" "[rbp+8*rcx]" "[rsi+8*rcx]" "[rdi+8*rcx]"   ; [rxx+8*rcx]
-                                                                   "[rax+8*rdx]" "[rcx+8*rdx]" "[rdx+8*rdx]" "[rbx+8*rdx]"
-                                                                   "[rsp+8*rdx]" "[rbp+8*rdx]" "[rsi+8*rdx]" "[rdi+8*rdx]"   ; [rxx+8*rdx]
-                                                                   "[rax+8*rbx]" "[rcx+8*rbx]" "[rdx+8*rbx]" "[rbx+8*rbx]"
-                                                                   "[rsp+8*rbx]" "[rbp+8*rbx]" "[rsi+8*rbx]" "[rdi+8*rbx]")) ; [rxx+8*rbx]
+(defparameter *reg64-sib-list-scale-8-from-rax-8-times-rax* (list "[rax+8*rax]" "[rcx+8*rax]" "[rdx+8*rax]" "[rbx+8*rax]"
+                                                                  "[rsp+8*rax]" "[rbp+8*rax]" "[rsi+8*rax]" "[rdi+8*rax]"   ; [rxx+8*rax]
+                                                                  "[rax+8*rcx]" "[rcx+8*rcx]" "[rdx+8*rcx]" "[rbx+8*rcx]"
+                                                                  "[rsp+8*rcx]" "[rbp+8*rcx]" "[rsi+8*rcx]" "[rdi+8*rcx]"   ; [rxx+8*rcx]
+                                                                  "[rax+8*rdx]" "[rcx+8*rdx]" "[rdx+8*rdx]" "[rbx+8*rdx]"
+                                                                  "[rsp+8*rdx]" "[rbp+8*rdx]" "[rsi+8*rdx]" "[rdi+8*rdx]"   ; [rxx+8*rdx]
+                                                                  "[rax+8*rbx]" "[rcx+8*rbx]" "[rdx+8*rbx]" "[rbx+8*rbx]"
+                                                                  "[rsp+8*rbx]" "[rbp+8*rbx]" "[rsi+8*rbx]" "[rdi+8*rbx]")) ; [rxx+8*rbx]
 
 
 ; begins from 0b00000000
@@ -100,145 +100,145 @@
                                                                  "[rsp+rbx+disp8]" "[rbp+rbx+disp8]" "[rsi+rbx+disp8]" "[rdi+rbx+disp8]")) ; [rxx+rbx+disp8]
 
 ; begins from 0b00101000
-(defparameter *reg64-sib-list-no-scale-from-rax-rbx-disp8* (list "[rax+rbp+disp8]" "[rcx+rbp+disp8]" "[rdx+rbp+disp8]" "[rbx+rbp+disp8]"
+(defparameter *reg64-sib-list-no-scale-from-rax-rbp-disp8* (list "[rax+rbp+disp8]" "[rcx+rbp+disp8]" "[rdx+rbp+disp8]" "[rbx+rbp+disp8]"
                                                                  "[rsp+rbp+disp8]" "[rbp+rbp+disp8]" "[rsi+rbp+disp8]" "[rdi+rbp+disp8]"   ; [rxx+rbp+disp8]
                                                                  "[rax+rsi+disp8]" "[rcx+rsi+disp8]" "[rdx+rsi+disp8]" "[rbx+rsi+disp8]"
                                                                  "[rsp+rsi+disp8]" "[rbp+rsi+disp8]" "[rsi+rsi+disp8]" "[rdi+rsi+disp8]"   ; [rxx+rsi+disp8]
                                                                  "[rax+rdi+disp8]" "[rcx+rdi+disp8]" "[rdx+rdi+disp8]" "[rbx+rdi+disp8]"
                                                                  "[rsp+rdi+disp8]" "[rbp+rdi+disp8]" "[rsi+rdi+disp8]" "[rdi+rdi+disp8]")) ; [rxx+rdi+disp8]
 ; begins from 0b00000000
-(defparameter *reg64-sib-list-no-scale-from-rax-1-times-rax-disp8* (list "[rax+1*rax+disp8]"
-                                                                         "[rcx+1*rax+disp8]"
-                                                                         "[rdx+1*rax+disp8]"
-                                                                         "[rbx+1*rax+disp8]"
-                                                                         "[rsp+1*rax+disp8]"
-                                                                         "[rbp+1*rax+disp8]"
-                                                                         "[rsi+1*rax+disp8]"
-                                                                         "[rdi+1*rax+disp8]"   ; [rxx+1*rax+disp8]
-                                                                         "[rax+1*rcx+disp8]"
-                                                                         "[rcx+1*rcx+disp8]"
-                                                                         "[rdx+1*rcx+disp8]"
-                                                                         "[rbx+1*rcx+disp8]"
-                                                                         "[rsp+1*rcx+disp8]"
-                                                                         "[rbp+1*rcx+disp8]"
-                                                                         "[rsi+1*rcx+disp8]"
-                                                                         "[rdi+1*rcx+disp8]"   ; [rxx+1*rcx+disp8]
-                                                                         "[rax+1*rdx+disp8]"
-                                                                         "[rcx+1*rdx+disp8]"
-                                                                         "[rdx+1*rdx+disp8]"
-                                                                         "[rbx+1*rdx+disp8]"
-                                                                         "[rsp+1*rdx+disp8]"
-                                                                         "[rbp+1*rdx+disp8]"
-                                                                         "[rsi+1*rdx+disp8]"
-                                                                         "[rdi+1*rdx+disp8]"   ; [rxx+1*rdx+disp8]
-                                                                         "[rax+1*rbx+disp8]"
-                                                                         "[rcx+1*rbx+disp8]"
-                                                                         "[rdx+1*rbx+disp8]"
-                                                                         "[rbx+1*rbx+disp8]"
-                                                                         "[rsp+1*rbx+disp8]"
-                                                                         "[rbp+1*rbx+disp8]"
-                                                                         "[rsi+1*rbx+disp8]"
-                                                                         "[rdi+1*rbx+disp8]")) ; [rxx+1*rbx+disp8]
+(defparameter *reg64-sib-list-scale-1-from-rax-1-times-rax-disp8* (list "[rax+1*rax+disp8]"
+                                                                        "[rcx+1*rax+disp8]"
+                                                                        "[rdx+1*rax+disp8]"
+                                                                        "[rbx+1*rax+disp8]"
+                                                                        "[rsp+1*rax+disp8]"
+                                                                        "[rbp+1*rax+disp8]"
+                                                                        "[rsi+1*rax+disp8]"
+                                                                        "[rdi+1*rax+disp8]"   ; [rxx+1*rax+disp8]
+                                                                        "[rax+1*rcx+disp8]"
+                                                                        "[rcx+1*rcx+disp8]"
+                                                                        "[rdx+1*rcx+disp8]"
+                                                                        "[rbx+1*rcx+disp8]"
+                                                                        "[rsp+1*rcx+disp8]"
+                                                                        "[rbp+1*rcx+disp8]"
+                                                                        "[rsi+1*rcx+disp8]"
+                                                                        "[rdi+1*rcx+disp8]"   ; [rxx+1*rcx+disp8]
+                                                                        "[rax+1*rdx+disp8]"
+                                                                        "[rcx+1*rdx+disp8]"
+                                                                        "[rdx+1*rdx+disp8]"
+                                                                        "[rbx+1*rdx+disp8]"
+                                                                        "[rsp+1*rdx+disp8]"
+                                                                        "[rbp+1*rdx+disp8]"
+                                                                        "[rsi+1*rdx+disp8]"
+                                                                        "[rdi+1*rdx+disp8]"   ; [rxx+1*rdx+disp8]
+                                                                        "[rax+1*rbx+disp8]"
+                                                                        "[rcx+1*rbx+disp8]"
+                                                                        "[rdx+1*rbx+disp8]"
+                                                                        "[rbx+1*rbx+disp8]"
+                                                                        "[rsp+1*rbx+disp8]"
+                                                                        "[rbp+1*rbx+disp8]"
+                                                                        "[rsi+1*rbx+disp8]"
+                                                                        "[rdi+1*rbx+disp8]")) ; [rxx+1*rbx+disp8]
 ; begins from 0b01000000
-(defparameter *reg64-sib-list-no-scale-from-rax-2-times-rax-disp8* (list "[rax+2*rax+disp8]"
-                                                                         "[rcx+2*rax+disp8]"
-                                                                         "[rdx+2*rax+disp8]"
-                                                                         "[rbx+2*rax+disp8]"
-                                                                         "[rsp+2*rax+disp8]"
-                                                                         "[rbp+2*rax+disp8]"
-                                                                         "[rsi+2*rax+disp8]"
-                                                                         "[rdi+2*rax+disp8]"   ; [rxx+2*rax+disp8]
-                                                                         "[rax+2*rcx+disp8]"
-                                                                         "[rcx+2*rcx+disp8]"
-                                                                         "[rdx+2*rcx+disp8]"
-                                                                         "[rbx+2*rcx+disp8]"
-                                                                         "[rsp+2*rcx+disp8]"
-                                                                         "[rbp+2*rcx+disp8]"
-                                                                         "[rsi+2*rcx+disp8]"
-                                                                         "[rdi+2*rcx+disp8]"   ; [rxx+2*rcx+disp8]
-                                                                         "[rax+2*rdx+disp8]"
-                                                                         "[rcx+2*rdx+disp8]"
-                                                                         "[rdx+2*rdx+disp8]"
-                                                                         "[rbx+2*rdx+disp8]"
-                                                                         "[rsp+2*rdx+disp8]"
-                                                                         "[rbp+2*rdx+disp8]"
-                                                                         "[rsi+2*rdx+disp8]"
-                                                                         "[rdi+2*rdx+disp8]"   ; [rxx+2*rdx+disp8]
-                                                                         "[rax+2*rbx+disp8]"
-                                                                         "[rcx+2*rbx+disp8]"
-                                                                         "[rdx+2*rbx+disp8]"
-                                                                         "[rbx+2*rbx+disp8]"
-                                                                         "[rsp+2*rbx+disp8]"
-                                                                         "[rbp+2*rbx+disp8]"
-                                                                         "[rsi+2*rbx+disp8]"
-                                                                         "[rdi+2*rbx+disp8]")) ; [rxx+2*rbx+disp8]
+(defparameter *reg64-sib-list-scale-2-from-rax-2-times-rax-disp8* (list "[rax+2*rax+disp8]"
+                                                                        "[rcx+2*rax+disp8]"
+                                                                        "[rdx+2*rax+disp8]"
+                                                                        "[rbx+2*rax+disp8]"
+                                                                        "[rsp+2*rax+disp8]"
+                                                                        "[rbp+2*rax+disp8]"
+                                                                        "[rsi+2*rax+disp8]"
+                                                                        "[rdi+2*rax+disp8]"   ; [rxx+2*rax+disp8]
+                                                                        "[rax+2*rcx+disp8]"
+                                                                        "[rcx+2*rcx+disp8]"
+                                                                        "[rdx+2*rcx+disp8]"
+                                                                        "[rbx+2*rcx+disp8]"
+                                                                        "[rsp+2*rcx+disp8]"
+                                                                        "[rbp+2*rcx+disp8]"
+                                                                        "[rsi+2*rcx+disp8]"
+                                                                        "[rdi+2*rcx+disp8]"   ; [rxx+2*rcx+disp8]
+                                                                        "[rax+2*rdx+disp8]"
+                                                                        "[rcx+2*rdx+disp8]"
+                                                                        "[rdx+2*rdx+disp8]"
+                                                                        "[rbx+2*rdx+disp8]"
+                                                                        "[rsp+2*rdx+disp8]"
+                                                                        "[rbp+2*rdx+disp8]"
+                                                                        "[rsi+2*rdx+disp8]"
+                                                                        "[rdi+2*rdx+disp8]"   ; [rxx+2*rdx+disp8]
+                                                                        "[rax+2*rbx+disp8]"
+                                                                        "[rcx+2*rbx+disp8]"
+                                                                        "[rdx+2*rbx+disp8]"
+                                                                        "[rbx+2*rbx+disp8]"
+                                                                        "[rsp+2*rbx+disp8]"
+                                                                        "[rbp+2*rbx+disp8]"
+                                                                        "[rsi+2*rbx+disp8]"
+                                                                        "[rdi+2*rbx+disp8]")) ; [rxx+2*rbx+disp8]
 ; begins from 0b10000000
-(defparameter *reg64-sib-list-no-scale-from-rax-1-times-rax-disp8* (list "[rax+4*rax+disp8]"
-                                                                         "[rcx+4*rax+disp8]"
-                                                                         "[rdx+4*rax+disp8]"
-                                                                         "[rbx+4*rax+disp8]"
-                                                                         "[rsp+4*rax+disp8]"
-                                                                         "[rbp+4*rax+disp8]"
-                                                                         "[rsi+4*rax+disp8]"
-                                                                         "[rdi+4*rax+disp8]"   ; [rxx+4*rax+disp8]
-                                                                         "[rax+4*rcx+disp8]"
-                                                                         "[rcx+4*rcx+disp8]"
-                                                                         "[rdx+4*rcx+disp8]"
-                                                                         "[rbx+4*rcx+disp8]"
-                                                                         "[rsp+4*rcx+disp8]"
-                                                                         "[rbp+4*rcx+disp8]"
-                                                                         "[rsi+4*rcx+disp8]"
-                                                                         "[rdi+4*rcx+disp8]"   ; [rxx+4*rcx+disp8]
-                                                                         "[rax+4*rdx+disp8]"
-                                                                         "[rcx+4*rdx+disp8]"
-                                                                         "[rdx+4*rdx+disp8]"
-                                                                         "[rbx+4*rdx+disp8]"
-                                                                         "[rsp+4*rdx+disp8]"
-                                                                         "[rbp+4*rdx+disp8]"
-                                                                         "[rsi+4*rdx+disp8]"
-                                                                         "[rdi+4*rdx+disp8]"   ; [rxx+4*rdx+disp8]
-                                                                         "[rax+4*rbx+disp8]"
-                                                                         "[rcx+4*rbx+disp8]"
-                                                                         "[rdx+4*rbx+disp8]"
-                                                                         "[rbx+4*rbx+disp8]"
-                                                                         "[rsp+4*rbx+disp8]"
-                                                                         "[rbp+4*rbx+disp8]"
-                                                                         "[rsi+4*rbx+disp8]"
-                                                                         "[rdi+4*rbx+disp8]")) ; [rxx+4*rbx+disp8]
+(defparameter *reg64-sib-list-scale-4-from-rax-4-times-rax-disp8* (list "[rax+4*rax+disp8]"
+                                                                        "[rcx+4*rax+disp8]"
+                                                                        "[rdx+4*rax+disp8]"
+                                                                        "[rbx+4*rax+disp8]"
+                                                                        "[rsp+4*rax+disp8]"
+                                                                        "[rbp+4*rax+disp8]"
+                                                                        "[rsi+4*rax+disp8]"
+                                                                        "[rdi+4*rax+disp8]"   ; [rxx+4*rax+disp8]
+                                                                        "[rax+4*rcx+disp8]"
+                                                                        "[rcx+4*rcx+disp8]"
+                                                                        "[rdx+4*rcx+disp8]"
+                                                                        "[rbx+4*rcx+disp8]"
+                                                                        "[rsp+4*rcx+disp8]"
+                                                                        "[rbp+4*rcx+disp8]"
+                                                                        "[rsi+4*rcx+disp8]"
+                                                                        "[rdi+4*rcx+disp8]"   ; [rxx+4*rcx+disp8]
+                                                                        "[rax+4*rdx+disp8]"
+                                                                        "[rcx+4*rdx+disp8]"
+                                                                        "[rdx+4*rdx+disp8]"
+                                                                        "[rbx+4*rdx+disp8]"
+                                                                        "[rsp+4*rdx+disp8]"
+                                                                        "[rbp+4*rdx+disp8]"
+                                                                        "[rsi+4*rdx+disp8]"
+                                                                        "[rdi+4*rdx+disp8]"   ; [rxx+4*rdx+disp8]
+                                                                        "[rax+4*rbx+disp8]"
+                                                                        "[rcx+4*rbx+disp8]"
+                                                                        "[rdx+4*rbx+disp8]"
+                                                                        "[rbx+4*rbx+disp8]"
+                                                                        "[rsp+4*rbx+disp8]"
+                                                                        "[rbp+4*rbx+disp8]"
+                                                                        "[rsi+4*rbx+disp8]"
+                                                                        "[rdi+4*rbx+disp8]")) ; [rxx+4*rbx+disp8]
 
 ; begins from 0b11000000
-(defparameter *reg64-sib-list-no-scale-from-rax-1-times-rax-disp8* (list "[rax+8*rax+disp8]"
-                                                                         "[rcx+8*rax+disp8]"
-                                                                         "[rdx+8*rax+disp8]"
-                                                                         "[rbx+8*rax+disp8]"
-                                                                         "[rsp+8*rax+disp8]"
-                                                                         "[rbp+8*rax+disp8]"
-                                                                         "[rsi+8*rax+disp8]"
-                                                                         "[rdi+8*rax+disp8]"   ; [rxx+8*rax+disp8]
-                                                                         "[rax+8*rcx+disp8]"
-                                                                         "[rcx+8*rcx+disp8]"
-                                                                         "[rdx+8*rcx+disp8]"
-                                                                         "[rbx+8*rcx+disp8]"
-                                                                         "[rsp+8*rcx+disp8]"
-                                                                         "[rbp+8*rcx+disp8]"
-                                                                         "[rsi+8*rcx+disp8]"
-                                                                         "[rdi+8*rcx+disp8]"   ; [rxx+8*rcx+disp8]
-                                                                         "[rax+8*rdx+disp8]"
-                                                                         "[rcx+8*rdx+disp8]"
-                                                                         "[rdx+8*rdx+disp8]"
-                                                                         "[rbx+8*rdx+disp8]"
-                                                                         "[rsp+8*rdx+disp8]"
-                                                                         "[rbp+8*rdx+disp8]"
-                                                                         "[rsi+8*rdx+disp8]"
-                                                                         "[rdi+8*rdx+disp8]"   ; [rxx+8*rdx+disp8]
-                                                                         "[rax+8*rbx+disp8]"
-                                                                         "[rcx+8*rbx+disp8]"
-                                                                         "[rdx+8*rbx+disp8]"
-                                                                         "[rbx+8*rbx+disp8]"
-                                                                         "[rsp+8*rbx+disp8]"
-                                                                         "[rbp+8*rbx+disp8]"
-                                                                         "[rsi+8*rbx+disp8]"
-                                                                         "[rdi+8*rbx+disp8]")) ; [rxx+8*rbx+disp8]
+(defparameter *reg64-sib-list-scale-8-from-rax-8-times-rax-disp8* (list "[rax+8*rax+disp8]"
+                                                                        "[rcx+8*rax+disp8]"
+                                                                        "[rdx+8*rax+disp8]"
+                                                                        "[rbx+8*rax+disp8]"
+                                                                        "[rsp+8*rax+disp8]"
+                                                                        "[rbp+8*rax+disp8]"
+                                                                        "[rsi+8*rax+disp8]"
+                                                                        "[rdi+8*rax+disp8]"   ; [rxx+8*rax+disp8]
+                                                                        "[rax+8*rcx+disp8]"
+                                                                        "[rcx+8*rcx+disp8]"
+                                                                        "[rdx+8*rcx+disp8]"
+                                                                        "[rbx+8*rcx+disp8]"
+                                                                        "[rsp+8*rcx+disp8]"
+                                                                        "[rbp+8*rcx+disp8]"
+                                                                        "[rsi+8*rcx+disp8]"
+                                                                        "[rdi+8*rcx+disp8]"   ; [rxx+8*rcx+disp8]
+                                                                        "[rax+8*rdx+disp8]"
+                                                                        "[rcx+8*rdx+disp8]"
+                                                                        "[rdx+8*rdx+disp8]"
+                                                                        "[rbx+8*rdx+disp8]"
+                                                                        "[rsp+8*rdx+disp8]"
+                                                                        "[rbp+8*rdx+disp8]"
+                                                                        "[rsi+8*rdx+disp8]"
+                                                                        "[rdi+8*rdx+disp8]"   ; [rxx+8*rdx+disp8]
+                                                                        "[rax+8*rbx+disp8]"
+                                                                        "[rcx+8*rbx+disp8]"
+                                                                        "[rdx+8*rbx+disp8]"
+                                                                        "[rbx+8*rbx+disp8]"
+                                                                        "[rsp+8*rbx+disp8]"
+                                                                        "[rbp+8*rbx+disp8]"
+                                                                        "[rsi+8*rbx+disp8]"
+                                                                        "[rdi+8*rbx+disp8]")) ; [rxx+8*rbx+disp8]
 
 ; begins from 0b00000000
 (defparameter *reg64-sib-list-no-scale-from-rax-rax-disp32* (list "[rax+rax+disp32]" "[rcx+rax+disp32]" "[rdx+rax+disp32]" "[rbx+rax+disp32]"
@@ -251,145 +251,145 @@
                                                                   "[rsp+rbx+disp32]" "[rbp+rbx+disp32]" "[rsi+rbx+disp32]" "[rdi+rbx+disp32]")) ; [rxx+rbx+disp32]
 
 ; begins from 0b00101000
-(defparameter *reg64-sib-list-no-scale-from-rax-rbx-disp32* (list "[rax+rbp+disp32]" "[rcx+rbp+disp32]" "[rdx+rbp+disp32]" "[rbx+rbp+disp32]"
+(defparameter *reg64-sib-list-no-scale-from-rax-rbp-disp32* (list "[rax+rbp+disp32]" "[rcx+rbp+disp32]" "[rdx+rbp+disp32]" "[rbx+rbp+disp32]"
                                                                   "[rsp+rbp+disp32]" "[rbp+rbp+disp32]" "[rsi+rbp+disp32]" "[rdi+rbp+disp32]"   ; [rxx+rbp+disp32]
                                                                   "[rax+rsi+disp32]" "[rcx+rsi+disp32]" "[rdx+rsi+disp32]" "[rbx+rsi+disp32]"
                                                                   "[rsp+rsi+disp32]" "[rbp+rsi+disp32]" "[rsi+rsi+disp32]" "[rdi+rsi+disp32]"   ; [rxx+rsi+disp32]
                                                                   "[rax+rdi+disp32]" "[rcx+rdi+disp32]" "[rdx+rdi+disp32]" "[rbx+rdi+disp32]"
                                                                   "[rsp+rdi+disp32]" "[rbp+rdi+disp32]" "[rsi+rdi+disp32]" "[rdi+rdi+disp32]")) ; [rxx+rdi+disp32]
 ; begins from 0b00000000
-(defparameter *reg64-sib-list-no-scale-from-rax-1-times-rax-disp32* (list "[rax+1*rax+disp32]"
-                                                                          "[rcx+1*rax+disp32]"
-                                                                          "[rdx+1*rax+disp32]"
-                                                                          "[rbx+1*rax+disp32]"
-                                                                          "[rsp+1*rax+disp32]"
-                                                                          "[rbp+1*rax+disp32]"
-                                                                          "[rsi+1*rax+disp32]"
-                                                                          "[rdi+1*rax+disp32]"   ; [rxx+1*rax+disp32]
-                                                                          "[rax+1*rcx+disp32]"
-                                                                          "[rcx+1*rcx+disp32]"
-                                                                          "[rdx+1*rcx+disp32]"
-                                                                          "[rbx+1*rcx+disp32]"
-                                                                          "[rsp+1*rcx+disp32]"
-                                                                          "[rbp+1*rcx+disp32]"
-                                                                          "[rsi+1*rcx+disp32]"
-                                                                          "[rdi+1*rcx+disp32]"   ; [rxx+1*rcx+disp32]
-                                                                          "[rax+1*rdx+disp32]"
-                                                                          "[rcx+1*rdx+disp32]"
-                                                                          "[rdx+1*rdx+disp32]"
-                                                                          "[rbx+1*rdx+disp32]"
-                                                                          "[rsp+1*rdx+disp32]"
-                                                                          "[rbp+1*rdx+disp32]"
-                                                                          "[rsi+1*rdx+disp32]"
-                                                                          "[rdi+1*rdx+disp32]"   ; [rxx+1*rdx+disp32]
-                                                                          "[rax+1*rbx+disp32]"
-                                                                          "[rcx+1*rbx+disp32]"
-                                                                          "[rdx+1*rbx+disp32]"
-                                                                          "[rbx+1*rbx+disp32]"
-                                                                          "[rsp+1*rbx+disp32]"
-                                                                          "[rbp+1*rbx+disp32]"
-                                                                          "[rsi+1*rbx+disp32]"
-                                                                          "[rdi+1*rbx+disp32]")) ; [rxx+1*rbx+disp32]
+(defparameter *reg64-sib-list-scale-1-from-rax-1-times-rax-disp32* (list "[rax+1*rax+disp32]"
+                                                                         "[rcx+1*rax+disp32]"
+                                                                         "[rdx+1*rax+disp32]"
+                                                                         "[rbx+1*rax+disp32]"
+                                                                         "[rsp+1*rax+disp32]"
+                                                                         "[rbp+1*rax+disp32]"
+                                                                         "[rsi+1*rax+disp32]"
+                                                                         "[rdi+1*rax+disp32]"   ; [rxx+1*rax+disp32]
+                                                                         "[rax+1*rcx+disp32]"
+                                                                         "[rcx+1*rcx+disp32]"
+                                                                         "[rdx+1*rcx+disp32]"
+                                                                         "[rbx+1*rcx+disp32]"
+                                                                         "[rsp+1*rcx+disp32]"
+                                                                         "[rbp+1*rcx+disp32]"
+                                                                         "[rsi+1*rcx+disp32]"
+                                                                         "[rdi+1*rcx+disp32]"   ; [rxx+1*rcx+disp32]
+                                                                         "[rax+1*rdx+disp32]"
+                                                                         "[rcx+1*rdx+disp32]"
+                                                                         "[rdx+1*rdx+disp32]"
+                                                                         "[rbx+1*rdx+disp32]"
+                                                                         "[rsp+1*rdx+disp32]"
+                                                                         "[rbp+1*rdx+disp32]"
+                                                                         "[rsi+1*rdx+disp32]"
+                                                                         "[rdi+1*rdx+disp32]"   ; [rxx+1*rdx+disp32]
+                                                                         "[rax+1*rbx+disp32]"
+                                                                         "[rcx+1*rbx+disp32]"
+                                                                         "[rdx+1*rbx+disp32]"
+                                                                         "[rbx+1*rbx+disp32]"
+                                                                         "[rsp+1*rbx+disp32]"
+                                                                         "[rbp+1*rbx+disp32]"
+                                                                         "[rsi+1*rbx+disp32]"
+                                                                         "[rdi+1*rbx+disp32]")) ; [rxx+1*rbx+disp32]
 ; begins from 0b01000000
-(defparameter *reg64-sib-list-no-scale-from-rax-2-times-rax-disp32* (list "[rax+2*rax+disp32]"
-                                                                          "[rcx+2*rax+disp32]"
-                                                                          "[rdx+2*rax+disp32]"
-                                                                          "[rbx+2*rax+disp32]"
-                                                                          "[rsp+2*rax+disp32]"
-                                                                          "[rbp+2*rax+disp32]"
-                                                                          "[rsi+2*rax+disp32]"
-                                                                          "[rdi+2*rax+disp32]"   ; [rxx+2*rax+disp32]
-                                                                          "[rax+2*rcx+disp32]"
-                                                                          "[rcx+2*rcx+disp32]"
-                                                                          "[rdx+2*rcx+disp32]"
-                                                                          "[rbx+2*rcx+disp32]"
-                                                                          "[rsp+2*rcx+disp32]"
-                                                                          "[rbp+2*rcx+disp32]"
-                                                                          "[rsi+2*rcx+disp32]"
-                                                                          "[rdi+2*rcx+disp32]"   ; [rxx+2*rcx+disp32]
-                                                                          "[rax+2*rdx+disp32]"
-                                                                          "[rcx+2*rdx+disp32]"
-                                                                          "[rdx+2*rdx+disp32]"
-                                                                          "[rbx+2*rdx+disp32]"
-                                                                          "[rsp+2*rdx+disp32]"
-                                                                          "[rbp+2*rdx+disp32]"
-                                                                          "[rsi+2*rdx+disp32]"
-                                                                          "[rdi+2*rdx+disp32]"   ; [rxx+2*rdx+disp32]
-                                                                          "[rax+2*rbx+disp32]"
-                                                                          "[rcx+2*rbx+disp32]"
-                                                                          "[rdx+2*rbx+disp32]"
-                                                                          "[rbx+2*rbx+disp32]"
-                                                                          "[rsp+2*rbx+disp32]"
-                                                                          "[rbp+2*rbx+disp32]"
-                                                                          "[rsi+2*rbx+disp32]"
-                                                                          "[rdi+2*rbx+disp32]")) ; [rxx+2*rbx+disp32]
+(defparameter *reg64-sib-list-scale-2-from-rax-2-times-rax-disp32* (list "[rax+2*rax+disp32]"
+                                                                         "[rcx+2*rax+disp32]"
+                                                                         "[rdx+2*rax+disp32]"
+                                                                         "[rbx+2*rax+disp32]"
+                                                                         "[rsp+2*rax+disp32]"
+                                                                         "[rbp+2*rax+disp32]"
+                                                                         "[rsi+2*rax+disp32]"
+                                                                         "[rdi+2*rax+disp32]"   ; [rxx+2*rax+disp32]
+                                                                         "[rax+2*rcx+disp32]"
+                                                                         "[rcx+2*rcx+disp32]"
+                                                                         "[rdx+2*rcx+disp32]"
+                                                                         "[rbx+2*rcx+disp32]"
+                                                                         "[rsp+2*rcx+disp32]"
+                                                                         "[rbp+2*rcx+disp32]"
+                                                                         "[rsi+2*rcx+disp32]"
+                                                                         "[rdi+2*rcx+disp32]"   ; [rxx+2*rcx+disp32]
+                                                                         "[rax+2*rdx+disp32]"
+                                                                         "[rcx+2*rdx+disp32]"
+                                                                         "[rdx+2*rdx+disp32]"
+                                                                         "[rbx+2*rdx+disp32]"
+                                                                         "[rsp+2*rdx+disp32]"
+                                                                         "[rbp+2*rdx+disp32]"
+                                                                         "[rsi+2*rdx+disp32]"
+                                                                         "[rdi+2*rdx+disp32]"   ; [rxx+2*rdx+disp32]
+                                                                         "[rax+2*rbx+disp32]"
+                                                                         "[rcx+2*rbx+disp32]"
+                                                                         "[rdx+2*rbx+disp32]"
+                                                                         "[rbx+2*rbx+disp32]"
+                                                                         "[rsp+2*rbx+disp32]"
+                                                                         "[rbp+2*rbx+disp32]"
+                                                                         "[rsi+2*rbx+disp32]"
+                                                                         "[rdi+2*rbx+disp32]")) ; [rxx+2*rbx+disp32]
 ; begins from 0b10000000
-(defparameter *reg64-sib-list-no-scale-from-rax-1-times-rax-disp32* (list "[rax+4*rax+disp32]"
-                                                                          "[rcx+4*rax+disp32]"
-                                                                          "[rdx+4*rax+disp32]"
-                                                                          "[rbx+4*rax+disp32]"
-                                                                          "[rsp+4*rax+disp32]"
-                                                                          "[rbp+4*rax+disp32]"
-                                                                          "[rsi+4*rax+disp32]"
-                                                                          "[rdi+4*rax+disp32]"   ; [rxx+4*rax+disp32]
-                                                                          "[rax+4*rcx+disp32]"
-                                                                          "[rcx+4*rcx+disp32]"
-                                                                          "[rdx+4*rcx+disp32]"
-                                                                          "[rbx+4*rcx+disp32]"
-                                                                          "[rsp+4*rcx+disp32]"
-                                                                          "[rbp+4*rcx+disp32]"
-                                                                          "[rsi+4*rcx+disp32]"
-                                                                          "[rdi+4*rcx+disp32]"   ; [rxx+4*rcx+disp32]
-                                                                          "[rax+4*rdx+disp32]"
-                                                                          "[rcx+4*rdx+disp32]"
-                                                                          "[rdx+4*rdx+disp32]"
-                                                                          "[rbx+4*rdx+disp32]"
-                                                                          "[rsp+4*rdx+disp32]"
-                                                                          "[rbp+4*rdx+disp32]"
-                                                                          "[rsi+4*rdx+disp32]"
-                                                                          "[rdi+4*rdx+disp32]"   ; [rxx+4*rdx+disp32]
-                                                                          "[rax+4*rbx+disp32]"
-                                                                          "[rcx+4*rbx+disp32]"
-                                                                          "[rdx+4*rbx+disp32]"
-                                                                          "[rbx+4*rbx+disp32]"
-                                                                          "[rsp+4*rbx+disp32]"
-                                                                          "[rbp+4*rbx+disp32]"
-                                                                          "[rsi+4*rbx+disp32]"
-                                                                          "[rdi+4*rbx+disp32]")) ; [rxx+4*rbx+disp32]
+(defparameter *reg64-sib-list-scale-4-from-rax-4-times-rax-disp32* (list "[rax+4*rax+disp32]"
+                                                                         "[rcx+4*rax+disp32]"
+                                                                         "[rdx+4*rax+disp32]"
+                                                                         "[rbx+4*rax+disp32]"
+                                                                         "[rsp+4*rax+disp32]"
+                                                                         "[rbp+4*rax+disp32]"
+                                                                         "[rsi+4*rax+disp32]"
+                                                                         "[rdi+4*rax+disp32]"   ; [rxx+4*rax+disp32]
+                                                                         "[rax+4*rcx+disp32]"
+                                                                         "[rcx+4*rcx+disp32]"
+                                                                         "[rdx+4*rcx+disp32]"
+                                                                         "[rbx+4*rcx+disp32]"
+                                                                         "[rsp+4*rcx+disp32]"
+                                                                         "[rbp+4*rcx+disp32]"
+                                                                         "[rsi+4*rcx+disp32]"
+                                                                         "[rdi+4*rcx+disp32]"   ; [rxx+4*rcx+disp32]
+                                                                         "[rax+4*rdx+disp32]"
+                                                                         "[rcx+4*rdx+disp32]"
+                                                                         "[rdx+4*rdx+disp32]"
+                                                                         "[rbx+4*rdx+disp32]"
+                                                                         "[rsp+4*rdx+disp32]"
+                                                                         "[rbp+4*rdx+disp32]"
+                                                                         "[rsi+4*rdx+disp32]"
+                                                                         "[rdi+4*rdx+disp32]"   ; [rxx+4*rdx+disp32]
+                                                                         "[rax+4*rbx+disp32]"
+                                                                         "[rcx+4*rbx+disp32]"
+                                                                         "[rdx+4*rbx+disp32]"
+                                                                         "[rbx+4*rbx+disp32]"
+                                                                         "[rsp+4*rbx+disp32]"
+                                                                         "[rbp+4*rbx+disp32]"
+                                                                         "[rsi+4*rbx+disp32]"
+                                                                         "[rdi+4*rbx+disp32]")) ; [rxx+4*rbx+disp32]
 
 ; begins from 0b11000000
-(defparameter *reg64-sib-list-no-scale-from-rax-1-times-rax-disp32* (list "[rax+8*rax+disp32]"
-                                                                          "[rcx+8*rax+disp32]"
-                                                                          "[rdx+8*rax+disp32]"
-                                                                          "[rbx+8*rax+disp32]"
-                                                                          "[rsp+8*rax+disp32]"
-                                                                          "[rbp+8*rax+disp32]"
-                                                                          "[rsi+8*rax+disp32]"
-                                                                          "[rdi+8*rax+disp32]"   ; [rxx+8*rax+disp32]
-                                                                          "[rax+8*rcx+disp32]"
-                                                                          "[rcx+8*rcx+disp32]"
-                                                                          "[rdx+8*rcx+disp32]"
-                                                                          "[rbx+8*rcx+disp32]"
-                                                                          "[rsp+8*rcx+disp32]"
-                                                                          "[rbp+8*rcx+disp32]"
-                                                                          "[rsi+8*rcx+disp32]"
-                                                                          "[rdi+8*rcx+disp32]"   ; [rxx+8*rcx+disp32]
-                                                                          "[rax+8*rdx+disp32]"
-                                                                          "[rcx+8*rdx+disp32]"
-                                                                          "[rdx+8*rdx+disp32]"
-                                                                          "[rbx+8*rdx+disp32]"
-                                                                          "[rsp+8*rdx+disp32]"
-                                                                          "[rbp+8*rdx+disp32]"
-                                                                          "[rsi+8*rdx+disp32]"
-                                                                          "[rdi+8*rdx+disp32]"   ; [rxx+8*rdx+disp32]
-                                                                          "[rax+8*rbx+disp32]"
-                                                                          "[rcx+8*rbx+disp32]"
-                                                                          "[rdx+8*rbx+disp32]"
-                                                                          "[rbx+8*rbx+disp32]"
-                                                                          "[rsp+8*rbx+disp32]"
-                                                                          "[rbp+8*rbx+disp32]"
-                                                                          "[rsi+8*rbx+disp32]"
-                                                                          "[rdi+8*rbx+disp32]")) ; [rxx+8*rbx+disp32]
+(defparameter *reg64-sib-list-scale-8-from-rax-8-times-rax-disp32* (list "[rax+8*rax+disp32]"
+                                                                         "[rcx+8*rax+disp32]"
+                                                                         "[rdx+8*rax+disp32]"
+                                                                         "[rbx+8*rax+disp32]"
+                                                                         "[rsp+8*rax+disp32]"
+                                                                         "[rbp+8*rax+disp32]"
+                                                                         "[rsi+8*rax+disp32]"
+                                                                         "[rdi+8*rax+disp32]"   ; [rxx+8*rax+disp32]
+                                                                         "[rax+8*rcx+disp32]"
+                                                                         "[rcx+8*rcx+disp32]"
+                                                                         "[rdx+8*rcx+disp32]"
+                                                                         "[rbx+8*rcx+disp32]"
+                                                                         "[rsp+8*rcx+disp32]"
+                                                                         "[rbp+8*rcx+disp32]"
+                                                                         "[rsi+8*rcx+disp32]"
+                                                                         "[rdi+8*rcx+disp32]"   ; [rxx+8*rcx+disp32]
+                                                                         "[rax+8*rdx+disp32]"
+                                                                         "[rcx+8*rdx+disp32]"
+                                                                         "[rdx+8*rdx+disp32]"
+                                                                         "[rbx+8*rdx+disp32]"
+                                                                         "[rsp+8*rdx+disp32]"
+                                                                         "[rbp+8*rdx+disp32]"
+                                                                         "[rsi+8*rdx+disp32]"
+                                                                         "[rdi+8*rdx+disp32]"   ; [rxx+8*rdx+disp32]
+                                                                         "[rax+8*rbx+disp32]"
+                                                                         "[rcx+8*rbx+disp32]"
+                                                                         "[rdx+8*rbx+disp32]"
+                                                                         "[rbx+8*rbx+disp32]"
+                                                                         "[rsp+8*rbx+disp32]"
+                                                                         "[rbp+8*rbx+disp32]"
+                                                                         "[rsi+8*rbx+disp32]"
+                                                                         "[rdi+8*rbx+disp32]")) ; [rxx+8*rbx+disp32]
 
 ; aadressing forms which need SIB.
 (defparameter *reg64-reg-indirect-rip-0*        (list "[rip0]"))
