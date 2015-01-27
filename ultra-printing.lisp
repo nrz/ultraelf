@@ -6,7 +6,9 @@
 (in-package :ultraelf)
 
 (defun print-hex (my-number)
-  (format nil "~x" my-number))
+  (if (listp my-number)
+    (format nil "~{~2,'0x~^ ~}" my-number)
+    (format nil "~2,'0x" my-number)))
 
 (defun print-hex-list (my-list)
   (mapcar #'(lambda (x) (print-hex x)) my-list))
