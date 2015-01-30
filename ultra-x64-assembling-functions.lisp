@@ -318,6 +318,9 @@
        ;; The encoding of this variant is constant, so just convert
        ;; the rest elements (hexadecimal numbers) to numbers in a list.
        (handle-nasm-code-format-x64 code-format my-operands :msg msg))
+      ((equal (first code-format) "[--:")
+       ;; The operands and encoding of this variant are fixed.
+       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
       ((equal (first code-format) "[m:")
        ;; This variant has one 'memory' (can be register too) operand.
        ;; The operand is encoded in the r/m field.

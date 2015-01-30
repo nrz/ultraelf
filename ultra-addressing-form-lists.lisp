@@ -7,10 +7,18 @@
 
 ;; register lists. must be ordered in ModRM order.
 ;; general purpose registers.
-(defparameter *old-low-reg8-list*          (list  "al"  "cl"   "dl"   "bl"))
+(defparameter *reg-al-list*                (list  "al"))
+(defparameter *reg-cl-list*                (list  "cl"))
+(defparameter *old-low-reg8-without-al-cl-list*          (list "dl"   "bl"))
 (defparameter *old-high-reg8-list*                                    (list  "ah"   "ch"   "dh"   "bh"))
-(defparameter *old-reg16-list*             (list  "ax"  "cx"   "dx"   "bx"   "sp"   "bp"   "si"   "di"))
-(defparameter *old-reg32-list*             (list "eax" "ecx"  "edx"  "ebx"  "esp"  "ebp"  "esi"  "edi"))
+(defparameter *reg-ax-list*                (list  "ax"))
+(defparameter *reg-cx-list*                (list  "cx"))
+(defparameter *reg-dx-list*                (list  "dx"))
+(defparameter *old-reg16-without-ax-cx-dx-list*                 (list "bx"   "sp"   "bp"   "si"   "di"))
+(defparameter *reg-eax-list*               (list "eax"))
+(defparameter *reg-ecx-list*               (list "ecx"))
+(defparameter *reg-edx-list*               (list "edx"))
+(defparameter *old-reg32-without-eax-ecx-edx-list*             (list "ebx"  "esp"  "ebp"  "esi"  "edi"))
 (defparameter *old-reg64-list*             (list "rax" "rcx"  "rdx"  "rbx"  "rsp"  "rbp"  "rsi"  "rdi"))
 (defparameter *new-low-reg8-list-from-spl*                            (list "spl"  "bpl"  "sil"  "dil"))
 (defparameter *new-low-reg8-list-from-r8b* (list "r8b" "r9b" "r10b" "r11b" "r12b" "r13b" "r14b" "r15b"))
@@ -401,10 +409,18 @@
 
 (defparameter *create-addressing-form-instances-list*
   (list
-    (list #b000 *old-low-reg8-list*                    'x86-old-8-bits-low-reg)
+    (list #b000 *reg-al-list*                          'x86-reg-al)
+    (list #b001 *reg-cl-list*                          'x86-reg-cl)
+    (list #b010 *old-low-reg8-without-al-cl-list*      'x86-old-8-bits-low-reg)
     (list #b100 *old-high-reg8-list*                   'x86-old-8-bits-high-reg)
-    (list #b000 *old-reg16-list*                       'x86-old-16-bits-reg)
-    (list #b000 *old-reg32-list*                       'x86-old-32-bits-reg)
+    (list #b000 *reg-ax-list*                          'x86-reg-ax)
+    (list #b001 *reg-cx-list*                          'x86-reg-cx)
+    (list #b010 *reg-dx-list*                          'x86-reg-dx)
+    (list #b011 *old-reg16-without-ax-cx-dx-list*      'x86-old-16-bits-reg)
+    (list #b000 *reg-eax-list*                         'x86-reg-eax)
+    (list #b001 *reg-ecx-list*                         'x86-reg-ecx)
+    (list #b010 *reg-edx-list*                         'x86-reg-edx)
+    (list #b011 *old-reg32-without-eax-ecx-edx-list*   'x86-old-32-bits-reg)
     (list #b000 *old-reg64-list*                       'x86-old-64-bits-reg)
     (list #b100 *new-low-reg8-list-from-spl*           'x86-new-8-bits-reg-rex-r-0)
     (list #b000 *new-low-reg8-list-from-r8b*           'x86-new-8-bits-reg-rex-r-1)
