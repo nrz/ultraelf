@@ -38,7 +38,7 @@
                 ;; variables.
                 :setf
                 ;; lists and other sequences.
-                :every :some :notevery :notany
+                :every :some :subseq :notevery :notany
                 :length
                 :mapcan :mapcar
                 :append :concatenate :nconc
