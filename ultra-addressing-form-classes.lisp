@@ -290,6 +290,10 @@
    (needs-rex
      :reader needs-rex
      :allocation :class
+     :initform nil)
+   (works-with-rex
+     :reader works-with-rex
+     :allocation :class
      :initform nil)))
 
 ;; subclasses of `arm-addressing-form` begin here (they have hierarchy level 4).
