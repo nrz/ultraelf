@@ -58,6 +58,16 @@
                       (rex-b arg1))) ; checked when implementing SIB!
       ((eql n-operands 2)
        (cond
+         ((equal encoding-type "[r-:")
+          (emit-rex-byte rex-w-value    ; operand size.
+                         (rex-r arg1)   ; number of arguments should be checked already.
+                         0              ; extension of the SIB index field, this should be
+                         (rex-b arg1))) ; checked when implementing SIB!
+         ((equal encoding-type "[-r:")
+          (emit-rex-byte rex-w-value    ; operand size.
+                         (rex-r arg2)   ; number of arguments should be checked already.
+                         0              ; extension of the SIB index field, this should be
+                         (rex-b arg2))) ; checked when implementing SIB!
          ((equal encoding-type "[mr:")
           (emit-rex-byte rex-w-value    ; operand size.
                          (rex-r arg2)   ; rex-r augments reg field, so it's from arg2 in `[mr:`.
@@ -69,6 +79,22 @@
                          0                ; extension of the SIB index field, this should be
                          (rex-b arg2))))) ; rex-b augments r/m field, so it's from arg2 in `[mr:`.
       (t (error "encoding not yet implemented")))))
+
+(defun emit-xx-plus-r (encoding-type given-operands code-string)
+  "This function emits code for `xx+r`, such as `90+r`."
+  (let*
+    ((my-args (get-list given-operands))
+     (arg1 (first my-args))  ; nil if list is too short.
+     (arg2 (second my-args)) ; nil if list is too short.
+     (base (parse-integer (subseq code-string 0 2) :radix 16)))
+    (cond
+      ((equal encoding-type "[-r:")
+       (list (+ base (modrm-r/m arg2))))
+      ((equal encoding-type "[r:")
+       (list (+ base (modrm-r/m arg1))))
+      ((equal encoding-type "[r-:")
+       (list (+ base (modrm-r/m arg1))))
+      (t (error "xx+r encoding for this code-string not implemented.")))))
 
 (defun handle-nasm-code-format-x64 (code-format req-operands &key given-operands msg (rex-w-value 0) (rex-r-value 0) (rex-b-value 0))
   "This function handles one code-string (from NASM's `insns.dat`) and returns the following:
@@ -265,42 +291,16 @@
                                     ;; there are currently 18 encodings of this type in use.
                                     ;; to check `insns.dat` for new encodings of this type:
                                     ;; `$ grep '[0-9a-f]+' insns.dat | sed 's/\(^.*\)\([\t ][0-9a-f][0-9a-f]+\)\(.*$\)/\2/g' | sed 's/[\t ]*//g' | sort | uniq`
-                                    ((equal code-string "40+r")
-                                     (list (+ #x40 (modrm-r/m arg1))))
-                                    ((equal code-string "48+r")
-                                     (list (+ #x48 (modrm-r/m arg1))))
-                                    ((equal code-string "50+r")
-                                     (list (+ #x50 (modrm-r/m arg1))))
-                                    ((equal code-string "58+r")
-                                     (list (+ #x58 (modrm-r/m arg1))))
-                                    ((equal code-string "70+r")
-                                     (list (+ #x70 (modrm-r/m arg1))))
-                                    ((equal code-string "71+r")
-                                     (list (+ #x71 (modrm-r/m arg1))))
-                                    ((equal code-string "80+r")
-                                     (list (+ #x80 (modrm-r/m arg1))))
-                                    ((equal code-string "90+r")
-                                     (list (+ #x90 (modrm-r/m arg1))))
-                                    ((equal code-string "b0+r")
-                                     (list (+ #xb0 (modrm-r/m arg1))))
-                                    ((equal code-string "b8+r")
-                                     (list (+ #xb8 (modrm-r/m arg1))))
-                                    ((equal code-string "c0+r")
-                                     (list (+ #xc0 (modrm-r/m arg1))))
-                                    ((equal code-string "c8+r")
-                                     (list (+ #xc8 (modrm-r/m arg1))))
-                                    ((equal code-string "d0+r")
-                                     (list (+ #xd0 (modrm-r/m arg1))))
-                                    ((equal code-string "d8+r")
-                                     (list (+ #xd8 (modrm-r/m arg1))))
-                                    ((equal code-string "e0+r")
-                                     (list (+ #xe0 (modrm-r/m arg1))))
-                                    ((equal code-string "e8+r")
-                                     (list (+ #xe8 (modrm-r/m arg1))))
-                                    ((equal code-string "f0+r")
-                                     (list (+ #xf0 (modrm-r/m arg1))))
-                                    ((equal code-string "f8+r")
-                                     (list (+ #xf8 (modrm-r/m arg1))))
+                                    ((and
+                                       (eql (length code-string) 4) ; "eg. `"90+r"`.
+                                       (equal (subseq code-string 2) "+r"))
+                                     (emit-xx-plus-r encoding-type given-operands code-string))
+                                    ((equal code-string "a16")
+                                     nil)
+                                    ((equal code-string "a32")
+                                     nil)
+                                    ((equal code-string "a64")
+                                     nil)
                                     ((equal code-string "nof3")
                                      nil)
                                     ((equal code-string "odf")
@@ -321,6 +321,9 @@
       ((equal (first code-format) "[--:")
        ;; The operands and encoding of this variant are fixed.
        (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
+      ((equal (first code-format) "[-r:")
+       ;; One fixed operand and one register operand.
+       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
       ((equal (first code-format) "[m:")
        ;; This variant has one 'memory' (can be register too) operand.
        ;; The operand is encoded in the r/m field.
@@ -330,6 +333,9 @@
        ;; This variant has one register operand.
        ;; The operand is encoded in the r/m field.
        ;; An extension of the opcode is in the reg field.
+       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
+      ((equal (first code-format) "[r-:")
+       ;; One register operand and one fixed operand.
        (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
       ((equal (first code-format) "[mr:")
        ;; This variant has one memory operand and one register operand.

@@ -112,6 +112,8 @@
 ;;       5 x86-64-bits-reg (x86-reg)
 ;;         6 x86-new-64-bits-reg (x64-rex-r-1 x64-rex-b-1 x86-new-reg x86-64-bits-reg)
 ;;         6 x86-old-64-bits-reg (x86-old-reg x86-64-bits-reg)
+;;           7 x86-reg-rax (x86-old-64-bits-reg)
+;;           7 x86-reg-rcx (x86-old-64-bits-reg)
 ;;       5 x86-mmx-reg (x86-reg)
 ;;       5 x86-new-reg (x86-reg)
 ;;         6 ^ x86-new-8-bits-reg (x86-new-reg x86-8-bits-reg) ^ see above ^
@@ -420,8 +422,8 @@
      :documentation "register size in bits")
    (allowed-targets
      :reader allowed-targets
-     :initform (list "reg32" "rm32")
-     :documentation "allowed encodings in NASM's `insns.dat` syntax")))
+     :initform (list "reg32" "reg32na" "rm32")
+     :documentation "allowed encodings in NASM's `insns.dat` syntax.")))
 
 (defclass x86-64-bits-reg (x86-reg)
   ((reg-size
@@ -873,13 +875,27 @@
 (defclass x86-reg-ecx (x86-old-32-bits-reg)
   ((allowed-targets
      :reader allowed-targets
-     :initform (list "reg_ecx" "reg32" "rm32")
+     :initform (list "reg_ecx" "reg32" "reg32na" "rm32")
      :documentation "allowed encodings in NASM's `insns.dat` syntax")))
 
 (defclass x86-reg-edx (x86-old-32-bits-reg)
   ((allowed-targets
      :reader allowed-targets
-     :initform (list "reg_edx" "reg32" "rm32")
+     :initform (list "reg_edx" "reg32" "reg32na" "rm32")
+     :documentation "allowed encodings in NASM's `insns.dat` syntax")))
+
+;; subclasses of `x86-old-64-bits-reg` begin here (they have hierarchy level 7).
+
+(defclass x86-reg-rax (x86-old-64-bits-reg)
+  ((allowed-targets
+     :reader allowed-targets
+     :initform (list "reg_rax" "reg64" "rm64")
+     :documentation "allowed encodings in NASM's `insns.dat` syntax")))
+
+(defclass x86-reg-rcx (x86-old-64-bits-reg)
+  ((allowed-targets
+     :reader allowed-targets
+     :initform (list "reg_rcx" "reg64" "rm64")
      :documentation "allowed encodings in NASM's `insns.dat` syntax")))
 
 ;; subclasses of `x64-new-reg-indirect` begin here (they have hierarchy level 8).
