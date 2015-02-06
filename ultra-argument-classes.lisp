@@ -11,6 +11,42 @@
      :reader name
      :initform nil
      :documentation "any argument to an instruction")
+   (is-reg
+     :reader is-reg
+     :allocation :class
+     :initform nil)
+   (is-memory-addressing
+     :reader is-memory-addressing
+     :allocation :class
+     :initform nil)
+   (is-abs-addressing
+     :reader is-abs-addressing
+     :allocation :class
+     :initform nil)
+   (is-pc-relative
+     :reader is-pc-relative
+     :allocation :class
+     :initform nil)
+   (is-reg-indirect
+     :reader is-reg-indirect
+     :allocation :class
+     :initform nil)
+   (is-address
+     :reader is-address
+     :allocation :class
+     :initform nil)
+   (needs-rex
+     :reader needs-rex
+     :allocation :class
+     :initform nil)
+   (works-with-rex
+     :reader works-with-rex
+     :allocation :class
+     :initform nil)
+   (is-string-instruction
+     :reader is-string-instruction
+     :allocation :class
+     :initform nil)
    (value
      :initarg :value
      :reader value
@@ -26,54 +62,25 @@
      :initarg :name
      :reader name
      :initform (error "name must be specified")
-     :documentation "the unknown string must be given as a name")
-   (is-reg
-     :reader is-reg
-     :initform nil
-     :allocation :class
-     :documentation "registers are _not_ unknown.")
-   (is-reg-indirect
-     :reader is-reg-indirect
-     :allocation :class
-     :initform nil
-     :documentation "register indirects are _not_ unknown.")
-   (is-address
-     :reader is-address
-     :allocation :class
-     :initform nil
-     :documentation "addresses indirects are _not_ unknown (although their values may be).")
-   (is-string-instruction
-     :reader is-string-instruction
-     :allocation :class
-     :initform nil
-     :documentation "string instructions are _not_ unknown.")))
+     :documentation "the unknown string must be given as a name")))
 
 (defclass address (argument)
   ((name
      :initarg :name
      :accessor name
      :initform nil)
-   (is-unknown
-     :reader is-unknown
-     :initform nil
-     :allocation :class
-     :documentation "Addresses are not unknown, although their value may be unknown.")
-   (is-reg
-     :reader is-reg
-     :allocation :class
-     :initform nil)
-   (is-reg-indirect
-     :reader is-reg-indirect
-     :allocation :class
-     :initform nil)
    (is-address
      :reader is-address
      :allocation :class
      :initform t)
-   (is-string-instruction
-     :reader is-string-instruction
-     :allocation :class
-     :initform nil)
+   (allowed-targets
+     :reader allowed-targets
+     :initform (list "imm" "imm|short" "imm|near" "imm|far"
+                     "imm16" "imm16|short" "imm16|near" "imm16|far"
+                     "imm32" "imm32|short" "imm32|near" "imm32|far"
+                     "imm64" "imm64|short" "imm64|near" "imm64|far"
+                     "imm:imm" "imm16:imm" "imm:imm16" "imm32:imm" "imm:imm32")
+     :documentation "allowed encodings in NASM's `insns.dat` syntax")
    (value
      :accessor value
      :initform nil)))

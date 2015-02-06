@@ -13,10 +13,12 @@
                 :cons :eval :lambda :read :progn :let :let* :macrolet :symbol-macrolet
                 ;; logical operators.
                 :and :or :not
+                ;; comparisons.
+                :< :> :<= :>=
                 ;; mathematics.
-                :+ :- :* :/ :incf :decf :ash :logand :logior :logxor :lognot
+                :+ :- :* :/ :1+ :1- :incf :decf :ash :logand :logior :logxor :lognot
                 ;; code flow macros.
-                :cond :loop :when :unless
+                :if :cond :loop :when :unless
                 ;; define instructions.
                 :defun :defmacro :defclass :defpackage :defparameter :defmethod
                 ;; function calls.

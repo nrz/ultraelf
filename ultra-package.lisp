@@ -10,6 +10,8 @@
   (:shadow :type)
   (:export
     ;; symbols imported by x86 common to x16, x32 and x64 begin here.
+    ;; global variables.
+    :*global-offset*
     ;; printing functions.
     :print-hex
     ;; list-handling functions.
@@ -35,16 +37,19 @@
     ;; symbols.
     :convert-string-to-symbol-if-symbol-exists
     ;; instruction classes' slots.
-    :allowed-targets
+    :req-operands
     :code-format
-    :operands
+    :arch-flags
     ;; addressing form classes' slots.
+    :allowed-targets
     :is-reg
     :reg-size
     :reg-name
     :is-x86-reg
     :is-memory-addressing
     :is-reg-indirect
+    :is-address
+    :value
     :displacement-size
     :needs-sib
     :r/m

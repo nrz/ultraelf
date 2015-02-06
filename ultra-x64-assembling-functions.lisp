@@ -302,13 +302,33 @@
                                      (eql (length code-string) 4) ; "eg. `"90+r"`.
                                      (equal (subseq code-string 2) "+r"))
                                    (emit-and-update-instruction-length (emit-xx-plus-r encoding-type given-operands code-string)))
+                                  ((equal code-string "rel8")
+                                   (if (is-address arg1)
+                                     (let*
+                                       ((current-address (+ *global-offset* instruction-length-in-bytes))
+                                        (rel-address (- (value arg1) (1+ current-address))))
+                                       (cond
+                                         ((and
+                                            (<= rel-address 127)
+                                            (>= rel-address 0))
+                                          ;; OK, this is a relative jump 0..127 bytes forward.
+                                          (emit-and-update-instruction-length (list rel-address)))
+                                         ((and
+                                            (>= rel-address -128)
+                                            (<= rel-address -1))
+                                          ;; OK, this is a relative jump 1..128 bytes backward.
+                                          (emit-and-update-instruction-length (list (+ rel-address 256))))
+                                         (t (error "jump of out range, must be within -128..+127 bytes"))))
+                                     (error "the first argument for a relative jump must be an address")))
                                   ((equal code-string "a16")
                                    nil)
                                   ((equal code-string "a32")
-                                   nil)
+                                   (emit-and-update-instruction-length (list #x67)))
                                   ((equal code-string "a64")
                                    nil)
                                   ((equal code-string "nof3")
+                                   nil)
+                                  ((equal code-string "adf")
                                    nil)
                                   ((equal code-string "odf")
                                    nil)
@@ -336,10 +356,16 @@
        ;; The operand is encoded in the r/m field.
        ;; An extension of the opcode is in the reg field.
        (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
+      ((equal (first code-format) "[i:")
+       ;; This variant has one immediate operand.
+       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
       ((equal (first code-format) "[r:")
        ;; This variant has one register operand.
        ;; The operand is encoded in the r/m field.
        ;; An extension of the opcode is in the reg field.
+       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
+      ((equal (first code-format) "[i-:")
+       ;; One immediate operand and one fixed operand.
        (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
       ((equal (first code-format) "[r-:")
        ;; One register operand and one fixed operand.

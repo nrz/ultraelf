@@ -206,27 +206,7 @@
 
 ;; subclasses of `argument` begin here (they have hierarchy level 2).
 (defclass addressing-form (argument)
-  ((is-reg
-     :reader is-reg
-     :allocation :class
-     :initform nil)
-   (is-memory-addressing
-     :reader is-memory-addressing
-     :allocation :class
-     :initform nil)
-   (is-abs-addressing
-     :reader is-abs-addressing
-     :allocation :class
-     :initform nil)
-   (is-pc-relative
-     :reader is-pc-relative
-     :allocation :class
-     :initform nil)
-   (is-reg-indirect
-     :reader is-reg-indirect
-     :allocation :class
-     :initform nil)
-   (displacement-size
+  ((displacement-size
      :reader displacement-size
      :allocation :class
      :initform 0
