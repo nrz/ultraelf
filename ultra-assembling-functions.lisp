@@ -6,7 +6,6 @@
 (in-package :ultraelf)
 
 (defparameter *global-offset* 0)
-(defparameter $ 0)
 
 (defun create-syntax-tree (my-list)
   "This recursive function converts a string produced by transform-code-to-string into a syntax tree.
@@ -38,7 +37,7 @@
    Otherwise this function converts the string into an instance of `unknown` class."
   (cond
     ((equal my-string "$")
-     (setf $ (make-instance 'address :name (write-to-string *global-offset*) :value *global-offset*)))
+     (make-instance 'address :name (write-to-string *global-offset*) :value *global-offset*))
     ((boundp (intern (string-upcase my-string)))
      (symbol-value (intern (string-upcase my-string))))
     (t (make-instance 'unknown :name my-string :value (parse-number my-string)))))
@@ -79,8 +78,7 @@
                                                                      collect (convert-string-to-symbol-if-symbol-exists arg))))))))))
     (when (boundp '*global-offset*)
       (progn
-        (incf *global-offset* (length binary-code))
-        (setf $ (make-instance 'address :name (write-to-string *global-offset*) :value *global-offset*))))
+        (incf *global-offset* (length binary-code))))
     binary-code))
 
 (defun get-nth (n)
@@ -121,7 +119,6 @@
 (defun emit-binary-code (syntax-tree my-hash-table &key (skip-errors t))
   "This function produces a single list of binary code bytes."
   (defparameter *global-offset* 0)
-  (defparameter $ (make-instance 'address :name (write-to-string *global-offset*) :value *global-offset*))
   (apply #'append (emit-binary-code-list syntax-tree my-hash-table :skip-errors skip-errors)))
 
 (defun emit-binary-code-and-print-hex (syntax-tree my-hash-table &key (skip-errors t))
