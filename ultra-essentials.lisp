@@ -10,7 +10,7 @@
                 ;; t.
                 :t
                 ;; Lisp basics.
-                :cons :eval :lambda :read :progn :let :let*
+                :cons :eval :lambda :read :progn :let :let* :macrolet :symbol-macrolet
                 ;; logical operators.
                 :and :or :not
                 ;; mathematics.
