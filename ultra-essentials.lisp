@@ -14,15 +14,15 @@
                 ;; logical operators.
                 :and :or :not
                 ;; mathematics.
-                :+ :- :* :/ :ash :logand :logior :logxor :lognot
+                :+ :- :* :/ :incf :decf :ash :logand :logior :logxor :lognot
                 ;; code flow macros.
                 :cond :loop :when :unless
                 ;; define instructions.
-                :defun :defclass :defpackage :defparameter :defmethod
+                :defun :defmacro :defclass :defpackage :defparameter :defmethod
                 ;; function calls.
                 :apply :funcall
-                ;; function definitions.
-                :&key :&optional :&rest
+                ;; function and macro definitions.
+                :&key :&optional :&rest :&body
                 ;; comparison functions and related stuff.
                 :eq :eql :equal :equalp :null :listp :not
                 ;; error handling.
