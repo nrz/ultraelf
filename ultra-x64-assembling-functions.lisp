@@ -127,15 +127,15 @@
                    ((equal code-string "66")
                     ;; in SIMD instructions used as a an instruction modifier,
                     ;; encoded before possible REX.
-                    (list #x66))
+                    (emit-and-update-instruction-length (list #x66)))
                    ((equal code-string "f2")
                     ;; in SIMD instructions used as a an instruction modifier,
                     ;; encoded before possible REX.
-                    (list #xf2))
+                    (emit-and-update-instruction-length (list #xf2)))
                    ((equal code-string "f3")
                     ;; in SIMD instructions used as a an instruction modifier,
                     ;; encoded before possible REX.
-                    (list #xf3))
+                    (emit-and-update-instruction-length (list #xf3)))
                    ((equal code-string "hle")
                     ;; instruction takes XRELEASE with or without lock.
                     nil)
@@ -149,12 +149,12 @@
                     ;; force REP prefix.
                     ;; ultraELF assumes REP prefix as a part of instruction,
                     ;; so eg. `rep xsha1` produces f3 f3 0f a6 c8 .
-                    (list #xf3))
+                    (emit-and-update-instruction-length (list #xf3)))
                    ((equal code-string "mustrepne")
                     ;; force REPNZ prefix.
                     ;; ultraELF assumes REPNZ prefix as a part of instruction.
                     ;; currently `"mustrepne"` flag is not in use (NASM 2.11.06).
-                    (list #xf2))
+                    (emit-and-update-instruction-length (list #xf2)))
                    ((equal code-string "norexb")
                     ;; invalid with REX.B.
                     nil)
@@ -175,9 +175,9 @@
                     nil)
                    ((equal code-string "wait")
                     ;; FWAIT instruction or prefix.
-                    (list #x9b))
+                    (emit-and-update-instruction-length (list #x9b)))
                    ((equal code-string "o16")
-                    (list #x66))
+                    (emit-and-update-instruction-length (list #x66)))
                    ((equal code-string "o32")
                     (cond
                       ((eql n-operands 0)
@@ -186,13 +186,13 @@
                        (cond
                          (do-args-require-rex
                            (setf is-rex-already-encoded t)
-                           (emit-rex encoding-type n-operands :given-operands my-args :rex-r-value rex-r-value))
+                           (emit-and-update-instruction-length (emit-rex encoding-type n-operands :given-operands my-args :rex-r-value rex-r-value)))
                          (t nil)))
                       ((eql n-operands 2)
                        (cond
                          (do-args-require-rex
                            (setf is-rex-already-encoded t)
-                           (emit-rex encoding-type n-operands :given-operands my-args :rex-r-value rex-r-value))
+                           (emit-and-update-instruction-length (emit-rex encoding-type n-operands :given-operands my-args :rex-r-value rex-r-value)))
                          (t nil)))
                       ((eql n-operands 3)
                        (error "o32 encoding of 3 operands in not yet implemented"))
@@ -201,13 +201,13 @@
                     (cond
                       ((eql n-operands 0)
                        (setf is-rex-already-encoded t)
-                       (emit-rex encoding-type n-operands :given-operands my-args :rex-w-value 1 :rex-r-value rex-r-value)) ; 64-bit operand size!
+                       (emit-and-update-instruction-length (emit-rex encoding-type n-operands :given-operands my-args :rex-w-value 1 :rex-r-value rex-r-value))) ; 64-bit operand size!
                       ((eql n-operands 1)
                        (setf is-rex-already-encoded t)
-                       (emit-rex encoding-type n-operands :given-operands my-args :rex-w-value 1 :rex-r-value rex-r-value)) ; 64-bit operand size!
+                       (emit-and-update-instruction-length (emit-rex encoding-type n-operands :given-operands my-args :rex-w-value 1 :rex-r-value rex-r-value))) ; 64-bit operand size!
                       ((eql n-operands 2)
                        (setf is-rex-already-encoded t)
-                       (emit-rex encoding-type n-operands :given-operands my-args :rex-w-value 1 :rex-r-value rex-r-value)) ; 64-bit operand size!
+                       (emit-and-update-instruction-length (emit-rex encoding-type n-operands :given-operands my-args :rex-w-value 1 :rex-r-value rex-r-value))) ; 64-bit operand size!
                       ((eql n-operands 3)
                        (error "o64 encoding of 3 operands in not yet implemented"))
                       (t (error "over 3 operands is an error"))))
@@ -223,7 +223,7 @@
                            ;; and REX.W is encoded this way:
                            ;; 0 (default operand size) or 1 (64-bit operand size).
                            ;; 64-bit operand size is the default, so it's possible to encode 1 bit of information!!!
-                           (emit-rex encoding-type n-operands :given-operands my-args :rex-w-value rex-w-value :rex-r-value rex-r-value))
+                           (emit-and-update-instruction-length (emit-rex encoding-type n-operands :given-operands my-args :rex-w-value rex-w-value :rex-r-value rex-r-value)))
                          (t nil)))
                       ((eql n-operands 2)
                        (error "o64nw encoding of 2 operands in not yet implemented"))
@@ -239,55 +239,55 @@
                                   (setf is-rex-already-encoded t)
                                   (cond
                                     ((eql n-operands 1)
-                                     (emit-rex encoding-type n-operands :given-operands my-args :rex-r-value rex-r-value))
+                                     (emit-and-update-instruction-length (emit-rex encoding-type n-operands :given-operands my-args :rex-r-value rex-r-value)))
                                     ((eql n-operands 2)
-                                     (emit-rex encoding-type n-operands :given-operands my-args :rex-r-value rex-r-value)) ; TODO: check if REX.W be used to encode data here!
+                                     (emit-and-update-instruction-length (emit-rex encoding-type n-operands :given-operands my-args :rex-r-value rex-r-value))) ; TODO: check if REX.W be used to encode data here!
                                     (t (error "encoding not yet implemented")))))
                               (cond ((equal code-string "/r")
                                      (cond
                                        ((equal encoding-type "[mr:")
                                         ;; ok, arg1 goes to r/m field and arg2 goes to reg field.
-                                        (emit-modrm (modrm-mod arg1)
-                                                    (modrm-reg arg2)
-                                                    (modrm-r/m arg1)))
+                                        (emit-and-update-instruction-length (emit-modrm (modrm-mod arg1)
+                                                                                        (modrm-reg arg2)
+                                                                                        (modrm-r/m arg1))))
                                        ((equal encoding-type "[rm:")
                                         ;; ok, arg1 goes to reg field and arg2 goes to r/m field.
-                                        (emit-modrm (modrm-mod arg2)
-                                                    (modrm-reg arg1)
-                                                    (modrm-r/m arg2)))
+                                        (emit-and-update-instruction-length (emit-modrm (modrm-mod arg2)
+                                                                                        (modrm-reg arg1)
+                                                                                        (modrm-r/m arg2))))
                                        (t (error "encoding not yet implemented"))))
                                     ((equal code-string "/0")
-                                     (emit-modrm (modrm-mod arg1)
-                                                 0 ; extension encoded in reg field.
-                                                 (modrm-r/m arg1)))
+                                     (emit-and-update-instruction-length (emit-modrm (modrm-mod arg1)
+                                                                                     0 ; extension encoded in reg field.
+                                                                                     (modrm-r/m arg1))))
                                     ((equal code-string "/1")
-                                     (emit-modrm (modrm-mod arg1)
-                                                 1 ; extension encoded in reg field.
-                                                 (modrm-r/m arg1)))
+                                     (emit-and-update-instruction-length (emit-modrm (modrm-mod arg1)
+                                                                                     1 ; extension encoded in reg field.
+                                                                                     (modrm-r/m arg1))))
                                     ((equal code-string "/2")
-                                     (emit-modrm (modrm-mod arg1)
-                                                 2 ; extension encoded in reg field.
-                                                 (modrm-r/m arg1)))
+                                     (emit-and-update-instruction-length (emit-modrm (modrm-mod arg1)
+                                                                                     2 ; extension encoded in reg field.
+                                                                                     (modrm-r/m arg1))))
                                     ((equal code-string "/3")
-                                     (emit-modrm (modrm-mod arg1)
-                                                 3 ; extension encoded in reg field.
-                                                 (modrm-r/m arg1)))
+                                     (emit-and-update-instruction-length (emit-modrm (modrm-mod arg1)
+                                                                                     3 ; extension encoded in reg field.
+                                                                                     (modrm-r/m arg1))))
                                     ((equal code-string "/4")
-                                     (emit-modrm (modrm-mod arg1)
-                                                 4 ; extension encoded in reg field.
-                                                 (modrm-r/m arg1)))
+                                     (emit-and-update-instruction-length (emit-modrm (modrm-mod arg1)
+                                                                                     4 ; extension encoded in reg field.
+                                                                                     (modrm-r/m arg1))))
                                     ((equal code-string "/5")
-                                     (emit-modrm (modrm-mod arg1)
-                                                 5 ; extension encoded in reg field.
-                                                 (modrm-r/m arg1)))
+                                     (emit-and-update-instruction-length (emit-modrm (modrm-mod arg1)
+                                                                                     5 ; extension encoded in reg field.
+                                                                                     (modrm-r/m arg1))))
                                     ((equal code-string "/6")
-                                     (emit-modrm (modrm-mod arg1)
-                                                 6 ; extension encoded in reg field.
-                                                 (modrm-r/m arg1)))
+                                     (emit-and-update-instruction-length (emit-modrm (modrm-mod arg1)
+                                                                                     6 ; extension encoded in reg field.
+                                                                                     (modrm-r/m arg1))))
                                     ((equal code-string "/7")
-                                     (emit-modrm (modrm-mod arg1)
-                                                 7 ; extension encoded in reg field.
-                                                 (modrm-r/m arg1)))
+                                     (emit-and-update-instruction-length (emit-modrm (modrm-mod arg1)
+                                                                                     7 ; extension encoded in reg field.
+                                                                                     (modrm-r/m arg1))))
                                     ;; register-only encodings.
                                     ;; there are currently 18 encodings of this type in use.
                                     ;; to check `insns.dat` for new encodings of this type:
@@ -295,7 +295,7 @@
                                     ((and
                                        (eql (length code-string) 4) ; "eg. `"90+r"`.
                                        (equal (subseq code-string 2) "+r"))
-                                     (emit-xx-plus-r encoding-type given-operands code-string))
+                                     (emit-and-update-instruction-length (emit-xx-plus-r encoding-type given-operands code-string)))
                                     ((equal code-string "a16")
                                      nil)
                                     ((equal code-string "a32")
@@ -306,7 +306,7 @@
                                      nil)
                                     ((equal code-string "odf")
                                      nil)
-                                    (t (list (parse-integer code-string :radix 16))))))))))
+                                    (t (emit-and-update-instruction-length (list (parse-integer code-string :radix 16)))))))))))
 
 (defun emit-with-format-and-operands-x64 (code-format req-operands &key given-operands msg)
   "This function emits code (list of binary code bytes) for one x64 instruction variant."

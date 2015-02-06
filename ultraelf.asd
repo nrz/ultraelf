@@ -43,6 +43,7 @@
                (:file "ultra-x64")                              ; instructions and arguments available in x64 (64-bit flavor of x86) and few basic essentials.
                (:file "ultra-arm")                              ; instructions and arguments available in ARM and few basic essentials.
                (:file "ultra-compiling-macros")                 ; `defmacro compile-ultraelf` & `defmacro c-u`.
+               (:file "ultra-x64-assembling-macros")            ; `defmacro emit-and-update-instruction-length `.
                (:file "ultra-init")                             ; some `defparameter` variable definitions.
                (:file "ultra-sequence")                         ; sequence functions.
                (:file "ultra-string")                           ; string functions.
