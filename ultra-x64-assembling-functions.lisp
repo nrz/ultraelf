@@ -113,7 +113,8 @@
                    ((and (eql (length req-operands) 1)
                          (equal (first req-operands) "void"))
                     0)
-                   (t (length req-operands)))))
+                   (t (length req-operands))))
+     (instruction-length-in-bytes 0))
     (when
       (and do-args-require-rex (not do-args-work-with-rex))
       (error "impossible combination of given arguments: some need REX and some don't work with REX"))
