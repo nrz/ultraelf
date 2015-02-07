@@ -6,6 +6,7 @@
 (in-package :ultraelf)
 
 (defparameter *global-offset* 0)
+(defparameter $ 0)
 
 (defun create-syntax-tree (my-list)
   "This recursive function converts a string produced by transform-code-to-string into a syntax tree.
@@ -78,7 +79,8 @@
                                                                      collect (convert-string-to-symbol-if-symbol-exists arg))))))))))
     (when (boundp '*global-offset*)
       (progn
-        (incf *global-offset* (length binary-code))))
+        (incf *global-offset* (length binary-code))
+        (setf $ *global-offset*)))
     binary-code))
 
 (defun get-nth (n)
@@ -118,7 +120,8 @@
 
 (defun emit-binary-code (syntax-tree my-hash-table &key (skip-errors t))
   "This function produces a single list of binary code bytes."
-  (defparameter *global-offset* 0)
+  (setf *global-offset* 0)
+  (setf $ 0)
   (apply #'append (emit-binary-code-list syntax-tree my-hash-table :skip-errors skip-errors)))
 
 (defun emit-binary-code-and-print-hex (syntax-tree my-hash-table &key (skip-errors t))

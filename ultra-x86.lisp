@@ -9,7 +9,7 @@
   (:import-from
     :ultraelf
     ;; global variables.
-    :*global-offset*
+    :*global-offset* :$
     ;; printing functions.
     :print-hex
     ;; list-handling functions.

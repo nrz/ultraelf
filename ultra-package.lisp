@@ -11,7 +11,7 @@
   (:export
     ;; symbols imported by x86 common to x16, x32 and x64 begin here.
     ;; global variables.
-    :*global-offset*
+    :*global-offset* :$
     ;; printing functions.
     :print-hex
     ;; list-handling functions.
