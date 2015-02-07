@@ -31,8 +31,8 @@
      :reader is-reg-indirect
      :allocation :class
      :initform nil)
-   (is-address
-     :reader is-address
+   (is-immediate
+     :reader is-immediate
      :allocation :class
      :initform nil)
    (needs-rex
@@ -64,13 +64,13 @@
      :initform (error "name must be specified")
      :documentation "the unknown string must be given as a name")))
 
-(defclass address (argument)
+(defclass immediate (argument)
   ((name
      :initarg :name
      :accessor name
      :initform nil)
-   (is-address
-     :reader is-address
+   (is-immediate
+     :reader is-immediate
      :allocation :class
      :initform t)
    (allowed-targets

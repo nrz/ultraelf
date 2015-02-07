@@ -48,7 +48,7 @@
     :is-x86-reg
     :is-memory-addressing
     :is-reg-indirect
-    :is-address
+    :is-immediate
     :value
     :displacement-size
     :needs-sib

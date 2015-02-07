@@ -37,11 +37,22 @@
   "This function converts a string into a symbol, if such symbol exists.
    Otherwise this function converts the string into an instance of `unknown` class."
   (cond
+    ((numberp my-string)
+     ;; An immediate (a number), probably produced by `eval`.
+     (make-instance 'immediate :name (write-to-string my-string) :value my-string))
     ((equal my-string "$")
-     (make-instance 'address :name (write-to-string *global-offset*) :value *global-offset*))
+     ;; An immediate (current address).
+     (make-instance 'immediate :name (write-to-string *global-offset*) :value *global-offset*))
+    ((and
+       (equal (coerce (list (elt my-string  0)) 'string) "(")
+       (equal (coerce (list (elt my-string  (1- (length my-string )))) 'string) ")"))
+     ;; A string with a Lisp form to be evaluated.
+     (convert-string-to-symbol-if-symbol-exists (eval (read-from-string my-string))))
     ((boundp (intern (string-upcase my-string)))
+     ;; An existing symbol (such as a register).
      (symbol-value (intern (string-upcase my-string))))
-    (t (make-instance 'unknown :name my-string :value (parse-number my-string)))))
+    ;; Something else. For now, we'll assume that it's a number.
+    (t (make-instance 'immediate :name my-string :value (parse-number my-string)))))
 
 (defun emit-binary-code-for-one-instruction (syntax-list my-hash-table &key (emit-function-selector-function #'first) (skip-errors t))
   "This function converts a syntax list of one instruction to a list of binary code bytes,

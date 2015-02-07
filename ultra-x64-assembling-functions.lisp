@@ -303,7 +303,7 @@
                                      (equal (subseq code-string 2) "+r"))
                                    (emit-and-update-instruction-length (emit-xx-plus-r encoding-type given-operands code-string)))
                                   ((equal code-string "rel8")
-                                   (if (is-address arg1)
+                                   (if (is-immediate arg1)
                                      (let*
                                        ((current-address (+ *global-offset* instruction-length-in-bytes))
                                         (rel-address (- (value arg1) (1+ current-address))))
