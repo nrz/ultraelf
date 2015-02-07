@@ -145,30 +145,6 @@
 ;;         ...                                                                                               `needs-sib nil`, `needs-rex nil`, `works-with-rex` nil.
 ;;     4 ^ x86-reg (reg x86-addressing-form) ^ see above ^
 
-(defclass modrm-mod-b00 ()
-  ((modrm-mod
-     :reader modrm-mod
-     :allocation :class
-     :initform #b00)))
-
-(defclass modrm-mod-b01 ()
-  ((modrm-mod
-     :reader modrm-mod
-     :allocation :class
-     :initform #b01)))
-
-(defclass modrm-mod-b10 ()
-  ((modrm-mod
-     :reader modrm-mod
-     :allocation :class
-     :initform #b10)))
-
-(defclass modrm-mod-b11 ()
-  ((modrm-mod
-     :reader modrm-mod
-     :allocation :class
-     :initform #b11)))
-
 (defclass needs-sib ()
   ((needs-sib
      :reader needs-sib
