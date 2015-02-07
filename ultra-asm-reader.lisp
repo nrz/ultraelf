@@ -100,8 +100,17 @@
                   ;; if yes, don't output anything, begin comment.
                   ((equal my-char ";")
                    (setf current-phase "inside-comment"))
-                  ;; are we inside memory address syntax?
-                  ;; if yes, don't output anything.
+                  ;; are we inside a Lisp form?
+                  ((equal current-phase "inside-lisp-form")
+                   ;; are we inside memory address syntax?
+                   (cond
+                     ;; is this closing square bracket?
+                     ;; if yes, output )
+                     ((equal my-char ")")
+                      (setf current-phase "closing-parenthesis")
+                      (setf my-string (concatenate 'string my-string my-char)))
+                     ;; otherwise output the character.
+                     (t (setf my-string (concatenate 'string my-string my-char)))))
                   ((equal current-phase "inside-memory-address-syntax")
                    (cond
                      ;; is this a space inside memory address syntax?
@@ -134,6 +143,11 @@
                      (or (equal (get-last-character-string my-string) " ")
                          (equal (get-last-character-string my-string) ",")))
                    (cond
+                     ((equal my-char "(")
+                      ;; is this a Lisp form (with parentesis)?
+                      ;; if yes, mark we're inside Lisp form, output " and current character.
+                      (setf current-phase "inside-lisp-form")
+                      (setf my-string (concatenate 'string my-string "\"" my-char)))
                      ;; is this memory address syntax (with square brackets)?
                      ;; if yes, mark we're inside memory address syntax, output " and current character.
                      ((equal my-char "[")
