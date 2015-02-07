@@ -36,7 +36,8 @@
      (current-phase "beginning-of-line")
      (is-hash-sign-read nil)
      (my-string "(list ")
-     (lisp-code-string ""))
+     (lisp-code-string "")
+     (n-lisp-forms 0))
     ;; loop through stream.
     (loop for my-char = (coerce (list (read-char stream t nil t)) 'string)
           do (cond
@@ -104,13 +105,18 @@
                   ((equal current-phase "inside-lisp-form")
                    ;; are we inside memory address syntax?
                    (cond
+                     ;; is this opening square bracket?
+                     ((equal my-char "(")
+                      ;; if yes, increment parenthesis count and output (
+                      (incf n-lisp-forms))
                      ;; is this closing square bracket?
                      ;; if yes, output )
-                     ((equal my-char ")")
-                      (setf current-phase "closing-parenthesis")
-                      (setf my-string (concatenate 'string my-string my-char)))
-                     ;; otherwise output the character.
-                     (t (setf my-string (concatenate 'string my-string my-char)))))
+                     ((and
+                        (equal my-char ")")
+                        (eql (decf n-lisp-forms) 0))
+                      (setf current-phase "closing-parenthesis")))
+                   ;; within Lisp form, output the character in any case.
+                   (setf my-string (concatenate 'string my-string my-char)))
                   ((equal current-phase "inside-memory-address-syntax")
                    (cond
                      ;; is this a space inside memory address syntax?
@@ -147,6 +153,7 @@
                       ;; is this a Lisp form (with parentesis)?
                       ;; if yes, mark we're inside Lisp form, output " and current character.
                       (setf current-phase "inside-lisp-form")
+                      (setf n-lisp-forms 1)
                       (setf my-string (concatenate 'string my-string "\"" my-char)))
                      ;; is this memory address syntax (with square brackets)?
                      ;; if yes, mark we're inside memory address syntax, output " and current character.
