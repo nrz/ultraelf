@@ -10,11 +10,9 @@
                 ;; t.
                 :t
                 ;; Lisp basics.
-                :cons :eval :lambda :read :progn :let :let* :macrolet :symbol-macrolet
+                :cons :eval :lambda :read :read-from-string :progn :let :let* :macrolet :symbol-macrolet
                 ;; logical operators.
                 :and :or :not
-                ;; comparisons.
-                :< :> :<= :>=
                 ;; mathematics.
                 :+ :- :* :/ :1+ :1- :incf :decf :ash :logand :logior :logxor :lognot
                 ;; code flow macros.
@@ -26,7 +24,7 @@
                 ;; function and macro definitions.
                 :&key :&optional :&rest :&body
                 ;; comparison functions and related stuff.
-                :eq :eql :equal :equalp :null :listp :not
+                :< :> :<= :>= :eq :eql :equal :equalp :null :listp :not :numberp
                 ;; error handling.
                 :error
                 ;; printing.
