@@ -36,6 +36,8 @@
   :author "Antti Nuortimo"
   :components ((:file "ultra-essentials")                       ; a package containing only some absolutely basic functions from `:cl`, to `:use` in others.
                (:file "ultra-package")                          ; functions, variables and classes not going into one of the architecture-specific packages go here.
+               (:file "ultra-big-endian")                       ; functions for big-endian architectures.
+               (:file "ultra-little-endian")                    ; functions for little-endian architectures.
                (:file "ultra-x86")                              ; instructions and arguments available to all x86 flavors (x16, x32, and x64).
                (:file "ultra-x86-modern")                       ; instructions and arguments available to both x32 and x64 flavors.
                (:file "ultra-x16")                              ; instructions and arguments available in x16 (16-bit flavor of x86) and few basic essentials.
@@ -63,6 +65,8 @@
                (:file "ultra-create-addressing-form-instances") ; create instance for each addressing form, including each register.
                (:file "ultra-elf-classes")                      ; ELF classes.
                (:file "ultra-asm-reader")                       ; Lisp assembly reader.
+               (:file "ultra-big-endian-emit-functions")        ; big-endian emit functions.
+               (:file "ultra-little-endian-emit-functions")     ; little-endian emit functions.
                (:file "ultra-general-emit-functions")           ; general emit functions, needed for assembling and pseudo-ops.
                (:file "ultra-asm-pseudo-ops")                   ; asm pseudo-ops.
                (:file "ultra-sib")                              ; x86 SIB byte scale values hash table.

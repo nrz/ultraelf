@@ -6,7 +6,7 @@
 (in-package :cl-user)
 
 (defpackage :x32
-  (:use :x86-modern :essentials)
+  (:use :x86-modern :little-endian :essentials)
   (:import-from
     :cl
     :nil)

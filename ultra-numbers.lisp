@@ -10,26 +10,20 @@
     (make-instance 'immediate :name (write-to-string my-number) :value my-number)
     my-number))
 
-(defun emit-byte (arg1)
+(defun emit-little-endian-number-in-n-bytes (my-number n-bytes)
   (let
-    ((immediate (convert-number-to-immediate arg1)))
-    (list (cond
-            ((fits-in-unsigned-byte immediate)
-             (value immediate))
-            ((fits-in-signed-byte immediate)
-             (+ (value immediate) 256))
-            (t (error "value does not fit in a byte"))))))
-
-(defun emit-little-endian-word (arg1)
-  (let
-    ((immediate (convert-number-to-immediate arg1)))
+    ((current-byte 0))
+    (if (not (numberp my-number))
+      (setf my-number (value my-number)))
     (cond
-      ((fits-in-unsigned-word immediate)
-       (list
-         (logand (value immediate) 255)
-         (ash (value immediate) -8)))
-      ((fits-in-signed-word immediate)
-       (list
-         (logand (+ (value immediate) 65536) 255)
-         (ash (+ (value immediate) 65536) -8)))
-      (t (error "value does not fit in a word")))))
+      ((>= my-number (expt 2 (* 8 n-bytes)))
+       (error "the value is too positive for given number of bytes"))
+      ((< my-number (* -1 (expt 2 (1- (* 8 n-bytes)))))
+       (error "the value is too negative for given number of bytes"))
+      (t (if (< my-number 0)
+           ;; convert negative values to positive values.
+           (incf my-number (expt 2 (* 8 n-bytes))))
+         (loop for i below n-bytes collect
+               (progn (setf current-byte (logand my-number 255))
+                      (setf my-number (ash my-number -8))
+                      current-byte))))))

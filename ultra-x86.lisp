@@ -19,8 +19,7 @@
     :emit-hex
     :emit-modrm
     :emit-modrm-byte
-    :emit-byte
-    :emit-little-endian-word
+    :emit-little-endian-number-in-n-bytes
     :create-syntax-tree
     :emit-binary-code-for-one-instruction
     :emit-binary-code-list
