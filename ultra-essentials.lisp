@@ -14,7 +14,7 @@
                 ;; logical operators.
                 :and :or :not
                 ;; mathematics.
-                :+ :- :* :/ :1+ :1- :incf :decf :ash :logand :logior :logxor :lognot
+                :+ :- :* :/ :mod :1+ :1- :incf :decf :ash :logand :logior :logxor :lognot
                 ;; code flow macros.
                 :if :cond :loop :when :unless
                 ;; define instructions.
