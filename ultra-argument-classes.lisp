@@ -88,5 +88,37 @@
 (defgeneric my-string (argument)
   (:documentation "string that is converted to this instance."))
 
+(defgeneric fits-in-unsigned-byte (immediate)
+  (:documentation "is this value in the range [0,255]?"))
+
+(defgeneric fits-in-unsigned-word (immediate)
+  (:documentation "is this value in the range [0,65535"))
+
+(defgeneric fits-in-signed-byte (immediate)
+  (:documentation "is this value in the range [-128,127]?"))
+
+(defgeneric fits-in-signed-word (immediate)
+  (:documentation "is this value in the range [-32768,32767"))
+
 (defmethod my-string ((argument argument))
   (slot-value argument 'name))
+
+(defmethod fits-in-unsigned-byte ((immediate immediate))
+  (and
+    (>= (slot-value immediate 'value) 0)
+    (<= (slot-value immediate 'value) 255)))
+
+(defmethod fits-in-unsigned-word ((immediate immediate))
+  (and
+    (>= (slot-value immediate 'value) 0)
+    (<= (slot-value immediate 'value) 65535)))
+
+(defmethod fits-in-signed-byte ((immediate immediate))
+  (and
+    (>= (slot-value immediate 'value) -128)
+    (<= (slot-value immediate 'value) 127)))
+
+(defmethod fits-in-signed-word ((immediate immediate))
+  (and
+    (>= (slot-value immediate 'value) -32768)
+    (<= (slot-value immediate 'value) 32767)))

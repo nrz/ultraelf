@@ -21,6 +21,8 @@
     :emit-hex
     :emit-modrm
     :emit-modrm-byte
+    :emit-byte
+    :emit-little-endian-word
     :create-syntax-tree
     :emit-binary-code-for-one-instruction
     :emit-binary-code-list
@@ -50,6 +52,10 @@
     :is-reg-indirect
     :is-immediate
     :value
+    :fits-in-unsigned-byte
+    :fits-in-unsigned-word
+    :fits-in-signed-byte
+    :fits-in-signed-word
     :displacement-size
     :needs-sib
     :r/m

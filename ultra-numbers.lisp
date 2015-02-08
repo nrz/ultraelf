@@ -5,14 +5,31 @@
 
 (in-package :ultraelf)
 
-(defun convert-negative-byte-to-positive (my-byte)
-  (cond
-    ((not (integerp my-byte))
-     (error "binary code bytes must be integers"))
-    ((< my-byte -128)
-     (error "binary code values must not be less than -128"))
-    ((> my-byte 127)
-     (error "binary code values must not be greater than 127"))
-    ((< my-byte 0)
-     (+ my-byte 256))
-    (t my-byte)))
+(defun convert-number-to-immediate (my-number)
+  (if (numberp my-number)
+    (make-instance 'immediate :name (write-to-string my-number) :value my-number)
+    my-number))
+
+(defun emit-byte (arg1)
+  (let
+    ((immediate (convert-number-to-immediate arg1)))
+    (list (cond
+            ((fits-in-unsigned-byte immediate)
+             (value immediate))
+            ((fits-in-signed-byte immediate)
+             (+ (value immediate) 256))
+            (t (error "value does not fit in a byte"))))))
+
+(defun emit-little-endian-word (arg1)
+  (let
+    ((immediate (convert-number-to-immediate arg1)))
+    (cond
+      ((fits-in-unsigned-word immediate)
+       (list
+         (logand (value immediate) 255)
+         (ash (value immediate) -8)))
+      ((fits-in-signed-word immediate)
+       (list
+         (logand (+ (value immediate) 65536) 255)
+         (ash (+ (value immediate) 65536) -8)))
+      (t (error "value does not fit in a word")))))

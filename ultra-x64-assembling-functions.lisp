@@ -111,6 +111,8 @@
         (my-args (get-list given-operands))
         (arg1 (first my-args))  ; nil if list is too short.
         (arg2 (second my-args)) ; nil if list is too short.
+        (arg3 (third my-args))  ; nil if list is too short.
+        (arg4 (fourth my-args)) ; nil if list is too short.
         (do-args-require-rex (some #'needs-rex my-args))
         (do-args-work-with-rex (every #'works-with-rex my-args))
         (is-rex-already-encoded nil)
@@ -302,6 +304,32 @@
                                      (eql (length code-string) 4) ; "eg. `"90+r"`.
                                      (equal (subseq code-string 2) "+r"))
                                    (emit-and-update-instruction-length (emit-xx-plus-r encoding-type given-operands code-string)))
+                                  ((equal code-string "ib")
+                                   (cond
+                                     ((eql n-operands 0)
+                                      (error "ib encoding for 0 operands is an error"))
+                                     ((eql n-operands 1)
+                                      (error "ib encoding for 1 operands not yet implemented"))
+                                     ((eql n-operands 2)
+                                      (emit-and-update-instruction-length (emit-byte arg2)))
+                                     ((eql n-operands 3)
+                                      (emit-and-update-instruction-length (emit-byte arg3)))
+                                     ((eql n-operands 4)
+                                      (emit-and-update-instruction-length (emit-byte arg4)))
+                                     (t (error "over 4 operands is an error"))))
+                                  ((equal code-string "iw")
+                                   (cond
+                                     ((eql n-operands 0)
+                                      (error "ib encoding for 0 operands is an error"))
+                                     ((eql n-operands 1)
+                                      (error "ib encoding for 1 operands not yet implemented"))
+                                     ((eql n-operands 2)
+                                      (emit-and-update-instruction-length (emit-little-endian-word arg2)))
+                                     ((eql n-operands 3)
+                                      (emit-and-update-instruction-length (emit-little-endian-word arg3)))
+                                     ((eql n-operands 4)
+                                      (emit-and-update-instruction-length (emit-little-endian-word arg4)))
+                                     (t (error "over 4 operands is an error"))))
                                   ((equal code-string "rel8")
                                    (if (is-immediate arg1)
                                      (let*
@@ -347,6 +375,9 @@
        (handle-nasm-code-format-x64 code-format my-operands :msg msg))
       ((equal (first code-format) "[--:")
        ;; The operands and encoding of this variant are fixed.
+       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
+      ((equal (first code-format) "[-i:")
+       ;; One fixed operand and one immediate operand.
        (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
       ((equal (first code-format) "[-r:")
        ;; One fixed operand and one register operand.
