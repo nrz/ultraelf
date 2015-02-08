@@ -45,6 +45,7 @@
                 :list
                 :nth :first :second :third :fourth :fifth :sixth :seventh :eighth :ninth :tenth :rest
                 :push :pushnew
+                :reverse :nreverse
                 ;; numbers.
                 :parse-integer
                 ;; CLOS.
