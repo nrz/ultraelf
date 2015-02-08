@@ -157,7 +157,6 @@ for my $i (0 .. $#mnemonic_array)
         $flags);
 }
 
-
 @sorted_keys_array = sort keys %instruction_variants_hash_table;
 
 foreach my $mnemonic (@sorted_keys_array)
