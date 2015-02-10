@@ -7,3 +7,6 @@
 
 (defun emit-number-in-n-bytes (my-number n-bytes)
   (ultraelf:emit-little-endian-number-in-n-bytes my-number n-bytes))
+
+(defun emit-sign-extended-dword-for-n-bytes (my-number n-bytes)
+  (ultraelf:emit-little-endian-sign-extended-dword-for-n-bytes my-number n-bytes))

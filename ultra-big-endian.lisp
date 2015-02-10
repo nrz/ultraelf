@@ -8,4 +8,5 @@
 (defpackage :big-endian
   (:use :essentials)
   (:export
-    :emit-number-in-n-bytes))
+    :emit-number-in-n-bytes
+    :emit-sign-extended-dword-for-n-bytes))
