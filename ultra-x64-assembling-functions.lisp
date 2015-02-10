@@ -85,6 +85,11 @@
                          (rex-r arg2)   ; number of arguments should be checked already.
                          0              ; extension of the SIB index field, this should be
                          (rex-b arg2))) ; checked when implementing SIB!
+         ((equal encoding-type "[mi:")
+          (emit-rex-byte rex-w-value    ; operand size.
+                         (rex-r arg1)   ; number of arguments should be checked already.
+                         0              ; extension of the SIB index field, this should be
+                         (rex-b arg1))) ; checked when implementing SIB!
          ((equal encoding-type "[mr:")
           (emit-rex-byte rex-w-value    ; operand size.
                          (rex-r arg2)   ; rex-r augments reg field, so it's from arg2 in `[mr:`.
@@ -347,6 +352,19 @@
                                      ((eql n-operands 4)
                                       (emit-and-update-instruction-length (emit-number-in-n-bytes arg4 2)))
                                      (t (error "over 4 operands is an error"))))
+                                  ((equal code-string "id")
+                                   (cond
+                                     ((eql n-operands 0)
+                                      (error "iw encoding for 0 operands is an error"))
+                                     ((eql n-operands 1)
+                                      (error "iw encoding for 1 operands not yet implemented"))
+                                     ((eql n-operands 2)
+                                      (emit-and-update-instruction-length (emit-number-in-n-bytes arg2 4)))
+                                     ((eql n-operands 3)
+                                      (emit-and-update-instruction-length (emit-number-in-n-bytes arg3 4)))
+                                     ((eql n-operands 4)
+                                      (emit-and-update-instruction-length (emit-number-in-n-bytes arg4 4)))
+                                     (t (error "over 4 operands is an error"))))
                                   ((equal code-string "rel8")
                                    (if (is-immediate arg1)
                                      (let*
@@ -417,6 +435,10 @@
        (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
       ((equal (first code-format) "[r-:")
        ;; One register operand and one fixed operand.
+       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
+      ((equal (first code-format) "[mi:")
+       ;; One memory operand and one immediate operand.
+       ;; The operands are encoded in corresponding ModRM fields.
        (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
       ((equal (first code-format) "[mr:")
        ;; One memory operand and one register operand.
