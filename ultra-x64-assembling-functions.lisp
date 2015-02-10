@@ -19,15 +19,14 @@
   "This function assembles x86-64 (x64) code."
   (assemble code *x64-instruction-variants-hash-table* :skip-errors skip-errors))
 
-(defun assemble-x64-and-print-hex (code &key (skip-errors t) (zero-global-offset t))
+(defun assemble-x64-and-print-hex (code &key (skip-errors t))
   "This function assembles x86-64 (x64) code and prints in a hexadecimal string.
    Please note that by default `*global-offset*` and `$` are zeroed after each instruction variant."
   (print-hex
     (assemble
       code
       *x64-instruction-variants-hash-table*
-      :skip-errors skip-errors
-      :zero-global-offset :zero-global-offset)))
+      :skip-errors skip-errors)))
 
 (defun assemble-alternatives-x64 (code &key (skip-errors t) (zero-global-offset t))
   "This function assembles x86-64 (x64) code, all alternatives.
