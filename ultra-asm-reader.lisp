@@ -108,15 +108,23 @@
                      ;; is this opening square bracket?
                      ((equal my-char "(")
                       ;; if yes, increment parenthesis count and output (
-                      (incf n-lisp-forms))
+                      (incf n-lisp-forms)
+                      (setf my-string (concatenate 'string my-string my-char)))
                      ;; is this closing square bracket?
                      ;; if yes, output )
-                     ((and
-                        (equal my-char ")")
-                        (eql (decf n-lisp-forms) 0))
-                      (setf current-phase "closing-parenthesis")))
-                   ;; within Lisp form, output the character in any case.
-                   (setf my-string (concatenate 'string my-string my-char)))
+                     ((equal my-char ")")
+                      (if (eql (decf n-lisp-forms) 0)
+                        (setf current-phase "closing-parenthesis"))
+                      (setf my-string (concatenate 'string my-string my-char)))
+                     ;; is character newline?
+                     ((equal my-char (coerce (list #\Newline) 'string))
+                      (if
+                        ;; was last character not space?
+                        (not (equal (get-last-character-string my-string) " "))
+                        ;; if last character was not space, output space.
+                        (setf my-string (concatenate 'string my-string " "))))
+                     ;; otherwise output the character.
+                     (t (setf my-string (concatenate 'string my-string my-char)))))
                   ((equal current-phase "inside-memory-address-syntax")
                    (cond
                      ;; is this a space inside memory address syntax?
