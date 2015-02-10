@@ -73,7 +73,7 @@
                                                                            instruction-instance
                                                                            ;; ... convert each argument string to a symbol,
                                                                            ;; if such a symbol exists, and give the list
-                                                                           ;; of these symbols as argument to the `emit` method.
+                                                                           ;; of these symbols as an argument to the `emit` method.
                                                                            (loop for arg in (rest syntax-list)
                                                                                  collect (convert-string-to-symbol-if-symbol-exists arg)))
                                                                   ;; if `common-lisp:simple-error` is produced, return `nil`.
@@ -85,7 +85,7 @@
                                                                instruction-instance
                                                                ;; ... convert each argument string to a symbol,
                                                                ;; if such a symbol exists, and give the list
-                                                               ;; of these symbols as argument to the `emit` method.
+                                                               ;; of these symbols as an argument to the `emit` method.
                                                                (loop for arg in (rest syntax-list)
                                                                      collect (convert-string-to-symbol-if-symbol-exists arg))))))))))
     (when (boundp '*global-offset*)
