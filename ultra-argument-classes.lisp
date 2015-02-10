@@ -76,6 +76,7 @@
    (allowed-targets
      :reader allowed-targets
      :initform (list "imm" "imm|short" "imm|near" "imm|far"
+                     "imm8"
                      "imm16" "imm16|short" "imm16|near" "imm16|far"
                      "imm32" "imm32|short" "imm32|near" "imm32|far"
                      "imm64" "imm64|short" "imm64|near" "imm64|far"
