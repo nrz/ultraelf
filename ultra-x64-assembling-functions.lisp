@@ -361,9 +361,9 @@
                                   ((equal code-string "id")
                                    (cond
                                      ((eql n-operands 0)
-                                      (error "iw encoding for 0 operands is an error"))
+                                      (error "id encoding for 0 operands is an error"))
                                      ((eql n-operands 1)
-                                      (error "iw encoding for 1 operands not yet implemented"))
+                                      (error "id encoding for 1 operands not yet implemented"))
                                      ((eql n-operands 2)
                                       (emit-and-update-instruction-length (emit-number-in-n-bytes arg2 4)))
                                      ((eql n-operands 3)
@@ -374,9 +374,9 @@
                                   ((equal code-string "iq")
                                    (cond
                                      ((eql n-operands 0)
-                                      (error "iw encoding for 0 operands is an error"))
+                                      (error "iq encoding for 0 operands is an error"))
                                      ((eql n-operands 1)
-                                      (error "iw encoding for 1 operands not yet implemented"))
+                                      (error "iq encoding for 1 operands not yet implemented"))
                                      ((eql n-operands 2)
                                       (emit-and-update-instruction-length (emit-number-in-n-bytes arg2 8)))
                                      ((eql n-operands 3)
