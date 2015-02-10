@@ -43,7 +43,7 @@
                 :mapcan :mapcar
                 :append :concatenate :nconc
                 :list
-                :nth :first :second :third :fourth :fifth :sixth :seventh :eighth :ninth :tenth :rest
+                :elt :nth :first :second :third :fourth :fifth :sixth :seventh :eighth :ninth :tenth :rest
                 :push :pushnew
                 :reverse :nreverse
                 ;; numbers.
