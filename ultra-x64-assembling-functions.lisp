@@ -19,17 +19,34 @@
   "This function assembles x86-64 (x64) code."
   (assemble code *x64-instruction-variants-hash-table* :skip-errors skip-errors))
 
-(defun assemble-x64-and-print-hex (code &key (skip-errors t))
-  "This function assembles x86-64 (x64) code and prints in a hexadecimal string."
-  (print-hex (assemble code *x64-instruction-variants-hash-table* :skip-errors skip-errors)))
+(defun assemble-x64-and-print-hex (code &key (skip-errors t) (zero-global-offset t))
+  "This function assembles x86-64 (x64) code and prints in a hexadecimal string.
+   Please note that by default `*global-offset*` and `$` are zeroed after each instruction variant."
+  (print-hex
+    (assemble
+      code
+      *x64-instruction-variants-hash-table*
+      :skip-errors skip-errors
+      :zero-global-offset :zero-global-offset)))
 
-(defun assemble-alternatives-x64 (code &key (skip-errors t))
-  "This function assembles x86-64 (x64) code, all alternatives."
-  (assemble-alternatives code *x64-instruction-variants-hash-table* :skip-errors skip-errors))
+(defun assemble-alternatives-x64 (code &key (skip-errors t) (zero-global-offset t))
+  "This function assembles x86-64 (x64) code, all alternatives.
+   Please note that by default `*global-offset*` and `$` are zeroed after each instruction variant."
+  (assemble-alternatives
+    code
+    *x64-instruction-variants-hash-table*
+    :skip-errors skip-errors
+    :zero-global-offset zero-global-offset))
 
-(defun assemble-alternatives-x64-and-print-hex (code &key (skip-errors t))
-  "This function assembles x86-64 (x64) code, all alternatives, and prints in a hexadecimal string."
-  (print-hex (assemble-alternatives code *x64-instruction-variants-hash-table* :skip-errors skip-errors)))
+(defun assemble-alternatives-x64-and-print-hex (code &key (skip-errors t) (zero-global-offset t))
+  "This function assembles x86-64 (x64) code, all alternatives, and prints in a hexadecimal string.
+   Please note that by default `*global-offset*` and `$` are zeroed after each instruction variant."
+  (print-hex
+    (assemble-alternatives
+      code
+      *x64-instruction-variants-hash-table*
+      :skip-errors skip-errors
+      :zero-global-offset zero-global-offset)))
 
 (defun emit-rex (encoding-type n-operands &key given-operands (rex-w-value 0) (rex-r-value 0) (rex-x-value 0) (rex-b-value 0))
   "This function emits REX according to encoding type and the operands.

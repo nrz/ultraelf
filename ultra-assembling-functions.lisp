@@ -98,20 +98,25 @@
   "This function returns a function that gets the nth value of a list."
   #'(lambda (my-list) (nth n my-list)))
 
-(defun get-all-encodings-for-syntax-tree (syntax-tree my-hash-table &key (skip-errors t))
+(defun get-all-encodings-for-syntax-tree (syntax-tree my-hash-table &key (skip-errors t) (zero-global-offset t))
   "This function converts syntax tree to a list of lists of lists of binary code bytes,
    the encodings of each instruction on their own list,
-   the bytes of each encoding on their own list."
+   the bytes of each encoding on their own list.
+   Please note that by default `*global-offset*` and `$` are zeroed after each instruction variant."
   (let
     ((syntax-list-of-lists (eval syntax-tree)))
     (loop for syntax-list in syntax-list-of-lists
           collect (remove nil
                           (loop for emit-function-i below (length (gethash (first syntax-list) my-hash-table))
-                                collect (emit-binary-code-for-one-instruction
-                                          syntax-list
-                                          my-hash-table
-                                          :emit-function-selector-function (get-nth emit-function-i)
-                                          :skip-errors skip-errors))))))
+                                collect (progn
+                                          (cond (zero-global-offset
+                                                  (setf *global-offset* 0)
+                                                  (setf $ 0)))
+                                          (emit-binary-code-for-one-instruction
+                                            syntax-list
+                                            my-hash-table
+                                            :emit-function-selector-function (get-nth emit-function-i)
+                                            :skip-errors skip-errors)))))))
 
 (defun get-all-encodings-for-syntax-tree-and-print-hex (syntax-tree my-hash-table &key (skip-errors t))
   "This function converts syntax tree to a list of strings of hexadecimal bytes."
@@ -147,16 +152,27 @@
   "This function assembles code and prints in a hexadecimal string."
   (print-hex (assemble code my-hash-table :skip-errors skip-errors)))
 
-(defun assemble-alternatives (code my-hash-table &key (skip-errors t))
+(defun assemble-alternatives (code my-hash-table &key (skip-errors t) (zero-global-offset t))
   "This function assembles code, all alternatives.
-   Duplicates are removed."
+   Duplicates are removed.
+   Please note that by default `*global-offset*` and `$` are zeroed after each instruction variant."
   (mapcar #'(lambda (x)
               (remove-duplicates x :test #'equal))
-          (get-all-encodings-for-syntax-tree (create-syntax-tree code) my-hash-table :skip-errors skip-errors)))
+          (get-all-encodings-for-syntax-tree
+            (create-syntax-tree code)
+            my-hash-table
+            :skip-errors skip-errors
+            :zero-global-offset zero-global-offset)))
 
-(defun assemble-alternatives-and-print-hex (code my-hash-table &key (skip-errors t))
-  "This function assembles code, all alternatives, and prints in a hexadecimal string."
-  (print-hex (get-all-encodings-for-syntax-tree (create-syntax-tree code) my-hash-table :skip-errors skip-errors)))
+(defun assemble-alternatives-and-print-hex (code my-hash-table &key (skip-errors t) (zero-global-offset t))
+  "This function assembles code, all alternatives, and prints in a hexadecimal string.
+   Please note that by default `*global-offset*` and `$` are zeroed after each instruction variant."
+  (print-hex
+    (get-all-encodings-for-syntax-tree
+      (create-syntax-tree code)
+      my-hash-table
+      :skip-errors skip-errors
+      :zero-global-offset zero-global-offset)))
 
 (defun string-to-function (my-string)
   "This function converts a string to a function.
