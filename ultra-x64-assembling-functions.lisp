@@ -104,6 +104,11 @@
                          (rex-r arg1)   ; rex-r augments reg field, so it's from arg1 in `[rm:`.
                          0              ; extension of the SIB index field, this should be
                          (rex-b arg2))) ; rex-b augments r/m field, so it's from arg2 in `[mr:`.
+         ((equal encoding-type "[-i:")
+          (emit-rex-byte rex-w-value    ; operand size.
+                         (rex-r arg1)   ; number of arguments should be checked already.
+                         0              ; extension of the SIB index field, this should be
+                         (rex-b arg1))) ; checked when implementing SIB!
          (t (error "encoding not yet implemented"))))
       (t (error "encoding not yet implemented")))))
 
