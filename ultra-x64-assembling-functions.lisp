@@ -384,6 +384,22 @@
                                      ((eql n-operands 4)
                                       (emit-and-update-instruction-length (emit-number-in-n-bytes arg4 8)))
                                      (t (error "over 4 operands is an error"))))
+                                  ((equal code-string "ib,s")
+                                   (cond
+                                     ((eql n-operands 0)
+                                      (error "ib,s encoding for 0 operands is an error"))
+                                     ((eql n-operands 1)
+                                      (cond
+                                        ((equal (first req-operands) "imm8")
+                                         (emit-and-update-instruction-length (emit-sign-extended-byte-for-n-bytes arg1 8)))
+                                        (t (error "ib,s encoding for 1 operands not yet implemented"))))
+                                     ((eql n-operands 2)
+                                      (emit-and-update-instruction-length (emit-sign-extended-byte-for-n-bytes arg2 (/ (reg-size arg1) 8))))
+                                     ((eql n-operands 3)
+                                      (error "ib,s encoding for 3 operands not yet implemented"))
+                                     ((eql n-operands 4)
+                                      (error "ib,s encoding for 4 operands not yet implemented"))
+                                     (t (error "over 4 operands is an error"))))
                                   ((equal code-string "rel8")
                                    (if (is-immediate arg1)
                                      (let*
