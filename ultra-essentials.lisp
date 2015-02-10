@@ -24,7 +24,7 @@
                 ;; function and macro definitions.
                 :&key :&optional :&rest :&body
                 ;; comparison functions and related stuff.
-                :< :> :<= :>= :eq :eql :equal :equalp :null :listp :not :numberp
+                :< :> :<= :>= :eq :eql :equal :equalp :null :listp :not :functionp :numberp :stringp
                 ;; error handling.
                 :error
                 ;; printing.
