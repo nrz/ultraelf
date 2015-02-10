@@ -22,6 +22,7 @@
     :emit-modrm
     :emit-modrm-byte
     :emit-little-endian-number-in-n-bytes
+    :emit-sign-extended-byte-for-n-bytes
     :create-syntax-tree
     :emit-binary-code-for-one-instruction
     :emit-binary-code-list
