@@ -100,10 +100,11 @@
                          0              ; extension of the SIB index field, this should be
                          (rex-b arg1))) ; checked when implementing SIB!
          ((equal encoding-type "[rm:")
-          (emit-rex-byte rex-w-value      ; operand size.
-                         (rex-r arg1)     ; rex-r augments reg field, so it's from arg1 in `[rm:`.
-                         0                ; extension of the SIB index field, this should be
-                         (rex-b arg2))))) ; rex-b augments r/m field, so it's from arg2 in `[mr:`.
+          (emit-rex-byte rex-w-value    ; operand size.
+                         (rex-r arg1)   ; rex-r augments reg field, so it's from arg1 in `[rm:`.
+                         0              ; extension of the SIB index field, this should be
+                         (rex-b arg2))) ; rex-b augments r/m field, so it's from arg2 in `[mr:`.
+         (t (error "encoding not yet implemented"))))
       (t (error "encoding not yet implemented")))))
 
 (defun emit-xx-plus-r (encoding-type given-operands code-string)
