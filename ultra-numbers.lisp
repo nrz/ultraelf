@@ -45,3 +45,25 @@
                (+ my-number 256)
                ;; positive value need only AND with 0xff.
                (logand my-number #xff))))))
+
+(defun emit-little-endian-sign-extended-dword-for-n-bytes (my-number n-bytes)
+  (let
+    ((current-byte 0))
+    (if (not (numberp my-number))
+      (setf my-number (value my-number)))
+    (cond
+      ((< my-number (- (expt 2 31)))
+       (error "number too negative to be encoded in a sign-extended byte"))
+      ((>= my-number (expt 2 (* 8 n-bytes)))
+       (error "number too positive to be encoded in a sign-extended byte"))
+      ((and
+         (> my-number (1- (expt 2 31)))
+         (< my-number (- (expt 2 (* 8 n-bytes)) (expt 2 31))))
+       (error "number in a positive range that cannot be encoded in a sign-extended byte"))
+      (t (if (< my-number 0)
+           ;; convert negative values to positive values.
+           (incf my-number (expt 2 32)))
+         (loop for i below 4 collect ; dword has 4 bytes.
+               (progn (setf current-byte (logand my-number 255))
+                      (setf my-number (ash my-number -8))
+                      current-byte))))))
