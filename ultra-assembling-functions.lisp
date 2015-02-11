@@ -105,18 +105,19 @@
    Please note that by default `*global-offset*` and `$` are zeroed after each instruction variant."
   (let
     ((syntax-list-of-lists (eval syntax-tree)))
-    (loop for syntax-list in syntax-list-of-lists
-          collect (remove nil
-                          (loop for emit-function-i below (length (gethash (first syntax-list) my-hash-table))
-                                collect (progn
-                                          (cond (zero-global-offset
-                                                  (setf *global-offset* 0)
-                                                  (setf $ 0)))
-                                          (emit-binary-code-for-one-instruction
-                                            syntax-list
-                                            my-hash-table
-                                            :emit-function-selector-function (get-nth emit-function-i)
-                                            :skip-errors skip-errors)))))))
+    (mapcar #'(lambda (syntax-list)
+                (remove nil
+                        (loop for emit-function-i below (length (gethash (first syntax-list) my-hash-table))
+                              collect (progn
+                                        (cond (zero-global-offset
+                                                (setf *global-offset* 0)
+                                                (setf $ 0)))
+                                        (emit-binary-code-for-one-instruction
+                                          syntax-list
+                                          my-hash-table
+                                          :emit-function-selector-function (get-nth emit-function-i)
+                                          :skip-errors skip-errors)))))
+            syntax-list-of-lists)))
 
 (defun get-all-encodings-for-syntax-tree-and-print-hex (syntax-tree my-hash-table &key (skip-errors t))
   "This function converts syntax tree to a list of strings of hexadecimal bytes."
