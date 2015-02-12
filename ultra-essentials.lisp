@@ -40,6 +40,7 @@
                 ;; lists and other sequences.
                 :every :some :subseq :notevery :notany
                 :length
+                :reduce
                 :mapcan :mapcar
                 :append :concatenate :nconc
                 :list
