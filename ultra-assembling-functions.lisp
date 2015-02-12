@@ -59,35 +59,41 @@
    `emit-function-selector-function` can be eg. `#'first` or `#'(lambda (x) (first (last x)))`."
   (let*
     ((instruction-instances-list (gethash (first syntax-list) my-hash-table))
-     (binary-code (funcall emit-function-selector-function
-                           ;; eliminate invalid encodings (`nil`).
-                           (remove nil
-                                   ;; attempt encoding with each instruction instance.
-                                   (loop for instruction-instance in instruction-instances-list
-                                         ;; collect all encodings to a list.
-                                         collect (cond
-                                                   ;; encoding with error handling.
-                                                   (skip-errors (handler-case
-                                                                  ;; call `emit` method of the instruction instance ...
-                                                                  (funcall #'emit
-                                                                           instruction-instance
-                                                                           ;; ... convert each argument string to a symbol,
-                                                                           ;; if such a symbol exists, and give the list
-                                                                           ;; of these symbols as an argument to the `emit` method.
-                                                                           (loop for arg in (rest syntax-list)
-                                                                                 collect (convert-string-to-symbol-if-symbol-exists arg)))
-                                                                  ;; if `common-lisp:simple-error` is produced, return `nil`.
-                                                                  (common-lisp:simple-error ()
-                                                                                            nil)))
-                                                   ;; encoding without error handling.
-                                                   (t (funcall #'emit
-                                                               ;; call `emit` method of the instruction instance ...
-                                                               instruction-instance
-                                                               ;; ... convert each argument string to a symbol,
-                                                               ;; if such a symbol exists, and give the list
-                                                               ;; of these symbols as an argument to the `emit` method.
-                                                               (loop for arg in (rest syntax-list)
-                                                                     collect (convert-string-to-symbol-if-symbol-exists arg))))))))))
+     (emit-function-selector-function-list (if (listp emit-function-selector-function)
+                                             emit-function-selector-function
+                                             (list emit-function-selector-function)))
+     (binary-code (reduce #'funcall
+                          (nreverse emit-function-selector-function-list)
+                          :from-end t
+                          :initial-value
+                          ;; eliminate invalid encodings (`nil`).
+                          (remove nil
+                                  ;; attempt encoding with each instruction instance.
+                                  (loop for instruction-instance in instruction-instances-list
+                                        ;; collect all encodings to a list.
+                                        collect (cond
+                                                  ;; encoding with error handling.
+                                                  (skip-errors (handler-case
+                                                                 ;; call `emit` method of the instruction instance ...
+                                                                 (funcall #'emit
+                                                                          instruction-instance
+                                                                          ;; ... convert each argument string to a symbol,
+                                                                          ;; if such a symbol exists, and give the list
+                                                                          ;; of these symbols as an argument to the `emit` method.
+                                                                          (loop for arg in (rest syntax-list)
+                                                                                collect (convert-string-to-symbol-if-symbol-exists arg)))
+                                                                 ;; if `common-lisp:simple-error` is produced, return `nil`.
+                                                                 (common-lisp:simple-error ()
+                                                                                           nil)))
+                                                  ;; encoding without error handling.
+                                                  (t (funcall #'emit
+                                                              ;; call `emit` method of the instruction instance ...
+                                                              instruction-instance
+                                                              ;; ... convert each argument string to a symbol,
+                                                              ;; if such a symbol exists, and give the list
+                                                              ;; of these symbols as an argument to the `emit` method.
+                                                              (loop for arg in (rest syntax-list)
+                                                                    collect (convert-string-to-symbol-if-symbol-exists arg))))))))))
     (when (boundp '*global-offset*)
       (progn
         (incf *global-offset* (length binary-code))
