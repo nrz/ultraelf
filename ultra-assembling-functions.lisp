@@ -54,7 +54,8 @@
     ;; Something else. For now, we'll assume that it's a number.
     (t (make-instance 'immediate :name my-string :value (parse-number my-string)))))
 
-(defun emit-binary-code-for-one-instruction (syntax-list my-hash-table &key (emit-function-selector-function #'first) (skip-errors t))
+(defun emit-binary-code-for-one-instruction
+  (syntax-list my-hash-table &key (emit-function-selector-function (list #'sort-sublists-shortest-first #'first)) (skip-errors t))
   "This function converts a syntax list of one instruction to a list of binary code bytes,
    `emit-function-selector-function` can be eg. `#'first` or `#'(lambda (x) (first (last x)))`."
   (let*
@@ -129,7 +130,7 @@
   "This function converts syntax tree to a list of strings of hexadecimal bytes."
   (print-hex (get-all-encodings-for-syntax-tree syntax-tree my-hash-table :skip-errors skip-errors)))
 
-(defun emit-binary-code-list (syntax-tree my-hash-table &key (emit-function-selector-function #'first) (skip-errors t))
+(defun emit-binary-code-list (syntax-tree my-hash-table &key (emit-function-selector-function (list #'sort-sublists-shortest-first #'first)) (skip-errors t))
   "This function converts syntax tree to a list of lists of binary code bytes,
    the bytes of each instruction are on their own list.
    `emit-function-selector-function` can be eg. `#'first` or `#'(lambda (x) (first (last x)))`."
@@ -141,23 +142,34 @@
                 :skip-errors skip-errors))
           (eval syntax-tree)))
 
-(defun emit-binary-code (syntax-tree my-hash-table &key (skip-errors t))
+(defun emit-binary-code (syntax-tree my-hash-table &key (emit-function-selector-function (list #'sort-sublists-shortest-first #'first)) (skip-errors t))
   "This function produces a single list of binary code bytes."
   (setf *global-offset* 0)
   (setf $ 0)
-  (apply #'append (emit-binary-code-list syntax-tree my-hash-table :skip-errors skip-errors)))
+  (apply #'append (emit-binary-code-list
+                    syntax-tree
+                    my-hash-table
+                    :emit-function-selector-function emit-function-selector-function
+                    :skip-errors skip-errors)))
 
-(defun emit-binary-code-and-print-hex (syntax-tree my-hash-table &key (skip-errors t))
+(defun emit-binary-code-and-print-hex (syntax-tree my-hash-table &key (emit-function-selector-function (list #'sort-sublists-shortest-first #'first)) (skip-errors t))
   "This function converts syntax tree to a string of hexadecimal bytes."
   (print-hex (emit-binary-code syntax-tree my-hash-table :skip-errors skip-errors)))
 
-(defun assemble (code my-hash-table &key (skip-errors t))
+(defun assemble (code my-hash-table &key (emit-function-selector-function (list #'sort-sublists-shortest-first #'first)) (skip-errors t))
   "This function assembles code."
-  (emit-binary-code (create-syntax-tree code) my-hash-table :skip-errors skip-errors))
+  (emit-binary-code
+    (create-syntax-tree code)
+    my-hash-table
+    :emit-function-selector-function emit-function-selector-function
+    :skip-errors skip-errors))
 
-(defun assemble-and-print-hex (code my-hash-table &key (skip-errors t))
+(defun assemble-and-print-hex (code my-hash-table &key (emit-function-selector-function (list #'sort-sublists-shortest-first #'first)) (skip-errors t))
   "This function assembles code and prints in a hexadecimal string."
-  (print-hex (assemble code my-hash-table :skip-errors skip-errors)))
+  (print-hex (assemble
+               code my-hash-table
+               :emit-function-selector-function emit-function-selector-function
+               :skip-errors skip-errors)))
 
 (defun assemble-alternatives (code my-hash-table &key (skip-errors t) (zero-global-offset t))
   "This function assembles code, all alternatives.

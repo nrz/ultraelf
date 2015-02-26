@@ -13,3 +13,6 @@
         (not (null my-list)))
     (get-list (first my-list))
     my-list))
+
+(defun sort-sublists-shortest-first (my-list)
+  (sort my-list '< :key #'length))

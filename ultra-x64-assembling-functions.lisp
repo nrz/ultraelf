@@ -15,18 +15,14 @@
   "This function converts x64 syntax tree to a list of strings of hexadecimal bytes."
   (print-hex (get-all-encodings-for-syntax-tree syntax-tree *x64-instruction-variants-hash-table* :skip-errors skip-errors)))
 
-(defun assemble-x64 (code &key (skip-errors t))
+(defun assemble-x64 (code &key (emit-function-selector-function (list #'sort-sublists-shortest-first #'first)) (skip-errors t))
   "This function assembles x86-64 (x64) code."
-  (assemble code *x64-instruction-variants-hash-table* :skip-errors skip-errors))
+  (assemble code *x64-instruction-variants-hash-table* :emit-function-selector-function emit-function-selector-function :skip-errors skip-errors))
 
-(defun assemble-x64-and-print-hex (code &key (skip-errors t))
+(defun assemble-x64-and-print-hex (code &key (emit-function-selector-function (list #'sort-sublists-shortest-first #'first)) (skip-errors t))
   "This function assembles x86-64 (x64) code and prints in a hexadecimal string.
    Please note that by default `*global-offset*` and `$` are zeroed after each instruction variant."
-  (print-hex
-    (assemble
-      code
-      *x64-instruction-variants-hash-table*
-      :skip-errors skip-errors)))
+  (print-hex (assemble code *x64-instruction-variants-hash-table* :emit-function-selector-function emit-function-selector-function :skip-errors skip-errors)))
 
 (defun assemble-alternatives-x64 (code &key (skip-errors t) (zero-global-offset t))
   "This function assembles x86-64 (x64) code, all alternatives.

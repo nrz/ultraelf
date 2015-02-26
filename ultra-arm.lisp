@@ -16,6 +16,7 @@
     :print-hex
     ;; list-handling functions.
     :get-list
+    :sort-sublists-shortest-first
     ;; emit-code functions.
     :emit
     :emit-hex

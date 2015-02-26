@@ -44,8 +44,9 @@
                 :mapcan :mapcar
                 :append :concatenate :nconc
                 :list
-                :elt :nth :first :second :third :fourth :fifth :sixth :seventh :eighth :ninth :tenth :rest
+                :elt :nth :first :second :third :fourth :fifth :sixth :seventh :eighth :ninth :tenth :last :rest
                 :push :pushnew
+                :sort
                 :reverse :nreverse
                 :remove :remove-duplicates
                 ;; numbers.
