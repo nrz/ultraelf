@@ -156,6 +156,9 @@
       (when
         (and do-args-require-rex (not do-args-work-with-rex))
         (error "impossible combination of given arguments: some need REX and some don't work with REX"))
+      ;; `handle-nasm-code-format-x64` should somehow call itself recursively and return multiple encodings, if needed.
+      ;; For example different but functionally identical REX encodings provide a situation with multiple encodings.
+      ;; Producing multiple encodings in `handle-nasm-code-format-x64` is not yet implemented.
       (loop for code-string in (rest code-format)
         ;; before `"o32"`, `"o64"` or `"o64nw"` there can be:
         ;; `"66"`, `"f2"`, `"f3"`, `"hle"`, `"hlenl"`, `"hlexr"`, `"mustrep"`, `"mustrepne"`,
