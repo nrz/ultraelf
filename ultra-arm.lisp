@@ -21,6 +21,7 @@
     :emit
     :emit-hex
     :create-syntax-tree
+    :create-and-eval-syntax-tree
     :emit-binary-code-for-one-instruction
     :emit-binary-code-list
     :emit-binary-code

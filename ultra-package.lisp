@@ -26,6 +26,7 @@
     :emit-sign-extended-byte-for-n-bytes
     :emit-little-endian-sign-extended-dword-for-n-bytes
     :create-syntax-tree
+    :create-and-eval-syntax-tree
     :emit-binary-code-for-one-instruction
     :emit-binary-code-list
     :emit-binary-code
