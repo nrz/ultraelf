@@ -41,7 +41,7 @@
                 :every :some :subseq :notevery :notany
                 :length
                 :reduce
-                :mapcan :mapcar
+                :map :mapc :mapcan :mapcar :mapcon :map-into :mapl :maplist
                 :append :concatenate :nconc
                 :list
                 :elt :nth :nthcdr :first :second :third :fourth :fifth :sixth :seventh :eighth :ninth :tenth :last :rest
