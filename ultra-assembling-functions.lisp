@@ -148,8 +148,16 @@
 (defun emit-binary-code-list (syntax-tree my-hash-table &key (emit-function-selector-function (list #'sort-sublists-shortest-first #'first)) (skip-errors t))
   "This function converts syntax tree to a list of lists of binary code bytes,
    the bytes of each instruction are on their own list.
-   `emit-function-selector-function` can be eg. `#'first` or `#'(lambda (x) (first (last x)))`."
-  (mapcar #'(lambda (x)
+   `emit-function-selector-function` can be eg. `#'first` or `#'(lambda (x) (first (last x)))`.
+   TODO: Fix bug in this function!"
+  ; (mapcar #'(lambda (x)       ; toimii, mutta listat ovat virheelliset.
+  ; (map 'list #'(lambda (x)    ; toimii, mutta listat ovat virheelliset (kuten mapcar).
+  ; (mapl #'(lambda (x)         ; ei toimi lainkaan, ei tuota koodia.
+  ; (mapc #'(lambda (x)         ; ei toimi lainkaan, ei tuota koodia.
+  ; (map-into nil #'(lambda (x) ; ei toimi lainkaan, tuloksena nil.
+  ; (mapcon #'(lambda (x)       ; ei toimi lainkaan, tuloksena nil.
+  ; (maplist #'(lambda (x)      ; ei toimi lainkaan, tuloksena (nil nil nil).
+  (mapcar #'(lambda (x)         ; toimii, mutta listat ovat virheelliset.
               (emit-binary-code-for-one-instruction
                 x
                 my-hash-table
