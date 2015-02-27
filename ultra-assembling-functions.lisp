@@ -12,8 +12,17 @@
   "This recursive function converts a string produced by transform-code-to-string into a syntax tree.
    Input argument my-list can be a string, in that case it is first stored into a list.
    usage examples:
-   (create-syntax-tree #a nop #e)
-   (create-syntax-tree #a mov ax,bx #a shl bx,1 #e)"
+   X64> (create-syntax-tree #a nop #e)
+   (LIST '(\"nop\"))
+   X64> (create-syntax-tree #a mov ax,bx #a shl bx,1 #e)
+   (LIST '(\"mov\" \"ax\" \"bx\") '(\"shl\" \"bx\" \"1\"))
+   The syntax tree can be `eval`ed:
+   X64> (eval (create-syntax-tree #a nop #e))
+   ((\"nop\"))
+   X64> (eval (create-syntax-tree #a mov ax,bx #a shl bx,1 #e))
+   ((\"mov\" \"ax\" \"bx\") (\"shl\" \"bx\" \"1\"))
+   To get all encodings of each instruction of a given syntax tree, use function `get-all-encodings-for-syntax-tree`.
+   To get one encoding for each instruction of a given syntax tree, use function `emit-binary-code-list`."
   (unless (listp my-list)
     (setf my-list (list my-list)))
   ;; is last element of the list a string?
