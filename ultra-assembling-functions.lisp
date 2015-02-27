@@ -42,6 +42,9 @@
     my-list
     (cons 'list my-list)))
 
+(defun create-and-eval-syntax-tree (my-list)
+  (eval (create-syntax-tree my-list)))
+
 (defun convert-string-to-symbol-if-symbol-exists (my-string)
   "This function converts a string into a symbol, if such symbol exists.
    Otherwise this function converts the string into an instance of `unknown` class."
@@ -123,7 +126,7 @@
    the bytes of each encoding on their own list.
    Please note that by default `*global-offset*` and `$` are zeroed after each instruction variant."
   (let
-    ((syntax-list-of-lists (eval syntax-tree)))
+    ((syntax-list-of-lists syntax-tree))
     (mapcar #'(lambda (syntax-list)
                 (remove nil
                         (loop for emit-function-i below (length (gethash (first syntax-list) my-hash-table))
@@ -152,7 +155,7 @@
                 my-hash-table
                 :emit-function-selector-function emit-function-selector-function
                 :skip-errors skip-errors))
-          (eval syntax-tree)))
+          syntax-tree))
 
 (defun emit-binary-code (syntax-tree my-hash-table &key (emit-function-selector-function (list #'sort-sublists-shortest-first #'first)) (skip-errors t))
   "This function produces a single list of binary code bytes."
@@ -171,7 +174,7 @@
 (defun assemble (code my-hash-table &key (emit-function-selector-function (list #'sort-sublists-shortest-first #'first)) (skip-errors t))
   "This function assembles code."
   (emit-binary-code
-    (create-syntax-tree code)
+    (create-and-eval-syntax-tree code)
     my-hash-table
     :emit-function-selector-function emit-function-selector-function
     :skip-errors skip-errors))
@@ -190,7 +193,7 @@
   (mapcar #'(lambda (x)
               (remove-duplicates x :test #'equal))
           (get-all-encodings-for-syntax-tree
-            (create-syntax-tree code)
+            (create-and-eval-syntax-tree code)
             my-hash-table
             :skip-errors skip-errors
             :zero-global-offset zero-global-offset)))
@@ -200,7 +203,7 @@
    Please note that by default `*global-offset*` and `$` are zeroed after each instruction variant."
   (print-hex
     (get-all-encodings-for-syntax-tree
-      (create-syntax-tree code)
+      (create-and-eval-syntax-tree code)
       my-hash-table
       :skip-errors skip-errors
       :zero-global-offset zero-global-offset)))
