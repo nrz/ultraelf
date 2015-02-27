@@ -44,7 +44,7 @@
                 :mapcan :mapcar
                 :append :concatenate :nconc
                 :list
-                :elt :nth :first :second :third :fourth :fifth :sixth :seventh :eighth :ninth :tenth :last :rest
+                :elt :nth :nthcdr :first :second :third :fourth :fifth :sixth :seventh :eighth :ninth :tenth :last :rest
                 :push :pushnew
                 :sort
                 :reverse :nreverse
