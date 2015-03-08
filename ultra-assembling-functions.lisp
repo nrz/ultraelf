@@ -3,6 +3,46 @@
 ;;; ultraELF x86-16, x86-32, x86-64 & ARM assembler, disassembler and metamorphic engine.
 ;;; ultraELF packs and reconstructs ELF executables, maintaining original functionality.
 
+;;; call tree for emit-code functions:
+;;;
+;;; function/macro                                          type of input                   type of output                      comments
+;;; 1 `defun assemble-x64`/`defun assemble-arm` etc.        `code`                          single list of binary code bytes    architecture-specific wrapper function.
+;;;   2 `defun assemble`                                    `code`, `my-hash-table`         single list of binary code bytes    simple wrapper function.
+;;;     3 `defun emit-binary-code`                          `syntax-tree`, `my-hash-table`  single list of binary code bytes    appends binary code by `apply #'append`.
+;;;       4 `defun emit-binary-code-list`                   `syntax-tree`, `my-hash-table`  list of lists of binary code bytes, `mapcar #'(lambda (x) ` ...
+;;;                                                                                             one list for each instruction.   `(emit-binary-code-for-one-instruction`
+;;;         5 `defun emit-binary-code-for-one-instruction`  `syntax-list`, `my-hash-table`  list of lists of binary code bytes  calls `emit` for each
+;;;                                                                                                                             `instruction-instance` inside `loop` ...
+;;;                                                                                                                             `collect`, then uses `reduce` ...
+;;;                                                                                                                             `funcall` with
+;;;                                                                                                                             `emit-function-selector-function-list`
+;;;                                                                                                                             to select the requested encoding of
+;;;                                                                                                                             each instruction.
+;;;
+;;; function/macro                                          type of input                   type of output                      comments
+;;; 1 `defun assemble-alternatives-x64`                     `code`                          a list of lists of lists of         architecture-specific
+;;;                                                                                         binary code bytes.
+;;;                                                                                         outermost list contains a list for
+;;;                                                                                         each instruction.
+;;;                                                                                         each instruction's own list
+;;;                                                                                         contains a list for each encoding.
+;;;   2 `defun assemble-alternatives`                       `code`, `my-hash-table`         a list of lists of lists of         removes duplicate encodings.
+;;;                                                                                         binary code bytes (same as above).
+;;;     3 `defun get-all-encodings-for-syntax-tree`         `syntax-tree`, `my-hash-table`  a list of lists of lists of         removes `nil` encodings.
+;;;                                                                                         binary code bytes.
+;;;       4 `defun emit-binary-code-for-one-instruction`    `syntax-list`, `my-hash-table`  list of lists of binary code bytes  calls `emit` for each
+;;;                                                                                                                             `instruction-instance` inside `loop` ...
+;;;                                                                                                                             `collect`, then uses `reduce` ...
+;;;                                                                                                                             `funcall` with
+;;;                                                                                                                             `emit-function-selector-function-list`
+;;;                                                                                                                             to select the requested encoding of
+;;;                                                                                                                             each instruction.
+;;;
+;;; assembling modes
+;;; #1 simple               functions as a regular assembler.
+;;; #2 steganographic       encodes given message into binary code according to given steganographic encoding flags/rules.
+;;; #3 constraint-based     uses constraint-based programming in binary code generation.
+
 (in-package :ultraelf)
 
 (defparameter *global-offset* 0)
