@@ -120,30 +120,30 @@
          (remove nil
                  ;; attempt encoding with each instruction instance.
                  (loop for instruction-instance in instruction-instances-list
-                       ;; collect all encodings to a list.
-                       collect (cond
-                                 ;; encoding with error handling.
-                                 (skip-errors (handler-case
-                                                ;; call `emit` method of the instruction instance ...
-                                                (funcall #'emit
-                                                         instruction-instance
-                                                         ;; ... convert each argument string to a symbol,
-                                                         ;; if such a symbol exists, and give the list
-                                                         ;; of these symbols as an argument to the `emit` method.
-                                                         (loop for arg in (rest syntax-list)
-                                                               collect (convert-string-to-symbol-if-symbol-exists arg)))
-                                                ;; if `common-lisp:simple-error` is produced, return `nil`.
-                                                (common-lisp:simple-error ()
-                                                                          nil)))
-                                 ;; encoding without error handling.
-                                 (t (funcall #'emit
-                                             ;; call `emit` method of the instruction instance ...
-                                             instruction-instance
-                                             ;; ... convert each argument string to a symbol,
-                                             ;; if such a symbol exists, and give the list
-                                             ;; of these symbols as an argument to the `emit` method.
-                                             (loop for arg in (rest syntax-list)
-                                                   collect (convert-string-to-symbol-if-symbol-exists arg)))))))
+                       ;; append all encodings to a list.
+                       append (cond
+                                ;; encoding with error handling.
+                                (skip-errors (handler-case
+                                               ;; call `emit` method of the instruction instance ...
+                                               (funcall #'emit
+                                                        instruction-instance
+                                                        ;; ... convert each argument string to a symbol,
+                                                        ;; if such a symbol exists, and give the list
+                                                        ;; of these symbols as an argument to the `emit` method.
+                                                        (loop for arg in (rest syntax-list)
+                                                              collect (convert-string-to-symbol-if-symbol-exists arg)))
+                                               ;; if `common-lisp:simple-error` is produced, return `nil`.
+                                               (common-lisp:simple-error ()
+                                                                         nil)))
+                                ;; encoding without error handling.
+                                (t (funcall #'emit
+                                            ;; call `emit` method of the instruction instance ...
+                                            instruction-instance
+                                            ;; ... convert each argument string to a symbol,
+                                            ;; if such a symbol exists, and give the list
+                                            ;; of these symbols as an argument to the `emit` method.
+                                            (loop for arg in (rest syntax-list)
+                                                  collect (convert-string-to-symbol-if-symbol-exists arg)))))))
          :test #'equal)))
     (when (boundp '*global-offset*)
       (progn
@@ -221,14 +221,14 @@
                   ;; eliminate invalid encodings (`nil`).
                   (remove nil
                           (loop for emit-function-i below (length (gethash (first syntax-list) my-hash-table))
-                                collect (progn
-                                          (cond (zero-global-offset
-                                                  (setf *global-offset* 0)
-                                                  (setf $ 0)))
-                                          (emit-all-binary-codes-for-one-instruction
-                                            syntax-list
-                                            my-hash-table
-                                            :skip-errors skip-errors))))
+                                append (progn
+                                         (cond (zero-global-offset
+                                                 (setf *global-offset* 0)
+                                                 (setf $ 0)))
+                                         (emit-all-binary-codes-for-one-instruction
+                                           syntax-list
+                                           my-hash-table
+                                           :skip-errors skip-errors))))
                   :test #'equal))
             syntax-list-of-lists)))
 
