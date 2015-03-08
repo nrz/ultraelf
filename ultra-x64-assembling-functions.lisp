@@ -127,9 +127,7 @@
       (t (error "xx+r encoding for this code-string not implemented.")))))
 
 (defun handle-nasm-code-format-x64 (code-format req-operands &key given-operands msg (rex-w-value 0) (rex-r-value 0) (rex-b-value 0))
-  "This function handles one code-string (from NASM's `insns.dat`) and returns the following:
-   0. the encoding as a list
-   1. number of bits of `msg` encoded."
+  "This function handles one NASM's `insns.dat` code-string and returns the encoding as a list of lists (possible encodings)."
   (macrolet
     ((emit-and-update-instruction-length (&body body)
        ;; This macro increments `instruction-length-in-bytes` by the size of `body`, and then returns `body`.
