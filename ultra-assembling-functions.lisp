@@ -262,7 +262,7 @@
 
 (defun emit-binary-code-and-print-hex (syntax-tree my-hash-table &key (emit-function-selector-function (list #'sort-sublists-shortest-first #'first)) (skip-errors t))
   "This function converts syntax tree to a string of hexadecimal bytes."
-  (print-hex (emit-binary-code syntax-tree my-hash-table :skip-errors skip-errors)))
+  (print-hex (emit-binary-code syntax-tree my-hash-table :emit-function-selector-function emit-function-selector-function :skip-errors skip-errors)))
 
 (defun assemble (code my-hash-table &key (emit-function-selector-function (list #'sort-sublists-shortest-first #'first)) (skip-errors t))
   "This function assembles code."
