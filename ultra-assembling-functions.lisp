@@ -108,7 +108,7 @@
 
 (defun emit-binary-code-for-one-instruction
   (syntax-list my-hash-table &key (emit-function-selector-function (list #'sort-sublists-shortest-first #'first)) (skip-errors t))
-  "This function converts a syntax list of one instruction to a list of binary code bytes,
+  "This function converts a syntax list of one instruction to a list of lists of binary code bytes,
    `emit-function-selector-function` can be eg. `#'first` or `#'(lambda (x) (first (last x)))`."
   (let*
     ((instruction-instances-list (gethash (first syntax-list) my-hash-table))
