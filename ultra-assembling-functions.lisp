@@ -12,12 +12,12 @@
 ;;;       4 `defun emit-binary-code-list`                   `syntax-tree`, `my-hash-table`  list of lists of binary code bytes, `mapcar #'(lambda (x) ` ...
 ;;;                                                                                             one list for each instruction.   `(emit-binary-code-for-one-instruction`
 ;;;         5 `defun emit-binary-code-for-one-instruction`  `syntax-list`, `my-hash-table`  list of lists of binary code bytes  calls `emit` for each
-;;;                                                                                                                             `instruction-instance` inside `loop` ...
-;;;                                                                                                                             `collect`, then uses `reduce` ...
-;;;                                                                                                                             `funcall` with
-;;;                                                                                                                             `emit-function-selector-function-list`
-;;;                                                                                                                             to select the requested encoding of
-;;;                                                                                                                             each instruction.
+;;;                                                                                                                               `instruction-instance` inside
+;;;                                                                                                                               `loop` ... `collect`, then uses
+;;;                                                                                                                               `reduce` ...  `funcall` with
+;;;                                                                                                                               `emit-function-selector-function-list`
+;;;                                                                                                                               to select the requested encoding of
+;;;                                                                                                                               each instruction.
 ;;;
 ;;; function/macro                                          type of input                   type of output                      comments
 ;;; 1 `defun assemble-alternatives-x64`                     `code`                          a list of lists of lists of         architecture-specific
@@ -28,15 +28,14 @@
 ;;;                                                                                         contains a list for each encoding.
 ;;;   2 `defun assemble-alternatives`                       `code`, `my-hash-table`         a list of lists of lists of         removes duplicate encodings.
 ;;;                                                                                         binary code bytes (same as above).
-;;;     3 `defun get-all-encodings-for-syntax-tree`         `syntax-tree`, `my-hash-table`  a list of lists of lists of         removes `nil` encodings.
+;;;     3 `defun get-all-encodings-for-syntax-tree`         `syntax-tree`, `my-hash-table`  a list of lists of lists of         calls
+;;;                                                                                                                             `emit-all-encodings-for-one-instruction`
+;;;                                                                                                                               inside `loop` ... `collect`, then
+;;;                                                                                                                               removes `nil` encodings.
 ;;;                                                                                         binary code bytes.
-;;;       4 `defun emit-binary-code-for-one-instruction`    `syntax-list`, `my-hash-table`  list of lists of binary code bytes  calls `emit` for each
-;;;                                                                                                                             `instruction-instance` inside `loop` ...
-;;;                                                                                                                             `collect`, then uses `reduce` ...
-;;;                                                                                                                             `funcall` with
-;;;                                                                                                                             `emit-function-selector-function-list`
-;;;                                                                                                                             to select the requested encoding of
-;;;                                                                                                                             each instruction.
+;;;       4 `defun emit-all-encodings-for-one-instruction`  `syntax-list`, `my-hash-table`  list of lists of binary code bytes  calls `emit` for each
+;;;                                                                                                                               `instruction-instance` inside
+;;;                                                                                                                               `loop` ... `collect`.
 ;;;
 ;;; assembling modes
 ;;; #1 simple               functions as a regular assembler.
