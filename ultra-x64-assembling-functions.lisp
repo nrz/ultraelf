@@ -43,7 +43,7 @@
       :skip-errors skip-errors
       :zero-global-offset zero-global-offset)))
 
-(defun emit-rex (encoding-type n-operands encoded-bytes &key given-operands (rex-w-value 0) (rex-r-value 0) (rex-x-value 0) (rex-b-value 0))
+(defmacro emit-rex (encoding-type n-operands encoded-bytes &key given-operands (rex-w-value 0) (rex-r-value 0) (rex-x-value 0) (rex-b-value 0))
   "This function emits REX according to encoding type and the operands.
    rex-w-value : 0 for default operand size, 1 for 64-bit operand size.
    `emit-rex` does not handle steganographic or variable encoding in any
@@ -54,60 +54,60 @@
    Steganographic encoding and variable encoding are done in ultraELF by
    selecting the specific encoding from the list of all encodings that
    fulfill the defined criteria (encoding length etc.)."
-  (let*
-    ((my-args (get-list given-operands))
-     (arg1 (first my-args))
-     (arg2 (second my-args)))
-    (cond
-      ((eql n-operands 0)
-       (emit-rex-byte rex-w-value   ; operand size.
-                      rex-r-value   ; TODO: encode here 1 bit of data!
-                      rex-x-value   ; TODO: encode here 1 bit of data!
-                      rex-b-value)) ; TODO: encode here 1 bit of data!
-      ((eql n-operands 1)
-       (emit-rex-byte rex-w-value    ; operand size.
-                      rex-r-value    ; number of arguments should be checked already.
-                      0              ; extension of the SIB index field, this should be
-                      (rex-b arg1))) ; checked when implementing SIB!
-      ((eql n-operands 2)
-       (cond
-         ((equal encoding-type "[r-:")
-          (emit-rex-byte rex-w-value    ; operand size.
-                         (rex-r arg1)   ; number of arguments should be checked already.
-                         0              ; extension of the SIB index field, this should be
-                         (rex-b arg1))) ; checked when implementing SIB!
-         ((equal encoding-type "[-r:")
-          (emit-rex-byte rex-w-value    ; operand size.
-                         (rex-r arg2)   ; number of arguments should be checked already.
-                         0              ; extension of the SIB index field, this should be
-                         (rex-b arg2))) ; checked when implementing SIB!
-         ((equal encoding-type "[mi:")
-          (emit-rex-byte rex-w-value    ; operand size.
-                         (rex-r arg1)   ; number of arguments should be checked already.
-                         0              ; extension of the SIB index field, this should be
-                         (rex-b arg1))) ; checked when implementing SIB!
-         ((equal encoding-type "[mr:")
-          (emit-rex-byte rex-w-value    ; operand size.
-                         (rex-r arg2)   ; rex-r augments reg field, so it's from arg2 in `[mr:`.
-                         0              ; extension of the SIB index field, this should be
-                         (rex-b arg1))) ; rex-b augments r/m field, so it's from arg1 in `[mr:`.
-         ((equal encoding-type "[ri:")
-          (emit-rex-byte rex-w-value    ; operand size.
-                         (rex-r arg1)   ; number of arguments should be checked already.
-                         0              ; extension of the SIB index field, this should be
-                         (rex-b arg1))) ; checked when implementing SIB!
-         ((equal encoding-type "[rm:")
-          (emit-rex-byte rex-w-value    ; operand size.
-                         (rex-r arg1)   ; rex-r augments reg field, so it's from arg1 in `[rm:`.
-                         0              ; extension of the SIB index field, this should be
-                         (rex-b arg2))) ; rex-b augments r/m field, so it's from arg2 in `[mr:`.
-         ((equal encoding-type "[-i:")
-          (emit-rex-byte rex-w-value    ; operand size.
-                         (rex-r arg1)   ; number of arguments should be checked already.
-                         0              ; extension of the SIB index field, this should be
-                         (rex-b arg1))) ; checked when implementing SIB!
-         (t (error "encoding not yet implemented"))))
-      (t (error "encoding not yet implemented")))))
+  `(let*
+     ((my-args (get-list ,given-operands))
+      (arg1 (first my-args))
+      (arg2 (second my-args)))
+     (cond
+       ((eql ,n-operands 0)
+        (emit-rex-byte ,rex-w-value   ; operand size.
+                       ,rex-r-value   ; TODO: encode here 1 bit of data!
+                       ,rex-x-value   ; TODO: encode here 1 bit of data!
+                       ,rex-b-value)) ; TODO: encode here 1 bit of data!
+       ((eql ,n-operands 1)
+        (emit-rex-byte ,rex-w-value   ; operand size.
+                       ,rex-r-value   ; number of arguments should be checked already.
+                       0              ; extension of the SIB index field, this should be
+                       (rex-b arg1))) ; checked when implementing SIB!
+       ((eql ,n-operands 2)
+        (cond
+          ((equal ,encoding-type "[r-:")
+           (emit-rex-byte ,rex-w-value   ; operand size.
+                          (rex-r arg1)   ; number of arguments should be checked already.
+                          0              ; extension of the SIB index field, this should be
+                          (rex-b arg1))) ; checked when implementing SIB!
+          ((equal ,encoding-type "[-r:")
+           (emit-rex-byte ,rex-w-value   ; operand size.
+                          (rex-r arg2)   ; number of arguments should be checked already.
+                          0              ; extension of the SIB index field, this should be
+                          (rex-b arg2))) ; checked when implementing SIB!
+          ((equal ,encoding-type "[mi:")
+           (emit-rex-byte ,rex-w-value   ; operand size.
+                          (rex-r arg1)   ; number of arguments should be checked already.
+                          0              ; extension of the SIB index field, this should be
+                          (rex-b arg1))) ; checked when implementing SIB!
+          ((equal ,encoding-type "[mr:")
+           (emit-rex-byte ,rex-w-value   ; operand size.
+                          (rex-r arg2)   ; rex-r augments reg field, so it's from arg2 in `[mr:`.
+                          0              ; extension of the SIB index field, this should be
+                          (rex-b arg1))) ; rex-b augments r/m field, so it's from arg1 in `[mr:`.
+          ((equal ,encoding-type "[ri:")
+           (emit-rex-byte ,rex-w-value   ; operand size.
+                          (rex-r arg1)   ; number of arguments should be checked already.
+                          0              ; extension of the SIB index field, this should be
+                          (rex-b arg1))) ; checked when implementing SIB!
+          ((equal ,encoding-type "[rm:")
+           (emit-rex-byte ,rex-w-value   ; operand size.
+                          (rex-r arg1)   ; rex-r augments reg field, so it's from arg1 in `[rm:`.
+                          0              ; extension of the SIB index field, this should be
+                          (rex-b arg2))) ; rex-b augments r/m field, so it's from arg2 in `[mr:`.
+          ((equal ,encoding-type "[-i:")
+           (emit-rex-byte ,rex-w-value   ; operand size.
+                          (rex-r arg1)   ; number of arguments should be checked already.
+                          0              ; extension of the SIB index field, this should be
+                          (rex-b arg1))) ; checked when implementing SIB!
+          (t (error "encoding not yet implemented"))))
+       (t (error "encoding not yet implemented")))))
 
 (defun emit-xx-plus-r (encoding-type given-operands code-string)
   "This function emits code for `xx+r`, such as `90+r`."
