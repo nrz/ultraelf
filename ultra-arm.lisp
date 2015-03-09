@@ -30,6 +30,7 @@
     :assemble-and-print-hex
     :assemble-alternatives
     :assemble-alternatives-and-print-hex
+    :check-args
     :get-all-encodings-for-syntax-tree
     :get-all-encodings-for-syntax-tree-and-print-hex
     ;; symbols.
