@@ -126,7 +126,7 @@
        (list (+ base (modrm-r/m arg1))))
       (t (error "xx+r encoding for this code-string not implemented.")))))
 
-(defun handle-nasm-code-format-x64 (code-format req-operands &key given-operands msg (rex-w-value 0) (rex-r-value 0) (rex-b-value 0))
+(defun handle-nasm-code-format-x64 (code-format req-operands &key given-operands (rex-w-value 0) (rex-r-value 0) (rex-b-value 0))
   "This function handles one NASM's `insns.dat` code-string and returns the encoding as a list of lists (possible encodings)."
   (macrolet
     ((emit-and-update-instruction-length (&body body)
@@ -144,7 +144,6 @@
         (do-args-require-rex (some #'needs-rex my-args))
         (do-args-work-with-rex (every #'works-with-rex my-args))
         (is-rex-already-encoded nil)
-        (msg-i 0) ; index to message sequence.
         (n-operands (cond
                       ((and (eql (length req-operands) 1)
                             (equal (first req-operands) "void"))
@@ -460,7 +459,7 @@
                                          nil)
                                         (t (emit-and-update-instruction-length (list (parse-integer code-string :radix 16)))))))))))))
 
-(defun emit-with-format-and-operands-x64 (code-format req-operands &key given-operands msg)
+(defun emit-with-format-and-operands-x64 (code-format req-operands &key given-operands)
   "This function emits code (list of binary code bytes) for one x64 instruction variant."
   (let*
     ((my-args (get-list given-operands))
@@ -470,49 +469,49 @@
       ((equal (first code-format) "[")
        ;; The encoding of this variant is constant, so just convert
        ;; the rest elements (hexadecimal numbers) to numbers in a list.
-       (handle-nasm-code-format-x64 code-format my-operands :msg msg))
+       (handle-nasm-code-format-x64 code-format my-operands))
       ((equal (first code-format) "[--:")
        ;; The operands and encoding of this variant are fixed.
-       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
+       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands))
       ((equal (first code-format) "[-i:")
        ;; One fixed operand and one immediate operand.
-       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
+       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands))
       ((equal (first code-format) "[-r:")
        ;; One fixed operand and one register operand.
-       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
+       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands))
       ((equal (first code-format) "[m:")
        ;; This variant has one 'memory' (can be register too) operand.
        ;; The operand is encoded in the r/m field.
        ;; An extension of the opcode is in the reg field.
-       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
+       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands))
       ((equal (first code-format) "[i:")
        ;; This variant has one immediate operand.
-       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
+       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands))
       ((equal (first code-format) "[r:")
        ;; This variant has one register operand.
        ;; The operand is encoded in the r/m field.
        ;; An extension of the opcode is in the reg field.
-       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
+       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands))
       ((equal (first code-format) "[i-:")
        ;; One immediate operand and one fixed operand.
-       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
+       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands))
       ((equal (first code-format) "[r-:")
        ;; One register operand and one fixed operand.
-       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
+       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands))
       ((equal (first code-format) "[mi:")
        ;; One memory operand and one immediate operand.
        ;; The operands are encoded in corresponding ModRM fields.
-       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
+       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands))
       ((equal (first code-format) "[mr:")
        ;; One memory operand and one register operand.
        ;; The operands are encoded in corresponding ModRM fields.
-       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
+       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands))
       ((equal (first code-format) "[ri:")
        ;; One register operand and one immediate operand.
        ;; The operands are encoded in corresponding ModRM fields.
-       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
+       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands))
       ((equal (first code-format) "[rm:")
        ;; One register operand and one memory operand.
        ;; The operands are encoded in corresponding ModRM fields.
-       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands :msg msg))
+       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands))
       (t (error "encoding not yet implemented")))))
