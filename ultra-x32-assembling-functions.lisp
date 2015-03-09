@@ -7,4 +7,8 @@
 
 (defun emit-with-format-and-operands-x32 (code-format req-operands &rest given-operands)
   "This function emits code (list of binary code bytes) for one x32 instruction variant."
-  (error "x32 encoding not yet implemented"))
+  (let*
+    ((my-args (get-list given-operands))
+     (my-operands (get-list req-operands)))
+    (check-args my-operands my-args)
+    (error "x32 encoding not yet implemented")))
