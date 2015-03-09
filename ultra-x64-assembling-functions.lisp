@@ -51,8 +51,9 @@
    and optional bits according to `rex-w-value`, `rex-r-value`,
    `rex-x-value` and `rex-b-value. Using default values (0) for all REX
    bits produces REX bytes identical to those produced by NASM.
-   For steganographic or variable encoding `emit-rex` must be called with
-   appropriate values for the mentioned keyword arguments."
+   Steganographic encoding and variable encoding are done in ultraELF by
+   selecting the specific encoding from the list of all encodings that
+   fulfill the defined criteria (encoding length etc.)."
   (let*
     ((my-args (get-list given-operands))
      (arg1 (first my-args))
