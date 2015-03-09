@@ -9,13 +9,11 @@
   (x16:emit-with-format-and-operands-x16
     (slot-value x16-asm-instruction 'code-format)
     (slot-value x16-asm-instruction 'req-operands)
-    :given-operands given-operands
-    :msg nil))
+    :given-operands given-operands))
 
 (defmethod emit-hex ((x16-asm-instruction x16-asm-instruction) &rest given-operands)
   (print-hex
     (x16:emit-with-format-and-operands-x16
       (slot-value x16-asm-instruction 'code-format)
       (slot-value x16-asm-instruction 'req-operands)
-      :given-operands given-operands
-      :msg nil)))
+      :given-operands given-operands)))
