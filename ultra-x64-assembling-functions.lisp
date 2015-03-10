@@ -61,7 +61,16 @@
        (list (+ base (modrm-r/m arg1))))
       (t (error "xx+r encoding for this code-string not implemented.")))))
 
-(defun handle-nasm-code-format-x64 (code-format req-operands &key given-operands (rex-w-value 0) (rex-r-value 0) (rex-b-value 0) encoded-bytes)
+(defun handle-nasm-code-format-x64
+  (code-format
+    req-operands
+    &key
+    given-operands
+    (rex-w-value 0)
+    (rex-r-value 0)
+    (rex-b-value 0)
+    encoded-bytes
+    (instruction-length-in-bytes 0))
   "This function handles one NASM's `insns.dat` code-string and returns the encoding as a list of lists (possible encodings)."
   (macrolet
     ((emit-rex (encoding-type n-operands encoded-bytes &key given-operands (rex-w-value 0) (rex-r-value 0) (rex-x-value 0) (rex-b-value 0))
@@ -152,8 +161,7 @@
                      ((and (eql (length req-operands) 1)
                            (equal (first req-operands) "void"))
                       0)
-                     (t (length req-operands))))
-       (instruction-length-in-bytes 0))
+                     (t (length req-operands)))))
       (when
         (and do-args-require-rex (not do-args-work-with-rex))
         (error "impossible combination of given arguments: some need REX and some don't work with REX"))
