@@ -75,11 +75,11 @@
   (macrolet
     ((emit-rex (encoding-type n-operands encoded-bytes &key given-operands (rex-w-value 0) (rex-r-value 0) (rex-x-value 0) (rex-b-value 0))
        ;; This macro emits REX according to encoding type and the operands.
-       ;; rex-w-value : 0 for default operand size, 1 for 64-bit operand size.
+       ;; `rex-w-value`: 0 for default operand size, 1 for 64-bit operand size.
        ;; `emit-rex` does not handle steganographic or variable encoding in any
        ;; particular way, it just encodes a REX byte with required bits as needed
        ;; and optional bits according to `rex-w-value`, `rex-r-value`,
-       ;; `rex-x-value` and `rex-b-value. Using default values (0) for all REX
+       ;; `rex-x-value` and `rex-b-value`. Using default values (0) for all REX
        ;; bits produces REX bytes identical to those produced by NASM.
        ;; Steganographic encoding and variable encoding are done in ultraELF by
        ;; selecting the specific encoding from the list of all encodings that
