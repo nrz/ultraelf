@@ -230,26 +230,26 @@
                                                               (do-args-require-rex
                                                                 (setf is-rex-already-encoded t)
                                                                 (emit-and-update-instruction-length
-(emit-rex
-encoding-type
-n-operands
-encoded-bytes
-:given-operands my-args
-:rex-r-value rex-r-value
-)))
+                                                                  (emit-rex
+                                                                    encoding-type
+                                                                    n-operands
+                                                                    encoded-bytes
+                                                                    :given-operands my-args
+                                                                    :rex-r-value rex-r-value
+                                                                    )))
                                                               (t nil)))
                                                            ((eql n-operands 2)
                                                             (cond
                                                               (do-args-require-rex
                                                                 (setf is-rex-already-encoded t)
                                                                 (emit-and-update-instruction-length
-(emit-rex
-encoding-type
-n-operands
-encoded-bytes
-:given-operands my-args
-:rex-r-value rex-r-value
-)))
+                                                                  (emit-rex
+                                                                    encoding-type
+                                                                    n-operands
+                                                                    encoded-bytes
+                                                                    :given-operands my-args
+                                                                    :rex-r-value rex-r-value
+                                                                    )))
                                                               (t nil)))
                                                            ((eql n-operands 3)
                                                             (error "o32 encoding of 3 operands in not yet implemented"))
@@ -297,22 +297,22 @@ encoded-bytes
                                                                        (cond
                                                                          ((eql n-operands 1)
                                                                           (emit-and-update-instruction-length
-(emit-rex
-encoding-type
-n-operands
-encoded-bytes
-:given-operands my-args
-:rex-r-value rex-r-value
-)))
+                                                                            (emit-rex
+                                                                              encoding-type
+                                                                              n-operands
+                                                                              encoded-bytes
+                                                                              :given-operands my-args
+                                                                              :rex-r-value rex-r-value
+                                                                              )))
                                                                          ((eql n-operands 2)
                                                                           (emit-and-update-instruction-length
-(emit-rex
-encoding-type
-n-operands
-encoded-bytes
-:given-operands my-args
-:rex-r-value rex-r-value
-))) ; TODO: check if REX.W be used to encode data here!
+                                                                            (emit-rex
+                                                                              encoding-type
+                                                                              n-operands
+                                                                              encoded-bytes
+                                                                              :given-operands my-args
+                                                                              :rex-r-value rex-r-value
+                                                                              ))) ; TODO: check if REX.W be used to encode data here!
                                                                          (t (error "encoding not yet implemented")))))
                                                                    (cond ((equal code-string "/r")
                                                                           (cond
