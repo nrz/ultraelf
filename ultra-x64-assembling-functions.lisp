@@ -157,6 +157,7 @@
        (do-args-require-rex (some #'needs-rex my-args))
        (do-args-work-with-rex (every #'works-with-rex my-args))
        (is-rex-already-encoded nil)
+       (n-processed-code-strings 0)
        (n-operands (cond
                      ((and (eql (length req-operands) 1)
                            (equal (first req-operands) "void"))
@@ -521,7 +522,8 @@
                                                                           nil)
                                                                          ((equal code-string "odf")
                                                                           nil)
-                                                                         (t (emit-and-update-instruction-length (list (parse-integer code-string :radix 16)))))))))))))
+                                                                         (t (emit-and-update-instruction-length (list (parse-integer code-string :radix 16))))))))))
+            (incf n-processed-code-strings))))
   (list encoded-bytes))
 
 (defun emit-with-format-and-operands-x64 (code-format req-operands &key given-operands)
