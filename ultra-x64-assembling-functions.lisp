@@ -194,6 +194,7 @@
             ;; `"norexb"`, `"norexr"`, `"norexw"`, `"norexx"`,
             ;; `"np"`, `"repe"`, `"wait"`.
             do
+            (incf n-processed-code-strings)
             (setf encoded-bytes (append encoded-bytes (cond
                                                         ((equal code-string "66")
                                                          ;; in SIMD instructions used as a an instruction modifier,
@@ -549,8 +550,7 @@
                                                                           nil)
                                                                          ((equal code-string "odf")
                                                                           nil)
-                                                                         (t (emit-and-update-instruction-length (list (parse-integer code-string :radix 16))))))))))
-            (incf n-processed-code-strings))))
+                                                                         (t (emit-and-update-instruction-length (list (parse-integer code-string :radix 16)))))))))))))
   (list encoded-bytes))
 
 (defun emit-with-format-and-operands-x64 (code-format req-operands &key given-operands)
