@@ -78,13 +78,13 @@
        (code-format
          req-operands
          encoded-bytes
+         instruction-length-in-bytes
          &key
          given-operands
          (rex-w-value 0)
          (rex-r-value 0)
          (rex-x-value 0)
-         (rex-b-value 0)
-         (instruction-length-in-bytes 0))
+         (rex-b-value 0))
        ;; This macro emits REX according to encoding type and the operands.
        ;; `rex-w-value`: 0 for default operand size, 1 for 64-bit operand size.
        ;; `emit-rex` does not handle steganographic or variable encoding in any
@@ -262,6 +262,7 @@
                                                                     code-format
                                                                     req-operands
                                                                     encoded-bytes
+                                                                    instruction-length-in-bytes
                                                                     :given-operands my-args
                                                                     :rex-r-value rex-r-value)))
                                                               (t nil)))
@@ -274,6 +275,7 @@
                                                                     code-format
                                                                     req-operands
                                                                     encoded-bytes
+                                                                    instruction-length-in-bytes
                                                                     :given-operands my-args
                                                                     :rex-r-value rex-r-value)))
                                                               (t nil)))
@@ -289,6 +291,7 @@
                                                                 code-format
                                                                 req-operands
                                                                 encoded-bytes
+                                                                instruction-length-in-bytes
                                                                 :given-operands my-args
                                                                 :rex-w-value 1
                                                                 :rex-r-value rex-r-value))) ; 64-bit operand size!
@@ -299,6 +302,7 @@
                                                                 code-format
                                                                 req-operands
                                                                 encoded-bytes
+                                                                instruction-length-in-bytes
                                                                 :given-operands my-args
                                                                 :rex-w-value 1
                                                                 :rex-r-value rex-r-value))) ; 64-bit operand size!
@@ -309,6 +313,7 @@
                                                                 code-format
                                                                 req-operands
                                                                 encoded-bytes
+                                                                instruction-length-in-bytes
                                                                 :given-operands my-args
                                                                 :rex-w-value 1
                                                                 :rex-r-value rex-r-value))) ; 64-bit operand size!
@@ -332,6 +337,7 @@
                                                                     code-format
                                                                     req-operands
                                                                     encoded-bytes
+                                                                    instruction-length-in-bytes
                                                                     :given-operands my-args
                                                                     :rex-w-value rex-w-value
                                                                     :rex-r-value rex-r-value)))
@@ -355,6 +361,7 @@
                                                                               code-format
                                                                               req-operands
                                                                               encoded-bytes
+                                                                              instruction-length-in-bytes
                                                                               :given-operands my-args
                                                                               :rex-r-value rex-r-value)))
                                                                          ((eql n-operands 2)
@@ -363,6 +370,7 @@
                                                                               code-format
                                                                               req-operands
                                                                               encoded-bytes
+                                                                              instruction-length-in-bytes
                                                                               :given-operands my-args
                                                                               :rex-r-value rex-r-value))) ; TODO: check if REX.W be used to encode data here!
                                                                          (t (error "encoding not yet implemented")))))
