@@ -73,7 +73,16 @@
     (instruction-length-in-bytes 0))
   "This function handles one NASM's `insns.dat` code-string and returns the encoding as a list of lists (possible encodings)."
   (macrolet
-    ((emit-rex (encoding-type n-operands encoded-bytes &key given-operands (rex-w-value 0) (rex-r-value 0) (rex-x-value 0) (rex-b-value 0))
+    ((emit-rex
+       (encoding-type
+         n-operands
+         encoded-bytes
+         &key
+         given-operands
+         (rex-w-value 0)
+         (rex-r-value 0)
+         (rex-x-value 0)
+         (rex-b-value 0))
        ;; This macro emits REX according to encoding type and the operands.
        ;; `rex-w-value`: 0 for default operand size, 1 for 64-bit operand size.
        ;; `emit-rex` does not handle steganographic or variable encoding in any
