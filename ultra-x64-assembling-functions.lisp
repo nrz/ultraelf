@@ -68,6 +68,7 @@
     given-operands
     (rex-w-value 0)
     (rex-r-value 0)
+    (rex-x-value 0)
     (rex-b-value 0)
     encoded-bytes
     (instruction-length-in-bytes 0))
