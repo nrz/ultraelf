@@ -74,8 +74,8 @@
   "This function handles one NASM's `insns.dat` code-string and returns the encoding as a list of lists (possible encodings)."
   (macrolet
     ((emit-rex
-       (encoding-type
-         n-operands
+       (code-format
+         req-operands
          encoded-bytes
          &key
          given-operands
@@ -96,11 +96,19 @@
        (let
          ((my-args (gensym))
           (arg1 (gensym))
-          (arg2 (gensym)))
+          (arg2 (gensym))
+          (encoding-type (gensym))
+          (n-operands (gensym)))
          `(let*
             ((,my-args (get-list ,given-operands))
              (,arg1 (first ,my-args))
-             (,arg2 (second ,my-args)))
+             (,arg2 (second ,my-args))
+             (,encoding-type (first ,code-format))
+             (,n-operands (cond
+                            ((and (eql (length ,req-operands) 1)
+                                  (equal (first ,req-operands) "void"))
+                             0)
+                            (t (length ,req-operands)))))
             (cond
               ((eql ,n-operands 0)
                (emit-rex-byte ,rex-w-value   ; operand size.
@@ -249,8 +257,8 @@
                                                                 (setf is-rex-already-encoded t)
                                                                 (emit-and-update-instruction-length
                                                                   (emit-rex
-                                                                    encoding-type
-                                                                    n-operands
+                                                                    code-format
+                                                                    req-operands
                                                                     encoded-bytes
                                                                     :given-operands my-args
                                                                     :rex-r-value rex-r-value)))
@@ -261,8 +269,8 @@
                                                                 (setf is-rex-already-encoded t)
                                                                 (emit-and-update-instruction-length
                                                                   (emit-rex
-                                                                    encoding-type
-                                                                    n-operands
+                                                                    code-format
+                                                                    req-operands
                                                                     encoded-bytes
                                                                     :given-operands my-args
                                                                     :rex-r-value rex-r-value)))
@@ -276,8 +284,8 @@
                                                             (setf is-rex-already-encoded t)
                                                             (emit-and-update-instruction-length
                                                               (emit-rex
-                                                                encoding-type
-                                                                n-operands
+                                                                code-format
+                                                                req-operands
                                                                 encoded-bytes
                                                                 :given-operands my-args
                                                                 :rex-w-value 1
@@ -286,8 +294,8 @@
                                                             (setf is-rex-already-encoded t)
                                                             (emit-and-update-instruction-length
                                                               (emit-rex
-                                                                encoding-type
-                                                                n-operands
+                                                                code-format
+                                                                req-operands
                                                                 encoded-bytes
                                                                 :given-operands my-args
                                                                 :rex-w-value 1
@@ -296,8 +304,8 @@
                                                             (setf is-rex-already-encoded t)
                                                             (emit-and-update-instruction-length
                                                               (emit-rex
-                                                                encoding-type
-                                                                n-operands
+                                                                code-format
+                                                                req-operands
                                                                 encoded-bytes
                                                                 :given-operands my-args
                                                                 :rex-w-value 1
@@ -319,8 +327,8 @@
                                                                 ;; 64-bit operand size is the default, so it's possible to encode 1 bit of information!!!
                                                                 (emit-and-update-instruction-length
                                                                   (emit-rex
-                                                                    encoding-type
-                                                                    n-operands
+                                                                    code-format
+                                                                    req-operands
                                                                     encoded-bytes
                                                                     :given-operands my-args
                                                                     :rex-w-value rex-w-value
@@ -342,16 +350,16 @@
                                                                          ((eql n-operands 1)
                                                                           (emit-and-update-instruction-length
                                                                             (emit-rex
-                                                                              encoding-type
-                                                                              n-operands
+                                                                              code-format
+                                                                              req-operands
                                                                               encoded-bytes
                                                                               :given-operands my-args
                                                                               :rex-r-value rex-r-value)))
                                                                          ((eql n-operands 2)
                                                                           (emit-and-update-instruction-length
                                                                             (emit-rex
-                                                                              encoding-type
-                                                                              n-operands
+                                                                              code-format
+                                                                              req-operands
                                                                               encoded-bytes
                                                                               :given-operands my-args
                                                                               :rex-r-value rex-r-value))) ; TODO: check if REX.W be used to encode data here!
