@@ -194,7 +194,6 @@
             ;; `"norexb"`, `"norexr"`, `"norexw"`, `"norexx"`,
             ;; `"np"`, `"repe"`, `"wait"`.
             do
-            (incf n-processed-code-strings)
             (setf encoded-bytes (append encoded-bytes (cond
                                                         ((equal code-string "66")
                                                          ;; in SIMD instructions used as a an instruction modifier,
@@ -260,7 +259,7 @@
                                                                 (setf is-rex-already-encoded t)
                                                                 (emit-and-update-instruction-length
                                                                   (emit-rex
-                                                                    (cons encoding-type (nthcdr n-processed-code-strings (rest code-format)))
+                                                                    (cons encoding-type (nthcdr (1+ n-processed-code-strings) (rest code-format)))
                                                                     req-operands
                                                                     encoded-bytes
                                                                     instruction-length-in-bytes
@@ -273,7 +272,7 @@
                                                                 (setf is-rex-already-encoded t)
                                                                 (emit-and-update-instruction-length
                                                                   (emit-rex
-                                                                    (cons encoding-type (nthcdr n-processed-code-strings (rest code-format)))
+                                                                    (cons encoding-type (nthcdr (1+ n-processed-code-strings) (rest code-format)))
                                                                     req-operands
                                                                     encoded-bytes
                                                                     instruction-length-in-bytes
@@ -289,7 +288,7 @@
                                                             (setf is-rex-already-encoded t)
                                                             (emit-and-update-instruction-length
                                                               (emit-rex
-                                                                (cons encoding-type (nthcdr n-processed-code-strings (rest code-format)))
+                                                                (cons encoding-type (nthcdr (1+ n-processed-code-strings) (rest code-format)))
                                                                 req-operands
                                                                 encoded-bytes
                                                                 instruction-length-in-bytes
@@ -300,7 +299,7 @@
                                                             (setf is-rex-already-encoded t)
                                                             (emit-and-update-instruction-length
                                                               (emit-rex
-                                                                (cons encoding-type (nthcdr n-processed-code-strings (rest code-format)))
+                                                                (cons encoding-type (nthcdr (1+ n-processed-code-strings) (rest code-format)))
                                                                 req-operands
                                                                 encoded-bytes
                                                                 instruction-length-in-bytes
@@ -311,7 +310,7 @@
                                                             (setf is-rex-already-encoded t)
                                                             (emit-and-update-instruction-length
                                                               (emit-rex
-                                                                (cons encoding-type (nthcdr n-processed-code-strings (rest code-format)))
+                                                                (cons encoding-type (nthcdr (1+ n-processed-code-strings) (rest code-format)))
                                                                 req-operands
                                                                 encoded-bytes
                                                                 instruction-length-in-bytes
@@ -335,7 +334,7 @@
                                                                 ;; 64-bit operand size is the default, so it's possible to encode 1 bit of information!!!
                                                                 (emit-and-update-instruction-length
                                                                   (emit-rex
-                                                                    (cons encoding-type (nthcdr n-processed-code-strings (rest code-format)))
+                                                                    (cons encoding-type (nthcdr (1+ n-processed-code-strings) (rest code-format)))
                                                                     req-operands
                                                                     encoded-bytes
                                                                     instruction-length-in-bytes
@@ -359,7 +358,7 @@
                                                                          ((eql n-operands 1)
                                                                           (emit-and-update-instruction-length
                                                                             (emit-rex
-                                                                              (cons encoding-type (nthcdr n-processed-code-strings (rest code-format)))
+                                                                              (cons encoding-type (nthcdr (1+ n-processed-code-strings) (rest code-format)))
                                                                               req-operands
                                                                               encoded-bytes
                                                                               instruction-length-in-bytes
@@ -368,7 +367,7 @@
                                                                          ((eql n-operands 2)
                                                                           (emit-and-update-instruction-length
                                                                             (emit-rex
-                                                                              (cons encoding-type (nthcdr n-processed-code-strings (rest code-format)))
+                                                                              (cons encoding-type (nthcdr (1+ n-processed-code-strings) (rest code-format)))
                                                                               req-operands
                                                                               encoded-bytes
                                                                               instruction-length-in-bytes
@@ -550,7 +549,8 @@
                                                                           nil)
                                                                          ((equal code-string "odf")
                                                                           nil)
-                                                                         (t (emit-and-update-instruction-length (list (parse-integer code-string :radix 16)))))))))))))
+                                                                         (t (emit-and-update-instruction-length (list (parse-integer code-string :radix 16))))))))))
+            (incf n-processed-code-strings))))
   (list encoded-bytes))
 
 (defun emit-with-format-and-operands-x64 (code-format req-operands &key given-operands)
