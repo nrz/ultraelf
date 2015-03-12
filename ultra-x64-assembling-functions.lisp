@@ -61,14 +61,6 @@
        (list (+ base (modrm-r/m arg1))))
       (t (error "xx+r encoding for this code-string not implemented.")))))
 
-(defun emit-rex-byte (rex-w rex-r rex-x rex-b)
-  "This function emits a REX prefix as requested."
-  (list (logior #x40
-                rex-b
-                (ash rex-x 1)
-                (ash rex-r 2)
-                (ash rex-w 3))))
-
 (defun handle-nasm-code-format-x64-wrapper
   (code-format
     req-operands
@@ -110,7 +102,139 @@
     instruction-length-in-bytes)
   "This function handles one NASM's `insns.dat` code-string and returns the encoding as a list of lists (possible encodings)."
   (macrolet
-    ((emit-rex
+    ((emit-rex-byte
+       (code-format
+         req-operands
+         given-operands
+         rex-w-value
+         rex-r-value
+         rex-x-value
+         rex-b-value
+         encoded-bytes
+         is-rex-already-encoded
+         instruction-length-in-bytes)
+       ;; This macro emits a REX prefix as requested."
+       (let
+         ((encoding-type (gensym)))
+         `(let*
+            ((,encoding-type (first ,code-format)))
+            (cond
+              ((null ,rex-w-value)
+               (return-from handle-nasm-code-format-x64
+                            (append
+                              (handle-nasm-code-format-x64
+                                ,code-format
+                                ,req-operands
+                                ,given-operands
+                                0 ; `rex-w-value`
+                                ,rex-r-value
+                                ,rex-x-value
+                                ,rex-b-value
+                                ,encoded-bytes
+                                ,is-rex-already-encoded
+                                ,instruction-length-in-bytes)
+                              (handle-nasm-code-format-x64
+                                ,code-format
+                                ,req-operands
+                                ,given-operands
+                                1 ; `rex-w-value`
+                                ,rex-r-value
+                                ,rex-x-value
+                                ,rex-b-value
+                                ,encoded-bytes
+                                ,is-rex-already-encoded
+                                ,instruction-length-in-bytes))))
+              ((null ,rex-r-value)
+               (return-from handle-nasm-code-format-x64
+                            (append
+                              (handle-nasm-code-format-x64
+                                ,code-format
+                                ,req-operands
+                                ,given-operands
+                                ,rex-w-value
+                                0 ; `rex-r-value`
+                                ,rex-x-value
+                                ,rex-b-value
+                                ,encoded-bytes
+                                ,is-rex-already-encoded
+                                ,instruction-length-in-bytes)
+                              (handle-nasm-code-format-x64
+                                ,code-format
+                                ,req-operands
+                                ,given-operands
+                                ,rex-w-value
+                                1 ; `rex-r-value`
+                                ,rex-x-value
+                                ,rex-b-value
+                                ,encoded-bytes
+                                ,is-rex-already-encoded
+                                ,instruction-length-in-bytes))))
+              ((null ,rex-x-value)
+               (return-from handle-nasm-code-format-x64
+                            (append
+                              (handle-nasm-code-format-x64
+                                ,code-format
+                                ,req-operands
+                                ,given-operands
+                                ,rex-w-value
+                                ,rex-r-value
+                                0 ; `rex-x-value`
+                                ,rex-b-value
+                                ,encoded-bytes
+                                ,is-rex-already-encoded
+                                ,instruction-length-in-bytes)
+                              (handle-nasm-code-format-x64
+                                ,code-format
+                                ,req-operands
+                                ,given-operands
+                                ,rex-w-value
+                                ,rex-r-value
+                                1 ; `rex-x-value`
+                                ,rex-b-value
+                                ,encoded-bytes
+                                ,is-rex-already-encoded
+                                ,instruction-length-in-bytes))))
+              ((null ,rex-b-value)
+               (return-from handle-nasm-code-format-x64
+                            (append
+                              (handle-nasm-code-format-x64
+                                ,code-format
+                                ,req-operands
+                                ,given-operands
+                                ,rex-w-value
+                                ,rex-r-value
+                                ,rex-x-value
+                                0 ; `rex-b-value`
+                                ,encoded-bytes
+                                ,is-rex-already-encoded
+                                ,instruction-length-in-bytes)
+                              (handle-nasm-code-format-x64
+                                ,code-format
+                                ,req-operands
+                                ,given-operands
+                                ,rex-w-value
+                                ,rex-r-value
+                                ,rex-x-value
+                                1 ; `rex-b-value`
+                                ,encoded-bytes
+                                ,is-rex-already-encoded
+                                ,instruction-length-in-bytes))))
+              (t (return-from handle-nasm-code-format-x64
+                              (handle-nasm-code-format-x64-wrapper
+                                (cons ,encoding-type (nthcdr 2 code-format)) ; `code-format`
+                                ,req-operands
+                                :given-operands ,given-operands
+                                :encoded-bytes (append
+                                                 ,encoded-bytes
+                                                 (list
+                                                   (logior #x40
+                                                           ,rex-b-value
+                                                           (ash ,rex-x-value 1)
+                                                           (ash ,rex-r-value 2)
+                                                           (ash ,rex-w-value 3))))
+                                :is-rex-already-encoded t
+                                :instruction-length-in-bytes (1+ ,instruction-length-in-bytes))))))))
+     (emit-rex
        (code-format
          req-operands
          rex-w-value
@@ -150,247 +274,115 @@
                             (t (length ,req-operands)))))
             (cond
               ((eql ,n-operands 0)
-               (cond
-                 ((null ,rex-w-value)
-                  (return-from handle-nasm-code-format-x64
-                               (append
-                                 (handle-nasm-code-format-x64
-                                   ,code-format
-                                   ,req-operands
-                                   ,given-operands
-                                   0 ; `rex-w-value`
-                                   ,rex-r-value
-                                   ,rex-x-value
-                                   ,rex-b-value
-                                   ,encoded-bytes
-                                   ,is-rex-already-encoded
-                                   ,instruction-length-in-bytes)
-                                 (handle-nasm-code-format-x64
-                                   ,code-format
-                                   ,req-operands
-                                   ,given-operands
-                                   1 ; `rex-w-value`
-                                   ,rex-r-value
-                                   ,rex-x-value
-                                   ,rex-b-value
-                                   ,encoded-bytes
-                                   ,is-rex-already-encoded
-                                   ,instruction-length-in-bytes))))
-                 ((null ,rex-r-value)
-                  (return-from handle-nasm-code-format-x64
-                               (append
-                                 (handle-nasm-code-format-x64
-                                   ,code-format
-                                   ,req-operands
-                                   ,given-operands
-                                   ,rex-w-value
-                                   0 ; `rex-r-value`
-                                   ,rex-x-value
-                                   ,rex-b-value
-                                   ,encoded-bytes
-                                   ,is-rex-already-encoded
-                                   ,instruction-length-in-bytes)
-                                 (handle-nasm-code-format-x64
-                                   ,code-format
-                                   ,req-operands
-                                   ,given-operands
-                                   ,rex-w-value
-                                   1 ; `rex-r-value`
-                                   ,rex-x-value
-                                   ,rex-b-value
-                                   ,encoded-bytes
-                                   ,is-rex-already-encoded
-                                   ,instruction-length-in-bytes))))
-                 ((null ,rex-x-value)
-                  (return-from handle-nasm-code-format-x64
-                               (append
-                                 (handle-nasm-code-format-x64
-                                   ,code-format
-                                   ,req-operands
-                                   ,given-operands
-                                   ,rex-w-value
-                                   ,rex-r-value
-                                   0 ; `rex-x-value`
-                                   ,rex-b-value
-                                   ,encoded-bytes
-                                   ,is-rex-already-encoded
-                                   ,instruction-length-in-bytes)
-                                 (handle-nasm-code-format-x64
-                                   ,code-format
-                                   ,req-operands
-                                   ,given-operands
-                                   ,rex-w-value
-                                   ,rex-r-value
-                                   1 ; `rex-x-value`
-                                   ,rex-b-value
-                                   ,encoded-bytes
-                                   ,is-rex-already-encoded
-                                   ,instruction-length-in-bytes))))
-                 ((null ,rex-b-value)
-                  (return-from handle-nasm-code-format-x64
-                               (append
-                                 (handle-nasm-code-format-x64
-                                   ,code-format
-                                   ,req-operands
-                                   ,given-operands
-                                   ,rex-w-value
-                                   ,rex-r-value
-                                   ,rex-x-value
-                                   0 ; `rex-b-value`
-                                   ,encoded-bytes
-                                   ,is-rex-already-encoded
-                                   ,instruction-length-in-bytes)
-                                 (handle-nasm-code-format-x64
-                                   ,code-format
-                                   ,req-operands
-                                   ,given-operands
-                                   ,rex-w-value
-                                   ,rex-r-value
-                                   ,rex-x-value
-                                   1 ; `rex-b-value`
-                                   ,encoded-bytes
-                                   ,is-rex-already-encoded
-                                   ,instruction-length-in-bytes))))
-                 (t (return-from handle-nasm-code-format-x64
-                                 (handle-nasm-code-format-x64-wrapper
-                                   (cons ,encoding-type (nthcdr 2 code-format)) ; `code-format`
-                                   ,req-operands
-                                   :given-operands ,given-operands
-                                   :encoded-bytes (append
-                                                    ,encoded-bytes
-                                                    (emit-rex-byte ,rex-w-value   ; operand size.
-                                                                   ,rex-r-value   ; TODO: encode here 1 bit of data!
-                                                                   ,rex-x-value   ; TODO: encode here 1 bit of data!
-                                                                   ,rex-b-value)) ; TODO: encode here 1 bit of data!
-                                   :is-rex-already-encoded t                      ; `is-rex-already-encoded`
-                                   :instruction-length-in-bytes (1+ ,instruction-length-in-bytes)))))) ; `instruction-length-in-bytes`
+               (emit-rex-byte
+                 ,code-format
+                 ,req-operands
+                 ,given-operands
+                 ,rex-w-value
+                 ,rex-r-value
+                 ,rex-x-value
+                 ,rex-b-value
+                 ,encoded-bytes
+                 ,is-rex-already-encoded
+                 ,instruction-length-in-bytes))
               ((eql ,n-operands 1)
-               (cond
-                 ((null ,rex-w-value)
-                  (return-from handle-nasm-code-format-x64
-                               (append
-                                 (handle-nasm-code-format-x64
-                                   ,code-format
-                                   ,req-operands
-                                   ,given-operands
-                                   0 ; `rex-w-value`
-                                   ,rex-r-value
-                                   ,rex-x-value
-                                   ,rex-b-value
-                                   ,encoded-bytes
-                                   ,is-rex-already-encoded
-                                   ,instruction-length-in-bytes)
-                                 (handle-nasm-code-format-x64
-                                   ,code-format
-                                   ,req-operands
-                                   ,given-operands
-                                   1 ; `rex-w-value`
-                                   ,rex-r-value
-                                   ,rex-x-value
-                                   ,rex-b-value
-                                   ,encoded-bytes
-                                   ,is-rex-already-encoded
-                                   ,instruction-length-in-bytes))))
-                 ((null ,rex-r-value)
-                  (return-from handle-nasm-code-format-x64
-                               (append
-                                 (handle-nasm-code-format-x64
-                                   ,code-format
-                                   ,req-operands
-                                   ,given-operands
-                                   ,rex-w-value
-                                   0 ; `rex-r-value`
-                                   ,rex-x-value
-                                   ,rex-b-value
-                                   ,encoded-bytes
-                                   ,is-rex-already-encoded
-                                   ,instruction-length-in-bytes)
-                                 (handle-nasm-code-format-x64
-                                   ,code-format
-                                   ,req-operands
-                                   ,given-operands
-                                   ,rex-w-value
-                                   1 ; `rex-r-value`
-                                   ,rex-x-value
-                                   ,rex-b-value
-                                   ,encoded-bytes
-                                   ,is-rex-already-encoded
-                                   ,instruction-length-in-bytes))))
-                 ((null ,rex-x-value)
-                  (return-from handle-nasm-code-format-x64
-                               (append
-                                 (handle-nasm-code-format-x64
-                                   ,code-format
-                                   ,req-operands
-                                   ,given-operands
-                                   ,rex-w-value
-                                   ,rex-r-value
-                                   0 ; `rex-x-value`
-                                   ,rex-b-value
-                                   ,encoded-bytes
-                                   ,is-rex-already-encoded
-                                   ,instruction-length-in-bytes)
-                                 (handle-nasm-code-format-x64
-                                   ,code-format
-                                   ,req-operands
-                                   ,given-operands
-                                   ,rex-w-value
-                                   ,rex-r-value
-                                   1 ; `rex-x-value`
-                                   ,rex-b-value
-                                   ,encoded-bytes
-                                   ,is-rex-already-encoded
-                                   ,instruction-length-in-bytes))))
-                 (t (return-from handle-nasm-code-format-x64
-                                 (handle-nasm-code-format-x64-wrapper
-                                   (cons ,encoding-type (nthcdr 2 code-format)) ; `code-format`
-                                   ,req-operands
-                                   :given-operands ,given-operands
-                                   :encoded-bytes (append
-                                                    ,encoded-bytes
-                                                    (emit-rex-byte ,rex-w-value    ; operand size.
-                                                                   ,rex-r-value    ; number of arguments should be checked already.
-                                                                   ,rex-x-value    ; extension of the SIB index field, this should be
-                                                                   (rex-b ,arg1))) ; checked when implementing SIB!
-                                   :is-rex-already-encoded t                       ; `is-rex-already-encoded`
-                                   :instruction-length-in-bytes (1+ ,instruction-length-in-bytes)))))) ; `instruction-length-in-bytes`
+               (emit-rex-byte
+                 ,code-format
+                 ,req-operands
+                 ,given-operands
+                 ,rex-w-value
+                 ,rex-r-value
+                 ,rex-x-value
+                 (rex-b ,arg1)
+                 ,encoded-bytes
+                 ,is-rex-already-encoded
+                 ,instruction-length-in-bytes))
               ((eql ,n-operands 2)
                (cond
                  ((equal ,encoding-type "[r-:")
-                  (emit-rex-byte ,rex-w-value    ; operand size.
-                                 (rex-r ,arg1)   ; number of arguments should be checked already.
-                                 0               ; extension of the SIB index field, this should be
-                                 (rex-b ,arg1))) ; checked when implementing SIB!
+                  (emit-rex-byte
+                    ,code-format
+                    ,req-operands
+                    ,given-operands
+                    ,rex-w-value  ; operand size.
+                    (rex-r ,arg1) ; number of arguments should be checked already.
+                    ,rex-x-value  ; extension of the SIB index field, this should be
+                    (rex-b ,arg1) ; checked when implementing SIB!
+                    ,encoded-bytes
+                    ,is-rex-already-encoded
+                    ,instruction-length-in-bytes))
                  ((equal ,encoding-type "[-r:")
-                  (emit-rex-byte ,rex-w-value    ; operand size.
-                                 (rex-r ,arg2)   ; number of arguments should be checked already.
-                                 0               ; extension of the SIB index field, this should be
-                                 (rex-b ,arg2))) ; checked when implementing SIB!
+                  (emit-rex-byte
+                    ,code-format
+                    ,req-operands
+                    ,given-operands
+                    ,rex-w-value  ; operand size.
+                    (rex-r ,arg2) ; number of arguments should be checked already.
+                    ,rex-x-value  ; extension of the SIB index field, this should be
+                    (rex-b ,arg2) ; checked when implementing SIB!
+                    ,encoded-bytes
+                    ,is-rex-already-encoded
+                    ,instruction-length-in-bytes))
                  ((equal ,encoding-type "[mi:")
-                  (emit-rex-byte ,rex-w-value    ; operand size.
-                                 (rex-r ,arg1)   ; number of arguments should be checked already.
-                                 0               ; extension of the SIB index field, this should be
-                                 (rex-b ,arg1))) ; checked when implementing SIB!
+                  (emit-rex-byte
+                    ,code-format
+                    ,req-operands
+                    ,given-operands
+                    ,rex-w-value  ; operand size.
+                    (rex-r ,arg1) ; number of arguments should be checked already.
+                    ,rex-x-value  ; extension of the SIB index field, this should be
+                    (rex-b ,arg1) ; checked when implementing SIB!
+                    ,encoded-bytes
+                    ,is-rex-already-encoded
+                    ,instruction-length-in-bytes))
                  ((equal ,encoding-type "[mr:")
-                  (emit-rex-byte ,rex-w-value    ; operand size.
-                                 (rex-r ,arg2)   ; rex-r augments reg field, so it's from arg2 in `[mr:`.
-                                 0               ; extension of the SIB index field, this should be
-                                 (rex-b ,arg1))) ; rex-b augments r/m field, so it's from arg1 in `[mr:`.
+                  (emit-rex-byte
+                    ,code-format
+                    ,req-operands
+                    ,given-operands
+                    ,rex-w-value  ; operand size.
+                    (rex-r ,arg2) ; rex-r augments reg field, so it's from arg2 in `[mr:`.
+                    ,rex-x-value  ; extension of the SIB index field, this should be
+                    (rex-b ,arg1) ; rex-b augments r/m field, so it's from arg1 in `[mr:`.
+                    ,encoded-bytes
+                    ,is-rex-already-encoded
+                    ,instruction-length-in-bytes))
                  ((equal ,encoding-type "[ri:")
-                  (emit-rex-byte ,rex-w-value    ; operand size.
-                                 (rex-r ,arg1)   ; number of arguments should be checked already.
-                                 0               ; extension of the SIB index field, this should be
-                                 (rex-b ,arg1))) ; checked when implementing SIB!
+                  (emit-rex-byte
+                    ,code-format
+                    ,req-operands
+                    ,given-operands
+                    ,rex-w-value  ; operand size.
+                    (rex-r ,arg1) ; number of arguments should be checked already.
+                    ,rex-x-value  ; extension of the SIB index field, this should be
+                    (rex-b ,arg1) ; checked when implementing SIB!
+                    ,encoded-bytes
+                    ,is-rex-already-encoded
+                    ,instruction-length-in-bytes))
                  ((equal ,encoding-type "[rm:")
-                  (emit-rex-byte ,rex-w-value    ; operand size.
-                                 (rex-r ,arg1)   ; rex-r augments reg field, so it's from arg1 in `[rm:`.
-                                 0               ; extension of the SIB index field, this should be
-                                 (rex-b ,arg2))) ; rex-b augments r/m field, so it's from arg2 in `[mr:`.
+                  (emit-rex-byte
+                    ,code-format
+                    ,req-operands
+                    ,given-operands
+                    ,rex-w-value  ; operand size.
+                    (rex-r ,arg1) ; rex-r augments reg field, so it's from arg1 in `[rm:`.
+                    ,rex-x-value  ; extension of the SIB index field, this should be
+                    (rex-b ,arg2) ; rex-b augments r/m field, so it's from arg2 in `[mr:`.
+                    ,encoded-bytes
+                    ,is-rex-already-encoded
+                    ,instruction-length-in-bytes))
                  ((equal ,encoding-type "[-i:")
-                  (emit-rex-byte ,rex-w-value    ; operand size.
-                                 (rex-r ,arg1)   ; number of arguments should be checked already.
-                                 0               ; extension of the SIB index field, this should be
-                                 (rex-b ,arg1))) ; checked when implementing SIB!
+                  (emit-rex-byte
+                    ,code-format
+                    ,req-operands
+                    ,given-operands
+                    ,rex-w-value  ; operand size.
+                    (rex-r ,arg1) ; number of arguments should be checked already.
+                    ,rex-x-value  ; extension of the SIB index field, this should be
+                    (rex-b ,arg1) ; checked when implementing SIB!
+                    ,encoded-bytes
+                    ,is-rex-already-encoded
+                    ,instruction-length-in-bytes))
                  (t (error "encoding not yet implemented"))))
               (t (error "encoding not yet implemented"))))))
      (emit-and-update-instruction-length (&body body)
