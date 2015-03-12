@@ -66,10 +66,10 @@
     req-operands
     &key
     given-operands
-    (rex-w-value 0)
-    (rex-r-value 0)
-    (rex-x-value 0)
-    (rex-b-value 0)
+    rex-w-value
+    rex-r-value
+    rex-x-value
+    rex-b-value
     encoded-bytes
     (instruction-length-in-bytes 0))
   "This function handles one NASM's `insns.dat` code-string and returns the encoding as a list of lists (possible encodings)."
@@ -81,10 +81,10 @@
          instruction-length-in-bytes
          &key
          given-operands
-         (rex-w-value 0)
-         (rex-r-value 0)
-         (rex-x-value 0)
-         (rex-b-value 0))
+         rex-w-value
+         rex-r-value
+         rex-x-value
+         rex-b-value)
        ;; This macro emits REX according to encoding type and the operands.
        ;; `rex-w-value`: 0 for default operand size, 1 for 64-bit operand size.
        ;; `emit-rex` does not handle steganographic or variable encoding in any
@@ -113,10 +113,111 @@
                             (t (length ,req-operands)))))
             (cond
               ((eql ,n-operands 0)
-               (emit-rex-byte ,rex-w-value   ; operand size.
-                              ,rex-r-value   ; TODO: encode here 1 bit of data!
-                              ,rex-x-value   ; TODO: encode here 1 bit of data!
-                              ,rex-b-value)) ; TODO: encode here 1 bit of data!
+               (cond
+                 ((null ,rex-w-value)
+                  (return-from handle-nasm-code-format-x64
+                               (append
+                                 (handle-nasm-code-format-x64
+                                   ,code-format
+                                   ,req-operands
+                                   :given-operands ,given-operands
+                                   :rex-w-value 0
+                                   :rex-r-value ,rex-r-value
+                                   :rex-x-value ,rex-x-value
+                                   :rex-b-value ,rex-b-value
+                                   :encoded-bytes ,encoded-bytes
+                                   :instruction-length-in-bytes ,instruction-length-in-bytes)
+                                 (handle-nasm-code-format-x64
+                                   ,code-format
+                                   ,req-operands
+                                   :given-operands ,given-operands
+                                   :rex-w-value 1
+                                   :rex-r-value ,rex-r-value
+                                   :rex-x-value ,rex-x-value
+                                   :rex-b-value ,rex-b-value
+                                   :encoded-bytes ,encoded-bytes
+                                   :instruction-length-in-bytes ,instruction-length-in-bytes))))
+                 ((null ,rex-r-value)
+                  (return-from handle-nasm-code-format-x64
+                               (append
+                                 (handle-nasm-code-format-x64
+                                   ,code-format
+                                   ,req-operands
+                                   :given-operands ,given-operands
+                                   :rex-w-value ,rex-w-value
+                                   :rex-r-value 0
+                                   :rex-x-value ,rex-x-value
+                                   :rex-b-value ,rex-b-value
+                                   :encoded-bytes ,encoded-bytes
+                                   :instruction-length-in-bytes ,instruction-length-in-bytes)
+                                 (handle-nasm-code-format-x64
+                                   ,code-format
+                                   ,req-operands
+                                   :given-operands ,given-operands
+                                   :rex-w-value ,rex-w-value
+                                   :rex-r-value 1
+                                   :rex-x-value ,rex-x-value
+                                   :rex-b-value ,rex-b-value
+                                   :encoded-bytes ,encoded-bytes
+                                   :instruction-length-in-bytes ,instruction-length-in-bytes))))
+                 ((null ,rex-x-value)
+                  (return-from handle-nasm-code-format-x64
+                               (append
+                                 (handle-nasm-code-format-x64
+                                   ,code-format
+                                   ,req-operands
+                                   :given-operands ,given-operands
+                                   :rex-w-value ,rex-w-value
+                                   :rex-r-value ,rex-r-value
+                                   :rex-x-value 0
+                                   :rex-b-value ,rex-b-value
+                                   :encoded-bytes ,encoded-bytes
+                                   :instruction-length-in-bytes ,instruction-length-in-bytes)
+                                 (handle-nasm-code-format-x64
+                                   ,code-format
+                                   ,req-operands
+                                   :given-operands ,given-operands
+                                   :rex-w-value ,rex-w-value
+                                   :rex-r-value ,rex-r-value
+                                   :rex-x-value 1
+                                   :rex-b-value ,rex-b-value
+                                   :encoded-bytes ,encoded-bytes
+                                   :instruction-length-in-bytes ,instruction-length-in-bytes))))
+                 ((null ,rex-b-value)
+                  (return-from handle-nasm-code-format-x64
+                               (append
+                                 (handle-nasm-code-format-x64
+                                   ,code-format
+                                   ,req-operands
+                                   :given-operands ,given-operands
+                                   :rex-w-value ,rex-w-value
+                                   :rex-r-value ,rex-r-value
+                                   :rex-x-value ,rex-x-value
+                                   :rex-b-value 0
+                                   :encoded-bytes ,encoded-bytes
+                                   :instruction-length-in-bytes ,instruction-length-in-bytes)
+                                 (handle-nasm-code-format-x64
+                                   ,code-format
+                                   ,req-operands
+                                   :given-operands ,given-operands
+                                   :rex-w-value ,rex-w-value
+                                   :rex-r-value ,rex-r-value
+                                   :rex-x-value ,rex-x-value
+                                   :rex-b-value 1
+                                   :encoded-bytes ,encoded-bytes
+                                   :instruction-length-in-bytes ,instruction-length-in-bytes))))
+                 (t (return-from handle-nasm-code-format-x64
+                                 (handle-nasm-code-format-x64
+                                   (cons ,encoding-type (nthcdr 2 code-format))
+                                   ,req-operands
+                                   :given-operands ,given-operands
+                                   :encoded-bytes (append
+                                                    ,encoded-bytes
+                                                    (emit-rex-byte ,rex-w-value   ; operand size.
+                                                                   ,rex-r-value   ; TODO: encode here 1 bit of data!
+                                                                   ,rex-x-value   ; TODO: encode here 1 bit of data!
+                                                                   ,rex-b-value)) ; TODO: encode here 1 bit of data!
+                                   :instruction-length-in-bytes (1+ ,instruction-length-in-bytes))))))
               ((eql ,n-operands 1)
                (emit-rex-byte ,rex-w-value    ; operand size.
                               ,rex-r-value    ; number of arguments should be checked already.
@@ -259,12 +360,15 @@
                                                                 (setf is-rex-already-encoded t)
                                                                 (emit-and-update-instruction-length
                                                                   (emit-rex
-                                                                    (cons encoding-type (nthcdr (1+ n-processed-code-strings) (rest code-format)))
+                                                                    (cons encoding-type (nthcdr n-processed-code-strings (rest code-format)))
                                                                     req-operands
                                                                     encoded-bytes
                                                                     instruction-length-in-bytes
                                                                     :given-operands my-args
-                                                                    :rex-r-value rex-r-value)))
+                                                                    :rex-w-value rex-w-value
+                                                                    :rex-r-value rex-r-value
+                                                                    :rex-x-value rex-x-value
+                                                                    :rex-b-value rex-b-value)))
                                                               (t nil)))
                                                            ((eql n-operands 2)
                                                             (cond
@@ -272,12 +376,15 @@
                                                                 (setf is-rex-already-encoded t)
                                                                 (emit-and-update-instruction-length
                                                                   (emit-rex
-                                                                    (cons encoding-type (nthcdr (1+ n-processed-code-strings) (rest code-format)))
+                                                                    (cons encoding-type (nthcdr n-processed-code-strings (rest code-format)))
                                                                     req-operands
                                                                     encoded-bytes
                                                                     instruction-length-in-bytes
                                                                     :given-operands my-args
-                                                                    :rex-r-value rex-r-value)))
+                                                                    :rex-w-value rex-w-value
+                                                                    :rex-r-value rex-r-value
+                                                                    :rex-x-value rex-x-value
+                                                                    :rex-b-value rex-b-value)))
                                                               (t nil)))
                                                            ((eql n-operands 3)
                                                             (error "o32 encoding of 3 operands in not yet implemented"))
@@ -288,35 +395,41 @@
                                                             (setf is-rex-already-encoded t)
                                                             (emit-and-update-instruction-length
                                                               (emit-rex
-                                                                (cons encoding-type (nthcdr (1+ n-processed-code-strings) (rest code-format)))
+                                                                (cons encoding-type (nthcdr n-processed-code-strings (rest code-format)))
                                                                 req-operands
                                                                 encoded-bytes
                                                                 instruction-length-in-bytes
                                                                 :given-operands my-args
                                                                 :rex-w-value 1
-                                                                :rex-r-value rex-r-value))) ; 64-bit operand size!
+                                                                :rex-r-value rex-r-value ; 64-bit operand size!
+                                                                :rex-x-value rex-x-value
+                                                                :rex-b-value rex-b-value)))
                                                            ((eql n-operands 1)
                                                             (setf is-rex-already-encoded t)
                                                             (emit-and-update-instruction-length
                                                               (emit-rex
-                                                                (cons encoding-type (nthcdr (1+ n-processed-code-strings) (rest code-format)))
+                                                                (cons encoding-type (nthcdr n-processed-code-strings (rest code-format)))
                                                                 req-operands
                                                                 encoded-bytes
                                                                 instruction-length-in-bytes
                                                                 :given-operands my-args
                                                                 :rex-w-value 1
-                                                                :rex-r-value rex-r-value))) ; 64-bit operand size!
+                                                                :rex-r-value rex-r-value ; 64-bit operand size!
+                                                                :rex-x-value rex-x-value
+                                                                :rex-b-value rex-b-value)))
                                                            ((eql n-operands 2)
                                                             (setf is-rex-already-encoded t)
                                                             (emit-and-update-instruction-length
                                                               (emit-rex
-                                                                (cons encoding-type (nthcdr (1+ n-processed-code-strings) (rest code-format)))
+                                                                (cons encoding-type (nthcdr n-processed-code-strings (rest code-format)))
                                                                 req-operands
                                                                 encoded-bytes
                                                                 instruction-length-in-bytes
                                                                 :given-operands my-args
                                                                 :rex-w-value 1
-                                                                :rex-r-value rex-r-value))) ; 64-bit operand size!
+                                                                :rex-r-value rex-r-value ; 64-bit operand size!
+                                                                :rex-x-value rex-x-value
+                                                                :rex-b-value rex-b-value)))
                                                            ((eql n-operands 3)
                                                             (error "o64 encoding of 3 operands in not yet implemented"))
                                                            (t (error "over 3 operands is an error"))))
@@ -334,13 +447,15 @@
                                                                 ;; 64-bit operand size is the default, so it's possible to encode 1 bit of information!!!
                                                                 (emit-and-update-instruction-length
                                                                   (emit-rex
-                                                                    (cons encoding-type (nthcdr (1+ n-processed-code-strings) (rest code-format)))
+                                                                    (cons encoding-type (nthcdr n-processed-code-strings (rest code-format)))
                                                                     req-operands
                                                                     encoded-bytes
                                                                     instruction-length-in-bytes
                                                                     :given-operands my-args
                                                                     :rex-w-value rex-w-value
-                                                                    :rex-r-value rex-r-value)))
+                                                                    :rex-r-value rex-r-value
+                                                                    :rex-x-value rex-x-value
+                                                                    :rex-b-value rex-b-value)))
                                                               (t nil)))
                                                            ((eql n-operands 2)
                                                             (error "o64nw encoding of 2 operands in not yet implemented"))
@@ -358,21 +473,27 @@
                                                                          ((eql n-operands 1)
                                                                           (emit-and-update-instruction-length
                                                                             (emit-rex
-                                                                              (cons encoding-type (nthcdr (1+ n-processed-code-strings) (rest code-format)))
+                                                                              (cons encoding-type (nthcdr n-processed-code-strings (rest code-format)))
                                                                               req-operands
                                                                               encoded-bytes
                                                                               instruction-length-in-bytes
                                                                               :given-operands my-args
-                                                                              :rex-r-value rex-r-value)))
+                                                                              :rex-w-value rex-w-value
+                                                                              :rex-r-value rex-r-value
+                                                                              :rex-x-value rex-x-value
+                                                                              :rex-b-value rex-b-value)))
                                                                          ((eql n-operands 2)
                                                                           (emit-and-update-instruction-length
                                                                             (emit-rex
-                                                                              (cons encoding-type (nthcdr (1+ n-processed-code-strings) (rest code-format)))
+                                                                              (cons encoding-type (nthcdr n-processed-code-strings (rest code-format)))
                                                                               req-operands
                                                                               encoded-bytes
                                                                               instruction-length-in-bytes
                                                                               :given-operands my-args
-                                                                              :rex-r-value rex-r-value))) ; TODO: check if REX.W be used to encode data here!
+                                                                              :rex-w-value rex-w-value
+                                                                              :rex-r-value rex-r-value ; TODO: check if REX.W be used to encode data here!
+                                                                              :rex-x-value rex-x-value
+                                                                              :rex-b-value rex-b-value)))
                                                                          (t (error "encoding not yet implemented")))))
                                                                    (cond ((equal code-string "/r")
                                                                           (cond
