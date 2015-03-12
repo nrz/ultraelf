@@ -61,17 +61,42 @@
        (list (+ base (modrm-r/m arg1))))
       (t (error "xx+r encoding for this code-string not implemented.")))))
 
-(defun handle-nasm-code-format-x64
+(defun handle-nasm-code-format-x64-wrapper
   (code-format
     req-operands
     &key
+    given-operands
+    encoded-bytes
+    (instruction-length-in-bytes 0))
+  "This is simple wrapper function that calls `handle-nasm-code-format-x64` with
+   the hardcoded parameters (so that `handle-nasm-code-format-x64` can be made simpler):
+   `rex-w-value` `nil`
+   `rex-r-value` `nil`
+   `rex-x-value` `nil`
+   `rex-b-value` `nil`
+   `encoded-bytes` `nil`
+   `instruction-length-in-bytes` 0"
+  (handle-nasm-code-format-x64
+    code-format
+    req-operands
+    given-operands
+    nil           ; `rex-w-value`
+    nil           ; `rex-r-value`
+    nil           ; `rex-x-value`
+    nil           ; `rex-b-value`
+    encoded-bytes ; `encoded-bytes`
+    instruction-length-in-bytes)) ; `instruction-length-in-bytes`
+
+(defun handle-nasm-code-format-x64
+  (code-format
+    req-operands
     given-operands
     rex-w-value
     rex-r-value
     rex-x-value
     rex-b-value
     encoded-bytes
-    (instruction-length-in-bytes 0))
+    instruction-length-in-bytes)
   "This function handles one NASM's `insns.dat` code-string and returns the encoding as a list of lists (possible encodings)."
   (macrolet
     ((emit-rex
@@ -120,95 +145,95 @@
                                  (handle-nasm-code-format-x64
                                    ,code-format
                                    ,req-operands
-                                   :given-operands ,given-operands
-                                   :rex-w-value 0
-                                   :rex-r-value ,rex-r-value
-                                   :rex-x-value ,rex-x-value
-                                   :rex-b-value ,rex-b-value
-                                   :encoded-bytes ,encoded-bytes
-                                   :instruction-length-in-bytes ,instruction-length-in-bytes)
+                                   ,given-operands
+                                   0 ; `rex-w-value`
+                                   ,rex-r-value
+                                   ,rex-x-value
+                                   ,rex-b-value
+                                   ,encoded-bytes
+                                   ,instruction-length-in-bytes)
                                  (handle-nasm-code-format-x64
                                    ,code-format
                                    ,req-operands
-                                   :given-operands ,given-operands
-                                   :rex-w-value 1
-                                   :rex-r-value ,rex-r-value
-                                   :rex-x-value ,rex-x-value
-                                   :rex-b-value ,rex-b-value
-                                   :encoded-bytes ,encoded-bytes
-                                   :instruction-length-in-bytes ,instruction-length-in-bytes))))
+                                   ,given-operands
+                                   1 ; `rex-w-value`
+                                   ,rex-r-value
+                                   ,rex-x-value
+                                   ,rex-b-value
+                                   ,encoded-bytes
+                                   ,instruction-length-in-bytes))))
                  ((null ,rex-r-value)
                   (return-from handle-nasm-code-format-x64
                                (append
                                  (handle-nasm-code-format-x64
                                    ,code-format
                                    ,req-operands
-                                   :given-operands ,given-operands
-                                   :rex-w-value ,rex-w-value
-                                   :rex-r-value 0
-                                   :rex-x-value ,rex-x-value
-                                   :rex-b-value ,rex-b-value
-                                   :encoded-bytes ,encoded-bytes
-                                   :instruction-length-in-bytes ,instruction-length-in-bytes)
+                                   ,given-operands
+                                   ,rex-w-value
+                                   0 ; `rex-r-value`
+                                   ,rex-x-value
+                                   ,rex-b-value
+                                   ,encoded-bytes
+                                   ,instruction-length-in-bytes)
                                  (handle-nasm-code-format-x64
                                    ,code-format
                                    ,req-operands
-                                   :given-operands ,given-operands
-                                   :rex-w-value ,rex-w-value
-                                   :rex-r-value 1
-                                   :rex-x-value ,rex-x-value
-                                   :rex-b-value ,rex-b-value
-                                   :encoded-bytes ,encoded-bytes
-                                   :instruction-length-in-bytes ,instruction-length-in-bytes))))
+                                   ,given-operands
+                                   ,rex-w-value
+                                   1 ; `rex-r-value`
+                                   ,rex-x-value
+                                   ,rex-b-value
+                                   ,encoded-bytes
+                                   ,instruction-length-in-bytes))))
                  ((null ,rex-x-value)
                   (return-from handle-nasm-code-format-x64
                                (append
                                  (handle-nasm-code-format-x64
                                    ,code-format
                                    ,req-operands
-                                   :given-operands ,given-operands
-                                   :rex-w-value ,rex-w-value
-                                   :rex-r-value ,rex-r-value
-                                   :rex-x-value 0
-                                   :rex-b-value ,rex-b-value
-                                   :encoded-bytes ,encoded-bytes
-                                   :instruction-length-in-bytes ,instruction-length-in-bytes)
+                                   ,given-operands
+                                   ,rex-w-value
+                                   ,rex-r-value
+                                   0 ; `rex-x-value`
+                                   ,rex-b-value
+                                   ,encoded-bytes
+                                   ,instruction-length-in-bytes)
                                  (handle-nasm-code-format-x64
                                    ,code-format
                                    ,req-operands
-                                   :given-operands ,given-operands
-                                   :rex-w-value ,rex-w-value
-                                   :rex-r-value ,rex-r-value
-                                   :rex-x-value 1
-                                   :rex-b-value ,rex-b-value
-                                   :encoded-bytes ,encoded-bytes
-                                   :instruction-length-in-bytes ,instruction-length-in-bytes))))
+                                   ,given-operands
+                                   ,rex-w-value
+                                   ,rex-r-value
+                                   1 ; `rex-x-value`
+                                   ,rex-b-value
+                                   ,encoded-bytes
+                                   ,instruction-length-in-bytes))))
                  ((null ,rex-b-value)
                   (return-from handle-nasm-code-format-x64
                                (append
                                  (handle-nasm-code-format-x64
                                    ,code-format
                                    ,req-operands
-                                   :given-operands ,given-operands
-                                   :rex-w-value ,rex-w-value
-                                   :rex-r-value ,rex-r-value
-                                   :rex-x-value ,rex-x-value
-                                   :rex-b-value 0
-                                   :encoded-bytes ,encoded-bytes
-                                   :instruction-length-in-bytes ,instruction-length-in-bytes)
+                                   ,given-operands
+                                   ,rex-w-value
+                                   ,rex-r-value
+                                   ,rex-x-value
+                                   0 ; `rex-b-value`
+                                   ,encoded-bytes
+                                   ,instruction-length-in-bytes)
                                  (handle-nasm-code-format-x64
                                    ,code-format
                                    ,req-operands
-                                   :given-operands ,given-operands
-                                   :rex-w-value ,rex-w-value
-                                   :rex-r-value ,rex-r-value
-                                   :rex-x-value ,rex-x-value
-                                   :rex-b-value 1
-                                   :encoded-bytes ,encoded-bytes
-                                   :instruction-length-in-bytes ,instruction-length-in-bytes))))
+                                   ,given-operands
+                                   ,rex-w-value
+                                   ,rex-r-value
+                                   ,rex-x-value
+                                   1 ; `rex-b-value`
+                                   ,encoded-bytes
+                                   ,instruction-length-in-bytes))))
                  (t (return-from handle-nasm-code-format-x64
-                                 (handle-nasm-code-format-x64
-                                   (cons ,encoding-type (nthcdr 2 code-format))
+                                 (handle-nasm-code-format-x64-wrapper
+                                   (cons ,encoding-type (nthcdr 2 code-format)) ; `code-format`
                                    ,req-operands
                                    :given-operands ,given-operands
                                    :encoded-bytes (append
@@ -217,7 +242,7 @@
                                                                    ,rex-r-value   ; TODO: encode here 1 bit of data!
                                                                    ,rex-x-value   ; TODO: encode here 1 bit of data!
                                                                    ,rex-b-value)) ; TODO: encode here 1 bit of data!
-                                   :instruction-length-in-bytes (1+ ,instruction-length-in-bytes))))))
+                                   :instruction-length-in-bytes (1+ ,instruction-length-in-bytes)))))) ; `instruction-length-in-bytes`
               ((eql ,n-operands 1)
                (emit-rex-byte ,rex-w-value    ; operand size.
                               ,rex-r-value    ; number of arguments should be checked already.
@@ -684,49 +709,49 @@
       ((equal (first code-format) "[")
        ;; The encoding of this variant is constant, so just convert
        ;; the rest elements (hexadecimal numbers) to numbers in a list.
-       (handle-nasm-code-format-x64 code-format my-operands))
+       (handle-nasm-code-format-x64-wrapper code-format my-operands))
       ((equal (first code-format) "[--:")
        ;; The operands and encoding of this variant are fixed.
-       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands))
+       (handle-nasm-code-format-x64-wrapper code-format my-operands :given-operands given-operands))
       ((equal (first code-format) "[-i:")
        ;; One fixed operand and one immediate operand.
-       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands))
+       (handle-nasm-code-format-x64-wrapper code-format my-operands :given-operands given-operands))
       ((equal (first code-format) "[-r:")
        ;; One fixed operand and one register operand.
-       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands))
+       (handle-nasm-code-format-x64-wrapper code-format my-operands :given-operands given-operands))
       ((equal (first code-format) "[m:")
        ;; This variant has one 'memory' (can be register too) operand.
        ;; The operand is encoded in the r/m field.
        ;; An extension of the opcode is in the reg field.
-       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands))
+       (handle-nasm-code-format-x64-wrapper code-format my-operands :given-operands given-operands))
       ((equal (first code-format) "[i:")
        ;; This variant has one immediate operand.
-       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands))
+       (handle-nasm-code-format-x64-wrapper code-format my-operands :given-operands given-operands))
       ((equal (first code-format) "[r:")
        ;; This variant has one register operand.
        ;; The operand is encoded in the r/m field.
        ;; An extension of the opcode is in the reg field.
-       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands))
+       (handle-nasm-code-format-x64-wrapper code-format my-operands :given-operands given-operands))
       ((equal (first code-format) "[i-:")
        ;; One immediate operand and one fixed operand.
-       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands))
+       (handle-nasm-code-format-x64-wrapper code-format my-operands :given-operands given-operands))
       ((equal (first code-format) "[r-:")
        ;; One register operand and one fixed operand.
-       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands))
+       (handle-nasm-code-format-x64-wrapper code-format my-operands :given-operands given-operands))
       ((equal (first code-format) "[mi:")
        ;; One memory operand and one immediate operand.
        ;; The operands are encoded in corresponding ModRM fields.
-       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands))
+       (handle-nasm-code-format-x64-wrapper code-format my-operands :given-operands given-operands))
       ((equal (first code-format) "[mr:")
        ;; One memory operand and one register operand.
        ;; The operands are encoded in corresponding ModRM fields.
-       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands))
+       (handle-nasm-code-format-x64-wrapper code-format my-operands :given-operands given-operands))
       ((equal (first code-format) "[ri:")
        ;; One register operand and one immediate operand.
        ;; The operands are encoded in corresponding ModRM fields.
-       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands))
+       (handle-nasm-code-format-x64-wrapper code-format my-operands :given-operands given-operands))
       ((equal (first code-format) "[rm:")
        ;; One register operand and one memory operand.
        ;; The operands are encoded in corresponding ModRM fields.
-       (handle-nasm-code-format-x64 code-format my-operands :given-operands given-operands))
+       (handle-nasm-code-format-x64-wrapper code-format my-operands :given-operands given-operands))
       (t (error "encoding not yet implemented")))))
