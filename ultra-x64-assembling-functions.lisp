@@ -61,6 +61,14 @@
        (list (+ base (modrm-r/m arg1))))
       (t (error "xx+r encoding for this code-string not implemented.")))))
 
+(defun emit-rex-byte (rex-w rex-r rex-x rex-b)
+  "This function emits a REX prefix as requested."
+  (list (logior #x40
+                rex-b
+                (ash rex-x 1)
+                (ash rex-r 2)
+                (ash rex-w 3))))
+
 (defun handle-nasm-code-format-x64-wrapper
   (code-format
     req-operands

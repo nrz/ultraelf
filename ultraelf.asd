@@ -51,7 +51,6 @@
                (:file "ultra-printing")                         ; printing functions.
                (:file "ultra-regex")                            ; regular expression functions.
                (:file "ultra-numbers")                          ; number-handling functions.
-               (:file "ultra-x64-rex")                          ; x64 "emit REX" functions.
                (:file "ultra-architecture-classes")             ; architecture classes.
                (:file "ultra-instruction-classes")              ; instruction classes.
                (:file "ultra-x86-instruction-classes")          ; x86 instruction classes.
