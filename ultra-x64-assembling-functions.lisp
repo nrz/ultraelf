@@ -84,8 +84,8 @@
     nil           ; `rex-r-value`
     nil           ; `rex-x-value`
     nil           ; `rex-b-value`
-    encoded-bytes ; `encoded-bytes`
-    instruction-length-in-bytes)) ; `instruction-length-in-bytes`
+    encoded-bytes
+    instruction-length-in-bytes))
 
 (defun handle-nasm-code-format-x64
   (code-format
