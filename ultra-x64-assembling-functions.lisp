@@ -77,14 +77,14 @@
     ((emit-rex
        (code-format
          req-operands
-         encoded-bytes
-         instruction-length-in-bytes
-         &key
-         given-operands
          rex-w-value
          rex-r-value
          rex-x-value
-         rex-b-value)
+         rex-b-value
+         encoded-bytes
+         instruction-length-in-bytes
+         &key
+         given-operands)
        ;; This macro emits REX according to encoding type and the operands.
        ;; `rex-w-value`: 0 for default operand size, 1 for 64-bit operand size.
        ;; `emit-rex` does not handle steganographic or variable encoding in any
@@ -362,13 +362,13 @@
                                                                   (emit-rex
                                                                     (cons encoding-type (nthcdr n-processed-code-strings (rest code-format)))
                                                                     req-operands
+                                                                    rex-w-value
+                                                                    rex-r-value
+                                                                    rex-x-value
+                                                                    rex-b-value
                                                                     encoded-bytes
                                                                     instruction-length-in-bytes
-                                                                    :given-operands my-args
-                                                                    :rex-w-value rex-w-value
-                                                                    :rex-r-value rex-r-value
-                                                                    :rex-x-value rex-x-value
-                                                                    :rex-b-value rex-b-value)))
+                                                                    :given-operands my-args)))
                                                               (t nil)))
                                                            ((eql n-operands 2)
                                                             (cond
@@ -378,13 +378,13 @@
                                                                   (emit-rex
                                                                     (cons encoding-type (nthcdr n-processed-code-strings (rest code-format)))
                                                                     req-operands
+                                                                    rex-w-value
+                                                                    rex-r-value
+                                                                    rex-x-value
+                                                                    rex-b-value
                                                                     encoded-bytes
                                                                     instruction-length-in-bytes
-                                                                    :given-operands my-args
-                                                                    :rex-w-value rex-w-value
-                                                                    :rex-r-value rex-r-value
-                                                                    :rex-x-value rex-x-value
-                                                                    :rex-b-value rex-b-value)))
+                                                                    :given-operands my-args)))
                                                               (t nil)))
                                                            ((eql n-operands 3)
                                                             (error "o32 encoding of 3 operands in not yet implemented"))
@@ -397,39 +397,39 @@
                                                               (emit-rex
                                                                 (cons encoding-type (nthcdr n-processed-code-strings (rest code-format)))
                                                                 req-operands
+                                                                1 ; 64-bit operand size!
+                                                                rex-r-value
+                                                                rex-x-value
+                                                                rex-b-value
                                                                 encoded-bytes
                                                                 instruction-length-in-bytes
-                                                                :given-operands my-args
-                                                                :rex-w-value 1
-                                                                :rex-r-value rex-r-value ; 64-bit operand size!
-                                                                :rex-x-value rex-x-value
-                                                                :rex-b-value rex-b-value)))
+                                                                :given-operands my-args)))
                                                            ((eql n-operands 1)
                                                             (setf is-rex-already-encoded t)
                                                             (emit-and-update-instruction-length
                                                               (emit-rex
                                                                 (cons encoding-type (nthcdr n-processed-code-strings (rest code-format)))
                                                                 req-operands
+                                                                1 ; 64-bit operand size!
+                                                                rex-r-value
+                                                                rex-x-value
+                                                                rex-b-value
                                                                 encoded-bytes
                                                                 instruction-length-in-bytes
-                                                                :given-operands my-args
-                                                                :rex-w-value 1
-                                                                :rex-r-value rex-r-value ; 64-bit operand size!
-                                                                :rex-x-value rex-x-value
-                                                                :rex-b-value rex-b-value)))
+                                                                :given-operands my-args)))
                                                            ((eql n-operands 2)
                                                             (setf is-rex-already-encoded t)
                                                             (emit-and-update-instruction-length
                                                               (emit-rex
                                                                 (cons encoding-type (nthcdr n-processed-code-strings (rest code-format)))
                                                                 req-operands
+                                                                1 ; 64-bit operand size!
+                                                                rex-r-value
+                                                                rex-x-value
+                                                                rex-b-value
                                                                 encoded-bytes
                                                                 instruction-length-in-bytes
-                                                                :given-operands my-args
-                                                                :rex-w-value 1
-                                                                :rex-r-value rex-r-value ; 64-bit operand size!
-                                                                :rex-x-value rex-x-value
-                                                                :rex-b-value rex-b-value)))
+                                                                :given-operands my-args)))
                                                            ((eql n-operands 3)
                                                             (error "o64 encoding of 3 operands in not yet implemented"))
                                                            (t (error "over 3 operands is an error"))))
@@ -449,13 +449,13 @@
                                                                   (emit-rex
                                                                     (cons encoding-type (nthcdr n-processed-code-strings (rest code-format)))
                                                                     req-operands
+                                                                    rex-w-value
+                                                                    rex-r-value
+                                                                    rex-x-value
+                                                                    rex-b-value
                                                                     encoded-bytes
                                                                     instruction-length-in-bytes
-                                                                    :given-operands my-args
-                                                                    :rex-w-value rex-w-value
-                                                                    :rex-r-value rex-r-value
-                                                                    :rex-x-value rex-x-value
-                                                                    :rex-b-value rex-b-value)))
+                                                                    :given-operands my-args)))
                                                               (t nil)))
                                                            ((eql n-operands 2)
                                                             (error "o64nw encoding of 2 operands in not yet implemented"))
@@ -475,25 +475,25 @@
                                                                             (emit-rex
                                                                               (cons encoding-type (nthcdr n-processed-code-strings (rest code-format)))
                                                                               req-operands
+                                                                              rex-w-value
+                                                                              rex-r-value
+                                                                              rex-x-value
+                                                                              rex-b-value
                                                                               encoded-bytes
                                                                               instruction-length-in-bytes
-                                                                              :given-operands my-args
-                                                                              :rex-w-value rex-w-value
-                                                                              :rex-r-value rex-r-value
-                                                                              :rex-x-value rex-x-value
-                                                                              :rex-b-value rex-b-value)))
+                                                                              :given-operands my-args)))
                                                                          ((eql n-operands 2)
                                                                           (emit-and-update-instruction-length
                                                                             (emit-rex
                                                                               (cons encoding-type (nthcdr n-processed-code-strings (rest code-format)))
                                                                               req-operands
+                                                                              rex-w-value
+                                                                              rex-r-value
+                                                                              rex-x-value
+                                                                              rex-b-value
                                                                               encoded-bytes
                                                                               instruction-length-in-bytes
-                                                                              :given-operands my-args
-                                                                              :rex-w-value rex-w-value
-                                                                              :rex-r-value rex-r-value ; TODO: check if REX.W be used to encode data here!
-                                                                              :rex-x-value rex-x-value
-                                                                              :rex-b-value rex-b-value)))
+                                                                              :given-operands my-args)))
                                                                          (t (error "encoding not yet implemented")))))
                                                                    (cond ((equal code-string "/r")
                                                                           (cond
