@@ -17,6 +17,12 @@
 
 (in-package :cl-user)
 
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (progn
+    (ql:quickload 'cl-ppcre)
+    ;; `re:scan` etc. ...
+    (rename-package "CL-PPCRE" "CL-PPCRE" '("PPCRE" "RE"))))
+
 (defmacro compile-ultraelf ()
   (asdf:oos 'asdf:load-op 'ultraelf)
   (in-package :ultraelf))
