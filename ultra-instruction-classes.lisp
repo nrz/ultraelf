@@ -8,27 +8,6 @@
 ;; an object will be created for each instruction based on the instruction data:
 ;; x86/x86-64: `insns.dat` from NASM source.
 ;; ARM:        `ARMTABLE.INC` from FASMARM source.
-;;
-;; ultraELF additions to NASM syntax (these are higher-level code):
-;; `add!`    functionally equivalent to `add`, but allows also `add! [mem],[mem]`.
-;; `adc!`    functionally equivalent to `adc`, but allows also `adc! [mem],[mem]`.
-;; `cmovcc!` functionally equivalent to `cmovcc`, but allows also `cmovcc! [mem],[mem]`, works for any condicion `cc`.
-;; `mov!`    functionally equivalent to `mov`, but allows also `mov! [mem],[mem]`.
-;; `neg!`    functionally equivalent to `neg`.
-;; `not!`    functionally equivalent to `not`.
-;; `pop!`    functionally equivalent to `pop`.
-;; `push!`   functionally equivalent to `push`.
-;; `sbb!`    functionally equivalent to `sbb`, but allows also `sbb! [mem],[mem]`.
-;; `sub!`    functionally equivalent to `sub`, but allows also `sub! [mem],[mem]`.
-;; `xor!`    functionally equivalent to `xor`, but allows also `xor! [mem],[mem]`.
-;; `xchg!`   functionally equivalent to `xchg`, but allows also `xchg! [mem],[mem]`.
-;; `setcc!`  functionally equivalent to `setcc`, but allows also `setcc! r/m`, works for any condicion `cc`.
-;; `set0!`   sets arg1 to 0.
-;; `set1!`   sets arg1 to +1.
-;; `set+1!`  sets arg1 to +1.
-;; `set-1!`  sets arg1 to -1.
-;; `set!`    sets arg1 to arg2.
-;; `jmp?`    jumps to next instruction if the blocks are not consecutive in binary code.
 
 (defclass asm-instruction ()
   ((name
