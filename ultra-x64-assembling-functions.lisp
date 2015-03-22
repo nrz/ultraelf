@@ -411,6 +411,19 @@
           ;; `"np"`, `"repe"`, `"wait"`.
           do
           (setf encoded-bytes (append encoded-bytes (cond
+                                                      ((equal code-string "rex!")
+                                                       ;; `"rex!"` is a code-string used internally by ultraELF to force encoding of REX byte now.
+                                                       (emit-rex
+                                                         (cons encoding-type (nthcdr n-processed-code-strings (rest code-format)))
+                                                         req-operands
+                                                         rex-w-value
+                                                         rex-r-value
+                                                         rex-x-value
+                                                         rex-b-value
+                                                         encoded-bytes
+                                                         is-rex-already-encoded
+                                                         instruction-length-in-bytes
+                                                         :given-operands my-args))
                                                       ((equal code-string "66")
                                                        ;; in SIMD instructions used as a an instruction modifier,
                                                        ;; encoded before possible REX.
@@ -464,8 +477,10 @@
                                                        ;; FWAIT instruction or prefix.
                                                        (emit-and-update-instruction-length (list #x9b)))
                                                       ((equal code-string "o16")
+                                                       (setf rex-w-value 0) ; This is compulsory, because if REX.W is not 0, 0x66 prefix is ignored.
                                                        (emit-and-update-instruction-length (list #x66)))
                                                       ((equal code-string "o32")
+                                                       (setf rex-w-value 0) ; This is compulsory, because if REX.W is not 0, 0x66 prefix is ignored.
                                                        (cond
                                                          ((eql n-operands 0)
                                                           nil)
@@ -587,10 +602,9 @@
                                                                        ((eql n-operands 1)
                                                                         (emit-and-update-instruction-length
                                                                           (emit-rex
-                                                                            ;; `1-` is needed below, because the same `code-string` needs to be processed twice:
-                                                                            ;; 1st time to produce the REX byte.
-                                                                            ;; 2nd time to produce the appropriate encoding of the byte itself.
-                                                                            (cons encoding-type (nthcdr (1- n-processed-code-strings) (rest code-format)))
+                                                                            ;; `"rex!"` is needed below to force encoding of REX byte here.
+                                                                            ;; `"rex!"` is a `code-string` that is internal to ultraELF.
+                                                                            (cons encoding-type (cons "rex!" (nthcdr n-processed-code-strings (rest code-format))))
                                                                             req-operands
                                                                             rex-w-value
                                                                             rex-r-value
@@ -603,10 +617,9 @@
                                                                        ((eql n-operands 2)
                                                                         (emit-and-update-instruction-length
                                                                           (emit-rex
-                                                                            ;; `1-` is needed below, because the same `code-string` needs to be processed twice:
-                                                                            ;; 1st time to produce the REX byte.
-                                                                            ;; 2nd time to produce the appropriate encoding of the byte itself.
-                                                                            (cons encoding-type (nthcdr (1- n-processed-code-strings) (rest code-format)))
+                                                                            ;; `"rex!"` is needed below to force encoding of REX byte here.
+                                                                            ;; `"rex!"` is a `code-string` that is internal to ultraELF.
+                                                                            (cons encoding-type (cons "rex!" (nthcdr n-processed-code-strings (rest code-format))))
                                                                             req-operands
                                                                             rex-w-value
                                                                             rex-r-value
