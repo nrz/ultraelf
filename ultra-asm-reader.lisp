@@ -117,9 +117,7 @@
                       (setf my-string (concatenate 'string my-string my-char)))
                      ;; is character newline?
                      ((equal my-char (coerce (list #\Newline) 'string))
-                      (if
-                        ;; was last character not space?
-                        (not (equal (get-last-character-string my-string) " "))
+                      (when (not (equal (get-last-character-string my-string) " "))
                         ;; if last character was not space, output space.
                         (setf my-string (concatenate 'string my-string " "))))
                      ;; otherwise output the character.
