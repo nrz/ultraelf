@@ -103,14 +103,13 @@
                    (setf current-phase "inside-comment"))
                   ;; are we inside a Lisp form?
                   ((equal current-phase "inside-lisp-form")
-                   ;; are we inside memory address syntax?
                    (cond
-                     ;; is this opening square bracket?
+                     ;; is this opening parenthesis?
                      ((equal my-char "(")
                       ;; if yes, increment parenthesis count and output (
                       (incf n-lisp-forms)
                       (setf my-string (concatenate 'string my-string my-char)))
-                     ;; is this closing square bracket?
+                     ;; is this closing parenthesis?
                      ;; if yes, output )
                      ((equal my-char ")")
                       (if (eql (decf n-lisp-forms) 0)
