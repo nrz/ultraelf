@@ -23,7 +23,7 @@
 ;;; ULTRAELF> (assemble-x64-and-print-hex #a inc rax #e)
 ;;; "(48 FF C0)"
 
-(in-package :ultraelf)
+(in-package :x64)
 
 (defparameter *hello-world-x64*
   #a
