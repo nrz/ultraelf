@@ -37,6 +37,8 @@
                 :intern
                 ;; variables.
                 :setf
+                ;; objects.
+                :coerce
                 ;; lists and other sequences.
                 :every :some :subseq :notevery :notany
                 :length
