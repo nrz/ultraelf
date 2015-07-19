@@ -112,7 +112,7 @@
                      ;; is this closing parenthesis?
                      ;; if yes, output )
                      ((equal my-char ")")
-                      (if (eql (decf n-lisp-forms) 0)
+                      (when (eql (decf n-lisp-forms) 0)
                         (setf current-phase "closing-parenthesis"))
                       (setf my-string (concatenate 'string my-string my-char)))
                      ;; is character newline?
