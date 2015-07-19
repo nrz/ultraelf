@@ -45,7 +45,7 @@
                 :reduce
                 :map :mapc :mapcan :mapcar :mapcon :map-into :mapl :maplist
                 :append :concatenate :nconc
-                :list
+                :list :string
                 :elt :nth :nthcdr :first :second :third :fourth :fifth :sixth :seventh :eighth :ninth :tenth :last :rest
                 :push :pushnew
                 :sort
