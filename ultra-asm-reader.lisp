@@ -31,7 +31,7 @@
    This function is a finite state machine (excluding input and output).
    Usually the execution of this function is triggered by the dispatch macro character: `#a`.
    Current mode is stored in the variable `current-mode` as a string. In the beginning, `current-mode` is `\"asm\"`.
-   Current phase is stored in the variable `current-phase` as a string. In the beginnig, `current-phase` is `\"beginning-of-line\"`.
+   Current phase is stored in the variable `current-phase` as a string. In the beginning, `current-phase` is `\"beginning-of-line\"`.
    NOTE: commas are considered as whitespace!
 
    Then, inside this function the following states and transitions are possible:
@@ -43,10 +43,13 @@
    beginning-of-line
    description of state: no non-whitespace printed on this line so far.
    beginning-of-line -> # -> hash-sign-read
+   beginning-of-line -> ( -> inside-lisp-form (set `n-lisp-forms` to 1).
+   beginning-of-line -> ) -> error (cannot terminate Lisp form outside Lisp form).
    beginning-of-line -> [ -> error (cannot begin memory address syntax before instruction).
    beginning-of-line -> ] -> error (cannot terminate memory address syntax before instruction).
    beginning-of-line -> ; -> inside-comment
    beginning-of-line -> a newline -> beginning-of-line
+   beginning-of-line -> a whitespace character -> beginning-of-line (do not output anything).
    beginning-of-line -> a non-whitespace character -> inside-instruction
 
    hash-sign-read
@@ -56,6 +59,12 @@
    beginning-of-line -> l -> switch to Lisp mode
    beginning-of-line -> any other character -> error (hash sign must be followed with `a`, `e`, or `l`).
 
+   inside-lisp-form
+   description: inside a Lisp form that will be evaluated during assembling phase.
+   inside-lisp-form -> ( -> inside-lisp-form (increment `n-lisp-forms` to 1).
+   inside-lisp-form -> ) -> decrement `n-lisp-forms` by 1. if `n-lisp-forms` becomes zero, then -> closing-parenthesis.
+   inside-lisp-form -> any other character -> inside-lisp-form
+
    inside-instruction
    description of state: inside first no-whitespace character block of this line.
    inside-instruction -> # -> hash-sign-read
@@ -63,27 +72,43 @@
    inside-instruction -> ] -> error (cannot terminate memory address syntax inside instruction).
    inside-instruction -> ; -> inside-comment
    inside-instruction -> a newline -> beginning-of-line
-   inside-instruction -> a whitespace character -> space-after-instruction
+   inside-instruction -> a whitespace character -> in-space
 
-   space-after-instruction
-   description of state: inside whitespace characters after instruction and before first parameter (in case there is one or more parameters).
-   space-after-instruction -> # -> hash-sign-read
-   space-after-instruction -> [ -> inside-memory-address-syntax
-   space-after-instruction -> ] -> error (cannot terminate memory address syntax before any parameters).
-   space-after-instruction -> ; -> inside-comment
-   space-after-instruction -> a newline -> beginning-of-line
-   space-after-instruction -> a whitespace character -> space-after-instruction
-   space-after-instruction -> a non-whitespace character -> inside-parameters
+   in-space
+   description of state: inside whitespace characters between instruction and parameters (in case there is one or more parameters).
+   in-space -> # -> hash-sign-read
+   in-space -> ( -> inside-lisp-form (set `n-lisp-forms` to 1).
+   in-space -> ) -> error (cannot terminate Lisp form outside Lisp form).
+   in-space -> [ -> inside-memory-address-syntax
+   in-space -> ] -> error (cannot terminate memory address syntax before any parameters).
+   in-space -> ; -> inside-comment
+   in-space -> a newline -> beginning-of-line
+   in-space -> a whitespace character -> in-space (do not output anything).
+   in-space -> a non-whitespace character -> inside-parameters
 
    inside-memory-address-syntax
    description of state: inside memory address syntax limited by square brackets. The content between square brackets will be parsed as a parameter.
-   space-after-instruction -> # -> error (memory address syntax must be terminated with a closing square bracket before a hash sign).
-   space-after-instruction -> [ -> error (cannot begin a new memory address syntax inside memory address syntax).
-   space-after-instruction -> ] -> closing-square-bracket (the content of `memory-address-syntax-buffer` will be converted to intermediate representation).
-   space-after-instruction -> ; -> error (memory address syntax must be terminated with a closing square bracket before comment).
-   space-after-instruction -> a newline -> error (memory address syntax must be terminated with a closing square bracket before newline).
-   space-after-instruction -> a whitespace character -> space-after-instruction (print space if not yet printed).
-   space-after-instruction -> a non-whitespace character -> space-after-instruction
+   inside-memory-address-syntax -> # -> error (memory address syntax must be terminated with a closing square bracket before a hash sign).
+   inside-memory-address-syntax -> ( -> inside-lisp-form (set `n-lisp-forms` to 1).
+   inside-memory-address-syntax -> ) -> error (cannot terminate Lisp form outside Lisp form).
+   inside-memory-address-syntax -> [ -> error (cannot begin a new memory address syntax inside memory address syntax).
+   inside-memory-address-syntax -> ] -> closing-square-bracket (the content of `memory-address-syntax-buffer` will be converted to intermediate representation).
+   inside-memory-address-syntax -> ; -> error (memory address syntax must be terminated with a closing square bracket before comment).
+   inside-memory-address-syntax -> a newline -> error (memory address syntax must be terminated with a closing square bracket before newline).
+   inside-memory-address-syntax -> a whitespace character -> space-inside-memory-address-syntax
+   inside-memory-address-syntax -> a non-whitespace character -> inside-memory-address-syntax
+
+   space-inside-memory-address-syntax
+   description: space inside memory address syntax.
+   space-inside-memory-address-syntax -> # -> error (memory address syntax must be terminated with a closing square bracket before a hash sign).
+   space-inside-memory-address-syntax -> ( -> inside-lisp-form (set `n-lisp-forms` to 1).
+   space-inside-memory-address-syntax -> ) -> error (cannot terminate Lisp form outside Lisp form).
+   space-inside-memory-address-syntax -> [ -> error (cannot begin a new memory address syntax inside memory address syntax).
+   space-inside-memory-address-syntax -> ] -> closing-square-bracket (the content of `memory-address-syntax-buffer` will be converted to intermediate representation).
+   space-inside-memory-address-syntax -> ; -> error (memory address syntax must be terminated with a closing square bracket before comment).
+   space-inside-memory-address-syntax -> a newline -> error (memory address syntax must be terminated with a closing square bracket before newline).
+   space-inside-memory-address-syntax -> a whitespace character -> space-inside-memory-address-syntax
+   space-inside-memory-address-syntax -> a non-whitespace character -> space-inside-memory-address-syntax (do not output anything).
 
    closing-square-bracket
    description of state: the last character was a closing square bracket that closed memory address syntax.
@@ -92,7 +117,7 @@
    closing-square-bracket -> ] -> error (cannot the same terminate memory address syntax twice).
    closing-square-bracket -> ; -> inside-comment
    closing-square-bracket -> a newline -> beginning-of-line
-   closing-square-bracket -> a whitespace character -> space-between-parameters
+   closing-square-bracket -> a whitespace character -> in-space
    closing-square-bracket -> a non-whitespace character -> error (a whitespace is required after closing square bracket).
 
    inside-parameters
@@ -102,16 +127,8 @@
    inside-parameters -> ] -> error (cannot terminate memory address syntax inside a parameter).
    inside-parameters -> ; -> inside-comment
    inside-parameters -> a newline -> beginning-of-line
-   inside-parameters -> a whitespace character -> space-between-parameters
-
-   space-between-parameters
-   description of state: inside whitespace characters after any parameter.
-   space-between-parameters -> # -> hash-sign-read
-   space-between-parameters -> [ -> inside-memory-address-syntax
-   space-between-parameters -> ] -> error (cannot terminate memory address syntax inside a parameter).
-   space-between-parameters -> ; -> inside-comment
-   space-between-parameters -> a newline -> beginning-of-line
-   space-between-parameters -> a whitespace character -> space-between-parameters
+   inside-parameters -> a whitespace character -> in-space
+   inside-parameters -> a non-whitespace character -> inside-parameters
 
    #l marks change to Lisp mode (Common Lisp macros are executed during assembling of the code).
    #a marks return to asm, or a new instruction if we are on asm mode.
