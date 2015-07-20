@@ -150,31 +150,30 @@
                ((equal current-mode "asm")
                 (cond
                   (is-hash-sign-read
-                    (progn
-                      (setf is-hash-sign-read nil)
-                      ;; is character e ?
-                      ;; if yes, we're done, fix closing parentheses and return.
-                      (cond
-                        ((equal my-char "e")
-                         (return-from transform-code-to-string
-                                      (concatenate 'string (get-string-without-invalid-last-character
-                                                             (get-string-without-invalid-last-character
-                                                               my-string invalid-last-characters)
-                                                             invalid-last-characters) "))")))
-                        ;; is character a ?
-                        ;; if yes, do exactly the same is if it was newline.
-                        ((equal my-char "a")
-                         (setf (values is-there-code-on-this-line current-phase my-string)
-                               (new-instruction is-there-code-on-this-line current-phase my-string)))
-                        ;; is character l ?
-                        ;; if yes, change to Lisp mode.
-                        ((equal my-char "l")
-                         (setf current-mode "Lisp")
-                         (setf is-there-code-on-this-line nil)
-                         (setf lisp-code-string "")
-                         (setf current-phase "beginning-of-line"))
-                        ;; otherwise, print error.
-                        (t (error "in asm mode undefined control character after #")))))
+                    (setf is-hash-sign-read nil)
+                    ;; is character e ?
+                    ;; if yes, we're done, fix closing parentheses and return.
+                    (cond
+                      ((equal my-char "e")
+                       (return-from transform-code-to-string
+                                    (concatenate 'string (get-string-without-invalid-last-character
+                                                           (get-string-without-invalid-last-character
+                                                             my-string invalid-last-characters)
+                                                           invalid-last-characters) "))")))
+                      ;; is character a ?
+                      ;; if yes, do exactly the same is if it was newline.
+                      ((equal my-char "a")
+                       (setf (values is-there-code-on-this-line current-phase my-string)
+                             (new-instruction is-there-code-on-this-line current-phase my-string)))
+                      ;; is character l ?
+                      ;; if yes, change to Lisp mode.
+                      ((equal my-char "l")
+                       (setf current-mode "Lisp")
+                       (setf is-there-code-on-this-line nil)
+                       (setf lisp-code-string "")
+                       (setf current-phase "beginning-of-line"))
+                      ;; otherwise, print error.
+                      (t (error "in asm mode undefined control character after #"))))
                   ;; is character # ?
                   ;; if yes, mark hash sign read.
                   ((equal my-char "#")
@@ -282,46 +281,45 @@
                 ;; in Lisp mode, read text until #e or #a is reached and eval it.
                 (cond
                   (is-hash-sign-read
-                    (progn
-                      (setf is-hash-sign-read nil)
-                      (cond
-                        ;; is character e ?
-                        ;; if yes, we're done, fix closing parentheses and return.
-                        ((equal my-char "e")
-                         (setf my-string (concatenate 'string
-                                                      my-string
-                                                      (coerce (list #\Newline) 'string)
-                                                      "#a"
-                                                      (coerce (list #\Newline) 'string)
-                                                      (eval (read-from-string lisp-code-string))
-                                                      (coerce (list #\Newline) 'string)
-                                                      "#e"
-                                                      (coerce (list #\Newline) 'string)
-                                                      ")"))
-                         (return-from transform-code-to-string
-                                      (concatenate 'string (get-string-without-invalid-last-character
-                                                             (get-string-without-invalid-last-character
-                                                               my-string invalid-last-characters)
-                                                             invalid-last-characters) ")")))
-                        ;; is character a ?
-                        ;; if yes, change to asm mode.
-                        ((equal my-char "a")
-                         (setf current-mode "asm")
-                         (setf is-there-code-on-this-line nil)
-                         (setf current-phase "beginning-of-line")
-                         (setf my-string (concatenate 'string
-                                                      my-string
-                                                      (coerce (list #\Newline) 'string)
-                                                      "#a"
-                                                      (coerce (list #\Newline) 'string)
-                                                      (eval (read-from-string lisp-code-string))
-                                                      (coerce (list #\Newline) 'string)
-                                                      "#e"
-                                                      (coerce (list #\Newline) 'string))))
-                        ;; otherwise, add # and the character to the Lisp code to be evaluated.
-                        (t
-                         (setf current-phase "")
-                         (setf lisp-code-string (concatenate 'string lisp-code-string "#" my-char))))))
+                    (setf is-hash-sign-read nil)
+                    (cond
+                      ;; is character e ?
+                      ;; if yes, we're done, fix closing parentheses and return.
+                      ((equal my-char "e")
+                       (setf my-string (concatenate 'string
+                                                    my-string
+                                                    (coerce (list #\Newline) 'string)
+                                                    "#a"
+                                                    (coerce (list #\Newline) 'string)
+                                                    (eval (read-from-string lisp-code-string))
+                                                    (coerce (list #\Newline) 'string)
+                                                    "#e"
+                                                    (coerce (list #\Newline) 'string)
+                                                    ")"))
+                       (return-from transform-code-to-string
+                                    (concatenate 'string (get-string-without-invalid-last-character
+                                                           (get-string-without-invalid-last-character
+                                                             my-string invalid-last-characters)
+                                                           invalid-last-characters) ")")))
+                      ;; is character a ?
+                      ;; if yes, change to asm mode.
+                      ((equal my-char "a")
+                       (setf current-mode "asm")
+                       (setf is-there-code-on-this-line nil)
+                       (setf current-phase "beginning-of-line")
+                       (setf my-string (concatenate 'string
+                                                    my-string
+                                                    (coerce (list #\Newline) 'string)
+                                                    "#a"
+                                                    (coerce (list #\Newline) 'string)
+                                                    (eval (read-from-string lisp-code-string))
+                                                    (coerce (list #\Newline) 'string)
+                                                    "#e"
+                                                    (coerce (list #\Newline) 'string))))
+                      ;; otherwise, add # and the character to the Lisp code to be evaluated.
+                      (t
+                       (setf current-phase "")
+                       (setf lisp-code-string (concatenate 'string lisp-code-string "#" my-char)))))
                   ;; is character # ?
                   ;; if yes, mark hash sign read.
                   ((equal my-char "#")
