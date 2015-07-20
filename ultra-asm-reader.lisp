@@ -37,25 +37,28 @@
    Then, inside this function the following states and transitions are possible:
 
    inside-comment
-   description of state: inside comment text. 
+   description of state: inside comment text.
    inside-comment -> a newline -> beginning-of-line
 
    beginning-of-line
    description of state: no non-whitespace printed on this line so far.
-   beginning-of-line -> #a -> beginning-of-line
-   beginning-of-line -> #e -> end of syntax
-   beginning-of-line -> #l -> switch to Lisp mode
+   beginning-of-line -> # -> hash-sign-read
    beginning-of-line -> [ -> error (cannot begin memory address syntax before instruction).
    beginning-of-line -> ] -> error (cannot terminate memory address syntax before instruction).
    beginning-of-line -> ; -> inside-comment
    beginning-of-line -> a newline -> beginning-of-line
    beginning-of-line -> a non-whitespace character -> inside-instruction
 
+   hash-sign-read
+   description of state: the previous character was a hash sign.
+   beginning-of-line -> a -> beginning-of-line
+   beginning-of-line -> e -> end of syntax
+   beginning-of-line -> l -> switch to Lisp mode
+   beginning-of-line -> any other character -> error (hash sign must be followed with `a`, `e`, or `l`).
+
    inside-instruction
    description of state: inside first no-whitespace character block of this line.
-   inside-instruction -> #a -> beginning-of-line
-   inside-instruction -> #e -> end of syntax
-   inside-instruction -> #l -> switch to Lisp mode
+   inside-instruction -> # -> hash-sign-read
    inside-instruction -> [ -> error (cannot begin memory address syntax inside instruction).
    inside-instruction -> ] -> error (cannot terminate memory address syntax inside instruction).
    inside-instruction -> ; -> inside-comment
@@ -64,9 +67,7 @@
 
    space-after-instruction
    description of state: inside whitespace characters after instruction and before first parameter (in case there is one or more parameters).
-   space-after-instruction -> #a -> beginning-of-line
-   space-after-instruction -> #e -> end of syntax
-   space-after-instruction -> #l -> switch to Lisp mode
+   space-after-instruction -> # -> hash-sign-read
    space-after-instruction -> [ -> inside-memory-address-syntax
    space-after-instruction -> ] -> error (cannot terminate memory address syntax before any parameters).
    space-after-instruction -> ; -> inside-comment
@@ -77,9 +78,6 @@
    inside-memory-address-syntax
    description of state: inside memory address syntax limited by square brackets. The content between square brackets will be parsed as a parameter.
    space-after-instruction -> # -> error (memory address syntax must be terminated with a closing square bracket before a hash sign).
-   space-after-instruction -> #a -> error (memory address syntax must be terminated with a closing square bracket before a new instruction).
-   space-after-instruction -> #e -> error (memory address syntax must be terminated with a closing square bracket before the end of the syntax).
-   space-after-instruction -> #l -> error (memory address syntax must be terminated with a closing square bracket before switching to Lisp mode).
    space-after-instruction -> [ -> error (cannot begin a new memory address syntax inside memory address syntax).
    space-after-instruction -> ] -> closing-square-bracket (the content of `memory-address-syntax-buffer` will be converted to intermediate representation).
    space-after-instruction -> ; -> error (memory address syntax must be terminated with a closing square bracket before comment).
@@ -108,9 +106,7 @@
 
    space-between-parameters
    description of state: inside whitespace characters after any parameter.
-   space-between-parameters -> #a -> beginning-of-line
-   space-between-parameters -> #e -> end of syntax
-   space-between-parameters -> #l -> switch to Lisp mode
+   space-between-parameters -> # -> hash-sign-read
    space-between-parameters -> [ -> inside-memory-address-syntax
    space-between-parameters -> ] -> error (cannot terminate memory address syntax inside a parameter).
    space-between-parameters -> ; -> inside-comment
