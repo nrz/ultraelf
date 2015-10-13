@@ -6792,6 +6792,12 @@
 :code-format (list "[m:" "o32" "0f" "01" "/4")
 :arch-flags (list "386")))
 
+(defparameter SMSW-reg64 (make-instance 'x64-asm-instruction
+:name "SMSW"
+:req-operands (list "reg64")
+:code-format (list "[m:" "o64" "0f" "01" "/4")
+:arch-flags (list "X64")))
+
 (defparameter STC-void (make-instance 'x64-asm-instruction
 :name "STC"
 :req-operands (list "void")
@@ -28416,6 +28422,18 @@
 :code-format (list "[rvm:fv:" "evex.nds.512.0f.w0" "57" "/r" "")
 :arch-flags (list "AVX512DQ" "FUTURE")))
 
+(defparameter RDPKRU-void (make-instance 'x64-asm-instruction
+:name "RDPKRU"
+:req-operands (list "void")
+:code-format (list "[" "0f" "01" "ee")
+:arch-flags (list "X64" "FUTURE")))
+
+(defparameter WRPKRU-void (make-instance 'x64-asm-instruction
+:name "WRPKRU"
+:req-operands (list "void")
+:code-format (list "[" "0f" "01" "ef")
+:arch-flags (list "X64" "FUTURE")))
+
 (defparameter CLFLUSHOPT-mem (make-instance 'x64-asm-instruction
 :name "CLFLUSHOPT"
 :req-operands (list "mem")
@@ -37814,6 +37832,12 @@ RDMSR-void))
 (setf (gethash "RDMSR-void" *x64-instruction-variants-hash-table*) (list
 RDMSR-void))
 
+(setf (gethash "RDPKRU" *x64-instruction-variants-hash-table*) (list
+RDPKRU-void))
+
+(setf (gethash "RDPKRU-void" *x64-instruction-variants-hash-table*) (list
+RDPKRU-void))
+
 (setf (gethash "RDPMC" *x64-instruction-variants-hash-table*) (list
 RDPMC-void))
 
@@ -38784,7 +38808,8 @@ SMINTOLD-void))
 SMSW-mem
 SMSW-mem16
 SMSW-reg16
-SMSW-reg32))
+SMSW-reg32
+SMSW-reg64))
 
 (setf (gethash "SMSW-mem" *x64-instruction-variants-hash-table*) (list
 SMSW-mem))
@@ -38797,6 +38822,9 @@ SMSW-reg16))
 
 (setf (gethash "SMSW-reg32" *x64-instruction-variants-hash-table*) (list
 SMSW-reg32))
+
+(setf (gethash "SMSW-reg64" *x64-instruction-variants-hash-table*) (list
+SMSW-reg64))
 
 (setf (gethash "SQRTPD" *x64-instruction-variants-hash-table*) (list
 SQRTPD-xmmreg.xmmrm))
@@ -52259,6 +52287,12 @@ WRMSR-void))
 
 (setf (gethash "WRMSR-void" *x64-instruction-variants-hash-table*) (list
 WRMSR-void))
+
+(setf (gethash "WRPKRU" *x64-instruction-variants-hash-table*) (list
+WRPKRU-void))
+
+(setf (gethash "WRPKRU-void" *x64-instruction-variants-hash-table*) (list
+WRPKRU-void))
 
 (setf (gethash "WRSHR" *x64-instruction-variants-hash-table*) (list
 WRSHR-rm32))
