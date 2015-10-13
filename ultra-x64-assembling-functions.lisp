@@ -453,7 +453,7 @@
                                                       ((equal code-string "mustrepne")
                                                        ;; force REPNZ prefix.
                                                        ;; ultraELF assumes REPNZ prefix as a part of instruction.
-                                                       ;; currently `"mustrepne"` flag is not in use (NASM 2.11.06).
+                                                       ;; currently `"mustrepne"` flag is not in use (NASM 2.11.09-rc1).
                                                        (emit-and-update-instruction-length (list #xf2)))
                                                       ((equal code-string "norexb")
                                                        ;; invalid with REX.B.
