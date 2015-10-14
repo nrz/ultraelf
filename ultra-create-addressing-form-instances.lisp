@@ -35,6 +35,7 @@
 ;; `pc`     program counter specific addressing (such as RIP-relative addressing) must be used.
 ;; `sib`    SIB must be used in encoding.
 ;; `nosib`  SIB must not be used in encoding.
+;; `null`   empty base or index in SIB (if `null` is used as index, it can be scaled).
 ;; `disp`   there must be a displacement.
 ;; `disp8`  there must be a displacement encoded in 8 bits.
 ;; `disp32` there must be a displacement encoded in  32 bits.
@@ -44,52 +45,62 @@
 ;; `rex`    REX must be used in encoding.
 ;; `norex`  REX must not be used in encoding.
 ;;
-;; ultraELF syntax                produces                  Intel *1    Intel *2            NASM syntax         my own explanation
-;; `inc dword [rax]`              FF 00                     FF /0       [rax]               `inc dword [rax]`   reg. indir., no disp.
-;; `inc dword rex [rax]`          40 FF 00                  FF /0       n/a *3              n/a                 reg. indir., no disp., REX.
-;; `inc dword [rax+0]`            FF 40 00                  FF /0       n/a *4              n/a                 reg. indir., any disp. size (8 bits), disp. 0.
-;; `inc dword [rax-0]`            FF 40 00                  FF /0       n/a *4              n/a                 reg. indir., any disp. size (8 bits), disp. 0.
-;; `inc dword [rax+disp]`         FF 40 00                  FF /0       n/a *4              n/a                 reg. indir., any disp. size (8 bits), disp. 0.
-;; `inc dword [rax-disp]`         FF 40 00                  FF /0       n/a *4              n/a                 reg. indir., any disp. size (8 bits), disp. 0.
-;; `inc dword [rax+disp 0]`       FF 40 00                  FF /0       n/a *4              n/a                 reg. indir., any disp. size (8 bits), disp. 0.
-;; `inc dword rex [rax+0]`        40 FF 40 00               FF /0       n/a *4              n/a                 reg. indir., any disp. size (8 bits), disp. 0, REX.
-;; `inc dword [rax+disp8]`        FF 40 00                  FF /0       [rax]+disp8         n/a                 reg. indir., disp. size 8 bits,  disp. 0.
-;; `inc dword [rax+disp8 0]`      FF 40 00                  FF /0       [rax]+disp8         n/a                 reg. indir., disp. size 8 bits,  disp. 0.
-;; `inc dword [rax-disp8 0]`      FF 40 00                  FF /0       [rax]+disp8         n/a                 reg. indir., disp. size 8 bits,  disp. 0.
-;; `inc dword [rax+disp32 0]`     FF 80 00 00 00 00         FF /0       [rax]+disp32        n/a                 reg. indir., disp. size 32 bits, disp. 0.
-;; `inc dword [rax-disp32 0]`     FF 80 00 00 00 00         FF /0       [rax]+disp32        n/a                 reg. indir., disp. size 32 bits, disp. 0.
-;; `inc dword rex [rax+disp32 0]` 40 FF 80 00 00 00 00      FF /0       [rax]+disp32        n/a                 reg. indir., disp. size 32 bits, disp. 0, REX.
-;; `inc dword [sib 0]`            FF 04 25 00 00 00 00      FF /0       none, none, SS=01   inc dword [0x0]     SIB direct, any disp. size (32 bits), disp. 0.
-;; `inc dword rex [sib 0]`        40 FF 04 25 00 00 00 00   FF /0       none, none, SS=01   n/a                 SIB direct, any disp. size (32 bits), disp. 0, REX.
-;; `inc dword [++0]`              FF 04 25 00 00 00 00      FF /0       none, none, SS=01   inc dword [0x0]     SIB direct, any disp. size (32 bits), disp. 0.
-;; `inc dword [+-0]`              FF 04 25 00 00 00 00      FF /0       none, none, SS=01   inc dword [0x0]     SIB direct, any disp. size (32 bits), disp. 0.
-;; `inc dword [sib disp32 0]`     FF 04 25 00 00 00 00      FF /0       none, none, SS=01   inc dword [0x0]     SIB direct, displacement size 32 bits), disp. 0.
-;; `inc dword [++disp32 0]`       FF 04 25 00 00 00 00      FF /0       none, none, SS=01   inc dword [0x0]     SIB direct, displacement size 32 bits), disp. 0.
-;; `inc dword [sib disp8 0]`      invalid                   n/a         n/a                 n/a                 invalid (there is no SIB direct with disp. size 8 bits.
-;; `inc dword [++disp8 0]`        invalid                   n/a         n/a                 n/a                 invalid (there is no SIB direct with disp. size 8 bits.
-;; `inc dword [rax+]`             FF 04 20                  FF /0       n/a                 n/a                 SIB register indirect, rax as base.
-;;                                                                                                              Note: `+` without displacement refers to a register,
-;;                                                                                                              in this case to an index register, as the order is
-;;                                                                                                              base+index+displacement. `+` without displacement
-;;                                                                                                              implies the use of SIB.
-;; `inc dword [sib rax]`          FF 04 20                  FF /0       n/a                 n/a                 SIB register indirect, rax as base.
-;; `inc dword [sib rax+]`         FF 04 20                  FF /0       n/a                 n/a                 SIB register indirect, rax as base.
-;; `inc dword [sib rax++]`        FF 44 20 00               FF /0       [rax]+disp8         n/a                 SIB reg. indir., rax as base, any disp. size, disp. 0.
-;; `inc dword [rax++0]`           FF 44 20 00               FF /0       [rax]+disp8         n/a                 SIB reg. indir., rax as base, any disp. size, disp. 0.
-;; `inc dword [sib disp8 rax++]`  FF 44 20 00               FF /0       [rax]+disp8         n/a                 SIB reg. indir., rax as base, disp. size 8, disp. 0.
-;; `inc dword [sib disp32 rax++]` FF 84 20 00 00 00 00      FF /0       [rax]+disp32        n/a                 SIB reg. indir., rax as base, disp. size 32, disp. 0.
-;; `inc dword [sib +rax]`         FF 04 05 00 00 00 00      FF /0       [rax]+disp32        n/a                 SIB reg. indir., rax as index, any disp. size, disp. 0.
-;; `inc dword [+rax+]`            FF 04 05 00 00 00 00      FF /0       [rax]+disp32        n/a                 SIB reg. indir., rax as index, any disp. size, disp. 0.
-;; `inc dword [+rax+0]`           FF 04 05 00 00 00 00      FF /0       [rax]+disp32        n/a                 SIB reg. indir., rax as index, any disp. size, disp. 0.
-;; `inc dword [+rax-0]`           FF 04 05 00 00 00 00      FF /0       [rax]+disp32        n/a                 SIB reg. indir., rax as index, any disp. size, disp. 0.
-;; `inc dword [sib +rax+]`        FF 04 05 00 00 00 00      FF /0       [rax]+disp32        n/a                 SIB reg. indir., rax as index, any disp. size, disp. 0.
-;; `inc dword [rax++disp8 0]`     FF 44 20 00               FF /0       [rax]+disp8         n/a                 SIB reg. indir., rax as base, disp. size 8 bits, disp. 0.
-;; `inc dword [rax++disp32 0]`    FF 84 20 00 00 00 00      FF /0       [rax]+disp32        n/a                 SIB reg. indir., rax as base, disp. size 32 bits, disp. 0.
-;; `inc dword [+rax+disp8 0]`     invalid                   n/a         n/a                 n/a                 invalid (there is no SIB reg. indirect, rax as index, disp. size 8 bits, displacement 0).
-;; `inc dword [+rax+disp32 0]`    FF 04 05 00 00 00 00      FF /0       [rax]+disp32        n/a                 SIB reg. indir., rax as index, any disp. size, disp. 0.
-;; `inc dword [0]`                FF 05 00 00 00 00         FF /0       n/a                 n/a                 x32: basic direct, disp. size 32, disp. 0.
-;;                                                                                                              x64: RIP-relative, disp. size 32, disp. 0.
-;; `inc dword [+0]`               FF 05 00 00 00 00         FF /0       n/a                 n/a                 x32: basic direct, disp. size 32, disp. 0.
-;;                                                                                                              x64: RIP-relative, disp. size 32, disp. 0.
-;; `inc dword [-0]`               FF 05 00 00 00 00         FF /0       n/a                 n/a                 x32: basic direct, disp. size 32, disp. 0.
-;;                                                                                                              x64: RIP-relative, disp. size 32, disp. 0.
+;; In native mode (default), ultraELF disassembler should always produce 'full' information disassembly
+;; (with `rex`/`norex`, `sib`/`nosib`, `null`, `disp8`/`disp32` as needed).
+;; In NDISASM mode, ultraELF disassembler should produce disassembly identical to the one produced by NDISASM.
+;;
+;; ultraELF syntax                produces                 OK? Intel*1 Intel*2            NASM syntax        my own explanation
+;; `inc dword [rax]`              FF 00                    [ ] FF /0   [rax]              `inc dword [rax]`  reg. indir., no disp.
+;; `inc dword rex [rax]`          40 FF 00                 [ ] FF /0   n/a *3             n/a                reg. indir., no disp., REX.
+;; `inc dword [rax+0]`            FF 40 00                 [ ] FF /0   n/a *4             n/a                reg. indir., any disp. size (8 bits), disp. 0.
+;; `inc dword [rax-0]`            FF 40 00                 [ ] FF /0   n/a *4             n/a                reg. indir., any disp. size (8 bits), disp. 0.
+;; `inc dword [rax+disp]`         FF 40 00                 [ ] FF /0   n/a *4             n/a                reg. indir., any disp. size (8 bits), disp. 0.
+;; `inc dword [rax-disp]`         FF 40 00                 [ ] FF /0   n/a *4             n/a                reg. indir., any disp. size (8 bits), disp. 0.
+;; `inc dword [rax+disp 0]`       FF 40 00                 [ ] FF /0   n/a *4             n/a                reg. indir., any disp. size (8 bits), disp. 0.
+;; `inc dword rex [rax+0]`        40 FF 40 00              [ ] FF /0   n/a *4             n/a                reg. indir., any disp. size (8 bits), disp. 0, REX.
+;; `inc dword [rax+disp8]`        FF 40 00                 [ ] FF /0   [rax]+disp8        n/a                reg. indir., disp. size 8 bits,  disp. 0.
+;; `inc dword [rax+disp8 0]`      FF 40 00                 [ ] FF /0   [rax]+disp8        n/a                reg. indir., disp. size 8 bits,  disp. 0.
+;; `inc dword [rax-disp8 0]`      FF 40 00                 [ ] FF /0   [rax]+disp8        n/a                reg. indir., disp. size 8 bits,  disp. 0.
+;; `inc dword [rax+disp32 0]`     FF 80 00 00 00 00        [ ] FF /0   [rax]+disp32       n/a                reg. indir., disp. size 32 bits, disp. 0.
+;; `inc dword [rax-disp32 0]`     FF 80 00 00 00 00        [ ] FF /0   [rax]+disp32       n/a                reg. indir., disp. size 32 bits, disp. 0.
+;; `inc dword rex [rax+disp32 0]` 40 FF 80 00 00 00 00     [ ] FF /0   [rax]+disp32       n/a                reg. indir., disp. size 32 bits, disp. 0, REX.
+;; `inc dword [sib 0]`            FF 04 25 00 00 00 00     [ ] FF /0   none, none, SS=01  inc dword [0x0]    SIB direct, any disp. size (32 bits), disp. 0.
+;; `inc dword [null+null+0]`      FF 04 25 00 00 00 00     [ ] FF /0   none, none, SS=01  inc dword [0x0]    SIB direct, any disp. size (32 bits), disp. 0.
+;; `inc dword rex [sib 0]`        40 FF 04 25 00 00 00 00  [ ] FF /0   none, none, SS=01  n/a                SIB direct, any disp. size (32 bits), disp. 0, REX.
+;; `inc dword [++0]`              FF 04 25 00 00 00 00     [ ] FF /0   none, none, SS=01  inc dword [0x0]    SIB direct, any disp. size (32 bits), disp. 0.
+;; `inc dword [+-0]`              FF 04 25 00 00 00 00     [ ] FF /0   none, none, SS=01  inc dword [0x0]    SIB direct, any disp. size (32 bits), disp. 0.
+;; `inc dword [sib disp32 0]`     FF 04 25 00 00 00 00     [ ] FF /0   none, none, SS=01  inc dword [0x0]    SIB direct, displacement size 32 bits), disp. 0.
+;; `inc dword [++disp32 0]`       FF 04 25 00 00 00 00     [ ] FF /0   none, none, SS=01  inc dword [0x0]    SIB direct, displacement size 32 bits), disp. 0.
+;; `inc dword [sib disp8 0]`      invalid                  [ ] n/a     n/a                n/a                invalid (there is no SIB direct with disp. size 8 bits.
+;; `inc dword [++disp8 0]`        invalid                  [ ] n/a     n/a                n/a                invalid (there is no SIB direct with disp. size 8 bits.
+;; `inc dword [rax+]`             FF 04 20                 [ ] FF /0   n/a                n/a                SIB register indirect, rax as base.
+;;                                                                                                           Note: `+` without displacement refers to a register,
+;;                                                                                                           in this case to an index register, as the order is
+;;                                                                                                           base+index+displacement. `+` without displacement
+;;                                                                                                           implies the use of SIB.
+;; `inc dword [sib rax]`          FF 04 20                 [ ] FF /0   n/a                n/a                SIB register indirect, rax as base.
+;; `inc dword [sib rax+]`         FF 04 20                 [ ] FF /0   n/a                n/a                SIB register indirect, rax as base.
+;; `inc dword [sib rax++]`        FF 44 20 00              [ ] FF /0   [rax]+disp8        n/a                SIB reg. indir., rax as base, any disp. size, disp. 0.
+;; `inc dword [rax++0]`           FF 44 20 00              [ ] FF /0   [rax]+disp8        n/a                SIB reg. indir., rax as base, any disp. size, disp. 0.
+;; `inc dword [sib disp8 rax++]`  FF 44 20 00              [ ] FF /0   [rax]+disp8        n/a                SIB reg. indir., rax as base, disp. size 8, disp. 0.
+;; `inc dword [sib disp32 rax++]` FF 84 20 00 00 00 00     [ ] FF /0   [rax]+disp32       n/a                SIB reg. indir., rax as base, disp. size 32, disp. 0.
+;; `inc dword [+rax]`             FF 04 05 00 00 00 00     [ ] FF /0   [rax]+disp32       n/a                SIB reg. indir., rax as index, any disp. size, disp. 0.
+;; `inc dword [null+rax]`         FF 04 05 00 00 00 00     [ ] FF /0   [rax]+disp32       n/a                SIB reg. indir., rax as index, any disp. size, disp. 0.
+;; `inc dword [sib +rax]`         FF 04 05 00 00 00 00     [ ] FF /0   [rax]+disp32       n/a                SIB reg. indir., rax as index, any disp. size, disp. 0.
+;; `inc dword [+rax+]`            FF 04 05 00 00 00 00     [ ] FF /0   [rax]+disp32       n/a                SIB reg. indir., rax as index, any disp. size, disp. 0.
+;; `inc dword [+rax+0]`           FF 04 05 00 00 00 00     [ ] FF /0   [rax]+disp32       n/a                SIB reg. indir., rax as index, any disp. size, disp. 0.
+;; `inc dword [+rax-0]`           FF 04 05 00 00 00 00     [ ] FF /0   [rax]+disp32       n/a                SIB reg. indir., rax as index, any disp. size, disp. 0.
+;; `inc dword [sib +rax+]`        FF 04 05 00 00 00 00     [ ] FF /0   [rax]+disp32       n/a                SIB reg. indir., rax as index, any disp. size, disp. 0.
+;; `inc dword [rax++disp8 0]`     FF 44 20 00              [ ] FF /0   [rax]+disp8        n/a                SIB reg. indir., rax as base, disp. size 8 bits, disp. 0.
+;; `inc dword [rax++disp32 0]`    FF 84 20 00 00 00 00     [ ] FF /0   [rax]+disp32       n/a                SIB reg. indir., rax as base, disp. size 32 bits, disp. 0.
+;; `inc dword [+rax+disp8 0]`     invalid                  [ ] n/a     n/a                n/a                invalid (there is no SIB reg. indirect, rax as index, disp. size 8 bits, displacement 0).
+;; `inc dword [+rax+disp32 0]`    FF 04 05 00 00 00 00     [ ] FF /0   [rax]+disp32       n/a                SIB reg. indir., rax as index, any disp. size, disp. 0.
+;; `inc dword [0]`                FF 05 00 00 00 00        [ ] FF /0   n/a                n/a                x32: basic direct, disp. size 32, disp. 0.
+;; `inc dword [+0]`               FF 05 00 00 00 00        [ ] FF /0   n/a                n/a                x32: basic direct, disp. size 32, disp. 0.
+;; `inc dword [-0]`               FF 05 00 00 00 00        [ ] FF /0   n/a                n/a                x32: basic direct, disp. size 32, disp. 0.
+;; `inc dword [rip]`              FF 05 00 00 00 00        [ ] FF /0   n/a                n/a                x64: RIP-relative, disp. size 32, disp. 0.
+;; `inc dword [pc]`               FF 05 00 00 00 00        [ ] FF /0   n/a                n/a                x64: RIP-relative, disp. size 32, disp. 0.
+;; `inc dword [rip+0]`            FF 05 00 00 00 00        [ ] FF /0   n/a                n/a                x64: RIP-relative, disp. size 32, disp. 0.
+;; `inc dword [rip-0]`            FF 05 00 00 00 00        [ ] FF /0   n/a                n/a                x64: RIP-relative, disp. size 32, disp. 0.
+;; `inc dword [pc+0]``            FF 05 00 00 00 00        [ ] FF /0   n/a                n/a                x64: RIP-relative, disp. size 32, disp. 0.
+;; `inc dword [pc-0]`             FF 05 00 00 00 00        [ ] FF /0   n/a                n/a                x64: RIP-relative, disp. size 32, disp. 0.
