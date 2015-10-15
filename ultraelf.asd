@@ -30,6 +30,7 @@
 (in-package :cl-user)
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
+  (ql:quickload 'rt)
   (ql:quickload 'cl-ppcre)
   ;; `re:scan` etc. ...
   (rename-package "CL-PPCRE" "CL-PPCRE" '("PPCRE" "RE")))
