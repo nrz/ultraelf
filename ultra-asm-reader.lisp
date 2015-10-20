@@ -27,7 +27,7 @@
 (defun transform-code-to-string (stream sub-char numarg)
   "This function converts assembly code into a string.
    This function is usually not called directly.
-   `create-syntax-tree` can be used to test the reader.
+   `create-syntax-tree` can be used to test the reader, eg. `(create-syntax-tree #a mov ax,bx #e)`.
    This function is a finite state machine (excluding input and output).
    Usually the execution of this function is triggered by the dispatch macro character: `#a`.
    Current mode is stored in the variable `current-mode` as a string. In the beginning, `current-mode` is `\"asm\"`.
