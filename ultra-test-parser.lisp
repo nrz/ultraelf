@@ -5,7 +5,7 @@
 
 (in-package :ultraelf)
 
-(defun test-assembling-functions ()
+(defun test-parser ()
   "This function tests the functioning of `assemble-x64-and-print-hex`."
   (rt:rem-all-tests)
 
