@@ -10,16 +10,16 @@
     ;; is there _no_ code on this line?
     ;; if true, do not output anything.
     ((not is-there-code-on-this-line)
-     (setf current-phase "beginning-of-line"))
+     (setf current-phase "start-of-line"))
     ;; are we inside instruction or inside a parameter?
     ;; if true, output ")
     ((or (equal current-phase "inside-instruction")
          (equal current-phase "inside-parameters"))
-     (setf current-phase "beginning-of-line")
+     (setf current-phase "start-of-line")
      (setf is-there-code-on-this-line nil)
      (setf my-string (concatenate 'string my-string "\")")))
     ;; otherwise output )
-    (t (setf current-phase "beginning-of-line")
+    (t (setf current-phase "start-of-line")
      (setf is-there-code-on-this-line nil)
      (setf my-string (concatenate 'string my-string ")"))))
   (values is-there-code-on-this-line current-phase my-string))
@@ -31,30 +31,30 @@
    This function is a finite state machine (excluding input and output).
    Usually the execution of this function is triggered by the dispatch macro character: `#a`.
    Current mode is stored in the variable `current-mode` as a string. In the beginning, `current-mode` is `\"asm\"`.
-   Current phase is stored in the variable `current-phase` as a string. In the beginning, `current-phase` is `\"beginning-of-line\"`.
+   Current phase is stored in the variable `current-phase` as a string. In the beginning, `current-phase` is `\"start-of-line\"`.
    NOTE: commas are considered as whitespace!
 
    Then, inside this function the following states and transitions are possible:
 
    inside-comment
    description of state: inside comment text.
-   inside-comment -> a newline -> beginning-of-line
+   inside-comment -> a newline -> start-of-line
 
-   beginning-of-line
+   start-of-line
    description of state: no non-whitespace printed on this line so far.
-   beginning-of-line -> # -> hash-sign-read
-   beginning-of-line -> ( -> inside-lisp-form (set `n-lisp-forms` to 1).
-   beginning-of-line -> ) -> error (cannot terminate Lisp form outside Lisp form).
-   beginning-of-line -> [ -> error (cannot begin memory address syntax before instruction).
-   beginning-of-line -> ] -> error (cannot terminate memory address syntax before instruction).
-   beginning-of-line -> ; -> inside-comment
-   beginning-of-line -> a newline -> beginning-of-line
-   beginning-of-line -> a whitespace character -> beginning-of-line (do not output anything).
-   beginning-of-line -> a non-whitespace character -> inside-instruction
+   start-of-line -> # -> hash-sign-read
+   start-of-line -> ( -> inside-lisp-form (set `n-lisp-forms` to 1).
+   start-of-line -> ) -> error (cannot terminate Lisp form outside Lisp form).
+   start-of-line -> [ -> error (cannot begin memory address syntax before instruction).
+   start-of-line -> ] -> error (cannot terminate memory address syntax before instruction).
+   start-of-line -> ; -> inside-comment
+   start-of-line -> a newline -> start-of-line
+   start-of-line -> a whitespace character -> start-of-line (do not output anything).
+   start-of-line -> a non-whitespace character -> inside-instruction
 
    hash-sign-read
    description of state: the previous character was a hash sign.
-   hash-sign-read -> a -> beginning-of-line
+   hash-sign-read -> a -> start-of-line
    hash-sign-read -> e -> end of syntax
    hash-sign-read -> l -> switch to Lisp mode
    hash-sign-read -> any other character -> error (hash sign must be followed with `a`, `e`, or `l`).
@@ -81,7 +81,7 @@
    inside-instruction -> [ -> error (cannot begin memory address syntax inside instruction).
    inside-instruction -> ] -> error (cannot terminate memory address syntax inside instruction).
    inside-instruction -> ; -> inside-comment
-   inside-instruction -> a newline -> beginning-of-line
+   inside-instruction -> a newline -> start-of-line
    inside-instruction -> a whitespace character -> in-space
 
    in-space
@@ -92,7 +92,7 @@
    in-space -> [ -> inside-memory-address-syntax
    in-space -> ] -> error (cannot terminate memory address syntax before any parameters).
    in-space -> ; -> inside-comment
-   in-space -> a newline -> beginning-of-line
+   in-space -> a newline -> start-of-line
    in-space -> a whitespace character -> in-space (do not output anything).
    in-space -> a non-whitespace character -> inside-parameters
 
@@ -102,7 +102,7 @@
    inside-memory-address-syntax -> ( -> inside-lisp-form (set `n-lisp-forms` to 1).
    inside-memory-address-syntax -> ) -> error (cannot terminate Lisp form outside Lisp form).
    inside-memory-address-syntax -> [ -> error (cannot begin a new memory address syntax inside memory address syntax).
-   inside-memory-address-syntax -> ] -> closing-square-bracket (the content of `memory-address-syntax-buffer` will be converted to intermediate representation).
+                                        inside-memory-address-syntax -> ] -> closing-square-bracket (the content of `memory-address-syntax-buffer` will be converted to intermediate representation).
    inside-memory-address-syntax -> ; -> error (memory address syntax must be terminated with a closing square bracket before comment).
    inside-memory-address-syntax -> a newline -> error (memory address syntax must be terminated with a closing square bracket before newline).
    inside-memory-address-syntax -> a whitespace character -> space-inside-memory-address-syntax
@@ -126,7 +126,7 @@
    closing-square-bracket -> [ -> error (a whitespace is required between closing square bracket and opening square bracket).
    closing-square-bracket -> ] -> error (cannot the same terminate memory address syntax twice).
    closing-square-bracket -> ; -> inside-comment
-   closing-square-bracket -> a newline -> beginning-of-line
+   closing-square-bracket -> a newline -> start-of-line
    closing-square-bracket -> a whitespace character -> in-space
    closing-square-bracket -> a non-whitespace character -> error (a whitespace is required after closing square bracket).
 
@@ -136,7 +136,7 @@
    inside-parameters -> [ -> error (cannot begin memory address syntax inside a parameter).
    inside-parameters -> ] -> error (cannot terminate memory address syntax inside a parameter).
    inside-parameters -> ; -> inside-comment
-   inside-parameters -> a newline -> beginning-of-line
+   inside-parameters -> a newline -> start-of-line
    inside-parameters -> a whitespace character -> in-space
    inside-parameters -> a non-whitespace character -> inside-parameters
 
@@ -149,7 +149,7 @@
     ((invalid-last-characters (list "'" " " "(" ")"))
      (current-mode "asm")
      (is-there-code-on-this-line nil)
-     (current-phase "beginning-of-line")
+     (current-phase "start-of-line")
      (is-hash-sign-read nil)
      (my-string "(list ")
      (lisp-code-string "")
@@ -181,7 +181,7 @@
                        (setf current-mode "Lisp")
                        (setf is-there-code-on-this-line nil)
                        (setf lisp-code-string "")
-                       (setf current-phase "beginning-of-line"))
+                       (setf current-phase "start-of-line"))
                       ;; otherwise, print error.
                       (t (error "in asm mode undefined control character after #"))))
                   ;; is character # ?
@@ -196,10 +196,10 @@
                   ;; if yes, don't output anything.
                   ((equal current-phase "inside-comment")
                    nil)
-                  ;; are we in the beginning of the line?
-                  ((equal current-phase "beginning-of-line")
+                  ;; are we in the start of the line?
+                  ((equal current-phase "start-of-line")
                    (cond
-                     ;; is this a space in the beginning of the line?
+                     ;; is this a space in the start of the line?
                      ;; if yes, do not output anything.
                      ((equal my-char " ")
                       nil)
@@ -316,7 +316,7 @@
                       ((equal my-char "a")
                        (setf current-mode "asm")
                        (setf is-there-code-on-this-line nil)
-                       (setf current-phase "beginning-of-line")
+                       (setf current-phase "start-of-line")
                        (setf my-string (concatenate 'string
                                                     my-string
                                                     (coerce (list #\Newline) 'string)
