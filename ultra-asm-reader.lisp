@@ -6,22 +6,20 @@
 (in-package :ultraelf)
 
 (defun new-instruction (is-there-code-on-this-line current-phase my-string)
+  (setf current-phase "start-of-line")
   (cond
     ;; is there _no_ code on this line?
     ;; if true, do not output anything.
     ((not is-there-code-on-this-line)
-     (setf current-phase "start-of-line"))
+     nil)
     ;; are we inside instruction or inside a parameter?
     ;; if true, output ")
     ((or (equal current-phase "inside-instruction")
          (equal current-phase "inside-parameters"))
-     (setf current-phase "start-of-line")
-     (setf is-there-code-on-this-line nil)
      (setf my-string (concatenate 'string my-string "\")")))
     ;; otherwise output )
-    (t (setf current-phase "start-of-line")
-     (setf is-there-code-on-this-line nil)
-     (setf my-string (concatenate 'string my-string ")"))))
+    (t (setf my-string (concatenate 'string my-string ")"))))
+  (setf is-there-code-on-this-line nil)
   (values is-there-code-on-this-line current-phase my-string))
 
 (defun transform-code-to-string (stream sub-char numarg)
