@@ -54,16 +54,26 @@
 
    hash-sign-read
    description of state: the previous character was a hash sign.
-   beginning-of-line -> a -> beginning-of-line
-   beginning-of-line -> e -> end of syntax
-   beginning-of-line -> l -> switch to Lisp mode
-   beginning-of-line -> any other character -> error (hash sign must be followed with `a`, `e`, or `l`).
+   hash-sign-read -> a -> beginning-of-line
+   hash-sign-read -> e -> end of syntax
+   hash-sign-read -> l -> switch to Lisp mode
+   hash-sign-read -> any other character -> error (hash sign must be followed with `a`, `e`, or `l`).
 
    inside-lisp-form
    description: inside a Lisp form that will be evaluated during assembling phase.
    inside-lisp-form -> ( -> inside-lisp-form (increment `n-lisp-forms` to 1).
    inside-lisp-form -> ) -> decrement `n-lisp-forms` by 1. if `n-lisp-forms` becomes zero, then -> closing-parenthesis.
+   inside-lisp-form -> a newline -> space-inside-lisp-form
+   inside-lisp-form -> a whitespace character -> -> space-inside-lisp-form
    inside-lisp-form -> any other character -> inside-lisp-form
+
+   space-inside-lisp-form
+   description: a space inside a Lisp form that will be evaluated during assembling phase.
+   space-inside-lisp-form -> ( -> inside-lisp-form (increment `n-lisp-forms` to 1).
+   space-inside-lisp-form -> ) -> decrement `n-lisp-forms` by 1. if `n-lisp-forms` becomes zero, then -> closing-parenthesis.
+   space-inside-lisp-form -> a newline -> space-inside-lisp-form (do not output anything).
+   space-inside-lisp-form -> a whitespace character -> -> space-inside-lisp-form (do not output anything).
+   space-inside-lisp-form -> any other character -> inside-lisp-form (output space).
 
    inside-instruction
    description of state: inside first no-whitespace character block of this line.
@@ -108,7 +118,7 @@
    space-inside-memory-address-syntax -> ; -> error (memory address syntax must be terminated with a closing square bracket before comment).
    space-inside-memory-address-syntax -> a newline -> error (memory address syntax must be terminated with a closing square bracket before newline).
    space-inside-memory-address-syntax -> a whitespace character -> space-inside-memory-address-syntax
-   space-inside-memory-address-syntax -> a non-whitespace character -> space-inside-memory-address-syntax (do not output anything).
+   space-inside-memory-address-syntax -> a non-whitespace character -> space-inside-memory-address-syntax (output space).
 
    closing-square-bracket
    description of state: the last character was a closing square bracket that closed memory address syntax.
