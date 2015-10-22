@@ -6,7 +6,6 @@
 (in-package :ultraelf)
 
 (defun new-instruction (is-there-code-on-this-line current-phase my-string)
-  (setf current-phase "start-of-line")
   (cond
     ;; is there _no_ code on this line?
     ;; if true, do not output anything.
@@ -20,6 +19,7 @@
     ;; otherwise output )
     (t (setf my-string (concatenate 'string my-string ")"))))
   (setf is-there-code-on-this-line nil)
+  (setf current-phase "start-of-line")
   (values is-there-code-on-this-line current-phase my-string))
 
 (defun transform-code-to-string (stream sub-char numarg)
