@@ -3,7 +3,7 @@
 ;;; ultraELF x86-16, x86-32, x86-64 & ARM assembler, disassembler and metamorphic engine.
 ;;; ultraELF packs and reconstructs ELF executables, maintaining original functionality.
 
-(in-package :ultraelf)
+(in-package :x64)
 
 (defparameter *alt-mov-reg64-reg64-push-pop*
   ;; clean, does not modify flags.
@@ -193,46 +193,46 @@
   #e)
 
 (defparameter *alt-shl-rm32-rol-and*
- ;; not clean?
- #a
- rol    arg1,1
- and    arg1,0xfffffffe
- #e)
+  ;; not clean?
+  #a
+  rol    arg1,1
+  and    arg1,0xfffffffe
+  #e)
 
 (defparameter *alt-shl-rm16-rol-and*
- ;; not clean?
- #a
- rol    arg1,1
- and    arg1,0xfffe
- #e)
+  ;; not clean?
+  #a
+  rol    arg1,1
+  and    arg1,0xfffe
+  #e)
 
 (defparameter *alt-shl-rm8-rol-and*
- ;; not clean?
- #a
- rol    arg1,1
- and    arg1,0xfe
- #e)
+  ;; not clean?
+  #a
+  rol    arg1,1
+  and    arg1,0xfe
+  #e)
 
 (defparameter *alt-shl-rm32-rcl-and*
- ;; not clean?
- #a
- rcl    arg1,1
- and    arg1,0xfffffffe
- #e)
+  ;; not clean?
+  #a
+  rcl    arg1,1
+  and    arg1,0xfffffffe
+  #e)
 
 (defparameter *alt-shl-rm16-rcl-and*
- ;; not clean?
- #a
- rcl    arg1,1
- and    arg1,0xfffe
- #e)
+  ;; not clean?
+  #a
+  rcl    arg1,1
+  and    arg1,0xfffe
+  #e)
 
 (defparameter *alt-shl-rm8-rcl-and*
- ;; not clean?
- #a
- rcl    arg1,1
- and    arg1,0xfe
- #e)
+  ;; not clean?
+  #a
+  rcl    arg1,1
+  and    arg1,0xfe
+  #e)
 
 (defparameter *alt-shr-rm32-sar-pushf-and-popf*
   ;; clean, modifies flags identically.
@@ -253,38 +253,38 @@
   #e)
 
 (defparameter *alt-rol-shl-adc*
- ;; not clean?
- #a
- shl    arg1,1
- adc    arg1,0
- #e)
+  ;; not clean?
+  #a
+  shl    arg1,1
+  adc    arg1,0
+  #e)
 
 (defparameter *alt-rol-shl-jnc-inc*
- ;; not clean?
- #a
- shl    arg1,1
- jnc    >.label
- inc    arg1
- .label:
- #e)
+  ;; not clean?
+  #a
+  shl    arg1,1
+  jnc    >.label
+  inc    arg1
+  .label:
+  #e)
 
 (defparameter *alt-rol-shl-jnc-or*
- ;; not clean?
- #a
- shl    arg1,1
- jnc    >.label
- or     arg1,1
- .label:
- #e)
+  ;; not clean?
+  #a
+  shl    arg1,1
+  jnc    >.label
+  or     arg1,1
+  .label:
+  #e)
 
 (defparameter *alt-rol-shl-jnc-xor*
- ;; not clean?
- #a
- shl    arg1,1
- jnc    >.label
- xor    arg1,1
- .label:
- #e)
+  ;; not clean?
+  #a
+  shl    arg1,1
+  jnc    >.label
+  xor    arg1,1
+  .label:
+  #e)
 
 (defparameter *alt-shr-rm8-sar-pushf-and-popf*
   ;; clean, modifies flags identically.
