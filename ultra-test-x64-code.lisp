@@ -57,10 +57,10 @@
 (defparameter *example-code-x64*
   #a
   mul   rax           ; rdx:rax = rax^2.
-  (
-   mov   rbp,rsp        ; create the stack frame
-   lea   rdi,[ rbx + 4*rax + testmsg1 ] ; load effective address.
-   )
+  {
+  mov   rbp,rsp        ; create the stack frame
+  lea   rdi,[ rbx + 4*rax + testmsg1 ] ; load effective address.
+  }
   #e)
 
 (defparameter *example-code-x64-with-lisp*
