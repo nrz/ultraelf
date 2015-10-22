@@ -10,12 +10,16 @@
 ;; ARM:        `ARMTABLE.INC` from FASMARM source.
 ;;
 ;; ultraELF additions to NASM syntax (these are higher-level code):
-;; `add!`    functionally equivalent to `add`, but allows also `add! [mem],[mem]`.
 ;; `adc!`    functionally equivalent to `adc`, but allows also `adc! [mem],[mem]`.
+;; `add!`    functionally equivalent to `add`, but allows also `add! [mem],[mem]`.
+;; `and!`    functionally equivalent to `and`, but allows also `and! [mem],[mem]`.
 ;; `cmovcc!` functionally equivalent to `cmovcc`, but allows also `cmovcc! [mem],[mem]`, works for any condicion `cc`.
+;; `cmp!`    functionally equivalent to `cmp`, but allows also `cmp! [mem],[mem]`.
+;; `jmp?`    jumps to next instruction if the blocks are not consecutive in binary code.
 ;; `mov!`    functionally equivalent to `mov`, but allows also `mov! [mem],[mem]`.
 ;; `neg!`    functionally equivalent to `neg`.
 ;; `not!`    functionally equivalent to `not`.
+;; `or!`     functionally equivalent to `or`, but allows also `or! [mem],[mem]`.
 ;; `pop!`    functionally equivalent to `pop`.
 ;; `push!`   functionally equivalent to `push`.
 ;; `sbb!`    functionally equivalent to `sbb`, but allows also `sbb! [mem],[mem]`.
@@ -28,7 +32,7 @@
 ;; `set+1!`  sets arg1 to +1.
 ;; `set-1!`  sets arg1 to -1.
 ;; `set!`    sets arg1 to arg2.
-;; `jmp?`    jumps to next instruction if the blocks are not consecutive in binary code.
+;; `test!`   functionally equivalent to `test`, but allows also `test! [mem],[mem]`.
 
 (defclass asm-instruction ()
   ((name
