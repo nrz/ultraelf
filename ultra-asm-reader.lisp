@@ -226,7 +226,7 @@
                      ((equal my-char "[")
                       (setf current-phase "opening-square-bracket")
                       (setf is-there-code-on-this-line t)
-                      (setf my-string (concatenate 'string my-string "'(\"" my-char)))
+                      (setf my-string (concatenate 'string my-string "'(\"[")))
                      ((equal my-char "]")
                       (error "cannot terminate memory address syntax before instruction"))
                      ;; is character ; ?
