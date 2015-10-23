@@ -44,7 +44,7 @@
    start-of-line -> ; -> inside-comment
    start-of-line -> \ -> backslash TODO!
    start-of-line -> a newline -> start-of-line (do not output anything).
-   start-of-line -> a whitespace character -> start-of-line (do not output anything).
+   start-of-line -> a space -> start-of-line (do not output anything).
    start-of-line -> any character -> inside-instruction
 
    hash-sign-read
@@ -61,7 +61,7 @@
    inside-lisp-form -> ( -> inside-lisp-form (increment `n-lisp-forms` to 1).
    inside-lisp-form -> ) -> decrement `n-lisp-forms` by 1. if `n-lisp-forms` becomes zero, then -> closing-parenthesis.
    inside-lisp-form -> a newline -> space-inside-lisp-form
-   inside-lisp-form -> a whitespace character -> -> space-inside-lisp-form
+   inside-lisp-form -> a space -> -> space-inside-lisp-form
    inside-lisp-form -> any other character -> inside-lisp-form
 
    space-inside-lisp-form
@@ -69,7 +69,7 @@
    space-inside-lisp-form -> ( -> inside-lisp-form (increment `n-lisp-forms` to 1).
    space-inside-lisp-form -> ) -> decrement `n-lisp-forms` by 1. if `n-lisp-forms` becomes zero, then -> closing-parenthesis.
    space-inside-lisp-form -> a newline -> space-inside-lisp-form (do not output anything).
-   space-inside-lisp-form -> a whitespace character -> -> space-inside-lisp-form (do not output anything).
+   space-inside-lisp-form -> a space -> -> space-inside-lisp-form (do not output anything).
    space-inside-lisp-form -> any other character -> inside-lisp-form.
 
    inside-instruction
@@ -79,7 +79,7 @@
    inside-instruction -> ] -> error (cannot terminate memory address syntax inside instruction).
    inside-instruction -> ; -> inside-comment
    inside-instruction -> a newline -> start-of-line (do not output anything).
-   inside-instruction -> a whitespace character -> in-space (do not output anything).
+   inside-instruction -> a space -> in-space (do not output anything).
    inside-instruction -> any other character -> inside-instruction
 
    in-space
@@ -92,7 +92,7 @@
    in-space -> ; -> inside-comment
    in-space -> \ -> backslash TODO!
    in-space -> a newline -> start-of-line
-   in-space -> a whitespace character -> in-space (do not output anything).
+   in-space -> a space -> in-space (do not output anything).
    in-space -> any other character -> inside-parameters
 
    inside-parameters
@@ -106,7 +106,7 @@
    inside-parameters -> \ -> backslash-inside-parameters TODO!
    inside-parameters -> a newline -> start-of-line
    inside-parameters -> , -> in-space
-   inside-parameters -> a whitespace character -> in-space
+   inside-parameters -> a space -> in-space
    inside-parameters -> any other character -> inside-parameters
 
    backslash-inside-parameters TODO!
@@ -121,7 +121,7 @@
    opening-square-bracket -> ; -> error (memory address syntax must be terminated with a closing square bracket before comment).
    opening-square-bracket -> \ -> backslash-inside-memory-address-syntax TODO!
    opening-square-bracket -> a newline -> space-inside-memory-address-syntax
-   opening-square-bracket -> a whitespace character -> space-inside-memory-address-syntax
+   opening-square-bracket -> a space -> space-inside-memory-address-syntax
    opening-square-bracket -> any other character -> inside-memory-address-syntax
 
    inside-memory-address-syntax
@@ -134,7 +134,7 @@
    inside-memory-address-syntax -> ; -> error (memory address syntax must be terminated with a closing square bracket before comment).
    inside-memory-address-syntax -> \ -> backslash-inside-memory-address-syntax TODO!
    inside-memory-address-syntax -> a newline -> space-inside-memory-address-syntax (do not output anything).
-   inside-memory-address-syntax -> a whitespace character -> space-inside-memory-address-syntax (do not output anything).
+   inside-memory-address-syntax -> a space -> space-inside-memory-address-syntax (do not output anything).
    inside-memory-address-syntax -> any other character -> inside-memory-address-syntax
 
    backslash-inside-memory-address-syntax TODO!
@@ -149,7 +149,7 @@
    space-inside-memory-address-syntax -> ; -> error (memory address syntax must be terminated with a closing square bracket before comment).
    space-inside-memory-address-syntax -> \ -> backslash-inside-memory-address-syntax TODO!
    space-inside-memory-address-syntax -> a newline -> error (memory address syntax must be terminated with a closing square bracket before newline).
-   space-inside-memory-address-syntax -> a whitespace character -> space-inside-memory-address-syntax
+   space-inside-memory-address-syntax -> a space -> space-inside-memory-address-syntax
    space-inside-memory-address-syntax -> any other character -> inside-memory-address-syntax (output space if needed and always the character).
 
    inside-lisp-form-inside-memory-address-syntax TODO!
@@ -164,7 +164,7 @@
    closing-square-bracket -> ; -> inside-comment
    closing-square-bracket -> a newline -> start-of-line
    closing-square-bracket -> , -> in-space
-   closing-square-bracket -> a whitespace character -> in-space
+   closing-square-bracket -> a space -> in-space
    closing-square-bracket -> any other character -> error (a whitespace is required after closing square bracket).
 
    closing-parenthesis
@@ -177,7 +177,7 @@
    closing-parenthesis -> ; -> inside-comment
    closing-parenthesis -> a newline -> start-of-line
    closing-parenthesis -> , -> in-space
-   closing-parenthesis -> a whitespace character -> in-space
+   closing-parenthesis -> a space -> in-space
    closing-parenthesis -> any other character -> error (a whitespace is required after closing parenthesis).
 
    inside-comment
