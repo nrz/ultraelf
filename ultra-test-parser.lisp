@@ -25,6 +25,7 @@
   (rt:deftest test-create-syntax-tree-foo1-hash-l-foo2 (create-syntax-tree #a foo1 #l "foo2" #e) (list '("foo1") '("foo2")))
   (rt:deftest test-create-syntax-tree-foo1-hash-l-foo2-hash-a-foo3 (create-syntax-tree #a foo1 #l "foo2" #a foo3 #e) (list '("foo1") '("foo2") '("foo3")))
   (rt:deftest test-create-syntax-tree-foo1-bar1-concatenate-string-foo2-bar2-foo3-bar3 (create-syntax-tree #a foo1 bar1 #l (concatenate 'string "foo2 bar2") #a foo3 bar3 #e) (list '("foo1" "bar1") '("foo2" "bar2") '("foo3" "bar3")))
+  (rt:deftest test-create-syntax-tree-hash-l-foo1-hash-l-foo2 (create-syntax-tree #a #l "foo1" #l "foo2" #e) (list '("foo1") '("foo2")))
 
   ;; Tests for syntax tree creation using assembly source code saved in variable.
   (rt:deftest test-code-with-lisp-number-1 (create-syntax-tree *test-code-with-lisp-number-1*) (list '("foo1" "bar1") '("foo2" "bar2") '("foo3" "bar3")))
