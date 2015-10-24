@@ -344,6 +344,11 @@
                      ((equal my-char (coerce (list #\Newline) 'string))
                       (setf (values is-there-code-on-this-line current-state my-string)
                             (new-instruction is-there-code-on-this-line current-state my-string)))
+                     ;; is character , ?
+                     ;; if yes, mark we are inside space, output "
+                     ((equal my-char ",")
+                      (setf current-state "in-space")
+                      (setf my-string (concatenate 'string my-string "\"")))
                      ;; is character space?
                      ;; if yes, mark we are inside space, output "
                      ((equal my-char " ")
