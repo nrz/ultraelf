@@ -98,7 +98,7 @@
                (:file "ultra-x32-assembling-functions")         ; x32 assembling functions.
                (:file "ultra-x64-assembling-functions")         ; x64 assembling functions.
                (:file "ultra-arm-assembling-functions")         ; ARM assembling functions.
-               (:file "ultra-test-x64-code")                    ; x64 test code, used for testing.
+               (:file "ultra-x64-test-code")                    ; x64 test code, used for x64 assembling tests.
                (:file "ultra-test-parser")                      ; tests for parser.
                (:file "ultra-test-x64-assembling-functions"))   ; tests for x64 assembling functions.
   :depends-on (:parse-number :screamer))
