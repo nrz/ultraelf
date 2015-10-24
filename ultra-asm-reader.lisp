@@ -647,6 +647,21 @@
                                                     (coerce (list #\Newline) 'string)
                                                     "#e"
                                                     (coerce (list #\Newline) 'string))))
+                      ;; is character l ?
+                      ;; if yes, start a new Lisp mode.
+                      ((equal my-char "l")
+                       (setf is-there-code-on-this-line nil)
+                       (setf current-state "start-of-line")
+                       (setf my-string (concatenate 'string
+                                                    my-string
+                                                    (coerce (list #\Newline) 'string)
+                                                    "#a"
+                                                    (coerce (list #\Newline) 'string)
+                                                    (eval (read-from-string lisp-code-string))
+                                                    (coerce (list #\Newline) 'string)
+                                                    "#e"
+                                                    (coerce (list #\Newline) 'string)))
+                       (setf lisp-code-string ""))
                       ;; otherwise, add # and the character to the Lisp code to be evaluated.
                       (t
                        (setf current-state "")
