@@ -18,6 +18,11 @@
   (rt:deftest |test-create-syntax-tree-foo-[bar1-bar2]| (create-syntax-tree #a foo [bar1 bar2] #e) (list '("foo" "[bar1 bar2]")))
   (rt:deftest |test-create-syntax-tree-foo,[bar1-bar2-bar3]| (create-syntax-tree #a foo [bar1 bar2 bar3] #e) (list '("foo" "[bar1 bar2 bar3]")))
 
+  ;; Tests for syntax tree creation using assembly source code saved in variable.
+  (rt:deftest test-code-with-lisp-number-1 (create-syntax-tree *test-code-with-lisp-number-1*) (list '("foo1" "bar1") '("foo2" "bar2") '("foo3" "bar3")))
+  (rt:deftest test-code-with-lisp-number-2 (create-syntax-tree *test-code-with-lisp-number-2*) (list '("foo1" "bar1") '("foo2" "bar2") '("foo3" "bar3") '("foo4" "bar4")))
+  (rt:deftest test-code-with-lisp-number-3 (create-syntax-tree *test-code-with-lisp-number-3*) (list '("foo1" "bar1") '("foo2" "bar2") '("foo3" "bar3") '("foo4" "bar4") '("foo5" "bar5")))
+
   ;; Tests for processing of memory address syntax.
 
   (rt:do-tests))
