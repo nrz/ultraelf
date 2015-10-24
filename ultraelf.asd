@@ -4,26 +4,44 @@
 ;;; ultraELF packs and reconstructs ELF executables, maintaining original functionality.
 ;;;
 ;;; compiling and loading:
-;;; 1. CL-USER> (load (compile-file "ultraelf.asd"))
-;;; 2. CL-USER> (compile-ultraelf)
-;;; or
-;;; 3. CL-USER> (c-u)
+;;;  1. CL-USER> (load (compile-file "ultraelf.asd"))
+;;;  2. CL-USER> (compile-ultraelf)
+;;;  or
+;;;  3. CL-USER> (c-u)
 ;;;
 ;;; (compile-ultraelf) and (c-u) are 2 separate but identical macros.
 ;;;
-;;; examples on assembling:
-;;; 4. ULTRAELF>(in-package :x64)
-;;;    #<COMMON-LISP:PACKAGE "X64">
-;;; 5. X64> (assemble-x64-and-print-hex *example-code-x64-with-lisp*)
-;;;    "(49 FF C2 49 FF C5 49 FF C6 49 FF C7 49 FF CD 49 FF CE 49 FF CF 66 F7 D0 66 F7 DB)"
-;;; 6. X64> (assemble-x64-and-print-hex #a mov ax,bx #e)
-;;;    "(66 89 D8)"
+;;; running tests for parser:
+;;;  4. CL-USER> (in-package :ultraelf)
+;;;     #<PACKAGE "ULTRAELF">
+;;;  5. ULTRAELF> (test-parser)
 ;;;
-;;; how to test reader (assembler front-end):
-;;; 7. X64> (create-syntax-tree #a my_instruction foo1,foo2 #e)
-;;;    (LIST '("my_instruction" "foo1" "foo2"))
-;;; 8. X64> (create-syntax-tree #a my_instruction foo1 foo2 #e)
-;;;    (LIST '("my_instruction" "foo1" "foo2"))
+;;; running tests for assembling x64 code:
+;;;  6. ULTRAELF> (in-package :x64)
+;;;     #<COMMON-LISP:PACKAGE "X64">
+;;;  7. X64> (test-x64-assembling-functions)
+;;;
+;;; practical examples on assembling:
+;;;  8. ULTRAELF> (in-package :x64)
+;;;     #<COMMON-LISP:PACKAGE "X64">
+;;;  9. X64> (assemble-x64-and-print-hex *example-code-x64-with-lisp*)
+;;;     "(49 FF C2 49 FF C3 49 FF C5 49 FF C6 49 FF C7 49 FF CD 49 FF CE 49 FF CF 66 F7 D0 66 F7 DB)"
+;;; 10. X64> (assemble-x64-and-print-hex #a mov ax,bx #e)
+;;;     "(66 89 D8)"
+;;;
+;;; how to check reader output (see `ultra-test-parser.lisp` for more examples):
+;;; 11. CL-USER> (in-package :ultraelf)
+;;;     #<PACKAGE "ULTRAELF">
+;;; 12. ULTRAELF> #a foo bar #e
+;;;     "(list '(\"foo\" \"bar\"))"
+;;; 13. ULTRAELF> #a foo bar1,bar2 #e
+;;;     "(list '(\"foo\" \"bar1\" \"bar2\"))"
+;;;
+;;; how to check parser output:
+;;; 14. ULTRAELF> (create-syntax-tree #a foo bar #e)
+;;;     (LIST '("foo" "bar"))
+;;; 15. ULTRAELF> (create-syntax-tree #a foo bar1,bar2 #e)
+;;;     (LIST '("foo" "bar1" "bar2"))
 ;;;
 ;;; Each instruction and its arguments can be separated by commas and/or spaces.
 
