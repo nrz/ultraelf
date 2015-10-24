@@ -78,8 +78,9 @@
    inside-instruction -> [ -> error (cannot begin memory address syntax inside instruction).
    inside-instruction -> ] -> error (cannot terminate memory address syntax inside instruction).
    inside-instruction -> ; -> inside-comment
-   inside-instruction -> a newline -> start-of-line (do not output anything).
-   inside-instruction -> a space -> in-space (do not output anything).
+   inside-instruction -> a newline -> start-of-line
+   inside-instruction -> , -> in-space
+   inside-instruction -> a space -> in-space
    inside-instruction -> any other character -> inside-instruction
 
    in-space
