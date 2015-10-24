@@ -22,7 +22,7 @@
   (setf current-state "start-of-line")
   (values is-there-code-on-this-line current-state my-string))
 
-(defun transform-code-to-string (stream sub-char numarg)
+(defun transform-code-to-string (stream sub-char numarg current-mode)
   "This function converts assembly code into a string.
    This function is usually not called directly.
    `create-syntax-tree` can be used to test the reader, eg. `(create-syntax-tree #a mov ax,bx #e)`.
@@ -196,7 +196,6 @@
   (declare (ignore sub-char numarg))
   (let*
     ((invalid-last-characters (list "'" " " "(" ")"))
-     (current-mode "asm")
      (is-there-code-on-this-line nil)
      (current-state "start-of-line")
      (is-hash-sign-read nil)
@@ -676,5 +675,12 @@
                  (format t "current mode: ~a~a" current-mode #\Newline)
                  (error "invalid current mode"))))))
 
+(defun transform-code-to-string-asm (stream sub-char numarg)
+  (transform-code-to-string stream sub-char numarg "asm"))
+
+(defun transform-code-to-string-lisp (stream sub-char numarg)
+  (transform-code-to-string stream sub-char numarg "Lisp"))
+
 ;;; #a is the input which starts the custom reader.
-(set-dispatch-macro-character #\# #\a #'transform-code-to-string)
+(set-dispatch-macro-character #\# #\a #'transform-code-to-string-asm)
+(set-dispatch-macro-character #\# #\l #'transform-code-to-string-lisp)
