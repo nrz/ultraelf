@@ -73,7 +73,7 @@
                                                    (rest (read-from-string (nth i my-list)))
                                                    (subseq my-list (1+ i)))))
                (setf my-list (create-syntax-tree (append
-                                                   (subseq my-list 0 (1- i))
+                                                   (subseq my-list 0 i)
                                                    (rest (read-from-string (nth i my-list)))
                                                    (subseq my-list (1+ i))))))))
   (if (eql (first my-list) 'list)
