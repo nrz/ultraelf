@@ -209,4 +209,11 @@
 (rt:deftest |test-alternatives-x64-and-print-hex-cpuid-mov-ax,bx| (assemble-alternatives-x64-and-print-hex #a cpuid #a mov ax,bx #e) (("(0F A2)") ("(66 89 D8)" "(66 8B C3)")))
 (rt:deftest |test-alternatives-x64-and-print-hex-mov-ax,bx-inc-dx| (assemble-alternatives-x64-and-print-hex #a mov ax,bx #a inc dx #e) (("(66 89 D8)" "(66 8B C3)") ("(66 FF C2)")))
 (rt:deftest |test-alternatives-x64-and-print-hex-movsq-scasq-xchg-eax,ecx| (assemble-alternatives-x64-and-print-hex #a movsq #a scasq #a xchg eax,ecx #e) (("(48 A5)" "(49 A5)" "(4A A5)" "(4B A5)" "(4C A5)" "(4D A5)" "(4E A5)" "(4F A5)") ("(48 AF)" "(49 AF)" "(4A AF)" "(4B AF)" "(4C AF)" "(4D AF)" "(4E AF)" "(4F AF)") ("(91)" "(87 C1)" "(87 C8)")))
+
+;; Tests for 2 or more instructions at once, print in hexadecimal, using assembly source code saved in variable.
+(rt:deftest test-code-x64-with-lisp-number-1 (assemble-x64-and-print-hex *test-code-x64-with-lisp-number-1*) "(49 FF CC 66 F7 D0 66 F7 DB)")
+(rt:deftest test-code-x64-with-lisp-number-2 (assemble-x64-and-print-hex *test-code-x64-with-lisp-number-2*) "(49 FF C2 49 FF CC 66 F7 D0 66 F7 DB)")
+(rt:deftest test-code-x64-with-lisp-number-3 (assemble-x64-and-print-hex *test-code-x64-with-lisp-number-3*) "(49 FF C2 49 FF C3 49 FF CC 66 F7 D0 66 F7 DB)")
+(rt:deftest test-example-code-x64-with-lisp (assemble-x64-and-print-hex *example-code-x64-with-lisp*) "(49 FF C2 49 FF C3 49 FF C5 49 FF C6 49 FF C7 49 FF CD 49 FF CE 49 FF CF 66 F7 D0 66 F7 DB)")
+
 (rt:do-tests))
