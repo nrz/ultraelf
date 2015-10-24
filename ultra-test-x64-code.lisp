@@ -82,3 +82,33 @@
   not ax
   neg bx
   #e)
+
+(defparameter *test-code-x64-with-lisp-number-1*
+  #a
+  #l
+  (concatenate 'string "dec r12")
+  #a
+  not ax
+  neg bx
+  #e)
+
+(defparameter *test-code-x64-with-lisp-number-2*
+  #a
+  inc r10     ; increment register r10.
+  #l
+  (concatenate 'string "dec r12")
+  #a
+  not ax
+  neg bx
+  #e)
+
+(defparameter *test-code-x64-with-lisp-number-3*
+  #a
+  inc r10     ; increment register r10.
+  inc r11     ; increment register r10.
+  #l
+  (concatenate 'string "dec r12")
+  #a
+  not ax
+  neg bx
+  #e)
