@@ -263,9 +263,9 @@
                                                           invalid-last-characters) "))")))
                      ((equal my-char "l")
                       (setf current-mode "Lisp")
-                      (setf is-there-code-on-this-line nil)
                       (setf lisp-code-string "")
-                      (setf current-phase "start-of-line"))
+                      (setf (values is-there-code-on-this-line current-phase my-string)
+                            (new-instruction is-there-code-on-this-line current-phase my-string)))
                      ;; otherwise, print error.
                      (t (error "in asm mode undefined control character after #"))))
                   ((equal current-phase "inside-lisp-form")
