@@ -19,7 +19,7 @@
   (rt:deftest |test-create-syntax-tree-foo,[bar1-bar2-bar3]| (create-syntax-tree #a foo [bar1 bar2 bar3] #e) (list '("foo" "[bar1 bar2 bar3]")))
 
   ;; Tests for syntax tree creation using assembly source code with Common Lisp macros.
-  (rt:deftest test-create-syntax-with-Lisp-macros (create-syntax-tree #a foo1 bar1 #l (concatenate 'string "foo2 bar2") #a foo3 bar3 #e) (list '("foo1" "bar1") '("foo2" "bar2") '("foo3" "bar3")))
+  (rt:deftest test-create-syntax-tree-foo1-bar1-concatenate-string-foo2-bar2-foo3-bar3 (create-syntax-tree #a foo1 bar1 #l (concatenate 'string "foo2 bar2") #a foo3 bar3 #e) (list '("foo1" "bar1") '("foo2" "bar2") '("foo3" "bar3")))
 
   ;; Tests for syntax tree creation using assembly source code saved in variable.
   (rt:deftest test-code-with-lisp-number-1 (create-syntax-tree *test-code-with-lisp-number-1*) (list '("foo1" "bar1") '("foo2" "bar2") '("foo3" "bar3")))
