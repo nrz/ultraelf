@@ -864,4 +864,4 @@
        ;; One register operand and one memory operand.
        ;; The operands are encoded in corresponding ModRM fields.
        (handle-nasm-code-format-x64-wrapper code-format my-operands :given-operands given-operands))
-      (t (error "encoding not yet implemented")))))
+      (t (error (concatenate 'string "encoding type " (first code-format) " not yet implemented"))))))
