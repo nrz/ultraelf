@@ -375,8 +375,8 @@
                  encoded-bytes
                  is-rex-already-encoded
                  instruction-length-in-bytes))
-              (t (error "encoding not yet implemented"))))
-           (t (error "encoding not yet implemented"))))))
+              (t (error (concatenate 'string "encoding of encoding-type " encoding-type " not yet implemented")))))
+           (t (error (concatenate 'string "encoding of n-operands " (write-to-string n-operands) " not yet implemented")))))))
     (macrolet
       ((emit-and-update-instruction-length (&body body)
          ;; This macro increments `instruction-length-in-bytes` by the size of `body`, and then returns `body`.
