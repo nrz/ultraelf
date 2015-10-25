@@ -812,56 +812,57 @@
 (defun emit-with-format-and-operands-x64 (code-format req-operands &key given-operands)
   "This function emits code (list of binary code bytes) for one x64 instruction variant."
   (let*
-    ((my-args (get-list given-operands))
+    ((encoding-type (first code-format))
+     (my-args (get-list given-operands))
      (my-operands (get-list req-operands)))
     (check-args my-operands my-args)
     (cond
-      ((equal (first code-format) "[")
+      ((equal encoding-type "[")
        ;; The encoding of this variant is constant, so just convert
        ;; the rest elements (hexadecimal numbers) to numbers in a list.
        (handle-nasm-code-format-x64-wrapper code-format my-operands))
-      ((equal (first code-format) "[--:")
+      ((equal encoding-type "[--:")
        ;; The operands and encoding of this variant are fixed.
        (handle-nasm-code-format-x64-wrapper code-format my-operands :given-operands given-operands))
-      ((equal (first code-format) "[-i:")
+      ((equal encoding-type "[-i:")
        ;; One fixed operand and one immediate operand.
        (handle-nasm-code-format-x64-wrapper code-format my-operands :given-operands given-operands))
-      ((equal (first code-format) "[-r:")
+      ((equal encoding-type "[-r:")
        ;; One fixed operand and one register operand.
        (handle-nasm-code-format-x64-wrapper code-format my-operands :given-operands given-operands))
-      ((equal (first code-format) "[m:")
+      ((equal encoding-type "[m:")
        ;; This variant has one 'memory' (can be register too) operand.
        ;; The operand is encoded in the r/m field.
        ;; An extension of the opcode is in the reg field.
        (handle-nasm-code-format-x64-wrapper code-format my-operands :given-operands given-operands))
-      ((equal (first code-format) "[i:")
+      ((equal encoding-type "[i:")
        ;; This variant has one immediate operand.
        (handle-nasm-code-format-x64-wrapper code-format my-operands :given-operands given-operands))
-      ((equal (first code-format) "[r:")
+      ((equal encoding-type "[r:")
        ;; This variant has one register operand.
        ;; The operand is encoded in the r/m field.
        ;; An extension of the opcode is in the reg field.
        (handle-nasm-code-format-x64-wrapper code-format my-operands :given-operands given-operands))
-      ((equal (first code-format) "[i-:")
+      ((equal encoding-type "[i-:")
        ;; One immediate operand and one fixed operand.
        (handle-nasm-code-format-x64-wrapper code-format my-operands :given-operands given-operands))
-      ((equal (first code-format) "[r-:")
+      ((equal encoding-type "[r-:")
        ;; One register operand and one fixed operand.
        (handle-nasm-code-format-x64-wrapper code-format my-operands :given-operands given-operands))
-      ((equal (first code-format) "[mi:")
+      ((equal encoding-type "[mi:")
        ;; One memory operand and one immediate operand.
        ;; The operands are encoded in corresponding ModRM fields.
        (handle-nasm-code-format-x64-wrapper code-format my-operands :given-operands given-operands))
-      ((equal (first code-format) "[mr:")
+      ((equal encoding-type "[mr:")
        ;; One memory operand and one register operand.
        ;; The operands are encoded in corresponding ModRM fields.
        (handle-nasm-code-format-x64-wrapper code-format my-operands :given-operands given-operands))
-      ((equal (first code-format) "[ri:")
+      ((equal encoding-type "[ri:")
        ;; One register operand and one immediate operand.
        ;; The operands are encoded in corresponding ModRM fields.
        (handle-nasm-code-format-x64-wrapper code-format my-operands :given-operands given-operands))
-      ((equal (first code-format) "[rm:")
+      ((equal encoding-type "[rm:")
        ;; One register operand and one memory operand.
        ;; The operands are encoded in corresponding ModRM fields.
        (handle-nasm-code-format-x64-wrapper code-format my-operands :given-operands given-operands))
-      (t (error (concatenate 'string "encoding type " (first code-format) " not yet implemented"))))))
+      (t (error (concatenate 'string "encoding type " encoding-type " not yet implemented"))))))
