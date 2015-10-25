@@ -738,13 +738,14 @@
                       (setf lisp-code-string (concatenate 'string lisp-code-string "#" my-char)))))
                   ;; is character # ?
                   ;; if yes, mark hash sign read.
-                  ((equal my-char "#")
-                   (setf current-lisp-state "hash-sign-read"))
-                  ;; otherwise add the character to the Lisp code to be evaluated.
-                  (t (setf lisp-code-string (concatenate 'string lisp-code-string my-char)))))
-               (t
-                 (format t "current mode: ~a~a" current-mode #\Newline)
-                 (error "invalid current mode"))))))
+                  ((equal current-lisp-state "regular")
+                   (cond
+                     ((equal my-char "#")
+                      (setf current-lisp-state "hash-sign-read"))
+                     ;; otherwise add the character to the Lisp code to be evaluated.
+                     (t (setf lisp-code-string (concatenate 'string lisp-code-string my-char)))))
+                  (t (error (concatenate 'string "invalid current-lisp-state: " current-lisp-state)))))
+               (t (error (concatenate 'string "invalid current-mode: " current-mode)))))))
 
 (defun transform-code-to-string-asm (stream sub-char numarg)
   (transform-code-to-string stream sub-char numarg "asm"))
