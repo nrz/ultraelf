@@ -59,7 +59,7 @@
        (list (+ base (modrm-r/m arg1))))
       ((equal encoding-type "[ri:")
        (list (+ base (modrm-r/m arg1))))
-      (t (error "xx+r encoding for this code-string not implemented.")))))
+      (t (error (concatenate 'string "xx+r encoding for encoding type " encoding-type " not yet implemented"))))))
 
 (defun handle-nasm-code-format-x64-wrapper
   (code-format
