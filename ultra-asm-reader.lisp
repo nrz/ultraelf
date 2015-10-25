@@ -456,6 +456,11 @@
                       (setf my-string (concatenate 'string my-string "]\"")))
                      ((equal my-char ";")
                       (error "memory address syntax must be terminated with a closing square bracket before a comment"))
+                     ;; is character +
+                     ;; if yes, mark we are at plus inside memory address syntax, output +
+                     ((equal my-char "+")
+                      (setf current-state "plus-inside-memory-address-syntax")
+                      (setf my-string (concatenate 'string my-string "+")))
                      ;; is character newline?
                      ;; if yes, mark are in space inside memory address syntax, do not output anything.
                      ((equal my-char (coerce (list #\Newline) 'string))
@@ -487,6 +492,11 @@
                       (setf my-string (concatenate 'string my-string "]\"")))
                      ((equal my-char ";")
                       (error "memory address syntax must be terminated with a closing square bracket before a comment"))
+                     ;; is character +
+                     ;; if yes, mark we are at plus inside memory address syntax, output +
+                     ((equal my-char "+")
+                      (setf current-state "plus-inside-memory-address-syntax")
+                      (setf my-string (concatenate 'string my-string "+")))
                      ;; is character newline?
                      ;; if yes, mark are in space inside memory address syntax, do not output anything.
                      ((equal my-char (coerce (list #\Newline) 'string))
@@ -517,6 +527,11 @@
                       (setf my-string (concatenate 'string my-string "]\"")))
                      ((equal my-char ";")
                       (error "memory address syntax must be terminated with a closing square bracket before a comment"))
+                     ;; is character +
+                     ;; if yes, mark we are at plus inside memory address syntax, output +
+                     ((equal my-char "+")
+                      (setf current-state "plus-inside-memory-address-syntax")
+                      (setf my-string (concatenate 'string my-string "+")))
                      ;; is character newline?
                      ;; if yes, do not output anything.
                      ((equal my-char (coerce (list #\Newline) 'string))
@@ -533,6 +548,43 @@
                           (equal (get-last-character-string my-string) "["))
                         ;; if last character was not space or [, output space.
                         (setf my-string (concatenate 'string my-string " ")))
+                      (setf my-string (concatenate 'string my-string my-char)))))
+                  ((equal current-state "plus-inside-memory-address-syntax")
+                   (cond
+                     ((equal my-char "#")
+                      (error "memory address syntax must be terminated with a closing square bracket before a hash sign"))
+                     ((equal my-char "(")
+                      ;; is this a Lisp form (with parentesis)?
+                      ;; if yes, mark we are inside Lisp form inside memory address syntax, output " and current character.
+                      (setf current-state "inside-lisp-form-inside-memory-address-syntax")
+                      (setf n-lisp-forms 1)
+                      (setf my-string (concatenate 'string my-string "\"" my-char)))
+                     ((equal my-char ")")
+                      (error "cannot terminate Lisp form outside a Lisp form"))
+                     ((equal my-char "[")
+                      (error "cannot begin memory address syntax inside memory address syntax"))
+                     ;; is character ] ?
+                     ;; if yes, mark we are at the closing square bracket, output ]"
+                     ((equal my-char "]")
+                      (setf current-state "closing-square-bracket")
+                      (setf my-string (concatenate 'string my-string "]\"")))
+                     ((equal my-char ";")
+                      (error "memory address syntax must be terminated with a closing square bracket before a comment"))
+                     ;; is character +
+                     ;; if yes, output +
+                     ((equal my-char "+")
+                      (setf my-string (concatenate 'string my-string "+")))
+                     ;; is character newline?
+                     ;; if yes, do not output anything.
+                     ((equal my-char (coerce (list #\Newline) 'string))
+                      nil)
+                     ;; is character space?
+                     ;; if yes, do not output anything.
+                     ((equal my-char " ")
+                      nil)
+                     ;; otherwise mark we are inside memory address syntax, output the character.
+                     (t
+                      (setf current-state "inside-memory-address-syntax")
                       (setf my-string (concatenate 'string my-string my-char)))))
                   ((equal current-state "closing-square-bracket")
                    (cond
