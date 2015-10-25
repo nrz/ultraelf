@@ -121,6 +121,7 @@
    opening-square-bracket -> ] -> closing-square-bracket (the content of `memory-address-syntax-buffer` will be converted to intermediate representation).
    opening-square-bracket -> ; -> error (memory address syntax must be terminated with a closing square bracket before comment).
    opening-square-bracket -> \ -> backslash-inside-memory-address-syntax TODO!
+   opening-square-bracket -> + -> plus-inside-memory-address-syntax
    opening-square-bracket -> a newline -> space-inside-memory-address-syntax
    opening-square-bracket -> a space -> space-inside-memory-address-syntax
    opening-square-bracket -> any other character -> inside-memory-address-syntax
@@ -134,6 +135,7 @@
    inside-memory-address-syntax -> ] -> closing-square-bracket (the content of `memory-address-syntax-buffer` will be converted to intermediate representation).
    inside-memory-address-syntax -> ; -> error (memory address syntax must be terminated with a closing square bracket before comment).
    inside-memory-address-syntax -> \ -> backslash-inside-memory-address-syntax TODO!
+   inside-memory-address-syntax -> + -> plus-inside-memory-address-syntax
    inside-memory-address-syntax -> a newline -> space-inside-memory-address-syntax (do not output anything).
    inside-memory-address-syntax -> a space -> space-inside-memory-address-syntax (do not output anything).
    inside-memory-address-syntax -> any other character -> inside-memory-address-syntax
@@ -149,17 +151,32 @@
    space-inside-memory-address-syntax -> ] -> closing-square-bracket (the content of `memory-address-syntax-buffer` will be converted to intermediate representation).
    space-inside-memory-address-syntax -> ; -> error (memory address syntax must be terminated with a closing square bracket before comment).
    space-inside-memory-address-syntax -> \ -> backslash-inside-memory-address-syntax TODO!
+   space-inside-memory-address-syntax -> + -> plus-inside-memory-address-syntax
    space-inside-memory-address-syntax -> a newline -> error (memory address syntax must be terminated with a closing square bracket before newline).
    space-inside-memory-address-syntax -> a space -> space-inside-memory-address-syntax
    space-inside-memory-address-syntax -> any other character -> inside-memory-address-syntax (output space if needed and always the character).
+
+   plus-inside-memory-address-syntax
+   description: plus sign inside memory address syntax.
+   plus-inside-memory-address-syntax -> # -> error (memory address syntax must be terminated with a closing square bracket before a hash sign).
+   plus-inside-memory-address-syntax -> ( -> inside-lisp-form-inside-memory-address-syntax (set `n-lisp-forms` to 1). TODO!
+   plus-inside-memory-address-syntax -> ) -> error (cannot terminate Lisp form outside a Lisp form).
+   plus-inside-memory-address-syntax -> [ -> error (cannot begin a new memory address syntax inside memory address syntax).
+   plus-inside-memory-address-syntax -> ] -> closing-square-bracket (the content of `memory-address-syntax-buffer` will be converted to intermediate representation).
+   plus-inside-memory-address-syntax -> ; -> error (memory address syntax must be terminated with a closing square bracket before comment).
+   plus-inside-memory-address-syntax -> \ -> backslash-inside-memory-address-syntax TODO!
+   plus-inside-memory-address-syntax -> + -> plus-inside-memory-address-syntax
+   plus-inside-memory-address-syntax -> a newline -> plus-inside-memory-address-syntax (do not output anything).
+   plus-inside-memory-address-syntax -> a space -> plus-inside-memory-address-syntax (do not output anything).
+   plus-inside-memory-address-syntax -> any other character -> inside-memory-address-syntax
 
    inside-lisp-form-inside-memory-address-syntax TODO!
 
    closing-square-bracket
    description of state: the last character was a closing square bracket that closed memory address syntax.
-   closing-square-bracket -> # -> error (a whitespace is required between closing square bracket and hash sign)
-   closing-square-bracket -> ( -> error (a whitespace is required between closing square bracket and a Lisp form)
-   closing-square-bracket -> ) -> error (cannot terminate Lisp form outside a Lisp form)
+   closing-square-bracket -> # -> error (a whitespace is required between closing square bracket and hash sign).
+   closing-square-bracket -> ( -> error (a whitespace is required between closing square bracket and a Lisp form).
+   closing-square-bracket -> ) -> error (cannot terminate Lisp form outside a Lisp form).
    closing-square-bracket -> [ -> error (a whitespace is required between closing square bracket and opening square bracket).
    closing-square-bracket -> ] -> error (cannot terminate the same terminate memory address syntax twice).
    closing-square-bracket -> ; -> inside-comment
@@ -170,11 +187,11 @@
 
    closing-parenthesis
    description of state: the last character was a closing parenthesis that closed a Lisp form.
-   closing-parenthesis -> # -> error (a whitespace is required between closing parenthesis and hash sign)
-   closing-parenthesis -> ( -> error (a whitespace is required between closing parenthesis and a Lisp form)
-   closing-parenthesis -> ) -> error (cannot terminate Lisp form outside a Lisp form)
+   closing-parenthesis -> # -> error (a whitespace is required between closing parenthesis and hash sign).
+   closing-parenthesis -> ( -> error (a whitespace is required between closing parenthesis and a Lisp form).
+   closing-parenthesis -> ) -> error (cannot terminate Lisp form outside a Lisp form).
    closing-parenthesis -> [ -> error (a whitespace is required between closing parenthesis and opening square bracket).
-   closing-parenthesis -> ] -> error (outside memory address syntax).
+   closing-parenthesis -> ] -> error (cannot terminate memory address syntax outside memory address syntax).
    closing-parenthesis -> ; -> inside-comment
    closing-parenthesis -> a newline -> start-of-line
    closing-parenthesis -> , -> in-space
