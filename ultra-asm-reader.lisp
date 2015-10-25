@@ -414,7 +414,8 @@
                      ((equal my-char " ")
                       nil)
                      ;; otherwise mark we are inside parameters, output " and the character.
-                     (t (setf current-state "inside-parameters")
+                     (t
+                      (setf current-state "inside-parameters")
                       (unless (equal (get-last-character-string my-string) " ")
                         ;; if last character was not space, output space.
                         (setf my-string (concatenate 'string my-string " ")))
@@ -486,7 +487,8 @@
                      ((equal my-char " ")
                       (setf current-state "space-inside-memory-address-syntax"))
                      ;; otherwise mark we are inside memory address syntax and output the character.
-                     (t (setf current-state "inside-memory-address-syntax")
+                     (t
+                      (setf current-state "inside-memory-address-syntax")
                       (setf my-string (concatenate 'string my-string my-char)))))
                   ((equal current-state "inside-memory-address-syntax")
                    (cond
@@ -558,7 +560,8 @@
                      ((equal my-char " ")
                       nil)
                      ;; otherwise mark that we are inside memory address syntax, output space if needed, and the character.
-                     (t (setf current-state "inside-memory-address-syntax")
+                     (t
+                      (setf current-state "inside-memory-address-syntax")
                       (unless
                         (or
                           (equal (get-last-character-string my-string) " ")
@@ -665,7 +668,6 @@
                       (setf current-state "in-space"))
                      ;; otherwise produce an error.
                      (t (error "a whitespace is required after closing square bracket"))))
-
                   ((equal current-state "inside-comment")
                    (cond
                      ;; is character newline?
