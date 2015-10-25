@@ -69,5 +69,9 @@
   (rt:deftest |test-create-syntax-tree-foo-[+-extra-space-+bar]| (create-syntax-tree #a foo [+ +bar] #e) (list '("foo" "[++bar]")))
   (rt:deftest |test-create-syntax-tree-foo-[bar++]| (create-syntax-tree #a foo [bar++] #e) (list '("foo" "[bar++]")))
   (rt:deftest |test-create-syntax-tree-foo-[bar+-extra-space-+]| (create-syntax-tree #a foo [bar+ +] #e) (list '("foo" "[bar++]")))
+  (rt:deftest |test-create-syntax-tree-foo-bar1-[bar2]| (create-syntax-tree #a foo bar1 [bar2] #e) (list '("foo" "bar1" "[bar2]")))
+  (rt:deftest |test-create-syntax-tree-foo-bar1-[bar2+]| (create-syntax-tree #a foo bar1 [bar2+] #e) (list '("foo" "bar1" "[bar2+]")))
+  (rt:deftest |test-create-syntax-tree-foo-bar1-[+bar2]| (create-syntax-tree #a foo bar1 [+bar2] #e) (list '("foo" "bar1" "[+bar2]")))
+  (rt:deftest |test-create-syntax-tree-foo-bar1-[+bar2+]| (create-syntax-tree #a foo bar1 [+bar2+] #e) (list '("foo" "bar1" "[+bar2+]")))
 
   (rt:do-tests))
