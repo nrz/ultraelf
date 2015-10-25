@@ -534,7 +534,7 @@
                       ;; if yes, mark we are inside Lisp form, output " and current character.
                       (setf current-state "inside-lisp-form-inside-memory-address-syntax")
                       (setf n-lisp-forms 1)
-                      (setf my-string (concatenate 'string my-string "\"" my-char)))
+                      (setf my-string (concatenate 'string my-string "\"(")))
                      ((equal my-char ")")
                       (error "cannot terminate Lisp form outside a Lisp form"))
                      ((equal my-char "[")
@@ -578,7 +578,7 @@
                       ;; if yes, mark we are inside Lisp form inside memory address syntax, output " and current character.
                       (setf current-state "inside-lisp-form-inside-memory-address-syntax")
                       (setf n-lisp-forms 1)
-                      (setf my-string (concatenate 'string my-string "\"" my-char)))
+                      (setf my-string (concatenate 'string my-string "\"(")))
                      ((equal my-char ")")
                       (error "cannot terminate Lisp form outside a Lisp form"))
                      ((equal my-char "[")
