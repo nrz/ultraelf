@@ -734,7 +734,6 @@
                       (setf lisp-code-string ""))
                      ;; otherwise, add # and the character to the Lisp code to be evaluated.
                      (t
-                      (setf current-state "")
                       (setf lisp-code-string (concatenate 'string lisp-code-string "#" my-char)))))
                   ;; is character # ?
                   ;; if yes, mark hash sign read.
