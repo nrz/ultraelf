@@ -678,7 +678,7 @@
                                                                        ;; register-only encodings.
                                                                        ;; there are currently 18 encodings of this type in use.
                                                                        ;; to check `insns.dat` for new encodings of this type:
-                                                                       ;; `$ grep '[0-9a-f]+' insns.dat | sed 's/\(^.*\)\([\t ][0-9a-f][0-9a-f]+\)\(.*$\)/\2/g' | sed 's/[\t ]*//g' | sort | uniq`
+                                                                       ;; `$ sed 's/.*\([\t ][0-9a-f][0-9a-f]+\).*/\1/g;tx;d;:x;s/[\t ]*//g' insns.dat | sort | uniq`
                                                                        ((and
                                                                           (eql (length code-string) 4) ; "eg. `"90+r"`.
                                                                           (equal (subseq code-string 2) "+r"))
