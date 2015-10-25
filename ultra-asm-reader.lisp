@@ -733,8 +733,7 @@
                                                    (coerce (list #\Newline) 'string)))
                       (setf lisp-code-string ""))
                      ;; otherwise, add # and the character to the Lisp code to be evaluated.
-                     (t
-                      (setf lisp-code-string (concatenate 'string lisp-code-string "#" my-char)))))
+                     (t (setf lisp-code-string (concatenate 'string lisp-code-string "#" my-char)))))
                   ;; is character # ?
                   ;; if yes, mark hash sign read.
                   ((equal current-lisp-state "regular")
