@@ -51,7 +51,9 @@
   (ql:quickload 'rt)
   (ql:quickload 'cl-ppcre)
   ;; `re:scan` etc. ...
-  (rename-package "CL-PPCRE" "CL-PPCRE" '("PPCRE" "RE")))
+  (rename-package "CL-PPCRE" "CL-PPCRE" '("PPCRE" "RE"))
+  (ql:quickload 'parse-number)
+  (ql:quickload 'screamer))
 
 (defmacro compile-ultraelf ()
   (asdf:oos 'asdf:load-op 'ultraelf)
@@ -119,5 +121,4 @@
                (:file "ultra-test-code")                        ; test code, used for parser tests.
                (:file "ultra-x64-test-code")                    ; x64 test code, used for x64 assembling tests.
                (:file "ultra-test-parser")                      ; tests for parser.
-               (:file "ultra-test-x64-assembling-functions"))   ; tests for x64 assembling functions.
-  :depends-on (:parse-number :screamer))
+               (:file "ultra-test-x64-assembling-functions")))  ; tests for x64 assembling functions.
