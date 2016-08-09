@@ -1,0 +1,10 @@
+ultraELF x86-64 assembler, disassembler and metamorphic engine.
+
+A hobby project of mine. Work in progress.
+
+ultraELF is under The GNU General Public License 3, or (at your option)
+any later version. See LICENSE file.
+
+For compiling and loading instructions see file ultraelf.asd .
+
+All my code copyright (C) 2016 Antti Nuortimo.
