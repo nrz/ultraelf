@@ -1,0 +1,5 @@
+# ohitettavat tiedostot ja hakemistot
+# files and directories to be ignored
+
+# Ignore all SBCL `.fasl` files.
+*.fasl
