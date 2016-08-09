@@ -4068,6 +4068,30 @@
 :code-format (list "[---:" "0f" "01" "c8")
 :arch-flags (list "X64" "ND")))
 
+(defparameter MONITORX-void (make-instance 'x64-asm-instruction
+:name "MONITORX"
+:req-operands (list "void")
+:code-format (list "[" "0f" "01" "fa")
+:arch-flags (list "AMD")))
+
+(defparameter MONITORX-reg_rax.reg_ecx.reg_edx (make-instance 'x64-asm-instruction
+:name "MONITORX"
+:req-operands (list "reg_rax" "reg_ecx" "reg_edx")
+:code-format (list "[---:" "0f" "01" "fa")
+:arch-flags (list "X64" "AMD" "ND")))
+
+(defparameter MONITORX-reg_eax.reg_ecx.reg_edx (make-instance 'x64-asm-instruction
+:name "MONITORX"
+:req-operands (list "reg_eax" "reg_ecx" "reg_edx")
+:code-format (list "[---:" "0f" "01" "fa")
+:arch-flags (list "AMD" "ND")))
+
+(defparameter MONITORX-reg_ax.reg_ecx.reg_edx (make-instance 'x64-asm-instruction
+:name "MONITORX"
+:req-operands (list "reg_ax" "reg_ecx" "reg_edx")
+:code-format (list "[---:" "0f" "01" "fa")
+:arch-flags (list "AMD" "ND")))
+
 (defparameter MOV-mem.reg_sreg (make-instance 'x64-asm-instruction
 :name "MOV"
 :req-operands (list "mem" "reg_sreg")
@@ -4583,6 +4607,18 @@
 :req-operands (list "reg_eax" "reg_ecx")
 :code-format (list "[--:" "0f" "01" "c9")
 :arch-flags (list "PRESCOTT" "ND")))
+
+(defparameter MWAITX-void (make-instance 'x64-asm-instruction
+:name "MWAITX"
+:req-operands (list "void")
+:code-format (list "[" "0f" "01" "fb")
+:arch-flags (list "AMD")))
+
+(defparameter MWAITX-reg_eax.reg_ecx (make-instance 'x64-asm-instruction
+:name "MWAITX"
+:req-operands (list "reg_eax" "reg_ecx")
+:code-format (list "[--:" "0f" "01" "fb")
+:arch-flags (list "AMD" "ND")))
 
 (defparameter NEG-rm8 (make-instance 'x64-asm-instruction
 :name "NEG"
@@ -28440,6 +28476,12 @@
 :code-format (list "[m:" "66" "0f" "ae" "/7")
 :arch-flags (list "FUTURE")))
 
+(defparameter CLZERO-void (make-instance 'x64-asm-instruction
+:name "CLZERO"
+:req-operands (list "void")
+:code-format (list "[" "0f" "01" "fc")
+:arch-flags (list "FUTURE" "AMD")))
+
 (defparameter HINT_NOP0-rm16 (make-instance 'x64-asm-instruction
 :name "HINT_NOP0"
 :req-operands (list "rm16")
@@ -30757,6 +30799,12 @@ CLTS-void))
 
 (setf (gethash "CLTS-void" *x64-instruction-variants-hash-table*) (list
 CLTS-void))
+
+(setf (gethash "CLZERO" *x64-instruction-variants-hash-table*) (list
+CLZERO-void))
+
+(setf (gethash "CLZERO-void" *x64-instruction-variants-hash-table*) (list
+CLZERO-void))
 
 (setf (gethash "CMC" *x64-instruction-variants-hash-table*) (list
 CMC-void))
@@ -35068,6 +35116,24 @@ MONITOR-reg_rax.reg_ecx.reg_edx))
 (setf (gethash "MONITOR-void" *x64-instruction-variants-hash-table*) (list
 MONITOR-void))
 
+(setf (gethash "MONITORX" *x64-instruction-variants-hash-table*) (list
+MONITORX-void
+MONITORX-reg_rax.reg_ecx.reg_edx
+MONITORX-reg_eax.reg_ecx.reg_edx
+MONITORX-reg_ax.reg_ecx.reg_edx))
+
+(setf (gethash "MONITORX-reg_ax.reg_ecx.reg_edx" *x64-instruction-variants-hash-table*) (list
+MONITORX-reg_ax.reg_ecx.reg_edx))
+
+(setf (gethash "MONITORX-reg_eax.reg_ecx.reg_edx" *x64-instruction-variants-hash-table*) (list
+MONITORX-reg_eax.reg_ecx.reg_edx))
+
+(setf (gethash "MONITORX-reg_rax.reg_ecx.reg_edx" *x64-instruction-variants-hash-table*) (list
+MONITORX-reg_rax.reg_ecx.reg_edx))
+
+(setf (gethash "MONITORX-void" *x64-instruction-variants-hash-table*) (list
+MONITORX-void))
+
 (setf (gethash "MONTMUL" *x64-instruction-variants-hash-table*) (list
 MONTMUL-void))
 
@@ -35807,6 +35873,16 @@ MWAIT-reg_eax.reg_ecx))
 
 (setf (gethash "MWAIT-void" *x64-instruction-variants-hash-table*) (list
 MWAIT-void))
+
+(setf (gethash "MWAITX" *x64-instruction-variants-hash-table*) (list
+MWAITX-void
+MWAITX-reg_eax.reg_ecx))
+
+(setf (gethash "MWAITX-reg_eax.reg_ecx" *x64-instruction-variants-hash-table*) (list
+MWAITX-reg_eax.reg_ecx))
+
+(setf (gethash "MWAITX-void" *x64-instruction-variants-hash-table*) (list
+MWAITX-void))
 
 (setf (gethash "NEG" *x64-instruction-variants-hash-table*) (list
 NEG-rm8
