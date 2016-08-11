@@ -255,6 +255,10 @@
                      ((equal my-char (coerce (list #\Newline) 'string))
                       (setf (values is-there-code-on-this-line current-state my-string)
                             (new-instruction is-there-code-on-this-line current-state my-string)))
+                     ;; is character backslash?
+                     ;; if yes, mark we have a backslash in start of line.
+                     ((equal my-char "\\")
+                      (setf current-state "backslash-in-start-of-line"))
                      ;; is character space?
                      ;; if yes, do not output anything.
                      ((equal my-char " ")
@@ -404,6 +408,10 @@
                      ;; if yes, don't output anything, begin comment.
                      ((equal my-char ";")
                       (setf current-state "inside-comment"))
+                     ;; is character backslash?
+                     ;; if yes, mark we have a backslash in space.
+                     ((equal my-char "\\")
+                      (setf current-state "backslash-in-space"))
                      ;; is character newline?
                      ;; if yes, start a new instruction.
                      ((equal my-char (coerce (list #\Newline) 'string))
@@ -436,6 +444,10 @@
                      ;; if yes, don't output anything, begin comment.
                      ((equal my-char ";")
                       (setf current-state "inside-comment"))
+                     ;; is character backslash?
+                     ;; if yes, mark we have a backslash inside parameters.
+                     ((equal my-char "\\")
+                      (setf current-state "backslash-inside-parameters"))
                      ;; is character newline?
                      ;; if yes, start a new instruction.
                      ((equal my-char (coerce (list #\Newline) 'string))
@@ -474,6 +486,10 @@
                       (setf my-string (concatenate 'string my-string "]\"")))
                      ((equal my-char ";")
                       (error "memory address syntax must be terminated with a closing square bracket before a comment"))
+                     ;; is character backslash?
+                     ;; if yes, mark we have a backslash inside memory address syntax
+                     ((equal my-char "\\")
+                      (setf current-state "backslash-inside-memory-address-syntax"))
                      ;; is character +
                      ;; if yes, mark we are at plus inside memory address syntax, output +
                      ((equal my-char "+")
@@ -511,6 +527,10 @@
                       (setf my-string (concatenate 'string my-string "]\"")))
                      ((equal my-char ";")
                       (error "memory address syntax must be terminated with a closing square bracket before a comment"))
+                     ;; is character backslash?
+                     ;; if yes, mark we have a backslash inside memory address syntax
+                     ((equal my-char "\\")
+                      (setf current-state "backslash-inside-memory-address-syntax"))
                      ;; is character +
                      ;; if yes, mark we are at plus inside memory address syntax, output +
                      ((equal my-char "+")
@@ -546,6 +566,10 @@
                       (setf my-string (concatenate 'string my-string "]\"")))
                      ((equal my-char ";")
                       (error "memory address syntax must be terminated with a closing square bracket before a comment"))
+                     ;; is character backslash?
+                     ;; if yes, mark we have a backslash inside memory address syntax
+                     ((equal my-char "\\")
+                      (setf current-state "backslash-inside-memory-address-syntax"))
                      ;; is character +
                      ;; if yes, mark we are at plus inside memory address syntax, output +
                      ((equal my-char "+")
@@ -590,6 +614,10 @@
                       (setf my-string (concatenate 'string my-string "]\"")))
                      ((equal my-char ";")
                       (error "memory address syntax must be terminated with a closing square bracket before a comment"))
+                     ;; is character backslash?
+                     ;; if yes, mark we have a backslash inside memory address syntax
+                     ((equal my-char "\\")
+                      (setf current-state "backslash-inside-memory-address-syntax"))
                      ;; is character +
                      ;; if yes, output +
                      ((equal my-char "+")
