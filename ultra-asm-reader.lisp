@@ -42,10 +42,14 @@
    start-of-line -> [ -> opening-square-bracket (this is needed for `[bits 64]` etc.).
    start-of-line -> ] -> error (cannot terminate memory address syntax before instruction).
    start-of-line -> ; -> inside-comment
-   start-of-line -> \ -> backslash TODO!
+   start-of-line -> \ -> backslash-in-start-of-line
    start-of-line -> a newline -> start-of-line (do not output anything).
    start-of-line -> a space -> start-of-line (do not output anything).
    start-of-line -> any character -> inside-instruction
+
+   backslash-in-start-of-line
+   description of state: the line begins with a backslash (possibly after whitespace). I wonder if there is need for such lines.
+   backslash-in-start-of-line -> TODO!
 
    hash-sign-read
    description of state: the previous character was a hash sign.
@@ -53,8 +57,6 @@
    hash-sign-read -> e -> end of syntax
    hash-sign-read -> l -> switch to Lisp mode
    hash-sign-read -> any other character -> error (hash sign must be followed with `a`, `e`, or `l`).
-
-   backslash TODO!
 
    inside-lisp-form
    description: inside a Lisp form that will be evaluated during assembling phase.
@@ -91,10 +93,14 @@
    in-space -> [ -> opening-square-bracket
    in-space -> ] -> error (cannot terminate memory address syntax outside memory address syntax).
    in-space -> ; -> inside-comment
-   in-space -> \ -> backslash TODO!
+   in-space -> \ -> backslash-in-space
    in-space -> a newline -> start-of-line
    in-space -> a space -> in-space (do not output anything).
    in-space -> any other character -> inside-parameters
+
+   backslash-in-space
+   description of state: immediately after a backslash in space between instruction and parameters (in case there is one or more parameters).
+   backslash-in-space -> TODO!
 
    inside-parameters
    description of state: inside parameter.
@@ -104,13 +110,15 @@
    inside-parameters -> [ -> error (cannot begin memory address syntax inside a parameter).
    inside-parameters -> ] -> error (cannot terminate memory address syntax inside a parameter).
    inside-parameters -> ; -> inside-comment
-   inside-parameters -> \ -> backslash-inside-parameters TODO!
+   inside-parameters -> \ -> backslash-inside-parameters
    inside-parameters -> a newline -> start-of-line
    inside-parameters -> , -> in-space
    inside-parameters -> a space -> in-space
    inside-parameters -> any other character -> inside-parameters
 
-   backslash-inside-parameters TODO!
+   backslash-inside-parameters
+   description of state: backslash inside parameters.
+   backslash-inside-parameters -> TODO!
 
    opening-square-bracket
    description of state: the last character was a opening square bracket that opened memory address syntax.
@@ -120,7 +128,7 @@
    opening-square-bracket -> [ -> error (cannot begin a new memory address syntax inside memory address syntax).
    opening-square-bracket -> ] -> closing-square-bracket (the content of `memory-address-syntax-buffer` will be converted to intermediate representation).
    opening-square-bracket -> ; -> error (memory address syntax must be terminated with a closing square bracket before comment).
-   opening-square-bracket -> \ -> backslash-inside-memory-address-syntax TODO!
+   opening-square-bracket -> \ -> backslash-inside-memory-address-syntax
    opening-square-bracket -> + -> plus-inside-memory-address-syntax
    opening-square-bracket -> a newline -> space-inside-memory-address-syntax
    opening-square-bracket -> a space -> space-inside-memory-address-syntax
@@ -134,23 +142,21 @@
    inside-memory-address-syntax -> [ -> error (cannot begin a new memory address syntax inside memory address syntax).
    inside-memory-address-syntax -> ] -> closing-square-bracket (the content of `memory-address-syntax-buffer` will be converted to intermediate representation).
    inside-memory-address-syntax -> ; -> error (memory address syntax must be terminated with a closing square bracket before comment).
-   inside-memory-address-syntax -> \ -> backslash-inside-memory-address-syntax TODO!
+   inside-memory-address-syntax -> \ -> backslash-inside-memory-address-syntax
    inside-memory-address-syntax -> + -> plus-inside-memory-address-syntax
    inside-memory-address-syntax -> a newline -> space-inside-memory-address-syntax (do not output anything).
    inside-memory-address-syntax -> a space -> space-inside-memory-address-syntax (do not output anything).
    inside-memory-address-syntax -> any other character -> inside-memory-address-syntax
 
-   backslash-inside-memory-address-syntax TODO!
-
    space-inside-memory-address-syntax
-   description: space inside memory address syntax.
+   description of state: space inside memory address syntax.
    space-inside-memory-address-syntax -> # -> error (memory address syntax must be terminated with a closing square bracket before a hash sign).
    space-inside-memory-address-syntax -> ( -> inside-lisp-form-inside-memory-address-syntax (set `n-lisp-forms` to 1). TODO!
    space-inside-memory-address-syntax -> ) -> error (cannot terminate Lisp form outside a Lisp form).
    space-inside-memory-address-syntax -> [ -> error (cannot begin a new memory address syntax inside memory address syntax).
    space-inside-memory-address-syntax -> ] -> closing-square-bracket (the content of `memory-address-syntax-buffer` will be converted to intermediate representation).
    space-inside-memory-address-syntax -> ; -> error (memory address syntax must be terminated with a closing square bracket before comment).
-   space-inside-memory-address-syntax -> \ -> backslash-inside-memory-address-syntax TODO!
+   space-inside-memory-address-syntax -> \ -> backslash-inside-memory-address-syntax
    space-inside-memory-address-syntax -> + -> plus-inside-memory-address-syntax
    space-inside-memory-address-syntax -> a newline -> error (memory address syntax must be terminated with a closing square bracket before newline).
    space-inside-memory-address-syntax -> a space -> space-inside-memory-address-syntax
@@ -164,11 +170,15 @@
    plus-inside-memory-address-syntax -> [ -> error (cannot begin a new memory address syntax inside memory address syntax).
    plus-inside-memory-address-syntax -> ] -> closing-square-bracket (the content of `memory-address-syntax-buffer` will be converted to intermediate representation).
    plus-inside-memory-address-syntax -> ; -> error (memory address syntax must be terminated with a closing square bracket before comment).
-   plus-inside-memory-address-syntax -> \ -> backslash-inside-memory-address-syntax TODO!
+   plus-inside-memory-address-syntax -> \ -> backslash-inside-memory-address-syntax
    plus-inside-memory-address-syntax -> + -> plus-inside-memory-address-syntax
    plus-inside-memory-address-syntax -> a newline -> plus-inside-memory-address-syntax (do not output anything).
    plus-inside-memory-address-syntax -> a space -> plus-inside-memory-address-syntax (do not output anything).
    plus-inside-memory-address-syntax -> any other character -> inside-memory-address-syntax
+
+   backslash-inside-memory-address-syntax
+   description of state: backslash inside memory address syntax.
+   backslash-inside-memory-address-syntax -> TODO!
 
    inside-lisp-form-inside-memory-address-syntax TODO!
 
