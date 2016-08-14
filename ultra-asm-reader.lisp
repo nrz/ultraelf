@@ -123,7 +123,7 @@
    opening-square-bracket
    description of state: the last character was a opening square bracket that opened memory address syntax.
    opening-square-bracket -> # -> error (memory address syntax must be terminated with a closing square bracket before a hash sign)
-   opening-square-bracket -> ( -> inside-lisp-form-inside-memory-address-syntax (set `n-lisp-forms` to 1). TODO!
+   opening-square-bracket -> ( -> inside-lisp-form-inside-memory-address-syntax (set `n-lisp-forms` to 1).
    opening-square-bracket -> ) -> error (cannot terminate Lisp form outside a Lisp form)
    opening-square-bracket -> [ -> error (cannot begin a new memory address syntax inside memory address syntax).
    opening-square-bracket -> ] -> closing-square-bracket (the content of `memory-address-syntax-buffer` will be converted to intermediate representation).
