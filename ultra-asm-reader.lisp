@@ -302,8 +302,8 @@
                   ((equal current-state "inside-lisp-form")
                    (cond
                      ;; is this opening parenthesis?
+                     ;; if yes, increment parenthesis count and output (
                      ((equal my-char "(")
-                      ;; if yes, increment parenthesis count and output (
                       (incf n-lisp-forms)
                       (setf my-string (concatenate 'string my-string "(")))
                      ;; is this closing parenthesis?
@@ -327,8 +327,8 @@
                   ((equal current-state "space-inside-lisp-form")
                    (cond
                      ;; is this opening parenthesis?
+                     ;; if yes, increment parenthesis count and output (
                      ((equal my-char "(")
-                      ;; if yes, increment parenthesis count and output (
                       (incf n-lisp-forms)
                       (unless
                         (equal (get-last-character-string my-string) " ")
