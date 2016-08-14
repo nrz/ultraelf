@@ -30,10 +30,13 @@ apply to all relevant architectures. ultraELF syntax is a work in progress,
 so additions and changes are to be expected.
 
 Design goals of ultraELF syntax (in order of descending importance):
- 1. surjective function from assembly code to binary code (that is, every
-    possible binary encoding has a distinct assembly syntax).
- 2. injective non-surjective function from binary code to assemble code
-    (that is, every possible binary encoding has a distinct assembly syntax).
+ 1. surjective non-injective (surjective-only) function from assembly code
+    to binary code (that is, every possible binary encoding has a distinct
+    assembly syntax, but many encodings can be produced by several
+    different assembly syntaxes).
+ 2. injective non-surjective (injective-only) function from binary code to
+    assemble code (that is, every possible binary encoding has a distinct
+    assembly syntax).
  3. possibility to hardcode displacements as constant values
     (useful for: 1. overlapping instructions, 2. code/data mixes).
  4. possibility to split code into code blocks that can be reordered, the blocks
@@ -51,6 +54,11 @@ Design goals of ultraELF syntax (in order of descending importance):
  9. possibility to define program-level constraints.
 10. maintain compatibility with NASM to the extent possible: ultraELF should
     assemble all NASM-syntax assembly code identical to NASM.
+
+`defun assemble-alternatives` should produce all possible encodings for a
+given instruction. Not providing all possible encodings for a given
+mnemonic and parameters is considered a bug, even if some of the encodings
+were overly long or overly complicated.
 
 keywords specific to ultraELF:
 `pc`     program counter specific addressing (such as RIP-relative addressing) must be used.
