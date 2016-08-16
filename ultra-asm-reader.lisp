@@ -20,6 +20,7 @@
     (t (setf my-string (concatenate 'string my-string ")"))))
   (setf is-there-code-on-this-line nil)
   (setf current-state "start-of-line")
+  (setf state-stack nil)
   (values is-there-code-on-this-line current-state my-string))
 
 (defun transform-code-to-string (stream sub-char numarg current-mode)
@@ -385,11 +386,13 @@
                      ;; is character , ?
                      ;; if yes, mark we are inside space, output "
                      ((equal my-char ",")
+                      (push current-state state-stack)
                       (setf current-state "in-space")
                       (setf my-string (concatenate 'string my-string "\"")))
                      ;; is character space?
                      ;; if yes, mark we are inside space, output "
                      ((equal my-char " ")
+                      (push current-state state-stack)
                       (setf current-state "in-space")
                       (setf my-string (concatenate 'string my-string "\"")))
                      ;; otherwise output the character.
@@ -478,11 +481,13 @@
                      ;; is character , ?
                      ;; if yes, mark we are in space between parameters, do not output anything.
                      ((equal my-char ",")
+                      (push current-state state-stack)
                       (setf current-state "in-space")
                       (setf my-string (concatenate 'string my-string "\"")))
                      ;; is character space?
                      ;; if yes, mark we are in space between parameters, do not output anything.
                      ((equal my-char " ")
+                      (push current-state state-stack)
                       (setf current-state "in-space")
                       (setf my-string (concatenate 'string my-string "\"")))
                      ;; otherwise output the character.
@@ -512,22 +517,18 @@
                      ;; is character backslash?
                      ;; if yes, mark we have a backslash inside memory address syntax
                      ((equal my-char "\\")
-                      (push current-state state-stack)
                       (setf current-state "backslash-inside-memory-address-syntax"))
                      ;; is character +
                      ;; if yes, mark we are at plus inside memory address syntax, output +
                      ((equal my-char "+")
-                      (push current-state state-stack)
                       (setf current-state "plus-inside-memory-address-syntax")
                       (setf my-string (concatenate 'string my-string "+")))
                      ;; is character newline?
                      ;; if yes, mark are in space inside memory address syntax, do not output anything.
                      ((equal my-char (coerce (list #\Newline) 'string))
-                      (push current-state state-stack)
                       (setf current-state "space-inside-memory-address-syntax"))
                      ;; is character space?
                      ((equal my-char " ")
-                      (push current-state state-stack)
                       (setf current-state "space-inside-memory-address-syntax"))
                      ;; otherwise mark we are inside memory address syntax and output the character.
                      (t
@@ -558,22 +559,18 @@
                      ;; is character backslash?
                      ;; if yes, mark we have a backslash inside memory address syntax
                      ((equal my-char "\\")
-                      (push current-state state-stack)
                       (setf current-state "backslash-inside-memory-address-syntax"))
                      ;; is character +
                      ;; if yes, mark we are at plus inside memory address syntax, output +
                      ((equal my-char "+")
-                      (push current-state state-stack)
                       (setf current-state "plus-inside-memory-address-syntax")
                       (setf my-string (concatenate 'string my-string "+")))
                      ;; is character newline?
                      ;; if yes, mark are in space inside memory address syntax, do not output anything.
                      ((equal my-char (coerce (list #\Newline) 'string))
-                      (push current-state state-stack)
                       (setf current-state "space-inside-memory-address-syntax"))
                      ;; is character space?
                      ((equal my-char " ")
-                      (push current-state state-stack)
                       (setf current-state "space-inside-memory-address-syntax"))
                      ;; otherwise output the character.
                      (t (setf my-string (concatenate 'string my-string my-char)))))
@@ -602,12 +599,10 @@
                      ;; is character backslash?
                      ;; if yes, mark we have a backslash inside memory address syntax
                      ((equal my-char "\\")
-                      (push current-state state-stack)
                       (setf current-state "backslash-inside-memory-address-syntax"))
                      ;; is character +
                      ;; if yes, mark we are at plus inside memory address syntax, output +
                      ((equal my-char "+")
-                      (push current-state state-stack)
                       (setf current-state "plus-inside-memory-address-syntax")
                       (setf my-string (concatenate 'string my-string "+")))
                      ;; is character newline?
@@ -695,13 +690,11 @@
                      ;; is character , ?
                      ;; if yes, mark we are in space between parameters, do not output anything.
                      ((equal my-char ",")
-                      (push current-state state-stack)
-                      (setf current-state "in-space"))
+                      (setf current-state (pop state-stack)))
                      ;; is character space?
                      ;; if yes, mark we are in space between parameters, do not output anything.
                      ((equal my-char " ")
-                      (push current-state state-stack)
-                      (setf current-state "in-space"))
+                      (setf current-state (pop state-stack)))
                      ;; otherwise produce an error.
                      (t (error "a whitespace is required after closing square bracket"))))
                   ((equal current-state "closing-parenthesis")
