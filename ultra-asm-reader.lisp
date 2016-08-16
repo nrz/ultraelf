@@ -226,6 +226,7 @@
      (is-there-code-on-this-line nil)
      (current-state "start-of-line")
      (current-lisp-state "regular")
+     (state-stack nil)
      (my-string "(list ")
      (lisp-code-string "")
      (n-lisp-forms 0))
@@ -240,10 +241,12 @@
                      ;; is character # ?
                      ;; if yes, mark hash sign read, do not output anything.
                      ((equal my-char "#")
+                      (push current-state state-stack)
                       (setf current-state "hash-sign-read"))
                      ((equal my-char "(")
                       ;; is this a Lisp form (with parentesis)?
                       ;; if yes, mark we are inside Lisp form, mark that there is code on this line, output "(
+                      (push current-state state-stack)
                       (setf current-state "inside-lisp-form")
                       (setf n-lisp-forms 1)
                       (setf is-there-code-on-this-line t)
@@ -251,6 +254,7 @@
                      ((equal my-char ")")
                       (error "cannot terminate Lisp form outside a Lisp form"))
                      ((equal my-char "[")
+                      (push current-state state-stack)
                       (setf current-state "opening-square-bracket")
                       (setf is-there-code-on-this-line t)
                       (setf my-string (concatenate 'string my-string "'(\"[")))
@@ -268,6 +272,7 @@
                      ;; is character backslash?
                      ;; if yes, mark we have a backslash in start of line.
                      ((equal my-char "\\")
+                      (push current-state state-stack)
                       (setf current-state "backslash-in-start-of-line"))
                      ;; is character space?
                      ;; if yes, do not output anything.
@@ -317,10 +322,12 @@
                      ;; is character newline?
                      ;; if yes, mark are in space inside a Lisp form.
                      ((equal my-char (coerce (list #\Newline) 'string))
+                      (push current-state state-stack)
                       (setf current-state "space-inside-lisp-form"))
                      ;; is character space?
                      ;; if yes, mark are in space inside a Lisp form.
                      ((equal my-char " ")
+                      (push current-state state-stack)
                       (setf current-state "space-inside-lisp-form"))
                      ;; otherwise output the character.
                      (t (setf my-string (concatenate 'string my-string my-char)))))
@@ -392,10 +399,12 @@
                      ;; is character # ?
                      ;; if yes, mark hash sign read, do not output anything.
                      ((equal my-char "#")
+                      (push current-state state-stack)
                       (setf current-state "hash-sign-read"))
                      ((equal my-char "(")
                       ;; is this a Lisp form (with parentesis)?
                       ;; if yes, mark we are inside Lisp form, output "(
+                      (push current-state state-stack)
                       (setf current-state "inside-lisp-form")
                       (setf n-lisp-forms 1)
                       (unless (equal (get-last-character-string my-string) " ")
@@ -407,6 +416,7 @@
                      ;; is this memory address syntax (with square brackets)?
                      ;; if yes, mark we are inside memory address syntax, output "[
                      ((equal my-char "[")
+                      (push current-state state-stack)
                       (setf current-state "opening-square-bracket")
                       (unless (equal (get-last-character-string my-string) " ")
                         ;; if last character was not space, output space.
@@ -421,6 +431,7 @@
                      ;; is character backslash?
                      ;; if yes, mark we have a backslash in space.
                      ((equal my-char "\\")
+                      (push current-state state-stack)
                       (setf current-state "backslash-in-space"))
                      ;; is character newline?
                      ;; if yes, start a new instruction.
@@ -457,6 +468,7 @@
                      ;; is character backslash?
                      ;; if yes, mark we have a backslash inside parameters.
                      ((equal my-char "\\")
+                      (push current-state state-stack)
                       (setf current-state "backslash-inside-parameters"))
                      ;; is character newline?
                      ;; if yes, start a new instruction.
@@ -482,6 +494,7 @@
                      ((equal my-char "(")
                       ;; is this a Lisp form (with parentesis)?
                       ;; if yes, mark we are inside Lisp form inside memory address syntax, output " and current character.
+                      (push current-state state-stack)
                       (setf current-state "inside-lisp-form-inside-memory-address-syntax")
                       (setf n-lisp-forms 1)
                       (setf my-string (concatenate 'string my-string "\"" my-char)))
@@ -499,18 +512,22 @@
                      ;; is character backslash?
                      ;; if yes, mark we have a backslash inside memory address syntax
                      ((equal my-char "\\")
+                      (push current-state state-stack)
                       (setf current-state "backslash-inside-memory-address-syntax"))
                      ;; is character +
                      ;; if yes, mark we are at plus inside memory address syntax, output +
                      ((equal my-char "+")
+                      (push current-state state-stack)
                       (setf current-state "plus-inside-memory-address-syntax")
                       (setf my-string (concatenate 'string my-string "+")))
                      ;; is character newline?
                      ;; if yes, mark are in space inside memory address syntax, do not output anything.
                      ((equal my-char (coerce (list #\Newline) 'string))
+                      (push current-state state-stack)
                       (setf current-state "space-inside-memory-address-syntax"))
                      ;; is character space?
                      ((equal my-char " ")
+                      (push current-state state-stack)
                       (setf current-state "space-inside-memory-address-syntax"))
                      ;; otherwise mark we are inside memory address syntax and output the character.
                      (t
@@ -523,6 +540,7 @@
                      ((equal my-char "(")
                       ;; is this a Lisp form (with parentesis)?
                       ;; if yes, mark we are inside Lisp form inside memory address syntax, output " and current character.
+                      (push current-state state-stack)
                       (setf current-state "inside-lisp-form-inside-memory-address-syntax")
                       (setf n-lisp-forms 1)
                       (setf my-string (concatenate 'string my-string "\"" my-char)))
@@ -540,18 +558,22 @@
                      ;; is character backslash?
                      ;; if yes, mark we have a backslash inside memory address syntax
                      ((equal my-char "\\")
+                      (push current-state state-stack)
                       (setf current-state "backslash-inside-memory-address-syntax"))
                      ;; is character +
                      ;; if yes, mark we are at plus inside memory address syntax, output +
                      ((equal my-char "+")
+                      (push current-state state-stack)
                       (setf current-state "plus-inside-memory-address-syntax")
                       (setf my-string (concatenate 'string my-string "+")))
                      ;; is character newline?
                      ;; if yes, mark are in space inside memory address syntax, do not output anything.
                      ((equal my-char (coerce (list #\Newline) 'string))
+                      (push current-state state-stack)
                       (setf current-state "space-inside-memory-address-syntax"))
                      ;; is character space?
                      ((equal my-char " ")
+                      (push current-state state-stack)
                       (setf current-state "space-inside-memory-address-syntax"))
                      ;; otherwise output the character.
                      (t (setf my-string (concatenate 'string my-string my-char)))))
@@ -562,6 +584,7 @@
                      ((equal my-char "(")
                       ;; is this a Lisp form (with parentesis)?
                       ;; if yes, mark we are inside Lisp form, output " and current character.
+                      (push current-state state-stack)
                       (setf current-state "inside-lisp-form-inside-memory-address-syntax")
                       (setf n-lisp-forms 1)
                       (setf my-string (concatenate 'string my-string "\"(")))
@@ -579,10 +602,12 @@
                      ;; is character backslash?
                      ;; if yes, mark we have a backslash inside memory address syntax
                      ((equal my-char "\\")
+                      (push current-state state-stack)
                       (setf current-state "backslash-inside-memory-address-syntax"))
                      ;; is character +
                      ;; if yes, mark we are at plus inside memory address syntax, output +
                      ((equal my-char "+")
+                      (push current-state state-stack)
                       (setf current-state "plus-inside-memory-address-syntax")
                       (setf my-string (concatenate 'string my-string "+")))
                      ;; is character newline?
@@ -610,6 +635,7 @@
                      ((equal my-char "(")
                       ;; is this a Lisp form (with parentesis)?
                       ;; if yes, mark we are inside Lisp form inside memory address syntax, output " and current character.
+                      (push current-state state-stack)
                       (setf current-state "inside-lisp-form-inside-memory-address-syntax")
                       (setf n-lisp-forms 1)
                       (setf my-string (concatenate 'string my-string "\"(")))
@@ -627,6 +653,7 @@
                      ;; is character backslash?
                      ;; if yes, mark we have a backslash inside memory address syntax
                      ((equal my-char "\\")
+                      (push current-state state-stack)
                       (setf current-state "backslash-inside-memory-address-syntax"))
                      ;; is character +
                      ;; if yes, output +
@@ -668,10 +695,12 @@
                      ;; is character , ?
                      ;; if yes, mark we are in space between parameters, do not output anything.
                      ((equal my-char ",")
+                      (push current-state state-stack)
                       (setf current-state "in-space"))
                      ;; is character space?
                      ;; if yes, mark we are in space between parameters, do not output anything.
                      ((equal my-char " ")
+                      (push current-state state-stack)
                       (setf current-state "in-space"))
                      ;; otherwise produce an error.
                      (t (error "a whitespace is required after closing square bracket"))))
@@ -699,10 +728,12 @@
                      ;; is character , ?
                      ;; if yes, mark we are in space between parameters, do not output anything.
                      ((equal my-char ",")
+                      (push current-state state-stack)
                       (setf current-state "in-space"))
                      ;; is character space?
                      ;; if yes, mark we are in space between parameters,  do not output anything.
                      ((equal my-char " ")
+                      (push current-state state-stack)
                       (setf current-state "in-space"))
                      ;; otherwise produce an error.
                      (t (error "a whitespace is required after closing square bracket"))))
