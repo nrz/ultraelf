@@ -247,7 +247,7 @@
                      ((equal my-char "(")
                       ;; is this a Lisp form (with parentesis)?
                       ;; if yes, mark we are inside Lisp form, mark that there is code on this line, output "(
-                      (push current-state state-stack)
+                      (push "in-space" state-stack)
                       (setf current-state "inside-lisp-form")
                       (setf n-lisp-forms 1)
                       (setf is-there-code-on-this-line t)
@@ -323,12 +323,10 @@
                      ;; is character newline?
                      ;; if yes, mark are in space inside a Lisp form.
                      ((equal my-char (coerce (list #\Newline) 'string))
-                      (push current-state state-stack)
                       (setf current-state "space-inside-lisp-form"))
                      ;; is character space?
                      ;; if yes, mark are in space inside a Lisp form.
                      ((equal my-char " ")
-                      (push current-state state-stack)
                       (setf current-state "space-inside-lisp-form"))
                      ;; otherwise output the character.
                      (t (setf my-string (concatenate 'string my-string my-char)))))
@@ -721,13 +719,11 @@
                      ;; is character , ?
                      ;; if yes, mark we are in space between parameters, do not output anything.
                      ((equal my-char ",")
-                      (push current-state state-stack)
-                      (setf current-state "in-space"))
+                      (setf current-state (pop state-stack)))
                      ;; is character space?
                      ;; if yes, mark we are in space between parameters,  do not output anything.
                      ((equal my-char " ")
-                      (push current-state state-stack)
-                      (setf current-state "in-space"))
+                      (setf current-state (pop state-stack)))
                      ;; otherwise produce an error.
                      (t (error "a whitespace is required after closing square bracket"))))
                   ((equal current-state "inside-comment")
