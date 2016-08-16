@@ -21,8 +21,8 @@ disassembler. So far ultraELF supports assembling x86-64 code. In contrast
 to some other assemblers, the ultraELF focuses in providing precise control
 over the binary encoding produced, flexibility, extensibility etc.
 ultraELF is a macro assembler, as it uses Common Lisp as the macro language.
-As Common Lisp is a Turing-complete language, there is no way to know
-beforehand if compiling ever ends given an arbitrary input.
+As Common Lisp is a Turing-complete language, due to halting problem there
+is no way to know beforehand if compiling an arbitrary input ever ends.
 
 ultraELF uses slightly extended Intel syntax (from here on 'ultraELF syntax').
 The below examples are using x64 (x86-64) encoding, but the same principles
