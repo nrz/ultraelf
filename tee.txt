@@ -1,0 +1,24 @@
+TEE-lista:
+Listaa tähän keskeneräiset asiat kiireellisyysjärjestyksessä kiireellisimmät ylös. Rasti ruutuun ja valmiit-osastolle kun on valmis.
+
+Tee seuraavat asiat:
+[ ] `defun transform-code-to-string`: Muokkaa lukija pinoautomaatiksi ('pushdown automaton') ja poista tilat kuten `"inside-lisp-form-inside-memory-address-syntax"`.
+[ ] Lisää tuki Lisp-koodille muistiosoitusten sisällä: `#a mov rax,[ #l (concatenate 'string "r" "b" "x") #a ] #e` -> `(list '("mov") '("rax") '("[rbx]"))`.
+[ ] `ultraelf-asm-reader.lisp`: Lisää tuki useamman rivin Lisp-koodilohkoille (siis muillekin kuin `#l`-koodilohkoille).
+[ ] `ultraelf-asm-reader.lisp`: Lisää tuki `|`-merkille: `"inside-vertical-bar-multiple-escape-mode"`.
+[ ] Koodaa tuki SIB:lle.
+[ ] Koodaa `defun emit-vex`.
+[ ] Koodaa `defun emit-xop`.
+[ ] Koodaa `defclass encoded-instruction`, jossa `:is-fixed`, `:is-ready`, `:is-position-independent`, `:is-rip-relative`, `:minimum-displacement-size`, `:alt-code`.
+[ ] Jos parametrissä on sulut `(` `)`, niin se on Lisp-koodilohko, joka luetaan ja evaluoidaan käännösvaiheessa, siis `(read (eval` ja tulos on parametrin arvo.
+[ ] Jos operaatiossa on sulut `(` `)`, niin se on Lisp-koodilohko, joka luetaan ja evaluoidaan käännösvaiheessa, siis `(read (eval` ja tulos on operaation/käskyn nimi.
+
+Valmiit:
+[x] Koodaa `defclass x86-register-indirect-with-disp0 (x86-register-indirect)`.
+[x] Koodaa `defclass x86-register-indirect-with-disp8 (x86-register-indirect)`.
+[x] Koodaa `defclass x86-register-indirect-with-disp32 (x86-register-indirect)`.
+[x] Koodaa `defclass disp32 (x86-addressing-form)`.
+[x] Koodaa `defclass x86-sib-with-disp0 (needs-sib)`.
+[x] Koodaa `defclass x86-sib-with-disp8 (needs-sib)`.
+[x] Koodaa `defclass x86-sib-with-disp32 (needs-sib)`.
+[x] Korjaa bugi, jonka vuoksi `defparameter *example-code-x64-with-lisp*`: syntaksipuu luodaan väärin (`inc r11` jää puuttumaan!).
