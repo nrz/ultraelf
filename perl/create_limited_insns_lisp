@@ -1,0 +1,198 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+
+# this program converts NASM's `insns.dat` to Common Lisp Object System (CLOS) syntax.
+
+my $num_args;
+my $firstchar;
+my $mnemonic_regex;
+my $line_length;
+my $are_there_square_brackets;
+my $mnemonic_and_operands;
+my $mnemonic;
+my $operands;
+my $code_format;
+my $flags;
+my $encoding_type;
+my $object_name;
+my $arch_flags;
+
+my @object_name_array = ();
+my @mnemonic_array = ();
+my @operands_array = ();
+my @code_format_array = ();
+my @flags_array = ();
+my @sorted_keys_array = ();
+
+my %instruction_variants_hash_table;
+
+# check that we have an input parameter.
+$num_args = $#ARGV + 1;
+if ($num_args != 1)
+{
+    print("usage: create_limited_insns_lisp <mnemonic_regex>\n");
+    exit;
+}
+
+$mnemonic_regex = $ARGV[0];
+
+# print the header.
+open(FILE, 'ultraelf-lisp-file-header.lisp');
+
+# read one line at once.
+while (<FILE>)
+{
+    print;
+}
+
+close(FILE);
+
+open(FILE, 'insns.dat');
+
+# read one line at once.
+while (<FILE>)
+{
+    $firstchar = substr($_, 0, 1);
+    $line_length = length($_);
+    $are_there_square_brackets = ($_ =~ /\[.*\]/);
+    chomp;
+    if (($line_length > 1) && ($firstchar =~ /[^\t ;]/))
+    {
+        if ($are_there_square_brackets)
+        {
+            ($mnemonic_and_operands, $code_format, $flags) = split /[\[\]]+/, $_;
+            ($mnemonic, $operands) = split /[\t ]+/, $mnemonic_and_operands;
+        }
+        else
+        {
+            ($mnemonic, $operands, $code_format, $flags) = split /[\t ]+/, $_;
+        }
+
+        # find out the following data:
+        # object name (Perl syntax): `$mnemonic . "-" . $operands`
+        # example object name:        `mov-mem,reg_sreg`
+        #
+        # fieldname in ultraELF     example
+        # :mnemonic                 `"MOV"`
+        # :operands                 `"mem,reg_sreg"`
+        # :code-string              `"[mr: 8c /r]"`
+        # :flags                    `(list "8086" "SW")`
+        $mnemonic =~ s/[\t ]+/ /g;
+        $operands =~ s/[\t ]+/ /g;
+        $code_format =~ s/[\t ]+/ /g;
+        $flags =~ s/[\t ]+//g;
+
+        unless ($mnemonic =~ m/\Q$mnemonic_regex/)
+        {
+            # Process only lines that match `$mnemonic_regex`.
+            next;
+        }
+
+        # we don't want non-x86-64 instructions here.
+        # they _need_ to be left out, because sometimes the same
+        # mnemonic-operands combination has different encodings in x86 and x86-64,
+        # and this would also cause identical object names in ultraELF.
+        unless ($flags =~ "NOLONG")
+        {
+            # ok, the content of each field is now filtered,
+            # let's convert them to a suitable Common Lisp format.
+
+            $object_name = $mnemonic . "-" . $operands;
+
+            # in Common Lisp object names `|`, `,`, and `:` must be escaped with a backslash `\`,
+            # but that would get too complicated.
+            # so we'll simply replace them:
+            # `|` -> `-`.
+            # `,` -> `.`.
+            # `:` -> `.`.
+            $object_name =~ s/\|/-/g;
+            $object_name =~ s/,/./g;
+            $object_name =~ s/:/./g;
+
+            # if variants `reg8,reg8`, `reg16,reg16`, `reg32,reg32`, `reg64,reg64`
+            # have always 2 different possible encodings: `mr` & `rm`.
+            # so we add a suffix `-mr` or `-rm` to the object in those cases.
+            if ($operands =~ /\breg(8|16|32|64),reg(8|16|32|64)\b/)
+            {
+                $encoding_type = substr($code_format, 0, 2);
+                $object_name = $object_name . "-" . $encoding_type;
+            }
+
+            # add a square bracket in the beginning.
+            # if first element in `:code-format` is `"["`, then the encoding is constant.
+            $code_format = "[" . $code_format;
+
+            # let's convert operands to Common Lisp list syntax.
+            $operands =~ s/[, ]+/\" \"/g;
+            $operands = "(list \"" . $operands . "\")";
+
+            # let's convert code format to Common Lisp list syntax.
+            $code_format =~ s/ +/\" \"/g;
+            $code_format = "(list \"" . $code_format . "\")";
+
+            $arch_flags = "\"" . $flags . "\"";        # add first and last double quotes.
+            $arch_flags =~ s/,/" "/g;                  # make each flag its own Common Lisp string.
+            $arch_flags = "(list " . $arch_flags. ")"; # convert to `list` syntax.
+
+            push @object_name_array, $object_name;
+            push @mnemonic_array, $mnemonic;
+            push @operands_array, $operands;
+            push @code_format_array, $code_format;
+            push @flags_array, $arch_flags;
+
+            # eg. "MOVSD-VOID".
+            push @{$instruction_variants_hash_table{$object_name}}, $object_name;
+
+            # eg. "MOVSD".
+            push @{$instruction_variants_hash_table{$mnemonic}}, $object_name;
+        }
+    }
+}
+
+close(FILE);
+
+# print the code to create a hash table.
+printf("(defparameter *x64-instruction-variants-hash-table* (make-hash-table :test #'equalp :size 32768))\n");
+
+# print the code to create each instruction + operands combination object and to push them to hash table.
+
+for my $i (0 .. $#mnemonic_array)
+{
+    $object_name = $object_name_array[$i];
+    $mnemonic    = $mnemonic_array[$i];
+    $operands    = $operands_array[$i];
+    $code_format = $code_format_array[$i];
+    $flags       = $flags_array[$i];
+
+    # print the code to create a variant object.
+    # each object here is a variant of a single instruction (or a single mnemonic).
+    # actually printed as 5 lines to make it easier to read (for us humans, I mean), with an empty line in the end.
+    printf("(defparameter %s (make-instance 'x64-asm-instruction\n:name \"%s\"\n:req-operands %s\n:code-format %s\n:arch-flags %s))\n\n",
+        $object_name,
+        $mnemonic,
+        $operands,
+        $code_format,
+        $flags);
+}
+
+@sorted_keys_array = sort keys %instruction_variants_hash_table;
+
+foreach my $mnemonic (@sorted_keys_array)
+{
+    printf("(setf (gethash \"%s\" *x64-instruction-variants-hash-table*) (list", $mnemonic);
+
+    for my $i (0 .. $#{$instruction_variants_hash_table{$mnemonic}})
+    {
+        printf("\n%s", $instruction_variants_hash_table{$mnemonic}[$i]);
+    }
+    print("))\n");
+
+    # If this is not the last mnemonic, print a newline.
+    if (!($mnemonic eq $sorted_keys_array[-1]))
+    {
+        print("\n");
+    }
+}
+
+exit;

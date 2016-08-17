@@ -111,7 +111,8 @@
                (:file "ultra-sreg3")                            ; x86 SREG3 segment register values hash table.
                (:file "ultra-arm-instructions")                 ; instruction-specific ARM emit-code functions.
                (:file "ultra-x86-general-emit-functions")       ; general x86 emit-code functions.
-               (:file "ultra-create-instruction-instances")     ; create instance for each x64 instruction+operands combination. converted from NASM's `insns.dat`.
+               ; (:file "ultra-create-instruction-instances")     ; create instance for each x64 instruction+operands combination. converted from NASM's `insns.dat`.
+               (:file "ultra-create-limited-instruction-instances") ; create instances for some x64 mnemonics. converted from NASM's `insns.dat`.
                (:file "ultra-alt-code")                         ; alternative code used for metamorphic engine.
                (:file "ultra-assembling-functions")             ; general assembling functions.
                (:file "ultra-x16-assembling-functions")         ; x16 assembling functions.
