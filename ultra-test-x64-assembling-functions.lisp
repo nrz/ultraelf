@@ -217,3 +217,42 @@
 (rt:deftest test-example-code-x64-with-lisp (assemble-x64-and-print-hex *example-code-x64-with-lisp*) "(49 FF C2 49 FF C3 49 FF C5 49 FF C6 49 FF C7 49 FF CD 49 FF CE 49 FF CF 66 F7 D0 66 F7 DB)")
 
 (rt:do-tests))
+
+(defun test-x64-assembling-functions-limited ()
+  "This function tests the functioning of `assemble-x64-and-print-hex`."
+  (rt:rem-all-tests)
+
+  ;; Tests for single instruction at once, print in hexadecimal.
+  (rt:deftest |test-x64-and-print-hex-add-al,7| (assemble-x64-and-print-hex #a add al,7 #e) "(04 07)")
+
+  ;; Tests for single instruction at once, no hexadecimal printing.
+
+  ;; Tests for single instruction at once, print in hexadecimal, with given emit function selector functions.
+
+  ;; Tests for single instruction at once, print in hexadecimal, with all alternatives.
+  (rt:deftest |test-alternatives-x64-and-print-hex-add-[r8],r8b| (assemble-alternatives-x64-and-print-hex #a add [r8],r8b #e) (("(45 00 00)" "(47 00 00)" "(4D 00 00)" "(4F 00 00)")))
+  (rt:deftest |test-alternatives-x64-and-print-hex-add-[r8],r8d| (assemble-alternatives-x64-and-print-hex #a add [r8],r8d #e) (("(45 01 00)" "(47 01 00)")))
+  (rt:deftest |test-alternatives-x64-and-print-hex-add-[r8],r8w| (assemble-alternatives-x64-and-print-hex #a add [r8],r8w #e) (("(66 45 01 00)" "(66 47 01 00)")))
+  (rt:deftest |test-alternatives-x64-and-print-hex-add-eax,3| (assemble-alternatives-x64-and-print-hex #a add eax,3 #e) (("(83 C0 03)" "(05 03 00 00 00)" "(81 C0 03 00 00 00)")))
+
+  ;; Tests for single instruction at once, no hexadecimal printing, with all alternatives.
+
+  ;; Tests for single instruction at once, no hexadecimal printing, with given emit function selector functions.
+
+  ;; Tests for single instruction with relative memory reference (`$`) at once, print in hexadecimal.
+
+  ;; Tests for single instruction with Common Lisp macro at once, print in hexadecimal.
+
+  ;; Tests for single instruction with Common Lisp macro at once, print in hexadecimal, with all alternatives.
+  (rt:deftest |test-alternatives-x64-and-print-hex-add-ax\(*--1-(expt-2-15))| (assemble-alternatives-x64-and-print-hex #a add ax,(* -1 (expt 2 15)) #e) (("(66 05 00 80)" "(66 81 C0 00 80)")))
+(rt:deftest |test-alternatives-x64-and-print-hex-add-ax,(1--(expt-2-16))| (assemble-alternatives-x64-and-print-hex #a add ax,(1- (expt 2 16)) #e) (("(66 83 C0 FF)" "(66 05 FF FF)" "(66 81 C0 FF FF)")))
+(rt:deftest |test-alternatives-x64-and-print-hex-add-eax,(*--1 (expt-2-31))| (assemble-alternatives-x64-and-print-hex #a add eax,(* -1 (expt 2 31)) #e) (("(05 00 00 00 80)" "(81 C0 00 00 00 80)")))
+(rt:deftest |test-alternatives-x64-and-print-hex-add-eax,(1--(expt-2-32))| (assemble-alternatives-x64-and-print-hex #a add eax,(1- (expt 2 32)) #e) (("(83 C0 FF)" "(05 FF FF FF FF)" "(81 C0 FF FF FF FF)")))
+
+;; Tests for 2 or more instructions at once, print in hexadecimal.
+
+;; Tests for 2 or more instructions at once, print in hexadecimal, with all alternatives.
+
+;; Tests for 2 or more instructions at once, print in hexadecimal, using assembly source code saved in variable.
+
+(rt:do-tests))
