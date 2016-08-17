@@ -10,8 +10,9 @@ Tee seuraavat asiat:
 [ ] Koodaa `defun emit-vex`.
 [ ] Koodaa `defun emit-xop`.
 [ ] Koodaa `defclass encoded-instruction`, jossa `:is-fixed`, `:is-ready`, `:is-position-independent`, `:is-rip-relative`, `:minimum-displacement-size`, `:alt-code`.
-[ ] Jos parametrissä on sulut `(` `)`, niin se on Lisp-koodilohko, joka luetaan ja evaluoidaan käännösvaiheessa, siis `(read (eval` ja tulos on parametrin arvo.
-[ ] Jos operaatiossa on sulut `(` `)`, niin se on Lisp-koodilohko, joka luetaan ja evaluoidaan käännösvaiheessa, siis `(read (eval` ja tulos on operaation/käskyn nimi.
+[ ] Koodaa tiedostoon kirjoitus.
+[ ] Koodaa ELF64-headerin luonti.
+[ ] Koodaa hyppyosoitteet/nimiöt ('label').
 
 Valmiit:
 [x] Koodaa `defclass x86-register-indirect-with-disp0 (x86-register-indirect)`.
