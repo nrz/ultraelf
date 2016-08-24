@@ -74,4 +74,22 @@
   (rt:deftest |test-create-syntax-tree-foo-bar1-[+bar2]| (create-syntax-tree #a foo bar1 [+bar2] #e) (list '("foo" "bar1" "[+bar2]")))
   (rt:deftest |test-create-syntax-tree-foo-bar1-[+bar2+]| (create-syntax-tree #a foo bar1 [+bar2+] #e) (list '("foo" "bar1" "[+bar2+]")))
 
+  ;; Tests for processing of ; comments
+  (rt:deftest |test-create-syntax-tree-foo-lisp-comment-bar| (create-syntax-tree #a foo ; bar
+                                                                                 #e) (list '("foo")))
+  (rt:deftest |test-create-syntax-tree-foo-c-style-on-1-line-comment-bar| (create-syntax-tree #a foo /* bar */ #e) (list '("foo")))
+  (rt:deftest |test-create-syntax-tree-foo-c-style-on-2-lines-comment-bar| (create-syntax-tree #a foo /* bar
+                                                                                               baz */ #e) (list '("foo")))
+  (rt:deftest |test-create-syntax-tree-foo-c-style-box-comment-bar| (create-syntax-tree #a foo
+                                                                                        /******
+                                                                                        * bar *
+                                                                                        ******/ #e) (list '("foo")))
+  (rt:deftest |test-create-syntax-tree-foo-c-style-box-comment-bar-baz| (create-syntax-tree #a foo
+                                                                                            /******
+                                                                                            * bar *
+                                                                                            * baz *
+                                                                                            ******/ #e) (list '("foo")))
+  (rt:deftest |test-create-syntax-tree-foo-c++-style-comment-bar| (create-syntax-tree #a foo // bar
+                                                                                      #e) (list '("foo")))
+
   (rt:do-tests))
