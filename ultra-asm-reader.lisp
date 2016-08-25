@@ -809,17 +809,19 @@
                      ((equal current-state "slash")
                       (cond
                         ;; is character * ?
-                        ;; if yes, mark we are inside C-style comment, do not output anything.
+                        ;; if yes, mark we are inside C-style comment.
                         ((equal my-char "*")
                          (let
                            ((previous-state (pop state-stack)))
                            ;; is previous state inside instruction?
-                           ;; if yes, change it to inside space, output "
+                           ;; if yes, change it to inside space, output " (to end the instruction).
                            (cond
                              ((equal previous-state "inside-instruction")
                               (push "in-space" state-stack)
                               (setf my-string (concatenate 'string my-string "\"")))
+                             ;; otherwise keep the previous state as is, do not output anything.
                              (t (push previous-state state-stack))))
+                         ;; in any case, mark we are inside C-style comment.
                          (setf current-state "inside-c-comment"))
                         ((equal my-char "/")
                          (let
