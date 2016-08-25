@@ -7,12 +7,12 @@ Tee seuraavat asiat:
 [ ] `ultraelf-asm-reader.lisp`: Lisää tuki useamman rivin Lisp-koodilohkoille (siis muillekin kuin `#l`-koodilohkoille).
 [ ] `ultraelf-asm-reader.lisp`: Lisää tuki `|`-merkille: `"inside-vertical-bar-multiple-escape-mode"`.
 [ ] Koodaa tuki SIB:lle.
+[ ] Koodaa hyppyosoitteet/nimiöt ('label').
+[ ] Koodaa tiedostoon kirjoitus.
+[ ] Koodaa ELF64-headerin luonti.
 [ ] Koodaa `defun emit-vex`.
 [ ] Koodaa `defun emit-xop`.
 [ ] Koodaa `defclass encoded-instruction`, jossa `:is-fixed`, `:is-ready`, `:is-position-independent`, `:is-rip-relative`, `:minimum-displacement-size`, `:alt-code`.
-[ ] Koodaa tiedostoon kirjoitus.
-[ ] Koodaa ELF64-headerin luonti.
-[ ] Koodaa hyppyosoitteet/nimiöt ('label').
 
 Valmiit:
 [x] Koodaa `defclass x86-register-indirect-with-disp0 (x86-register-indirect)`.
