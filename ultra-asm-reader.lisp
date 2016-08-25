@@ -811,6 +811,15 @@
                         ;; is character * ?
                         ;; if yes, mark we are inside C-style comment, do not output anything.
                         ((equal my-char "*")
+                         (let
+                           ((previous-state (pop state-stack)))
+                           ;; is previous state inside instruction?
+                           ;; if yes, change it to inside space, output "
+                           (cond
+                             ((equal previous-state "inside-instruction")
+                              (push "in-space" state-stack)
+                              (setf my-string (concatenate 'string my-string "\"")))
+                             (t (push previous-state state-stack))))
                          (setf current-state "inside-c-comment"))
                         ((equal my-char "/")
                          (let
