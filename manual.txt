@@ -79,6 +79,8 @@ In native mode (default), ultraELF disassembler should always produce 'full' inf
 (with `rex`/`norex`, `sib`/`nosib`, `null`, `disp8`/`disp32` as needed).
 In NDISASM mode, ultraELF disassembler should produce disassembly identical to the one produced by NDISASM.
 
+Please note: most of these ultraELF special syntax forms are not yet implemented!
+
 ultraELF syntax                produces                 OK? Intel*1 Intel*2            NASM syntax        my own explanation
 `inc dword [rax]`              FF 00                    [ ] FF /0   [rax]              `inc dword [rax]`  reg. indir., no disp.
 `inc dword rex [rax]`          40 FF 00                 [ ] FF /0   n/a *3             n/a                reg. indir., no disp., REX.
@@ -135,3 +137,15 @@ ultraELF syntax                produces                 OK? Intel*1 Intel*2     
 `inc dword [rip-0]`            FF 05 00 00 00 00        [ ] FF /0   n/a                n/a                x64: RIP-relative, disp. size 32, disp. 0.
 `inc dword [pc+0]``            FF 05 00 00 00 00        [ ] FF /0   n/a                n/a                x64: RIP-relative, disp. size 32, disp. 0.
 `inc dword [pc-0]`             FF 05 00 00 00 00        [ ] FF /0   n/a                n/a                x64: RIP-relative, disp. size 32, disp. 0.
+
+ultraELF supports standard NASM-style comments ; like this one.
+In addition to NASM-style comments, ultraELF supports also
+C-style comments /* like this one */
+/********************
+* and like this one *
+********************/
+and also C++-style comments // like this one.
+
+C-style comments can be written also inside memory address syntax,
+whereas NASM-style and C++-style comments can not, as memory address
+syntax requires closing square bracket `]` on the same line.
