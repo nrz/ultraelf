@@ -53,7 +53,10 @@ Design goals of ultraELF syntax (in order of descending importance):
  8. possibility to define code block-level constraints.
  9. possibility to define program-level constraints.
 10. maintain compatibility with NASM to the extent possible: ultraELF should
-    assemble all NASM-syntax assembly code identical to NASM.
+    assemble all NASM-syntax assembly code identical to NASM. An exception is
+    that in ultraELF all assembly-time arithmetics needs to be done using
+    Common Lisp and therefore prefix notation.
+    TODO: Write a Perl script that converts NASM code to ultraELF code!
 
 `defun assemble-alternatives` should produce all possible encodings for a
 given instruction. Not providing all possible encodings for a given
@@ -61,19 +64,22 @@ mnemonic and parameters is considered a bug, even if some of the encodings
 were overly long or overly complicated.
 
 keywords specific to ultraELF:
-`pc`     program counter specific addressing (such as RIP-relative addressing) must be used.
-`nopc`   program counter specific addressing (such as RIP-relative addressing) must not be used.
+`pic`    position-independent code (such as RIP-relative addressing) must be used.
+`nopic`  position-independent code (such as RIP-relative addressing) must not be used.
 `sib`    SIB must be used in encoding.
 `nosib`  SIB must not be used in encoding.
-`null`   empty base or index in SIB (if `null` is used as index, it can be scaled).
 `disp`   there must be a displacement.
 `disp8`  there must be a displacement encoded in 8 bits.
-`disp32` there must be a displacement encoded in  32 bits.
+`disp32` there must be a displacement encoded in 32 bits.
 `nodisp` there must not be a displacement.
-`scale`  scale: 1, 2, 4 or 8
+`scale`  scale: 1, 2, 4 or 8, eg. `scale=4`.
 `ss`     scale bits: 0b00 (scale=1), 0b01 (scale=2), 0b10 (scale=4), 0b11 (scale=8).
 `rex`    REX must be used in encoding.
 `norex`  REX must not be used in encoding.
+
+`null`   empty base or index in SIB (if `null` is used as index, it can be scaled).
+
+`pc` == `rip` (`rip` in in x86-64, in other CPU architectures `pc` is synonymous with the corresponding PC-relative addressing syntax).
 
 In native mode (default), ultraELF disassembler should always produce 'full' information disassembly
 (with `rex`/`norex`, `sib`/`nosib`, `null`, `disp8`/`disp32` as needed).
