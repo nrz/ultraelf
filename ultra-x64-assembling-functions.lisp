@@ -809,7 +809,7 @@
           (incf n-processed-code-strings)))))
   (list encoded-bytes))
 
-(defun emit-with-format-and-operands-x64 (code-format req-operands &key given-operands)
+(defun emit-with-format-and-operands-x64 (code-format req-operands given-operands)
   "This function emits code (list of binary code bytes) for one x64 instruction variant."
   (let*
     ((encoding-type (first code-format))
