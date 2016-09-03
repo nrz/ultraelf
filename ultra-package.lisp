@@ -42,6 +42,7 @@
     ;; symbols.
     :convert-string-to-symbol-if-symbol-exists
     ;; instruction classes' slots.
+    :name
     :req-operands
     :code-format
     :arch-flags
