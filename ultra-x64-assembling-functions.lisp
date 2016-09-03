@@ -242,7 +242,6 @@
          encoded-bytes
          is-rex-already-encoded
          instruction-length-in-bytes
-         &key
          given-operands)
        ;; This macro emits REX according to encoding type and the operands.
        ;; `rex-w-value`: 0 for default operand size, 1 for 64-bit operand size.
@@ -423,7 +422,7 @@
                                                          encoded-bytes
                                                          is-rex-already-encoded
                                                          instruction-length-in-bytes
-                                                         :given-operands my-args))
+                                                         my-args))
                                                       ((equal code-string "66")
                                                        ;; in SIMD instructions used as a an instruction modifier,
                                                        ;; encoded before possible REX.
@@ -498,7 +497,7 @@
                                                                   encoded-bytes
                                                                   is-rex-already-encoded
                                                                   instruction-length-in-bytes
-                                                                  :given-operands my-args)))
+                                                                  my-args)))
                                                             (t nil)))
                                                          ((eql n-operands 2)
                                                           (cond
@@ -514,7 +513,7 @@
                                                                   encoded-bytes
                                                                   is-rex-already-encoded
                                                                   instruction-length-in-bytes
-                                                                  :given-operands my-args)))
+                                                                  my-args)))
                                                             (t nil)))
                                                          ((eql n-operands 3)
                                                           (error "o32 encoding of 3 operands in not yet implemented"))
@@ -533,7 +532,7 @@
                                                               encoded-bytes
                                                               is-rex-already-encoded
                                                               instruction-length-in-bytes
-                                                              :given-operands my-args)))
+                                                              my-args)))
                                                          ((eql n-operands 1)
                                                           (emit-and-update-instruction-length
                                                             (emit-rex
@@ -546,7 +545,7 @@
                                                               encoded-bytes
                                                               is-rex-already-encoded
                                                               instruction-length-in-bytes
-                                                              :given-operands my-args)))
+                                                              my-args)))
                                                          ((eql n-operands 2)
                                                           (emit-and-update-instruction-length
                                                             (emit-rex
@@ -559,7 +558,7 @@
                                                               encoded-bytes
                                                               is-rex-already-encoded
                                                               instruction-length-in-bytes
-                                                              :given-operands my-args)))
+                                                              my-args)))
                                                          ((eql n-operands 3)
                                                           (error "o64 encoding of 3 operands in not yet implemented"))
                                                          (t (error "over 3 operands is an error"))))
@@ -585,7 +584,7 @@
                                                                   encoded-bytes
                                                                   is-rex-already-encoded
                                                                   instruction-length-in-bytes
-                                                                  :given-operands my-args)))
+                                                                  my-args)))
                                                             (t nil)))
                                                          ((eql n-operands 2)
                                                           (error "o64nw encoding of 2 operands in not yet implemented"))
@@ -613,7 +612,7 @@
                                                                             encoded-bytes
                                                                             is-rex-already-encoded
                                                                             instruction-length-in-bytes
-                                                                            :given-operands my-args)))
+                                                                            my-args)))
                                                                        ((eql n-operands 2)
                                                                         (emit-and-update-instruction-length
                                                                           (emit-rex
@@ -628,7 +627,7 @@
                                                                             encoded-bytes
                                                                             is-rex-already-encoded
                                                                             instruction-length-in-bytes
-                                                                            :given-operands my-args)))
+                                                                            my-args)))
                                                                        (t (error "encoding not yet implemented")))))
                                                                  (cond ((equal code-string "/r")
                                                                         (cond
