@@ -34,7 +34,7 @@
                 ;; package handling.
                 :in-package
                 ;; symbols.
-                :intern
+                :intern :boundp
                 ;; variables.
                 :setf
                 ;; objects.
@@ -46,6 +46,7 @@
                 :map :mapc :mapcan :mapcar :mapcon :map-into :mapl :maplist
                 :append :concatenate :nconc
                 :list :string
+                :string-upcase
                 :elt :nth :nthcdr :first :second :third :fourth :fifth :sixth :seventh :eighth :ninth :tenth :last :rest
                 :push :pushnew
                 :sort
