@@ -5,7 +5,7 @@
 
 (in-package :ultraelf)
 
-(defmethod emit ((x64-asm-instruction x64-asm-instruction) &rest given-operands)
+(defmethod emit ((x64-asm-instruction x64-asm-instruction) given-operands)
   (x64:emit-with-format-and-operands-x64
     (slot-value x64-asm-instruction 'code-format)
     (slot-value x64-asm-instruction 'req-operands)

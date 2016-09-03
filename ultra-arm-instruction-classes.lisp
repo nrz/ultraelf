@@ -11,7 +11,7 @@
      :allocation :class
      :initform t)))
 
-(defmethod emit ((arm-asm-instruction arm-asm-instruction) &rest given-operands)
+(defmethod emit ((arm-asm-instruction arm-asm-instruction) given-operands)
   (arm:emit-with-format-and-operands-arm
     (slot-value arm-asm-instruction 'code-format)
     (slot-value arm-asm-instruction 'req-operands)

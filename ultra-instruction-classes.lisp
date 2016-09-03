@@ -141,5 +141,5 @@
      :reader is-arm-asm-instruction
      :initform t)))
 
-(defgeneric emit (asm-instruction &rest given-operands)
+(defgeneric emit (asm-instruction given-operands)
   (:documentation "emit instruction without rep/repz/repe/repnz/repne."))

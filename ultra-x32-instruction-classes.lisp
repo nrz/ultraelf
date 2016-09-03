@@ -5,7 +5,7 @@
 
 (in-package :ultraelf)
 
-(defmethod emit ((x32-asm-instruction x32-asm-instruction) &rest given-operands)
+(defmethod emit ((x32-asm-instruction x32-asm-instruction) given-operands)
   (x32:emit-with-format-and-operands-x32
     (slot-value x32-asm-instruction 'code-format)
     (slot-value x32-asm-instruction 'req-operands)
