@@ -9,4 +9,4 @@
   (x32:emit-with-format-and-operands-x32
     (slot-value x32-asm-instruction 'code-format)
     (slot-value x32-asm-instruction 'req-operands)
-    :given-operands given-operands))
+    given-operands))
