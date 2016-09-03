@@ -118,9 +118,9 @@
                (:file "ultra-arm-instructions")                 ; instruction-specific ARM emit-code functions.
                (:file "ultra-x86-general-emit-functions")       ; general x86 emit-code functions.
 
-               (:file "ultra-create-instruction-instances")     ; create instance for each x64 instruction+operands combination. converted from NASM's `insns.dat`.
+               ; (:file "ultra-create-instruction-instances")     ; create instance for each x64 instruction+operands combination. converted from NASM's `insns.dat`.
 
-               ; (:file "ultra-create-limited-instruction-instances") ; THIS ONE FOR TESTING ONLY! (to make recompiling faster)
+               (:file "ultra-create-limited-instruction-instances") ; THIS ONE FOR TESTING ONLY! (to make recompiling faster)
                                                                 ; use `ultra-create-instruction-instances` for proper use.
                                                                 ; create instances only for some x64 mnemonics (`.*ADD.*`). converted from NASM's `insns.dat`.
 
