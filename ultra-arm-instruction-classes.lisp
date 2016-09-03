@@ -15,4 +15,4 @@
   (arm:emit-with-format-and-operands-arm
     (slot-value arm-asm-instruction 'code-format)
     (slot-value arm-asm-instruction 'req-operands)
-    :given-operands given-operands))
+    given-operands))

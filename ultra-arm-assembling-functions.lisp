@@ -5,7 +5,7 @@
 
 (in-package :arm)
 
-(defun emit-with-format-and-operands-arm (code-format req-operands &rest given-operands)
+(defun emit-with-format-and-operands-arm (code-format req-operands given-operands)
   "This function emits code (list of binary code bytes) for one ARM instruction variant."
   (let*
     ((my-args (get-list given-operands))
