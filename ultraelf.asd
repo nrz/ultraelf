@@ -16,6 +16,12 @@
 ;;;     #<PACKAGE "ULTRAELF">
 ;;;  5. ULTRAELF> (test-parser)
 ;;;
+;;; If (test-parser) fails, try first (c-u) in :ultraelf package,
+;;; it should fix the situation:
+;;;
+;;; 5a. ULTRAELF> (c-u)
+;;; 5b. ULTRAELF> (test-parser)
+;;;
 ;;; running tests for assembling x64 code:
 ;;;  6. ULTRAELF> (in-package :x64)
 ;;;     #<COMMON-LISP:PACKAGE "X64">
