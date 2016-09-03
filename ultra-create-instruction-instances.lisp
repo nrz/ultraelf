@@ -6,6 +6,36 @@
 (in-package :x64)
 
 (defparameter *x64-instruction-variants-hash-table* (make-hash-table :test #'equalp :size 32768))
+(defparameter REP (make-instance 'x64-asm-instruction
+:name "REP"
+:req-operands (list "ignore")
+:code-format (list "rep/repe/repz")
+:arch-flags (list "8086")))
+
+(defparameter REPE (make-instance 'x64-asm-instruction
+:name "REPE"
+:req-operands (list "ignore")
+:code-format (list "rep/repe/repz")
+:arch-flags (list "8086")))
+
+(defparameter REPZ (make-instance 'x64-asm-instruction
+:name "REPZ"
+:req-operands (list "ignore")
+:code-format (list "rep/repe/repz")
+:arch-flags (list "8086")))
+
+(defparameter REPNE (make-instance 'x64-asm-instruction
+:name "REPNE"
+:req-operands (list "ignore")
+:code-format (list "repne/repnz")
+:arch-flags (list "8086")))
+
+(defparameter REPNZ (make-instance 'x64-asm-instruction
+:name "REPNZ"
+:req-operands (list "ignore")
+:code-format (list "repne/repnz")
+:arch-flags (list "8086")))
+
 (defparameter DB-ignore (make-instance 'x64-asm-instruction
 :name "DB"
 :req-operands (list "ignore")
@@ -29633,6 +29663,16 @@
 :req-operands (list "rm64")
 :code-format (list "[m:" "o64" "0f" "1f" "/7")
 :arch-flags (list "X64" "UNDOC")))
+
+(setf (gethash "REP" *x64-instruction-variants-hash-table*) (list REP))
+
+(setf (gethash "REPE" *x64-instruction-variants-hash-table*) (list REPE))
+
+(setf (gethash "REPZ" *x64-instruction-variants-hash-table*) (list REPZ))
+
+(setf (gethash "REPNE" *x64-instruction-variants-hash-table*) (list REPNE))
+
+(setf (gethash "REPNZ" *x64-instruction-variants-hash-table*) (list REPNZ))
 
 (setf (gethash "ADC" *x64-instruction-variants-hash-table*) (list
 ADC-mem.reg8
