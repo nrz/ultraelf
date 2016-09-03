@@ -19,7 +19,6 @@
     :sort-sublists-shortest-first
     ;; emit-code functions.
     :emit
-    :emit-hex
     :emit-modrm
     :emit-modrm-byte
     :emit-little-endian-number-in-n-bytes

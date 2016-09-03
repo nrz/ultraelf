@@ -10,7 +10,6 @@
   (:export
     :asm-instruction
     :emit
-    :emit-hex
     :name
     :operands
     :code-format

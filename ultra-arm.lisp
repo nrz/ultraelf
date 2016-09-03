@@ -19,7 +19,6 @@
     :sort-sublists-shortest-first
     ;; emit-code functions.
     :emit
-    :emit-hex
     :create-syntax-tree
     :create-and-eval-syntax-tree
     :emit-binary-code-for-one-instruction

@@ -143,6 +143,3 @@
 
 (defgeneric emit (asm-instruction &rest given-operands)
   (:documentation "emit instruction without rep/repz/repe/repnz/repne."))
-
-(defgeneric emit-hex (asm-instruction &rest given-operands)
-  (:documentation "emit instruction without rep/repz/repe/repnz/repne and print in hexadecimal."))
