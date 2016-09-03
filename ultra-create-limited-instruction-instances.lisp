@@ -6,6 +6,36 @@
 (in-package :x64)
 
 (defparameter *x64-instruction-variants-hash-table* (make-hash-table :test #'equalp :size 32768))
+(defparameter REP (make-instance 'x64-asm-instruction
+:name "REP"
+:req-operands (list "ignore")
+:code-format (list "rep/repe/repz")
+:arch-flags (list "8086")))
+
+(defparameter REPE (make-instance 'x64-asm-instruction
+:name "REPE"
+:req-operands (list "ignore")
+:code-format (list "rep/repe/repz")
+:arch-flags (list "8086")))
+
+(defparameter REPZ (make-instance 'x64-asm-instruction
+:name "REPZ"
+:req-operands (list "ignore")
+:code-format (list "rep/repe/repz")
+:arch-flags (list "8086")))
+
+(defparameter REPNE (make-instance 'x64-asm-instruction
+:name "REPNE"
+:req-operands (list "ignore")
+:code-format (list "repne/repnz")
+:arch-flags (list "8086")))
+
+(defparameter REPNZ (make-instance 'x64-asm-instruction
+:name "REPNZ"
+:req-operands (list "ignore")
+:code-format (list "repne/repnz")
+:arch-flags (list "8086")))
+
 (defparameter ADD-mem.reg8 (make-instance 'x64-asm-instruction
 :name "ADD"
 :req-operands (list "mem" "reg8")
@@ -2633,6 +2663,16 @@
 :req-operands (list "zmmreg|mask|z" "zmmreg" "zmmrm512")
 :code-format (list "[rvm:fvm:" "evex.nds.512.66.0f.wig" "f5" "/r" "")
 :arch-flags (list "AVX512BW" "FUTURE")))
+
+(setf (gethash "REP" *x64-instruction-variants-hash-table*) (list REP))
+
+(setf (gethash "REPE" *x64-instruction-variants-hash-table*) (list REPE))
+
+(setf (gethash "REPZ" *x64-instruction-variants-hash-table*) (list REPZ))
+
+(setf (gethash "REPNE" *x64-instruction-variants-hash-table*) (list REPNE))
+
+(setf (gethash "REPNZ" *x64-instruction-variants-hash-table*) (list REPNZ))
 
 (setf (gethash "ADD" *x64-instruction-variants-hash-table*) (list
 ADD-mem.reg8
