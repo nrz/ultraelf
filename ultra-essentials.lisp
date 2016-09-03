@@ -38,7 +38,7 @@
                 ;; variables.
                 :setf
                 ;; objects.
-                :coerce
+                :coerce :type-of
                 ;; lists and other sequences.
                 :every :some :subseq :notevery :notany
                 :length
