@@ -5,7 +5,7 @@
 
 (in-package :x16)
 
-(defun emit-with-format-and-operands-x16 (code-format req-operands &rest given-operands)
+(defun emit-with-format-and-operands-x16 (code-format req-operands given-operands)
   "This function emits code (list of binary code bytes) for one x16 instruction variant."
   (let*
     ((my-args (get-list given-operands))
