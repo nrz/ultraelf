@@ -14,6 +14,8 @@
     :ultraelf
     ;; printing functions.
     :print-hex
+    ;; string functions.
+    :parse-number
     ;; list-handling functions.
     :get-list
     :sort-sublists-shortest-first
