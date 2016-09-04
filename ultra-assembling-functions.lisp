@@ -185,39 +185,45 @@
                                ;; collect all encodings to a list.
                                collect (cond
                                          ;; this is a prefix, such as `rep`/`repe`/`repz` or `repne`/`repnz`.
-                                         ((equal (first (code-format instruction-instance)) "prefix")
+                                         ((and
+                                            (equal (first (code-format instruction-instance)) "prefix")
+                                            (not (null (rest syntax-list))))
                                           (emit-binary-code-for-one-instruction
                                             (rest syntax-list)
                                             my-hash-table
                                             :prefix-list (append prefix-list (list (parse-number (second (code-format instruction-instance)))))
                                             :emit-function-selector-function emit-function-selector-function
                                             :skip-errors skip-errors))
+                                         ((equal (first (code-format instruction-instance)) "prefix")
+                                          ;; no other mnemonics after this prefix.
+                                          ;; just return the prefix list.
+                                          (append prefix-list (list (parse-number (second (code-format instruction-instance))))))
                                          ;; encoding with error handling.
                                          (skip-errors (handler-case
                                                         ;; call `emit` method of the instruction instance ...
-                                                        (funcall #'emit
-                                                                 instruction-instance
-                                                                 ;; current prefix-list.
-                                                                 prefix-list
-                                                                 ;; ... convert each argument string to a symbol,
-                                                                 ;; if such a symbol exists, and give the list
-                                                                 ;; of these symbols as an argument to the `emit` method.
-                                                                 (loop for arg in (rest syntax-list)
-                                                                       collect (convert-string-to-symbol-if-symbol-exists arg)))
+                                                        (append prefix-list (get-list (funcall #'emit
+                                                                                               instruction-instance
+                                                                                               ;; current prefix-list.
+                                                                                               prefix-list
+                                                                                               ;; ... convert each argument string to a symbol,
+                                                                                               ;; if such a symbol exists, and give the list
+                                                                                               ;; of these symbols as an argument to the `emit` method.
+                                                                                               (loop for arg in (rest syntax-list)
+                                                                                                     collect (convert-string-to-symbol-if-symbol-exists arg)))))
                                                         ;; if `common-lisp:simple-error` is produced, return `nil`.
                                                         (common-lisp:simple-error ()
                                                                                   nil)))
                                          ;; encoding without error handling.
-                                         (t (funcall #'emit
-                                                     ;; call `emit` method of the instruction instance ...
-                                                     instruction-instance
-                                                     ;; current prefix-list.
-                                                     prefix-list
-                                                     ;; ... convert each argument string to a symbol,
-                                                     ;; if such a symbol exists, and give the list
-                                                     ;; of these symbols as an argument to the `emit` method.
-                                                     (loop for arg in (rest syntax-list)
-                                                           collect (convert-string-to-symbol-if-symbol-exists arg)))))))
+                                         (t (append prefix-list (get-list (funcall #'emit
+                                                                                   ;; call `emit` method of the instruction instance ...
+                                                                                   instruction-instance
+                                                                                   ;; current prefix-list.
+                                                                                   prefix-list
+                                                                                   ;; ... convert each argument string to a symbol,
+                                                                                   ;; if such a symbol exists, and give the list
+                                                                                   ;; of these symbols as an argument to the `emit` method.
+                                                                                   (loop for arg in (rest syntax-list)
+                                                                                         collect (convert-string-to-symbol-if-symbol-exists arg)))))))))
                  :test #'equal))))
     (when (boundp '*global-offset*)
       (progn
