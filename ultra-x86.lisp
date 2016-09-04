@@ -45,6 +45,20 @@
     :req-operands
     :code-format
     :arch-flags
+    :is-asm-instruction
+    :is-x86-instruction
+    :is-x16-instruction
+    :is-x32-instruction
+    :is-x64-instruction
+    :modifies-flags
+    :flags-affected
+    :flags-zeroed
+    :flags-set
+    :flags-undefined
+    :depends-on-flags
+    :flags-depends-on
+    :depends-on-stack
+    :alt-code
     ;; addressing form classes' slots.
     :allowed-targets
     :is-reg
