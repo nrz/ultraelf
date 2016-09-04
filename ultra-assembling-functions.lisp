@@ -121,6 +121,13 @@
                  (loop for instruction-instance in instruction-instances-list
                        ;; append all encodings to a list.
                        append (cond
+                                ((equal (first (code-format instruction-instance)) "prefix")
+                                 ;; this is a prefix, such as `rep`/`repe`/`repz` or `repne`/`repnz`.
+                                 (emit-all-binary-codes-for-one-instruction
+                                   (rest syntax-list)
+                                   my-hash-table
+                                   :prefix-list (append prefix-list (parse-number (second (code-format instruction-instance))))
+                                   :skip-errors skip-errors))
                                 ;; encoding with error handling.
                                 (skip-errors (handler-case
                                                ;; call `emit` method of the instruction instance ...
