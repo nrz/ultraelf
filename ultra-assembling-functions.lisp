@@ -126,6 +126,8 @@
                                                ;; call `emit` method of the instruction instance ...
                                                (funcall #'emit
                                                         instruction-instance
+                                                        ;; initial prefix-list.
+                                                        nil
                                                         ;; ... convert each argument string to a symbol,
                                                         ;; if such a symbol exists, and give the list
                                                         ;; of these symbols as an argument to the `emit` method.
@@ -138,6 +140,8 @@
                                 (t (funcall #'emit
                                             ;; call `emit` method of the instruction instance ...
                                             instruction-instance
+                                            ;; initial prefix-list.
+                                            nil
                                             ;; ... convert each argument string to a symbol,
                                             ;; if such a symbol exists, and give the list
                                             ;; of these symbols as an argument to the `emit` method.
@@ -179,6 +183,8 @@
                                                         ;; call `emit` method of the instruction instance ...
                                                         (funcall #'emit
                                                                  instruction-instance
+                                                                 ;; initial prefix-list.
+                                                                 nil
                                                                  ;; ... convert each argument string to a symbol,
                                                                  ;; if such a symbol exists, and give the list
                                                                  ;; of these symbols as an argument to the `emit` method.
@@ -191,6 +197,8 @@
                                          (t (funcall #'emit
                                                      ;; call `emit` method of the instruction instance ...
                                                      instruction-instance
+                                                     ;; initial prefix-list.
+                                                     nil
                                                      ;; ... convert each argument string to a symbol,
                                                      ;; if such a symbol exists, and give the list
                                                      ;; of these symbols as an argument to the `emit` method.
