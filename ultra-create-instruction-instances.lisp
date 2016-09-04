@@ -9,31 +9,31 @@
 (defparameter REP (make-instance 'x64-asm-instruction
 :name "REP"
 :req-operands (list "ignore")
-:code-format (list "prefix" "f3")
+:code-format (list "prefix" "#xf3")
 :arch-flags (list "8086")))
 
 (defparameter REPE (make-instance 'x64-asm-instruction
 :name "REPE"
 :req-operands (list "ignore")
-:code-format (list "prefix" "f3")
+:code-format (list "prefix" "#xf3")
 :arch-flags (list "8086")))
 
 (defparameter REPZ (make-instance 'x64-asm-instruction
 :name "REPZ"
 :req-operands (list "ignore")
-:code-format (list "prefix" "f3")
+:code-format (list "prefix" "#xf3")
 :arch-flags (list "8086")))
 
 (defparameter REPNE (make-instance 'x64-asm-instruction
 :name "REPNE"
 :req-operands (list "ignore")
-:code-format (list "prefix" "f2")
+:code-format (list "prefix" "#xf2")
 :arch-flags (list "8086")))
 
 (defparameter REPNZ (make-instance 'x64-asm-instruction
 :name "REPNZ"
 :req-operands (list "ignore")
-:code-format (list "prefix" "f2")
+:code-format (list "prefix" "#xf2")
 :arch-flags (list "8086")))
 
 (defparameter DB-ignore (make-instance 'x64-asm-instruction

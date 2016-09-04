@@ -141,19 +141,19 @@ printf("(defparameter *x64-instruction-variants-hash-table* (make-hash-table :te
 printf("(defparameter REP (make-instance 'x64-asm-instruction\n" .
     ":name \"REP\"\n" .
     ":req-operands (list \"ignore\")\n" .
-    ":code-format (list \"prefix\" \"f3\")\n" .
+    ":code-format (list \"prefix\" \"#xf3\")\n" .
     ":arch-flags (list \"8086\")))\n\n");
 
 printf("(defparameter REPE (make-instance 'x64-asm-instruction\n" .
     ":name \"REPE\"\n" .
     ":req-operands (list \"ignore\")\n" .
-    ":code-format (list \"prefix\" \"f3\")\n" .
+    ":code-format (list \"prefix\" \"#xf3\")\n" .
     ":arch-flags (list \"8086\")))\n\n");
 
 printf("(defparameter REPZ (make-instance 'x64-asm-instruction\n" .
     ":name \"REPZ\"\n" .
     ":req-operands (list \"ignore\")\n" .
-    ":code-format (list \"prefix\" \"f3\")\n" .
+    ":code-format (list \"prefix\" \"#xf3\")\n" .
     ":arch-flags (list \"8086\")))\n\n");
 
 # repne/repnz
@@ -161,13 +161,13 @@ printf("(defparameter REPZ (make-instance 'x64-asm-instruction\n" .
 printf("(defparameter REPNE (make-instance 'x64-asm-instruction\n" .
     ":name \"REPNE\"\n" .
     ":req-operands (list \"ignore\")\n" .
-    ":code-format (list \"prefix\" \"f2\")\n" .
+    ":code-format (list \"prefix\" \"#xf2\")\n" .
     ":arch-flags (list \"8086\")))\n\n");
 
 printf("(defparameter REPNZ (make-instance 'x64-asm-instruction\n" .
     ":name \"REPNZ\"\n" .
     ":req-operands (list \"ignore\")\n" .
-    ":code-format (list \"prefix\" \"f2\")\n" .
+    ":code-format (list \"prefix\" \"#xf2\")\n" .
     ":arch-flags (list \"8086\")))\n\n");
 
 # print the code to create each instruction + operands combination object and to push them to hash table.
