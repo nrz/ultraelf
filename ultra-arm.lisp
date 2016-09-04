@@ -36,6 +36,22 @@
     :get-all-encodings-for-syntax-tree-and-print-hex
     ;; symbols.
     :convert-string-to-symbol-if-symbol-exists
+    ;; instruction classes' slots.
+    :name
+    :req-operands
+    :code-format
+    :arch-flags
+    :is-asm-instruction
+    :is-arm-instruction
+    :modifies-flags
+    :flags-affected
+    :flags-zeroed
+    :flags-set
+    :flags-undefined
+    :depends-on-flags
+    :flags-depends-on
+    :depends-on-stack
+    :alt-code
     ;; instruction class names.
     :arm-asm-instruction)
   (:export
