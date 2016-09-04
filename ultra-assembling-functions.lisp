@@ -104,8 +104,7 @@
     ;; Something else. For now, we'll assume that it's a number.
     (t (make-instance 'immediate :name my-string :value (parse-number my-string)))))
 
-(defun emit-all-binary-codes-for-one-instruction
-  (syntax-list my-hash-table &key (prefix-list nil) (skip-errors t))
+(defun emit-all-binary-codes-for-one-instruction (syntax-list my-hash-table &key (prefix-list nil) (skip-errors t))
   "This function converts a syntax list of one instruction to a list of lists of binary code bytes,
    `emit-function-selector-function` can be eg. `#'first` or `#'(lambda (x) (first (last x)))`."
   (let*
