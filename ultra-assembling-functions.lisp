@@ -99,7 +99,7 @@
      ;; A string with a Lisp form to be evaluated.
      (convert-string-to-symbol-if-symbol-exists (eval (read-from-string my-string))))
     ((boundp (intern (string-upcase my-string)))
-     ;; An existing symbol (such as a register).
+     ;; An existing symbol (such as a mnemonic or a register).
      (symbol-value (intern (string-upcase my-string))))
     ;; Something else. For now, we'll assume that it's a number.
     (t (make-instance 'immediate :name my-string :value (parse-number my-string)))))
