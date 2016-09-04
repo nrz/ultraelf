@@ -8,7 +8,8 @@
 (defun emit-with-format-and-operands-arm (code-format req-operands given-operands)
   "This function emits code (list of binary code bytes) for one ARM instruction variant."
   (let*
-    ((my-args (get-list given-operands))
+    ((encoding-type (first code-format))
+     (my-args (get-list given-operands))
      (my-operands (get-list req-operands)))
     (check-args my-operands my-args)
     (error "ARM encoding not yet implemented")))
