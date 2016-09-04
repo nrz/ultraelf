@@ -125,7 +125,7 @@
                                  (emit-all-binary-codes-for-one-instruction
                                    (rest syntax-list)
                                    my-hash-table
-                                   :prefix-list (append prefix-list (parse-number (second (code-format instruction-instance))))
+                                   :prefix-list (append prefix-list (list (parse-number (second (code-format instruction-instance)))))
                                    :skip-errors skip-errors))
                                 ;; encoding with error handling.
                                 (skip-errors (handler-case
@@ -189,7 +189,7 @@
                                           (emit-binary-code-for-one-instruction
                                             (rest syntax-list)
                                             my-hash-table
-                                            :prefix-list (append prefix-list (parse-number (second (code-format instruction-instance))))
+                                            :prefix-list (append prefix-list (list (parse-number (second (code-format instruction-instance)))))
                                             :emit-function-selector-function emit-function-selector-function
                                             :skip-errors skip-errors))
                                          ;; encoding with error handling.
