@@ -9,6 +9,10 @@
   "This function tests the functioning of `assemble-x64-and-print-hex`."
   (rt:rem-all-tests)
 
+  ;; Tests for zero instructions at once.
+  (rt:deftest test-x64-no-instructions (assemble-x64 #a #e) nil)
+  (rt:deftest test-x64-and-print-hex-no-instructions (assemble-x64 #a #e) nil)
+
   ;; Tests for single instruction at once, print in hexadecimal.
   (rt:deftest |test-x64-and-print-hex-adc-ax,-12345| (assemble-x64-and-print-hex #a adc ax,-12345 #e) "(66 15 C7 CF)")
   (rt:deftest |test-x64-and-print-hex-add-al,7| (assemble-x64-and-print-hex #a add al,7 #e) "(04 07)")
@@ -55,6 +59,9 @@
   (rt:deftest test-x64-and-print-hex-iretw (assemble-x64-and-print-hex #a iretw #e) "(66 CF)")
   (rt:deftest test-x64-and-print-hex-jmp-[rsi] (assemble-x64-and-print-hex #a jmp [rsi] #e) "(FF 26)")
   (rt:deftest test-x64-and-print-hex-loadall-void (assemble-x64-and-print-hex #a loadall-void #e) "(0F 07)")
+  (rt:deftest test-x64-and-print-hex-lock (assemble-x64-and-print-hex #a lock #e) "(F0)")
+  (rt:deftest test-x64-and-print-hex-lock-cmpxchg-[r14]-r12 (assemble-x64-and-print-hex #a lock cmpxchg [r14],r12 #e) "(F0 4D 0F B1 26)")
+  (rt:deftest test-x64-and-print-hex-lock-xadd-[rax]-edx (assemble-x64-and-print-hex #a lock xadd [rax],edx #e) "(F0 0F C1 10)")
   (rt:deftest test-x64-and-print-hex-lodsb (assemble-x64-and-print-hex #a lodsb #e) "(AC)")
   (rt:deftest |test-x64-and-print-hex-mov-ax,bx| (assemble-x64-and-print-hex #a mov ax,bx #e) "(66 89 D8)")
   (rt:deftest test-x64-and-print-hex-movdqu-xmmreg.mem-xmm2-[r14] (assemble-x64-and-print-hex #a movdqu-xmmreg.mem xmm2 [r14] #e) "(F3 41 0F 6F 16)")
@@ -88,9 +95,13 @@
   (rt:deftest test-x64-and-print-hex-rep-movsb (assemble-x64-and-print-hex #a rep movsb #e) "(F3 A4)")
   (rt:deftest test-x64-and-print-hex-rep-nop (assemble-x64-and-print-hex #a rep nop #e) "(F3 90)")
   (rt:deftest |test-x64-and-print-hex-rep-rep-mov-ax,bx| (assemble-x64-and-print-hex #a rep rep mov ax,bx #e) "(F3 F3 66 89 D8)")
+  (rt:deftest test-x64-and-print-hex-rep-rep-movsb (assemble-x64-and-print-hex #a rep rep movsb #e) "(F3 F3 A4)")
   (rt:deftest test-x64-and-print-hex-rep-rep-nop (assemble-x64-and-print-hex #a rep rep nop #e) "(F3 F3 90)")
+  (rt:deftest test-x64-and-print-hex-rep-rep-rep-movsb (assemble-x64-and-print-hex #a rep rep rep movsb #e) "(F3 F3 F3 A4)")
   (rt:deftest test-x64-and-print-hex-rep-stosd (assemble-x64-and-print-hex #a rep stosd #e) "(F3 AB)")
+  (rt:deftest test-x64-and-print-hex-rep-repne-scasw (assemble-x64-and-print-hex #a rep repne scasw #e) "(F3 F2 66 AF)")
   (rt:deftest test-x64-and-print-hex-repne (assemble-x64-and-print-hex #a repne #e) "(F2)")
+  (rt:deftest test-x64-and-print-hex-repne-repne-scasw (assemble-x64-and-print-hex #a repne repne scasw #e) "(F2 F2 66 AF)")
   (rt:deftest test-x64-and-print-hex-repne-scasw (assemble-x64-and-print-hex #a repne scasw #e) "(F2 66 AF)")
   (rt:deftest test-x64-and-print-hex-repnz (assemble-x64-and-print-hex #a repnz #e) "(F2)")
   (rt:deftest test-x64-and-print-hex-repnz-cmpsq (assemble-x64-and-print-hex #a repnz cmpsq #e) "(F2 48 A7)")
