@@ -136,6 +136,88 @@ close(FILE);
 # print the code to create a hash table.
 printf("(defparameter *x64-instruction-variants-hash-table* (make-hash-table :test #'equalp :size 32768))\n");
 
+# segment prefixes.
+
+printf("(defparameter |cs:| (make-instance 'x64-asm-instruction\n" .
+    ":name \"CS:\"\n" .
+    ":req-operands (list \"ignore\")\n" .
+    ":code-format (list \"prefix\" \"#x2e\")\n" .
+    ":arch-flags (list \"8086\")))\n\n");
+
+printf("(defparameter |CS:| (make-instance 'x64-asm-instruction\n" .
+    ":name \"CS:\"\n" .
+    ":req-operands (list \"ignore\")\n" .
+    ":code-format (list \"prefix\" \"#x2e\")\n" .
+    ":arch-flags (list \"8086\")))\n\n");
+
+printf("(defparameter |ds:| (make-instance 'x64-asm-instruction\n" .
+    ":name \"DS:\"\n" .
+    ":req-operands (list \"ignore\")\n" .
+    ":code-format (list \"prefix\" \"#x3e\")\n" .
+    ":arch-flags (list \"8086\")))\n\n");
+
+printf("(defparameter |DS:| (make-instance 'x64-asm-instruction\n" .
+    ":name \"DS:\"\n" .
+    ":req-operands (list \"ignore\")\n" .
+    ":code-format (list \"prefix\" \"#x3e\")\n" .
+    ":arch-flags (list \"8086\")))\n\n");
+
+printf("(defparameter |es:| (make-instance 'x64-asm-instruction\n" .
+    ":name \"ES:\"\n" .
+    ":req-operands (list \"ignore\")\n" .
+    ":code-format (list \"prefix\" \"#x26\")\n" .
+    ":arch-flags (list \"8086\")))\n\n");
+
+printf("(defparameter |ES:| (make-instance 'x64-asm-instruction\n" .
+    ":name \"ES:\"\n" .
+    ":req-operands (list \"ignore\")\n" .
+    ":code-format (list \"prefix\" \"#x26\")\n" .
+    ":arch-flags (list \"8086\")))\n\n");
+
+printf("(defparameter |fs:| (make-instance 'x64-asm-instruction\n" .
+    ":name \"FS:\"\n" .
+    ":req-operands (list \"ignore\")\n" .
+    ":code-format (list \"prefix\" \"#x64\")\n" .
+    ":arch-flags (list \"8086\")))\n\n");
+
+printf("(defparameter |FS:| (make-instance 'x64-asm-instruction\n" .
+    ":name \"FS:\"\n" .
+    ":req-operands (list \"ignore\")\n" .
+    ":code-format (list \"prefix\" \"#x64\")\n" .
+    ":arch-flags (list \"8086\")))\n\n");
+
+printf("(defparameter |gs:| (make-instance 'x64-asm-instruction\n" .
+    ":name \"GS:\"\n" .
+    ":req-operands (list \"ignore\")\n" .
+    ":code-format (list \"prefix\" \"#x65\")\n" .
+    ":arch-flags (list \"8086\")))\n\n");
+
+printf("(defparameter |GS:| (make-instance 'x64-asm-instruction\n" .
+    ":name \"GS:\"\n" .
+    ":req-operands (list \"ignore\")\n" .
+    ":code-format (list \"prefix\" \"#x65\")\n" .
+    ":arch-flags (list \"8086\")))\n\n");
+
+printf("(defparameter |ss:| (make-instance 'x64-asm-instruction\n" .
+    ":name \"SS:\"\n" .
+    ":req-operands (list \"ignore\")\n" .
+    ":code-format (list \"prefix\" \"#x36\")\n" .
+    ":arch-flags (list \"8086\")))\n\n");
+
+printf("(defparameter |SS:| (make-instance 'x64-asm-instruction\n" .
+    ":name \"SS:\"\n" .
+    ":req-operands (list \"ignore\")\n" .
+    ":code-format (list \"prefix\" \"#x36\")\n" .
+    ":arch-flags (list \"8086\")))\n\n");
+
+# lock
+
+printf("(defparameter LOCK (make-instance 'x64-asm-instruction\n" .
+    ":name \"LOCK\"\n" .
+    ":req-operands (list \"ignore\")\n" .
+    ":code-format (list \"prefix\" \"#xf0\")\n" .
+    ":arch-flags (list \"8086\")))\n\n");
+
 # rep/repe/repz
 
 printf("(defparameter REP (make-instance 'x64-asm-instruction\n" .
@@ -191,6 +273,13 @@ for my $i (0 .. $#mnemonic_array)
         $flags);
 }
 
+printf("\(setf (gethash \"|CS:|\" *x64-instruction-variants-hash-table*) (list |cs:| |CS:|))\n\n");
+printf("\(setf (gethash \"|DS:|\" *x64-instruction-variants-hash-table*) (list |ds:| |DS:|))\n\n");
+printf("\(setf (gethash \"|ES:|\" *x64-instruction-variants-hash-table*) (list |es:| |ES:|))\n\n");
+printf("\(setf (gethash \"|FS:|\" *x64-instruction-variants-hash-table*) (list |fs:| |FS:|))\n\n");
+printf("\(setf (gethash \"|GS:|\" *x64-instruction-variants-hash-table*) (list |gs:| |GS:|))\n\n");
+printf("\(setf (gethash \"|SS:|\" *x64-instruction-variants-hash-table*) (list |ss:| |SS:|))\n\n");
+printf("\(setf (gethash \"LOCK\" *x64-instruction-variants-hash-table*) (list LOCK))\n\n");
 printf("\(setf (gethash \"REP\" *x64-instruction-variants-hash-table*) (list REP))\n\n");
 printf("\(setf (gethash \"REPE\" *x64-instruction-variants-hash-table*) (list REPE))\n\n");
 printf("\(setf (gethash \"REPZ\" *x64-instruction-variants-hash-table*) (list REPZ))\n\n");

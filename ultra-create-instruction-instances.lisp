@@ -6,6 +6,84 @@
 (in-package :x64)
 
 (defparameter *x64-instruction-variants-hash-table* (make-hash-table :test #'equalp :size 32768))
+(defparameter |cs:| (make-instance 'x64-asm-instruction
+:name "CS:"
+:req-operands (list "ignore")
+:code-format (list "prefix" "#x2e")
+:arch-flags (list "8086")))
+
+(defparameter |CS:| (make-instance 'x64-asm-instruction
+:name "CS:"
+:req-operands (list "ignore")
+:code-format (list "prefix" "#x2e")
+:arch-flags (list "8086")))
+
+(defparameter |ds:| (make-instance 'x64-asm-instruction
+:name "DS:"
+:req-operands (list "ignore")
+:code-format (list "prefix" "#x3e")
+:arch-flags (list "8086")))
+
+(defparameter |DS:| (make-instance 'x64-asm-instruction
+:name "DS:"
+:req-operands (list "ignore")
+:code-format (list "prefix" "#x3e")
+:arch-flags (list "8086")))
+
+(defparameter |es:| (make-instance 'x64-asm-instruction
+:name "ES:"
+:req-operands (list "ignore")
+:code-format (list "prefix" "#x26")
+:arch-flags (list "8086")))
+
+(defparameter |ES:| (make-instance 'x64-asm-instruction
+:name "ES:"
+:req-operands (list "ignore")
+:code-format (list "prefix" "#x26")
+:arch-flags (list "8086")))
+
+(defparameter |fs:| (make-instance 'x64-asm-instruction
+:name "FS:"
+:req-operands (list "ignore")
+:code-format (list "prefix" "#x64")
+:arch-flags (list "8086")))
+
+(defparameter |FS:| (make-instance 'x64-asm-instruction
+:name "FS:"
+:req-operands (list "ignore")
+:code-format (list "prefix" "#x64")
+:arch-flags (list "8086")))
+
+(defparameter |gs:| (make-instance 'x64-asm-instruction
+:name "GS:"
+:req-operands (list "ignore")
+:code-format (list "prefix" "#x65")
+:arch-flags (list "8086")))
+
+(defparameter |GS:| (make-instance 'x64-asm-instruction
+:name "GS:"
+:req-operands (list "ignore")
+:code-format (list "prefix" "#x65")
+:arch-flags (list "8086")))
+
+(defparameter |ss:| (make-instance 'x64-asm-instruction
+:name "SS:"
+:req-operands (list "ignore")
+:code-format (list "prefix" "#x36")
+:arch-flags (list "8086")))
+
+(defparameter |SS:| (make-instance 'x64-asm-instruction
+:name "SS:"
+:req-operands (list "ignore")
+:code-format (list "prefix" "#x36")
+:arch-flags (list "8086")))
+
+(defparameter LOCK (make-instance 'x64-asm-instruction
+:name "LOCK"
+:req-operands (list "ignore")
+:code-format (list "prefix" "#xf0")
+:arch-flags (list "8086")))
+
 (defparameter REP (make-instance 'x64-asm-instruction
 :name "REP"
 :req-operands (list "ignore")
@@ -29663,6 +29741,20 @@
 :req-operands (list "rm64")
 :code-format (list "[m:" "o64" "0f" "1f" "/7")
 :arch-flags (list "X64" "UNDOC")))
+
+(setf (gethash "|CS:|" *x64-instruction-variants-hash-table*) (list |cs:| |CS:|))
+
+(setf (gethash "|DS:|" *x64-instruction-variants-hash-table*) (list |ds:| |DS:|))
+
+(setf (gethash "|ES:|" *x64-instruction-variants-hash-table*) (list |es:| |ES:|))
+
+(setf (gethash "|FS:|" *x64-instruction-variants-hash-table*) (list |fs:| |FS:|))
+
+(setf (gethash "|GS:|" *x64-instruction-variants-hash-table*) (list |gs:| |GS:|))
+
+(setf (gethash "|SS:|" *x64-instruction-variants-hash-table*) (list |ss:| |SS:|))
+
+(setf (gethash "LOCK" *x64-instruction-variants-hash-table*) (list LOCK))
 
 (setf (gethash "REP" *x64-instruction-variants-hash-table*) (list REP))
 
