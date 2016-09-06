@@ -2,8 +2,9 @@ TEE-lista:
 Listaa tähän keskeneräiset asiat kiireellisyysjärjestyksessä kiireellisimmät ylös. Rasti ruutuun ja valmiit-osastolle kun on valmis.
 
 Tee seuraavat asiat:
+[ ] Lisää tuki lainausmerkeille Lisp-koodissa: `#a mov rax,[ (concatenate 'string "r" "b" "x") ] #e` -> `(list '("mov") '("rax") '("[rbx]"))`.
 [ ] `defun transform-code-to-string`: Muokkaa lukija pinoautomaatiksi ('pushdown automaton') ja poista tilat kuten `"inside-lisp-form-inside-memory-address-syntax"`.
-[ ] Lisää tuki Lisp-koodille muistiosoitusten sisällä: `#a mov rax,[ #l (concatenate 'string "r" "b" "x") #a ] #e` -> `(list '("mov") '("rax") '("[rbx]"))`.
+[ ] Lisää tuki Lisp-koodille muistiosoitusten sisällä: `#a mov rax,[ (concatenate 'string "r" "b" "x") ] #e` -> `(list '("mov") '("rax") '("[rbx]"))`.
 [ ] `ultraelf-asm-reader.lisp`: Lisää tuki useamman rivin Lisp-koodilohkoille (siis muillekin kuin `#l`-koodilohkoille).
 [ ] `ultraelf-asm-reader.lisp`: Lisää tuki `|`-merkille: `"inside-vertical-bar-multiple-escape-mode"`.
 [ ] Koodaa tuki SIB:lle.
