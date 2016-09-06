@@ -10,6 +10,7 @@
   (rt:rem-all-tests)
 
   ;; Tests for basic syntax tree creation.
+  (rt:deftest test-create-syntax-tree (create-syntax-tree #a #e) (list))
   (rt:deftest test-create-syntax-tree-foo (create-syntax-tree #a foo #e) (list '("foo")))
   (rt:deftest test-create-syntax-tree-foo-bar (create-syntax-tree #a foo bar #e) (list '("foo" "bar")))
   (rt:deftest test-create-syntax-tree-foo-extra-space-bar (create-syntax-tree #a foo  bar #e) (list '("foo" "bar")))
@@ -19,6 +20,33 @@
   (rt:deftest |test-create-syntax-tree-foo-bar,more-extra-space-baz| (create-syntax-tree #a foo bar,  baz #e) (list '("foo" "bar" "baz")))
   (rt:deftest |test-create-syntax-tree-foo1-bar1-foo2-bar2| (create-syntax-tree #a foo1 bar1 #a foo2 bar2 #e) (list '("foo1" "bar1") '("foo2" "bar2")))
   (rt:deftest |test-create-syntax-tree-foo1-bar1-foo2-bar2-foo3-bar3| (create-syntax-tree #a foo1 bar1 #a foo2 bar2 #a foo3 bar3 #e) (list '("foo1" "bar1") '("foo2" "bar2") '("foo3" "bar3")))
+
+  ;; Tests for basic syntax cree creation with newlines in input.
+  (rt:deftest test-create-syntax-tree-newline-hash-a-foo-bar-hash-e (create-syntax-tree
+                                                                      #a foo bar #e) (list '("foo" "bar")))
+  (rt:deftest test-create-syntax-tree-newline-hash-a-foo-bar-newline-hash-e (create-syntax-tree
+                                                                              #a foo bar
+                                                                              #e) (list '("foo" "bar")))
+  (rt:deftest test-create-syntax-tree-hash-a-foo-newline-bar-hash-e (create-syntax-tree #a foo
+                                                                                        bar #e) (list '("foo") '("bar")))
+  (rt:deftest test-create-syntax-tree-hash-a-foo-newline-bar-newline-hash-e (create-syntax-tree #a foo
+                                                                                                bar
+                                                                                                #e) (list '("foo") '("bar")))
+  (rt:deftest test-create-syntax-tree-hash-a-newline-foo-newline-bar-hash-e (create-syntax-tree #a
+                                                                                                foo
+                                                                                                bar #e) (list '("foo") '("bar")))
+  (rt:deftest test-create-syntax-tree-newline-hash-a-foo-newline-bar-hash-e (create-syntax-tree
+                                                                              #a foo
+                                                                              bar #e) (list '("foo") '("bar")))
+  (rt:deftest test-create-syntax-tree-newline-hash-a-newline-foo-newline-bar-hash-e (create-syntax-tree
+                                                                                      #a
+                                                                                      foo
+                                                                                      bar #e) (list '("foo") '("bar")))
+  (rt:deftest test-create-syntax-tree-newline-hash-a-newline-foo-newline-bar-newline-hash-e (create-syntax-tree
+                                                                                              #a
+                                                                                              foo
+                                                                                              bar
+                                                                                              #e) (list '("foo") '("bar")))
 
   ;; Tests for syntax tree creation using assembly source code with Common Lisp macros.
   (rt:deftest test-create-syntax-tree-hash-a-hash-l-foo (create-syntax-tree #a #l "foo" #e) (list '("foo")))
