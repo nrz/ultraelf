@@ -94,8 +94,8 @@
      ;; An immediate (current address).
      (make-instance 'immediate :name (write-to-string *global-offset*) :value *global-offset*))
     ((and
-       (equal (coerce (list (elt my-string  0)) 'string) "(")
-       (equal (coerce (list (elt my-string  (1- (length my-string )))) 'string) ")"))
+       (equal (coerce (list (elt my-string 0)) 'string) "(")
+       (equal (coerce (list (elt my-string (1- (length my-string )))) 'string) ")"))
      ;; A string with a Lisp form to be evaluated.
      (convert-string-to-symbol-if-symbol-exists (eval (read-from-string my-string))))
     ((boundp (intern (string-upcase my-string)))
