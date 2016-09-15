@@ -90,6 +90,17 @@
      :accessor value
      :initform nil)))
 
+(defclass ultra-string (argument)
+  ((name
+     :initarg :name
+     :accessor name
+     :initform nil
+     :documentation "ultra-string is the string class of ultraELF. Name is ultra-string to avoid confusion with string")
+   (is-string
+     :reader is-string
+     :allocation :class
+     :initform t)))
+
 (defgeneric my-string (argument)
   (:documentation "string that is converted to this instance."))
 
