@@ -47,8 +47,7 @@
 (defparameter $ 0)
 
 (defun create-syntax-tree (my-list)
-  "This recursive function converts a string produced by transform-code-to-string into a syntax tree.
-   Input argument my-list can be a string, in that case it is first stored into a list.
+  "This is just a simple wrapper for create-syntax-tree-recursive-part.
    usage examples:
    X64> (create-syntax-tree #a nop #e)
    (LIST '(\"nop\"))
@@ -61,6 +60,11 @@
    ((\"mov\" \"ax\" \"bx\") (\"shl\" \"bx\" \"1\"))
    To get all encodings of each instruction of a given syntax tree, use function `get-all-encodings-for-syntax-tree`.
    To get one encoding for each instruction of a given syntax tree, use function `emit-binary-code-list`."
+  (create-syntax-tree-recursive-part my-list 0))
+
+(defun create-syntax-tree-recursive-part (my-list current-recursion-depth)
+  "This recursive function converts a string produced by transform-code-to-string into a syntax tree.
+   Input argument my-list can be a string, in that case it is first stored into a list."
   (unless (listp my-list)
     (setf my-list (list my-list)))
   ;; is last element of the list a string?
@@ -69,13 +73,15 @@
   (loop for i below (length my-list)
         do (when (stringp (nth i my-list))
              (if (eql i 0)
-               (setf my-list (create-syntax-tree (append
-                                                   (rest (read-from-string (nth i my-list)))
-                                                   (subseq my-list (1+ i)))))
-               (setf my-list (create-syntax-tree (append
-                                                   (subseq my-list 0 i)
-                                                   (rest (read-from-string (nth i my-list)))
-                                                   (subseq my-list (1+ i))))))))
+               (setf my-list (create-syntax-tree-recursive-part (append
+                                                                  (rest (read-from-string (nth i my-list)))
+                                                                  (subseq my-list (1+ i)))
+                                                                (1+ current-recursion-depth)))
+               (setf my-list (create-syntax-tree-recursive-part (append
+                                                                  (subseq my-list 0 i)
+                                                                  (rest (read-from-string (nth i my-list)))
+                                                                  (subseq my-list (1+ i)))
+                                                                (1+ current-recursion-depth))))))
   (if (eql (first my-list) 'list)
     my-list
     (cons 'list my-list)))
