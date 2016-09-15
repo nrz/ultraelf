@@ -35,6 +35,10 @@
      :reader is-immediate
      :allocation :class
      :initform nil)
+   (is-string
+     :reader is-string
+     :allocation :class
+     :initform nil)
    (needs-rex
      :reader needs-rex
      :allocation :class
