@@ -27,6 +27,13 @@
 ;;;     #<COMMON-LISP:PACKAGE "X64">
 ;;;  7. X64> (test-x64-assembling-functions)
 ;;;
+;;; If (test-x64-assembling-functions) fails, try first (c-u) in :ultraelf package,
+;;; it should fix the situation:
+;;; 7a. X64> (in-package :ultraelf)
+;;; 7b. X64> (c-u)
+;;; 7c. X64> (in-package :x64)
+;;; 7d. X64> (test-x64-assembling-functions)
+;;;
 ;;; practical examples on assembling:
 ;;;  8. ULTRAELF> (in-package :x64)
 ;;;     #<COMMON-LISP:PACKAGE "X64">
