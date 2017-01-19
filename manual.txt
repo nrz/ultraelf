@@ -14,7 +14,9 @@ Other names and brands may be claimed as other natural or legal persons' propert
 Contents
 1. Introduction
 
-1. Introduction
+Meaning of some expressions:
+"will support", "will be" etc.: a design goal, not yet fully implemented.
+"supports", "is":               a fully implemented design goal.
 
 ultraELF aims to be a fully functional multiarchitecture assembler and
 disassembler. So far ultraELF supports assembling x86-64 code. In contrast
@@ -61,7 +63,24 @@ Design goals of ultraELF syntax (in order of descending importance):
 `defun assemble-alternatives` should produce all possible encodings for a
 given instruction. Not providing all possible encodings for a given
 mnemonic and parameters is considered a bug, even if some of the encodings
-were overly long or overly complicated.
+were overly long or overly complicated. Unnecessary `rep/repe/repz` prefixes
+(#xf3) and unnecessary `repne/repnz` prefixes (#xf2) will not be encoded,
+though.
+
+ultraELF will support steganographic assembling in which information will
+be encoded in the choice of a specific encoding for a given instruction
+(<mnemonic> [parameter] ... ).
+
+Other steganographic assemblers include Hydan. People interested in Hydan
+might want to check these:
+http://www.crazyboy.com/hydan/
+https://www.cs.columbia.edu/~angelos/Papers/hydan.pdf
+https://www.sans.org/reading-room/whitepapers/stenganography/detecting-hydan-statistical-methods-classifying-hydan-based-stegonagraphy-execut-32839
+
+ultraELF will support encoding of overlapping instructions. The syntax for
+overlapping instructions is not yet defined. Some kind of constraint
+programming will be used. Whether steganography can practically be combined
+with overlapping instructions remains to be seen.
 
 keywords specific to ultraELF:
 `pic`    position-independent code (such as RIP-relative addressing) must be used.
