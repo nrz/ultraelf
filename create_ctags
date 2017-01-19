@@ -1,4 +1,4 @@
 #!/bin/bash
-ctags -R --languages=Lisp \
+ctags -R --fields=+l --languages=Lisp \
     --exclude=.git \
     .
