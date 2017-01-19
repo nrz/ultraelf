@@ -11,11 +11,9 @@ ultraELF compiles at least with SBCL (tested with SBCL 1.2.4.debian).
 For compiling and loading instructions please see file ultraelf.asd .
 For manual please see file manual.txt .
 
-All tests pass, except tests related to rep, repz/repe, repnz/repne.
-So you should receive a message "15 out of 181 total tests failed" when
-running `(test-x64-assembling-functions)` following the instructions
-in ultraelf.asd . The reason for this is that rep, repz/repe,
-repnz/repne have not been implemented yet.
+All tests pass. So you should receive a message "No tests failed." when
+running `(test-parser)` and also `(test-x64-assembling-functions)`
+following the instructions in ultraelf.asd .
 
 Implemented functionality:
 o Binary code generation for quite many x86-64 instruction encodings.
