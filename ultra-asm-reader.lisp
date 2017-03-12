@@ -5,6 +5,25 @@
 
 (in-package :ultraelf)
 
+(defun new-instruction (is-there-code-on-this-line current-state my-string)
+  (cond
+    ;; is there _no_ code on this line?
+    ;; if true, do not output anything.
+    ((not is-there-code-on-this-line)
+     nil)
+    ;; are we inside instruction or inside a parameter?
+    ;; if true, output ")
+    ((or (equal current-state "inside-instruction")
+         (equal current-state "inside-parameters"))
+     (setf my-string (concatenate 'string my-string "\")")))
+    ;; otherwise output )
+    (t (setf my-string (concatenate 'string my-string ")"))))
+  (let
+    ((is-there-code-on-this-line nil)
+     (current-state "start-of-line")
+     (state-stack nil))
+    (values is-there-code-on-this-line current-state state-stack my-string)))
+
 (defun transform-code-to-string (stream current-mode)
   "This function converts assembly code into a string.
    This function is usually not called directly.
@@ -224,26 +243,6 @@
    #a marks return to asm, or a new instruction if we are on asm mode.
    #e marks end of syntax.
    Partially based on: http://weitz.de/macros.lisp"
-  (flet
-    ((new-instruction
-       (is-there-code-on-this-line current-state my-string)
-       (cond
-         ;; is there _no_ code on this line?
-         ;; if true, do not output anything.
-         ((not is-there-code-on-this-line)
-          nil)
-         ;; are we inside instruction or inside a parameter?
-         ;; if true, output ")
-         ((or (equal current-state "inside-instruction")
-              (equal current-state "inside-parameters"))
-          (setf my-string (concatenate 'string my-string "\")")))
-         ;; otherwise output )
-         (t (setf my-string (concatenate 'string my-string ")"))))
-       (setf is-there-code-on-this-line nil)
-       (setf current-state "start-of-line")
-       (let
-         ((state-stack nil))
-         (values is-there-code-on-this-line current-state state-stack my-string))))
     (let*
       ((invalid-last-characters (list "'" " " "(" ")"))
         (is-there-code-on-this-line nil)
@@ -923,7 +922,7 @@
                    ;; otherwise add the character to the Lisp code to be evaluated.
                    (t (setf lisp-code-string (concatenate 'string lisp-code-string my-char)))))
                 (t (error (concatenate 'string "invalid current-lisp-state: " current-lisp-state)))))
-             (t (error (concatenate 'string "invalid current-mode: " current-mode))))))))
+             (t (error (concatenate 'string "invalid current-mode: " current-mode)))))))
 
 (defun transform-code-to-string-asm (stream sub-char numarg)
   (declare (ignore sub-char numarg))
