@@ -19,6 +19,9 @@
     ;; otherwise output )
     (t (setf my-string (concatenate 'string my-string ")"))))
   (let
+    ;; these variables (`is-there-code-on-this-line`, `current-state`, `state-stack`)
+    ;; are named here - even if they are used only for returning constant values -
+    ;; to make debugging easier.
     ((is-there-code-on-this-line nil)
      (current-state "start-of-line")
      (state-stack nil))
