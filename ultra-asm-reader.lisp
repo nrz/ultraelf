@@ -27,6 +27,59 @@
      (state-stack nil))
     (values is-there-code-on-this-line current-state state-stack my-string)))
 
+(defun asm-start-of-line (is-there-code-on-this-line my-char current-state state-stack my-string n-lisp-forms)
+  (cond
+    ;; is character # ?
+    ;; if yes, mark hash sign read, do not output anything.
+    ((equal my-char "#")
+     (push current-state state-stack)
+     (setf current-state "hash-sign-read"))
+    ((equal my-char "(")
+     ;; is this a Lisp form (with parentesis)?
+     ;; if yes, mark we are inside Lisp form, mark that there is code on this line, output "(
+     (push "in-space" state-stack)
+     (setf current-state "inside-lisp-form")
+     (setf n-lisp-forms 1)
+     (setf is-there-code-on-this-line t)
+     (setf my-string (concatenate 'string my-string "\"(")))
+    ((equal my-char ")")
+     (error "cannot terminate Lisp form outside a Lisp form"))
+    ((equal my-char "[")
+     (push current-state state-stack)
+     (setf current-state "opening-square-bracket")
+     (setf is-there-code-on-this-line t)
+     (setf my-string (concatenate 'string my-string "'(\"[")))
+    ((equal my-char "]")
+     (error "cannot terminate memory address syntax before instruction"))
+    ;; is character ; ?
+    ;; if yes, don't output anything, begin comment.
+    ((equal my-char ";")
+     (setf current-state "inside-comment"))
+    ;; is character / ?
+    ;; if yes, mark we have a slash.
+    ((equal my-char "/")
+     (push current-state state-stack)
+     (setf current-state "slash"))
+    ;; is character newline?
+    ;; if yes, start a new instruction.
+    ((equal my-char (coerce (list #\Newline) 'string))
+     (setf (values is-there-code-on-this-line current-state state-stack my-string)
+           (new-instruction is-there-code-on-this-line current-state my-string)))
+    ;; is character backslash?
+    ;; if yes, mark we have a backslash in start of line.
+    ((equal my-char "\\")
+     (push current-state state-stack)
+     (setf current-state "backslash-in-start-of-line"))
+    ;; is character space?
+    ;; if yes, do not output anything.
+    ((equal my-char " ")
+     nil)
+    ;; otherwise mark we are inside an instruction, mark that there is code on this line, output " and current character.
+    (t (setf current-state "inside-instruction")
+     (setf is-there-code-on-this-line t)
+     (setf my-string (concatenate 'string my-string "'(\"" my-char))))
+  (values is-there-code-on-this-line current-state state-stack my-string))
+
 (defun transform-code-to-string (stream current-mode)
   "This function converts assembly code into a string.
    This function is usually not called directly.
@@ -262,56 +315,8 @@
                 (cond
                   ;; are we in the start of the line?
                   ((equal current-state "start-of-line")
-                   (cond
-                     ;; is character # ?
-                     ;; if yes, mark hash sign read, do not output anything.
-                     ((equal my-char "#")
-                      (push current-state state-stack)
-                      (setf current-state "hash-sign-read"))
-                     ((equal my-char "(")
-                      ;; is this a Lisp form (with parentesis)?
-                      ;; if yes, mark we are inside Lisp form, mark that there is code on this line, output "(
-                      (push "in-space" state-stack)
-                      (setf current-state "inside-lisp-form")
-                      (setf n-lisp-forms 1)
-                      (setf is-there-code-on-this-line t)
-                      (setf my-string (concatenate 'string my-string "\"(")))
-                     ((equal my-char ")")
-                      (error "cannot terminate Lisp form outside a Lisp form"))
-                     ((equal my-char "[")
-                      (push current-state state-stack)
-                      (setf current-state "opening-square-bracket")
-                      (setf is-there-code-on-this-line t)
-                      (setf my-string (concatenate 'string my-string "'(\"[")))
-                     ((equal my-char "]")
-                      (error "cannot terminate memory address syntax before instruction"))
-                     ;; is character ; ?
-                     ;; if yes, don't output anything, begin comment.
-                     ((equal my-char ";")
-                      (setf current-state "inside-comment"))
-                     ;; is character / ?
-                     ;; if yes, mark we have a slash.
-                     ((equal my-char "/")
-                      (push current-state state-stack)
-                      (setf current-state "slash"))
-                     ;; is character newline?
-                     ;; if yes, start a new instruction.
-                     ((equal my-char (coerce (list #\Newline) 'string))
-                      (setf (values is-there-code-on-this-line current-state state-stack my-string)
-                            (new-instruction is-there-code-on-this-line current-state my-string)))
-                     ;; is character backslash?
-                     ;; if yes, mark we have a backslash in start of line.
-                     ((equal my-char "\\")
-                      (push current-state state-stack)
-                      (setf current-state "backslash-in-start-of-line"))
-                     ;; is character space?
-                     ;; if yes, do not output anything.
-                     ((equal my-char " ")
-                      nil)
-                     ;; otherwise mark we are inside an instruction, mark that there is code on this line, output " and current character.
-                     (t (setf current-state "inside-instruction")
-                      (setf is-there-code-on-this-line t)
-                      (setf my-string (concatenate 'string my-string "'(\"" my-char)))))
+                   (setf (values is-there-code-on-this-line current-state state-stack my-string)
+                         (asm-start-of-line is-there-code-on-this-line my-char current-state state-stack my-string n-lisp-forms)))
                   ((equal current-state "hash-sign-read")
                    (cond
                      ;; is character a ?
