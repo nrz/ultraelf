@@ -24,7 +24,8 @@
      :documentation "The abstract syntax tree produced so far by the reader. Stored as a string that needs to be read and eval'd.")
    (lisp-code-string
      :reader lisp-code-string
-     :initform "Lisp code string read from the source, will be evaluated.")
+     :initform ""
+     :documentation "Lisp code string read from the source, will be evaluated.")
    (is-there-code-on-this-line
      :reader is-there-code-on-this-line
      :initform nil
