@@ -18,10 +18,10 @@
      :reader state-stack
      :initform nil
      :documentation "The state stack needed by the finite state machine.")
-   (my-string
-     :reader my-string
+   (ast-string
+     :reader ast-string
      :initform "(list "
-     :documentation "The Lisp code produced so far by the reader.")
+     :documentation "The abstract syntax tree produced so far by the reader. Stored as a string that needs to be read and eval'd.")
    (lisp-code-string
      :reader lisp-code-string
      :initform "Lisp code string read from the source, will be evaluated.")
