@@ -300,7 +300,8 @@
    #e marks end of syntax.
    Partially based on: http://weitz.de/macros.lisp"
   (let*
-    ((invalid-last-characters (list "'" " " "(" ")"))
+    ((asm-reader (make-instance 'asm-reader))
+     (invalid-last-characters (list "'" " " "(" ")"))
      (is-there-code-on-this-line nil)
      (current-state "start-of-line")
      (current-lisp-state "regular")

@@ -114,6 +114,7 @@
                (:file "ultra-addressing-form-lists")            ; lists of registers etc. belonging to each addressing form class.
                (:file "ultra-create-addressing-form-instances") ; create instance for each addressing form, including each register.
                (:file "ultra-elf-classes")                      ; ELF classes.
+               (:file "ultra-asm-reader-class")                 ; Lisp assembly reader class.
                (:file "ultra-asm-reader")                       ; Lisp assembly reader.
                (:file "ultra-big-endian-emit-functions")        ; big-endian emit functions.
                (:file "ultra-little-endian-emit-functions")     ; little-endian emit functions.
