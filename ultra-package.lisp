@@ -140,6 +140,10 @@
     :ymm8 :ymm9 :ymm10 :ymm11 :ymm12 :ymm13 :ymm14 :ymm15
     ;; ZMM registers. availabte only to x64.
     :zmm8 :zmm9 :zmm10 :zmm11 :zmm12 :zmm13 :zmm14 :zmm15
+    ;; test functions.
+    :test-parser
+    :test-x64-assembling-functions
+    :test-x64-assembling-functions-limited
     ;; symbols available only to x64 end here.
     ;; instruction class names.
     :x16-asm-instruction   ; available only to x16.

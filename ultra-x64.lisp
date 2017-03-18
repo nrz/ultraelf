@@ -39,6 +39,10 @@
     :ymm8 :ymm9 :ymm10 :ymm11 :ymm12 :ymm13 :ymm14 :ymm15
     ;; ZMM registers.
     :zmm8 :zmm9 :zmm10 :zmm11 :zmm12 :zmm13 :zmm14 :zmm15
+    ;; test functions.
+    :test-parser
+    :test-x64-assembling-functions
+    :test-x64-assembling-functions-limited
     ;; instruction class names.
     :x64-asm-instruction)
   (:export
