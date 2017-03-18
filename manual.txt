@@ -5,7 +5,7 @@ A hobby project of mine. Work in progress.
 ultraELF is under The GNU General Public License 3, or (at your option)
 any later version. See LICENSE file.
 
-All my code copyright (C) 2016 Antti Nuortimo.
+All my code copyright (C) 2016-2017 Antti Nuortimo.
 
 Intel is a trademark of Intel Corporation or its subsidiaries in the U.S. and/or other countries.
 
