@@ -12,6 +12,16 @@
     ;; symbols imported by x86 common to x16, x32 and x64 begin here.
     ;; global variables.
     :*global-offset* :$
+    ;; reader functions.
+    :current-state
+    :current-lisp-state
+    :state-stack
+    :ast-string
+    :lisp-code-string
+    :is-there-code-on-this-line
+    :invalid-last-characters
+    :push-state
+    :pop-state
     ;; printing functions.
     :print-hex
     ;; string functions.
