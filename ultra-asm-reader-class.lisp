@@ -26,6 +26,10 @@
      :accessor lisp-code-string
      :initform ""
      :documentation "Lisp code string read from the source, will be evaluated.")
+   (n-lisp-forms
+     :accessor n-lisp-forms
+     :initform 0
+     :documentation "Number of recurrent Lisp forms.")
    (is-there-code-on-this-line
      :accessor is-there-code-on-this-line
      :initform nil
