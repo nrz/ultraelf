@@ -18,9 +18,11 @@
     :state-stack
     :ast-string
     :lisp-code-string
+    :n-lisp-forms
     :is-there-code-on-this-line
     :invalid-last-characters
     :push-state
+    :push-state1
     :pop-state
     ;; printing functions.
     :print-hex
