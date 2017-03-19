@@ -43,7 +43,7 @@
   (:documentation "store the current state on top of the state stack."))
 
 (defgeneric pop-state (asm-reader)
-  (:documentation "pop a state from the top of the state stack."))
+  (:documentation "pop a state from the top of the state stack and make it the current state."))
 
 (defmethod push-state ((asm-reader asm-reader))
   (push (slot-value asm-reader 'current-state) (slot-value asm-reader 'state-stack)))
