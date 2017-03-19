@@ -55,4 +55,4 @@
   (push state (slot-value asm-reader 'state-stack)))
 
 (defmethod pop-state ((asm-reader asm-reader))
-  (pop (slot-value asm-reader 'state-stack)))
+  (setf (slot-value asm-reader 'current-state) (pop (slot-value asm-reader 'state-stack))))
