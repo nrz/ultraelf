@@ -7,27 +7,27 @@
 
 (defclass asm-reader ()
   ((current-state
-     :reader current-state
+     :accessor current-state
      :initform "start-of-line"
      :documentation "The state of the finite state machine in asm mode.")
    (current-lisp-state
-     :reader current-lisp-state
+     :accessor current-lisp-state
      :initform "regular"
      :documentation "The state of the finite state machine in Lisp mode.")
    (state-stack
-     :reader state-stack
+     :accessor state-stack
      :initform nil
      :documentation "The state stack needed by the finite state machine.")
    (ast-string
-     :reader ast-string
+     :accessor ast-string
      :initform "(list "
      :documentation "The abstract syntax tree produced so far by the reader. Stored as a string that needs to be read and eval'd.")
    (lisp-code-string
-     :reader lisp-code-string
+     :accessor lisp-code-string
      :initform ""
      :documentation "Lisp code string read from the source, will be evaluated.")
    (is-there-code-on-this-line
-     :reader is-there-code-on-this-line
+     :accessor is-there-code-on-this-line
      :initform nil
      :documentation "A boolean value which tells whether this line has any code.")
    (invalid-last-characters
