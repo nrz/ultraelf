@@ -296,7 +296,6 @@
    Partially based on: http://weitz.de/macros.lisp"
   (let*
     ((asm-reader (make-instance 'asm-reader))
-     (lisp-code-string "")
      (n-lisp-forms 0))
     ;; loop through stream.
     (loop for my-char = (coerce (list (read-char stream t nil t)) 'string)
@@ -306,12 +305,10 @@
                   ;; are we in the start of the line?
                   ((equal (current-state asm-reader) "start-of-line")
                    ;; temporary code before `asm-reader` is taken fully into use.
-                   (setf (lisp-code-string asm-reader) lisp-code-string)
                    (setf (n-lisp-forms asm-reader) n-lisp-forms)
                    ;; temporary code before `asm-reader` is taken fully into use ends here.
                    (setf asm-reader (asm-start-of-line asm-reader my-char))
                    ;; temporary code before `asm-reader` is taken fully into use.
-                   (setf lisp-code-string (lisp-code-string asm-reader))
                    (setf n-lisp-forms (n-lisp-forms asm-reader)))
                    ;; temporary code before `asm-reader` is taken fully into use ends here.
                   ((equal (current-state asm-reader) "hash-sign-read")
@@ -320,12 +317,10 @@
                      ;; if yes, do exactly the same is if it was newline.
                      ((equal my-char "a")
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf (lisp-code-string asm-reader) lisp-code-string)
                       (setf (n-lisp-forms asm-reader) n-lisp-forms)
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                       (setf asm-reader (new-instruction asm-reader))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf lisp-code-string (lisp-code-string asm-reader))
                       (setf n-lisp-forms (n-lisp-forms asm-reader)))
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                      ;; is character e ?
@@ -338,14 +333,12 @@
                                                           (invalid-last-characters asm-reader)) "))")))
                      ((equal my-char "l")
                       (setf current-mode "Lisp")
-                      (setf lisp-code-string "")
+                      (setf (lisp-code-string asm-reader) "")
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf (lisp-code-string asm-reader) lisp-code-string)
                       (setf (n-lisp-forms asm-reader) n-lisp-forms)
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                       (setf asm-reader (new-instruction asm-reader))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf lisp-code-string (lisp-code-string asm-reader))
                       (setf n-lisp-forms (n-lisp-forms asm-reader)))
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                      ;; otherwise, print error.
@@ -430,12 +423,10 @@
                      ;; if yes, start a new instruction.
                      ((equal my-char (coerce (list #\Newline) 'string))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf (lisp-code-string asm-reader) lisp-code-string)
                       (setf (n-lisp-forms asm-reader) n-lisp-forms)
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                       (setf asm-reader (new-instruction asm-reader))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf lisp-code-string (lisp-code-string asm-reader))
                       (setf n-lisp-forms (n-lisp-forms asm-reader)))
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                      ;; is character , ?
@@ -500,12 +491,10 @@
                      ;; if yes, start a new instruction.
                      ((equal my-char (coerce (list #\Newline) 'string))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf (lisp-code-string asm-reader) lisp-code-string)
                       (setf (n-lisp-forms asm-reader) n-lisp-forms)
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                       (setf asm-reader (new-instruction asm-reader))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf lisp-code-string (lisp-code-string asm-reader))
                       (setf n-lisp-forms (n-lisp-forms asm-reader)))
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                      ;; is character space?
@@ -549,12 +538,10 @@
                      ;; if yes, start a new instruction.
                      ((equal my-char (coerce (list #\Newline) 'string))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf (lisp-code-string asm-reader) lisp-code-string)
                       (setf (n-lisp-forms asm-reader) n-lisp-forms)
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                       (setf asm-reader (new-instruction asm-reader))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf lisp-code-string (lisp-code-string asm-reader))
                       (setf n-lisp-forms (n-lisp-forms asm-reader)))
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                      ;; is character , ?
@@ -789,12 +776,10 @@
                      ;; if yes, start a new instruction.
                      ((equal my-char (coerce (list #\Newline) 'string))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf (lisp-code-string asm-reader) lisp-code-string)
                       (setf (n-lisp-forms asm-reader) n-lisp-forms)
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                       (setf asm-reader (new-instruction asm-reader))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf lisp-code-string (lisp-code-string asm-reader))
                       (setf n-lisp-forms (n-lisp-forms asm-reader)))
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                      ;; is character , ?
@@ -831,12 +816,10 @@
                      ;; if yes, start a new instruction.
                      ((equal my-char (coerce (list #\Newline) 'string))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf (lisp-code-string asm-reader) lisp-code-string)
                       (setf (n-lisp-forms asm-reader) n-lisp-forms)
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                       (setf asm-reader (new-instruction asm-reader))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf lisp-code-string (lisp-code-string asm-reader))
                       (setf n-lisp-forms (n-lisp-forms asm-reader)))
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                      ;; is character , ?
@@ -855,12 +838,10 @@
                      ;; if yes, start a new instruction.
                      ((equal my-char (coerce (list #\Newline) 'string))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf (lisp-code-string asm-reader) lisp-code-string)
                       (setf (n-lisp-forms asm-reader) n-lisp-forms)
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                       (setf asm-reader (new-instruction asm-reader))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf lisp-code-string (lisp-code-string asm-reader))
                       (setf n-lisp-forms (n-lisp-forms asm-reader)))
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                      ;; otherwise don't output anything.
@@ -930,7 +911,7 @@
                                                    (coerce (list #\Newline) 'string)
                                                    "#a"
                                                    (coerce (list #\Newline) 'string)
-                                                   (eval (read-from-string lisp-code-string))
+                                                   (eval (read-from-string (lisp-code-string asm-reader)))
                                                    (coerce (list #\Newline) 'string)
                                                    "#e"
                                                    (coerce (list #\Newline) 'string)
@@ -951,7 +932,7 @@
                                                    (coerce (list #\Newline) 'string)
                                                    "#a"
                                                    (coerce (list #\Newline) 'string)
-                                                   (eval (read-from-string lisp-code-string))
+                                                   (eval (read-from-string (lisp-code-string asm-reader)))
                                                    (coerce (list #\Newline) 'string)
                                                    "#e"
                                                    (coerce (list #\Newline) 'string))))
@@ -965,13 +946,13 @@
                                                    (coerce (list #\Newline) 'string)
                                                    "#a"
                                                    (coerce (list #\Newline) 'string)
-                                                   (eval (read-from-string lisp-code-string))
+                                                   (eval (read-from-string (lisp-code-string asm-reader)))
                                                    (coerce (list #\Newline) 'string)
                                                    "#e"
                                                    (coerce (list #\Newline) 'string)))
-                      (setf lisp-code-string ""))
+                      (setf (lisp-code-string asm-reader) ""))
                      ;; otherwise, add # and the character to the Lisp code to be evaluated.
-                     (t (setf lisp-code-string (concatenate 'string lisp-code-string "#" my-char)))))
+                     (t (setf (lisp-code-string asm-reader) (concatenate 'string (lisp-code-string asm-reader) "#" my-char)))))
                   ;; is character # ?
                   ;; if yes, mark hash sign read.
                   ((equal (current-lisp-state asm-reader) "regular")
@@ -979,7 +960,7 @@
                      ((equal my-char "#")
                       (setf (current-lisp-state asm-reader) "hash-sign-read"))
                      ;; otherwise add the character to the Lisp code to be evaluated.
-                     (t (setf lisp-code-string (concatenate 'string lisp-code-string my-char)))))
+                     (t (setf (lisp-code-string asm-reader) (concatenate 'string (lisp-code-string asm-reader) my-char)))))
                   (t (error (concatenate 'string "invalid current-lisp-state: " (current-lisp-state asm-reader))))))
                (t (error (concatenate 'string "invalid current-mode: " current-mode)))))))
 
