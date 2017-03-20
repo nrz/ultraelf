@@ -296,7 +296,6 @@
    Partially based on: http://weitz.de/macros.lisp"
   (let*
     ((asm-reader (make-instance 'asm-reader))
-     (ast-string "(list ")
      (lisp-code-string "")
      (n-lisp-forms 0))
     ;; loop through stream.
@@ -307,13 +306,11 @@
                   ;; are we in the start of the line?
                   ((equal (current-state asm-reader) "start-of-line")
                    ;; temporary code before `asm-reader` is taken fully into use.
-                   (setf (ast-string asm-reader) ast-string)
                    (setf (lisp-code-string asm-reader) lisp-code-string)
                    (setf (n-lisp-forms asm-reader) n-lisp-forms)
                    ;; temporary code before `asm-reader` is taken fully into use ends here.
                    (setf asm-reader (asm-start-of-line asm-reader my-char))
                    ;; temporary code before `asm-reader` is taken fully into use.
-                   (setf ast-string (ast-string asm-reader))
                    (setf lisp-code-string (lisp-code-string asm-reader))
                    (setf n-lisp-forms (n-lisp-forms asm-reader)))
                    ;; temporary code before `asm-reader` is taken fully into use ends here.
@@ -323,13 +320,11 @@
                      ;; if yes, do exactly the same is if it was newline.
                      ((equal my-char "a")
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf (ast-string asm-reader) ast-string)
                       (setf (lisp-code-string asm-reader) lisp-code-string)
                       (setf (n-lisp-forms asm-reader) n-lisp-forms)
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                       (setf asm-reader (new-instruction asm-reader))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf ast-string (ast-string asm-reader))
                       (setf lisp-code-string (lisp-code-string asm-reader))
                       (setf n-lisp-forms (n-lisp-forms asm-reader)))
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
@@ -339,19 +334,17 @@
                       (return-from transform-code-to-string
                                    (concatenate 'string (get-string-without-invalid-last-character
                                                           (get-string-without-invalid-last-character
-                                                            ast-string (invalid-last-characters asm-reader))
+                                                            (ast-string asm-reader) (invalid-last-characters asm-reader))
                                                           (invalid-last-characters asm-reader)) "))")))
                      ((equal my-char "l")
                       (setf current-mode "Lisp")
                       (setf lisp-code-string "")
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf (ast-string asm-reader) ast-string)
                       (setf (lisp-code-string asm-reader) lisp-code-string)
                       (setf (n-lisp-forms asm-reader) n-lisp-forms)
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                       (setf asm-reader (new-instruction asm-reader))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf ast-string (ast-string asm-reader))
                       (setf lisp-code-string (lisp-code-string asm-reader))
                       (setf n-lisp-forms (n-lisp-forms asm-reader)))
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
@@ -363,15 +356,15 @@
                      ;; if yes, increment parenthesis count and output (
                      ((equal my-char "(")
                       (incf n-lisp-forms)
-                      (setf ast-string (concatenate 'string ast-string "(")))
+                      (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "(")))
                      ;; is this closing parenthesis?
                      ;; if yes, output )" if last, otherwise output )
                      ((equal my-char ")")
                       (cond
                         ((eql (decf n-lisp-forms) 0)
                          (setf (current-state asm-reader) "closing-parenthesis")
-                         (setf ast-string (concatenate 'string ast-string ")\"")))
-                        (t (setf ast-string (concatenate 'string ast-string ")")))))
+                         (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) ")\"")))
+                        (t (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) ")")))))
                      ;; is character newline?
                      ;; if yes, mark are in space inside a Lisp form.
                      ((equal my-char (coerce (list #\Newline) 'string))
@@ -381,7 +374,7 @@
                      ((equal my-char " ")
                       (setf (current-state asm-reader) "space-inside-lisp-form"))
                      ;; otherwise output the character.
-                     (t (setf ast-string (concatenate 'string ast-string my-char)))))
+                     (t (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) my-char)))))
                   ((equal (current-state asm-reader) "space-inside-lisp-form")
                    (cond
                      ;; is this opening parenthesis?
@@ -389,18 +382,18 @@
                      ((equal my-char "(")
                       (incf n-lisp-forms)
                       (unless
-                        (equal (get-last-character-string ast-string) " ")
+                        (equal (get-last-character-string (ast-string asm-reader)) " ")
                         ;; if last character was not space, output space.
-                        (setf ast-string (concatenate 'string ast-string " ")))
-                      (setf ast-string (concatenate 'string ast-string "(")))
+                        (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) " ")))
+                      (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "(")))
                      ;; is this closing parenthesis?
                      ;; if yes, output )" if last, otherwise output )
                      ((equal my-char ")")
                       (cond
                         ((eql (decf n-lisp-forms) 0)
                          (setf (current-state asm-reader) "closing-parenthesis")
-                         (setf ast-string (concatenate 'string ast-string ")\"")))
-                        (t (setf ast-string (concatenate 'string ast-string ")")))))
+                         (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) ")\"")))
+                        (t (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) ")")))))
                      ;; is character newline?
                      ;; if yes, do not output anything.
                      ((equal my-char (coerce (list #\Newline) 'string))
@@ -412,10 +405,10 @@
                      ;; otherwise output the character and return to inside-lisp-form phase.
                      (t (setf (current-state asm-reader) "inside-lisp-form")
                       (unless
-                        (equal (get-last-character-string ast-string) " ")
+                        (equal (get-last-character-string (ast-string asm-reader)) " ")
                         ;; if last character was not space, output space.
-                        (setf ast-string (concatenate 'string ast-string " ")))
-                      (setf ast-string (concatenate 'string ast-string my-char)))))
+                        (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) " ")))
+                      (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) my-char)))))
                   ((equal (current-state asm-reader) "inside-instruction")
                    (cond
                      ((equal my-char "#")
@@ -437,13 +430,11 @@
                      ;; if yes, start a new instruction.
                      ((equal my-char (coerce (list #\Newline) 'string))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf (ast-string asm-reader) ast-string)
                       (setf (lisp-code-string asm-reader) lisp-code-string)
                       (setf (n-lisp-forms asm-reader) n-lisp-forms)
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                       (setf asm-reader (new-instruction asm-reader))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf ast-string (ast-string asm-reader))
                       (setf lisp-code-string (lisp-code-string asm-reader))
                       (setf n-lisp-forms (n-lisp-forms asm-reader)))
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
@@ -452,15 +443,15 @@
                      ((equal my-char ",")
                       (push-state asm-reader)
                       (setf (current-state asm-reader) "in-space")
-                      (setf ast-string (concatenate 'string ast-string "\"")))
+                      (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "\"")))
                      ;; is character space?
                      ;; if yes, mark we are inside space, output "
                      ((equal my-char " ")
                       (push-state asm-reader)
                       (setf (current-state asm-reader) "in-space")
-                      (setf ast-string (concatenate 'string ast-string "\"")))
+                      (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "\"")))
                      ;; otherwise output the character.
-                     (t (setf ast-string (concatenate 'string ast-string my-char)))))
+                     (t (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) my-char)))))
                   ((equal (current-state asm-reader) "in-space")
                    (cond
                      ;; is character # ?
@@ -474,10 +465,10 @@
                       (push-state asm-reader)
                       (setf (current-state asm-reader) "inside-lisp-form")
                       (setf n-lisp-forms 1)
-                      (unless (equal (get-last-character-string ast-string) " ")
+                      (unless (equal (get-last-character-string (ast-string asm-reader)) " ")
                         ;; if last character was not space, output space.
-                        (setf ast-string (concatenate 'string ast-string " ")))
-                      (setf ast-string (concatenate 'string ast-string "\"(")))
+                        (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) " ")))
+                      (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "\"(")))
                      ((equal my-char ")")
                       (error "cannot terminate Lisp form outside a Lisp form"))
                      ;; is this memory address syntax (with square brackets)?
@@ -485,10 +476,10 @@
                      ((equal my-char "[")
                       (push-state asm-reader)
                       (setf (current-state asm-reader) "opening-square-bracket")
-                      (unless (equal (get-last-character-string ast-string) " ")
+                      (unless (equal (get-last-character-string (ast-string asm-reader)) " ")
                         ;; if last character was not space, output space.
-                        (setf ast-string (concatenate 'string ast-string " ")))
-                      (setf ast-string (concatenate 'string ast-string "\"[")))
+                        (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) " ")))
+                      (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "\"[")))
                      ((equal my-char "]")
                       (error "cannot terminate memory address syntax outside memory address syntax"))
                      ;; is character ; ?
@@ -509,13 +500,11 @@
                      ;; if yes, start a new instruction.
                      ((equal my-char (coerce (list #\Newline) 'string))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf (ast-string asm-reader) ast-string)
                       (setf (lisp-code-string asm-reader) lisp-code-string)
                       (setf (n-lisp-forms asm-reader) n-lisp-forms)
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                       (setf asm-reader (new-instruction asm-reader))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf ast-string (ast-string asm-reader))
                       (setf lisp-code-string (lisp-code-string asm-reader))
                       (setf n-lisp-forms (n-lisp-forms asm-reader)))
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
@@ -526,10 +515,10 @@
                      ;; otherwise mark we are inside parameters, output " and the character.
                      (t
                        (setf (current-state asm-reader) "inside-parameters")
-                       (unless (equal (get-last-character-string ast-string) " ")
+                       (unless (equal (get-last-character-string (ast-string asm-reader)) " ")
                          ;; if last character was not space, output space.
-                         (setf ast-string (concatenate 'string ast-string " ")))
-                       (setf ast-string (concatenate 'string ast-string "\"" my-char)))))
+                         (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) " ")))
+                       (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "\"" my-char)))))
                   ((equal (current-state asm-reader) "inside-parameters")
                    (cond
                      ((equal my-char "#")
@@ -560,13 +549,11 @@
                      ;; if yes, start a new instruction.
                      ((equal my-char (coerce (list #\Newline) 'string))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf (ast-string asm-reader) ast-string)
                       (setf (lisp-code-string asm-reader) lisp-code-string)
                       (setf (n-lisp-forms asm-reader) n-lisp-forms)
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                       (setf asm-reader (new-instruction asm-reader))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf ast-string (ast-string asm-reader))
                       (setf lisp-code-string (lisp-code-string asm-reader))
                       (setf n-lisp-forms (n-lisp-forms asm-reader)))
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
@@ -575,15 +562,15 @@
                      ((equal my-char ",")
                       (push-state asm-reader)
                       (setf (current-state asm-reader) "in-space")
-                      (setf ast-string (concatenate 'string ast-string "\"")))
+                      (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "\"")))
                      ;; is character space?
                      ;; if yes, mark we are in space between parameters, do not output anything.
                      ((equal my-char " ")
                       (push-state asm-reader)
                       (setf (current-state asm-reader) "in-space")
-                      (setf ast-string (concatenate 'string ast-string "\"")))
+                      (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "\"")))
                      ;; otherwise output the character.
-                     (t (setf ast-string (concatenate 'string ast-string my-char)))))
+                     (t (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) my-char)))))
                   ((equal (current-state asm-reader) "opening-square-bracket")
                    (cond
                      ((equal my-char "#")
@@ -594,7 +581,7 @@
                       (push-state asm-reader)
                       (setf (current-state asm-reader) "inside-lisp-form-inside-memory-address-syntax")
                       (setf n-lisp-forms 1)
-                      (setf ast-string (concatenate 'string ast-string "\"" my-char)))
+                      (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "\"" my-char)))
                      ((equal my-char ")")
                       (error "cannot terminate Lisp form outside a Lisp form"))
                      ((equal my-char "[")
@@ -603,7 +590,7 @@
                      ;; if yes, mark we are at the closing square bracket, output ]"
                      ((equal my-char "]")
                       (setf (current-state asm-reader) "closing-square-bracket")
-                      (setf ast-string (concatenate 'string ast-string "]\"")))
+                      (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "]\"")))
                      ((equal my-char ";")
                       (error "memory address syntax must be terminated with a closing square bracket before a comment"))
                      ;; is character / ?
@@ -619,7 +606,7 @@
                      ;; if yes, mark we are at plus inside memory address syntax, output +
                      ((equal my-char "+")
                       (setf (current-state asm-reader) "plus-inside-memory-address-syntax")
-                      (setf ast-string (concatenate 'string ast-string "+")))
+                      (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "+")))
                      ;; is character newline?
                      ;; if yes, mark are in space inside memory address syntax, do not output anything.
                      ((equal my-char (coerce (list #\Newline) 'string))
@@ -630,7 +617,7 @@
                      ;; otherwise mark we are inside memory address syntax and output the character.
                      (t
                       (setf (current-state asm-reader) "inside-memory-address-syntax")
-                      (setf ast-string (concatenate 'string ast-string my-char)))))
+                      (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) my-char)))))
                   ((equal (current-state asm-reader) "inside-memory-address-syntax")
                    (cond
                      ((equal my-char "#")
@@ -641,7 +628,7 @@
                       (push-state asm-reader)
                       (setf (current-state asm-reader) "inside-lisp-form-inside-memory-address-syntax")
                       (setf n-lisp-forms 1)
-                      (setf ast-string (concatenate 'string ast-string "\"" my-char)))
+                      (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "\"" my-char)))
                      ((equal my-char ")")
                       (error "cannot terminate Lisp form outside a Lisp form"))
                      ((equal my-char "[")
@@ -650,7 +637,7 @@
                      ;; if yes, mark we are at the closing square bracket, output ]"
                      ((equal my-char "]")
                       (setf (current-state asm-reader) "closing-square-bracket")
-                      (setf ast-string (concatenate 'string ast-string "]\"")))
+                      (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "]\"")))
                      ((equal my-char ";")
                       (error "memory address syntax must be terminated with a closing square bracket before a comment"))
                      ;; is character / ?
@@ -666,7 +653,7 @@
                      ;; if yes, mark we are at plus inside memory address syntax, output +
                      ((equal my-char "+")
                       (setf (current-state asm-reader) "plus-inside-memory-address-syntax")
-                      (setf ast-string (concatenate 'string ast-string "+")))
+                      (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "+")))
                      ;; is character newline?
                      ;; if yes, mark are in space inside memory address syntax, do not output anything.
                      ((equal my-char (coerce (list #\Newline) 'string))
@@ -675,7 +662,7 @@
                      ((equal my-char " ")
                       (setf (current-state asm-reader) "space-inside-memory-address-syntax"))
                      ;; otherwise output the character.
-                     (t (setf ast-string (concatenate 'string ast-string my-char)))))
+                     (t (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) my-char)))))
                   ((equal (current-state asm-reader) "space-inside-memory-address-syntax")
                    (cond
                      ((equal my-char "#")
@@ -686,7 +673,7 @@
                       (push-state asm-reader)
                       (setf (current-state asm-reader) "inside-lisp-form-inside-memory-address-syntax")
                       (setf n-lisp-forms 1)
-                      (setf ast-string (concatenate 'string ast-string "\"(")))
+                      (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "\"(")))
                      ((equal my-char ")")
                       (error "cannot terminate Lisp form outside a Lisp form"))
                      ((equal my-char "[")
@@ -695,7 +682,7 @@
                      ;; if yes, mark we are at the closing square bracket, output ]"
                      ((equal my-char "]")
                       (setf (current-state asm-reader) "closing-square-bracket")
-                      (setf ast-string (concatenate 'string ast-string "]\"")))
+                      (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "]\"")))
                      ((equal my-char ";")
                       (error "memory address syntax must be terminated with a closing square bracket before a comment"))
                      ;; is character / ?
@@ -711,7 +698,7 @@
                      ;; if yes, mark we are at plus inside memory address syntax, output +
                      ((equal my-char "+")
                       (setf (current-state asm-reader) "plus-inside-memory-address-syntax")
-                      (setf ast-string (concatenate 'string ast-string "+")))
+                      (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "+")))
                      ;; is character newline?
                      ;; if yes, do not output anything.
                      ((equal my-char (coerce (list #\Newline) 'string))
@@ -725,11 +712,11 @@
                       (setf (current-state asm-reader) "inside-memory-address-syntax")
                       (unless
                         (or
-                          (equal (get-last-character-string ast-string) " ")
-                          (equal (get-last-character-string ast-string) "["))
+                          (equal (get-last-character-string (ast-string asm-reader)) " ")
+                          (equal (get-last-character-string (ast-string asm-reader)) "["))
                         ;; if last character was not space or [, output space.
-                        (setf ast-string (concatenate 'string ast-string " ")))
-                      (setf ast-string (concatenate 'string ast-string my-char)))))
+                        (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) " ")))
+                      (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) my-char)))))
                   ((equal (current-state asm-reader) "plus-inside-memory-address-syntax")
                    (cond
                      ((equal my-char "#")
@@ -740,7 +727,7 @@
                       (push-state asm-reader)
                       (setf (current-state asm-reader) "inside-lisp-form-inside-memory-address-syntax")
                       (setf n-lisp-forms 1)
-                      (setf ast-string (concatenate 'string ast-string "\"(")))
+                      (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "\"(")))
                      ((equal my-char ")")
                       (error "cannot terminate Lisp form outside a Lisp form"))
                      ((equal my-char "[")
@@ -749,7 +736,7 @@
                      ;; if yes, mark we are at the closing square bracket, output ]"
                      ((equal my-char "]")
                       (setf (current-state asm-reader) "closing-square-bracket")
-                      (setf ast-string (concatenate 'string ast-string "]\"")))
+                      (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "]\"")))
                      ((equal my-char ";")
                       (error "memory address syntax must be terminated with a closing square bracket before a comment"))
                      ;; is character / ?
@@ -765,7 +752,7 @@
                      ;; is character +
                      ;; if yes, output +
                      ((equal my-char "+")
-                      (setf ast-string (concatenate 'string ast-string "+")))
+                      (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "+")))
                      ;; is character newline?
                      ;; if yes, do not output anything.
                      ((equal my-char (coerce (list #\Newline) 'string))
@@ -777,7 +764,7 @@
                      ;; otherwise mark we are inside memory address syntax, output the character.
                      (t
                       (setf (current-state asm-reader) "inside-memory-address-syntax")
-                      (setf ast-string (concatenate 'string ast-string my-char)))))
+                      (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) my-char)))))
                   ((equal (current-state asm-reader) "closing-square-bracket")
                    (cond
                      ((equal my-char "#")
@@ -802,13 +789,11 @@
                      ;; if yes, start a new instruction.
                      ((equal my-char (coerce (list #\Newline) 'string))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf (ast-string asm-reader) ast-string)
                       (setf (lisp-code-string asm-reader) lisp-code-string)
                       (setf (n-lisp-forms asm-reader) n-lisp-forms)
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                       (setf asm-reader (new-instruction asm-reader))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf ast-string (ast-string asm-reader))
                       (setf lisp-code-string (lisp-code-string asm-reader))
                       (setf n-lisp-forms (n-lisp-forms asm-reader)))
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
@@ -846,13 +831,11 @@
                      ;; if yes, start a new instruction.
                      ((equal my-char (coerce (list #\Newline) 'string))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf (ast-string asm-reader) ast-string)
                       (setf (lisp-code-string asm-reader) lisp-code-string)
                       (setf (n-lisp-forms asm-reader) n-lisp-forms)
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                       (setf asm-reader (new-instruction asm-reader))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf ast-string (ast-string asm-reader))
                       (setf lisp-code-string (lisp-code-string asm-reader))
                       (setf n-lisp-forms (n-lisp-forms asm-reader)))
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
@@ -872,13 +855,11 @@
                      ;; if yes, start a new instruction.
                      ((equal my-char (coerce (list #\Newline) 'string))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf (ast-string asm-reader) ast-string)
                       (setf (lisp-code-string asm-reader) lisp-code-string)
                       (setf (n-lisp-forms asm-reader) n-lisp-forms)
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                       (setf asm-reader (new-instruction asm-reader))
                       ;; temporary code before `asm-reader` is taken fully into use.
-                      (setf ast-string (ast-string asm-reader))
                       (setf lisp-code-string (lisp-code-string asm-reader))
                       (setf n-lisp-forms (n-lisp-forms asm-reader)))
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
@@ -895,7 +876,7 @@
                       (cond
                         ((equal (current-state asm-reader) "inside-instruction")
                          (push-state1 "in-space" asm-reader)
-                         (setf ast-string (concatenate 'string ast-string "\"")))
+                         (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "\"")))
                         ;; otherwise keep the previous state as is, do not output anything.
                         (t (push-state asm-reader)))
                       ;; in any case, mark we are inside C-style comment.
@@ -915,7 +896,7 @@
                         (t (setf (current-state asm-reader) "inside-comment"))))
                      ;; otherwise return to the earlier state, output / and current character.
                      (t (pop-state asm-reader)
-                      (setf ast-string (concatenate 'string ast-string "/" my-char)))))
+                      (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "/" my-char)))))
                   ((equal (current-state asm-reader) "inside-c-comment")
                    (when
                      ;; is character * ?
@@ -944,8 +925,8 @@
                      ;; is character e ?
                      ;; if yes, we are done, fix closing parentheses and return.
                      ((equal my-char "e")
-                      (setf ast-string (concatenate 'string
-                                                   ast-string
+                      (setf (ast-string asm-reader) (concatenate 'string
+                                                   (ast-string asm-reader)
                                                    (coerce (list #\Newline) 'string)
                                                    "#a"
                                                    (coerce (list #\Newline) 'string)
@@ -957,7 +938,7 @@
                       (return-from transform-code-to-string
                                    (concatenate 'string (get-string-without-invalid-last-character
                                                           (get-string-without-invalid-last-character
-                                                            ast-string (invalid-last-characters asm-reader))
+                                                            (ast-string asm-reader) (invalid-last-characters asm-reader))
                                                           (invalid-last-characters asm-reader)) ")")))
                      ;; is character a ?
                      ;; if yes, change to asm mode.
@@ -965,8 +946,8 @@
                       (setf current-mode "asm")
                       (setf (is-there-code-on-this-line asm-reader) nil)
                       (setf (current-state asm-reader) "start-of-line")
-                      (setf ast-string (concatenate 'string
-                                                   ast-string
+                      (setf (ast-string asm-reader) (concatenate 'string
+                                                   (ast-string asm-reader)
                                                    (coerce (list #\Newline) 'string)
                                                    "#a"
                                                    (coerce (list #\Newline) 'string)
@@ -979,8 +960,8 @@
                      ((equal my-char "l")
                       (setf (is-there-code-on-this-line asm-reader) nil)
                       (setf (current-state asm-reader) "start-of-line")
-                      (setf ast-string (concatenate 'string
-                                                   ast-string
+                      (setf (ast-string asm-reader) (concatenate 'string
+                                                   (ast-string asm-reader)
                                                    (coerce (list #\Newline) 'string)
                                                    "#a"
                                                    (coerce (list #\Newline) 'string)
