@@ -296,7 +296,6 @@
    Partially based on: http://weitz.de/macros.lisp"
   (let*
     ((asm-reader (make-instance 'asm-reader))
-     (invalid-last-characters (list "'" " " "(" ")"))
      (is-there-code-on-this-line nil)
      (current-state "start-of-line")
      (current-lisp-state "regular")
@@ -360,8 +359,8 @@
                       (return-from transform-code-to-string
                                    (concatenate 'string (get-string-without-invalid-last-character
                                                           (get-string-without-invalid-last-character
-                                                            ast-string invalid-last-characters)
-                                                          invalid-last-characters) "))")))
+                                                            ast-string (invalid-last-characters asm-reader))
+                                                          (invalid-last-characters asm-reader)) "))")))
                      ((equal my-char "l")
                       (setf current-mode "Lisp")
                       (setf lisp-code-string "")
@@ -1036,8 +1035,8 @@
                       (return-from transform-code-to-string
                                    (concatenate 'string (get-string-without-invalid-last-character
                                                           (get-string-without-invalid-last-character
-                                                            ast-string invalid-last-characters)
-                                                          invalid-last-characters) ")")))
+                                                            ast-string (invalid-last-characters asm-reader))
+                                                          (invalid-last-characters asm-reader)) ")")))
                      ;; is character a ?
                      ;; if yes, change to asm mode.
                      ((equal my-char "a")
