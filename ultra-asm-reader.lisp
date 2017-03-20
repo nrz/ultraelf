@@ -296,7 +296,6 @@
    Partially based on: http://weitz.de/macros.lisp"
   (let*
     ((asm-reader (make-instance 'asm-reader))
-     (is-there-code-on-this-line nil)
      (current-state "start-of-line")
      (current-lisp-state "regular")
      (state-stack nil)
@@ -317,7 +316,6 @@
                    (setf (ast-string asm-reader) ast-string)
                    (setf (lisp-code-string asm-reader) lisp-code-string)
                    (setf (n-lisp-forms asm-reader) n-lisp-forms)
-                   (setf (is-there-code-on-this-line asm-reader) is-there-code-on-this-line)
                    ;; temporary code before `asm-reader` is taken fully into use ends here.
                    (setf asm-reader (asm-start-of-line asm-reader my-char))
                    ;; temporary code before `asm-reader` is taken fully into use.
@@ -326,8 +324,7 @@
                    (setf state-stack (state-stack asm-reader))
                    (setf ast-string (ast-string asm-reader))
                    (setf lisp-code-string (lisp-code-string asm-reader))
-                   (setf n-lisp-forms (n-lisp-forms asm-reader))
-                   (setf is-there-code-on-this-line (is-there-code-on-this-line asm-reader)))
+                   (setf n-lisp-forms (n-lisp-forms asm-reader)))
                    ;; temporary code before `asm-reader` is taken fully into use ends here.
                   ((equal current-state "hash-sign-read")
                    (cond
@@ -341,7 +338,6 @@
                       (setf (ast-string asm-reader) ast-string)
                       (setf (lisp-code-string asm-reader) lisp-code-string)
                       (setf (n-lisp-forms asm-reader) n-lisp-forms)
-                      (setf (is-there-code-on-this-line asm-reader) is-there-code-on-this-line)
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                       (setf asm-reader (new-instruction asm-reader))
                       ;; temporary code before `asm-reader` is taken fully into use.
@@ -350,8 +346,7 @@
                       (setf state-stack (state-stack asm-reader))
                       (setf ast-string (ast-string asm-reader))
                       (setf lisp-code-string (lisp-code-string asm-reader))
-                      (setf n-lisp-forms (n-lisp-forms asm-reader))
-                      (setf is-there-code-on-this-line (is-there-code-on-this-line asm-reader)))
+                      (setf n-lisp-forms (n-lisp-forms asm-reader)))
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                      ;; is character e ?
                      ;; if yes, we are done, fix closing parentheses and return.
@@ -371,7 +366,6 @@
                       (setf (ast-string asm-reader) ast-string)
                       (setf (lisp-code-string asm-reader) lisp-code-string)
                       (setf (n-lisp-forms asm-reader) n-lisp-forms)
-                      (setf (is-there-code-on-this-line asm-reader) is-there-code-on-this-line)
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                       (setf asm-reader (new-instruction asm-reader))
                       ;; temporary code before `asm-reader` is taken fully into use.
@@ -380,8 +374,7 @@
                       (setf state-stack (state-stack asm-reader))
                       (setf ast-string (ast-string asm-reader))
                       (setf lisp-code-string (lisp-code-string asm-reader))
-                      (setf n-lisp-forms (n-lisp-forms asm-reader))
-                      (setf is-there-code-on-this-line (is-there-code-on-this-line asm-reader)))
+                      (setf n-lisp-forms (n-lisp-forms asm-reader)))
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                      ;; otherwise, print error.
                      (t (error "in asm mode undefined control character after #"))))
@@ -471,7 +464,6 @@
                       (setf (ast-string asm-reader) ast-string)
                       (setf (lisp-code-string asm-reader) lisp-code-string)
                       (setf (n-lisp-forms asm-reader) n-lisp-forms)
-                      (setf (is-there-code-on-this-line asm-reader) is-there-code-on-this-line)
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                       (setf asm-reader (new-instruction asm-reader))
                       ;; temporary code before `asm-reader` is taken fully into use.
@@ -480,8 +472,7 @@
                       (setf state-stack (state-stack asm-reader))
                       (setf ast-string (ast-string asm-reader))
                       (setf lisp-code-string (lisp-code-string asm-reader))
-                      (setf n-lisp-forms (n-lisp-forms asm-reader))
-                      (setf is-there-code-on-this-line (is-there-code-on-this-line asm-reader)))
+                      (setf n-lisp-forms (n-lisp-forms asm-reader)))
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                      ;; is character , ?
                      ;; if yes, mark we are inside space, output "
@@ -551,7 +542,6 @@
                       (setf (ast-string asm-reader) ast-string)
                       (setf (lisp-code-string asm-reader) lisp-code-string)
                       (setf (n-lisp-forms asm-reader) n-lisp-forms)
-                      (setf (is-there-code-on-this-line asm-reader) is-there-code-on-this-line)
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                       (setf asm-reader (new-instruction asm-reader))
                       ;; temporary code before `asm-reader` is taken fully into use.
@@ -560,8 +550,7 @@
                       (setf state-stack (state-stack asm-reader))
                       (setf ast-string (ast-string asm-reader))
                       (setf lisp-code-string (lisp-code-string asm-reader))
-                      (setf n-lisp-forms (n-lisp-forms asm-reader))
-                      (setf is-there-code-on-this-line (is-there-code-on-this-line asm-reader)))
+                      (setf n-lisp-forms (n-lisp-forms asm-reader)))
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                      ;; is character space?
                      ;; if yes, do not output anything.
@@ -610,7 +599,6 @@
                       (setf (ast-string asm-reader) ast-string)
                       (setf (lisp-code-string asm-reader) lisp-code-string)
                       (setf (n-lisp-forms asm-reader) n-lisp-forms)
-                      (setf (is-there-code-on-this-line asm-reader) is-there-code-on-this-line)
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                       (setf asm-reader (new-instruction asm-reader))
                       ;; temporary code before `asm-reader` is taken fully into use.
@@ -619,8 +607,7 @@
                       (setf state-stack (state-stack asm-reader))
                       (setf ast-string (ast-string asm-reader))
                       (setf lisp-code-string (lisp-code-string asm-reader))
-                      (setf n-lisp-forms (n-lisp-forms asm-reader))
-                      (setf is-there-code-on-this-line (is-there-code-on-this-line asm-reader)))
+                      (setf n-lisp-forms (n-lisp-forms asm-reader)))
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                      ;; is character , ?
                      ;; if yes, mark we are in space between parameters, do not output anything.
@@ -860,7 +847,6 @@
                       (setf (ast-string asm-reader) ast-string)
                       (setf (lisp-code-string asm-reader) lisp-code-string)
                       (setf (n-lisp-forms asm-reader) n-lisp-forms)
-                      (setf (is-there-code-on-this-line asm-reader) is-there-code-on-this-line)
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                       (setf asm-reader (new-instruction asm-reader))
                       ;; temporary code before `asm-reader` is taken fully into use.
@@ -869,8 +855,7 @@
                       (setf state-stack (state-stack asm-reader))
                       (setf ast-string (ast-string asm-reader))
                       (setf lisp-code-string (lisp-code-string asm-reader))
-                      (setf n-lisp-forms (n-lisp-forms asm-reader))
-                      (setf is-there-code-on-this-line (is-there-code-on-this-line asm-reader)))
+                      (setf n-lisp-forms (n-lisp-forms asm-reader)))
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                      ;; is character , ?
                      ;; if yes, mark we are in space between parameters, do not output anything.
@@ -912,7 +897,6 @@
                       (setf (ast-string asm-reader) ast-string)
                       (setf (lisp-code-string asm-reader) lisp-code-string)
                       (setf (n-lisp-forms asm-reader) n-lisp-forms)
-                      (setf (is-there-code-on-this-line asm-reader) is-there-code-on-this-line)
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                       (setf asm-reader (new-instruction asm-reader))
                       ;; temporary code before `asm-reader` is taken fully into use.
@@ -921,8 +905,7 @@
                       (setf state-stack (state-stack asm-reader))
                       (setf ast-string (ast-string asm-reader))
                       (setf lisp-code-string (lisp-code-string asm-reader))
-                      (setf n-lisp-forms (n-lisp-forms asm-reader))
-                      (setf is-there-code-on-this-line (is-there-code-on-this-line asm-reader)))
+                      (setf n-lisp-forms (n-lisp-forms asm-reader)))
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                      ;; is character , ?
                      ;; if yes, mark we are in space between parameters, do not output anything.
@@ -946,7 +929,6 @@
                       (setf (ast-string asm-reader) ast-string)
                       (setf (lisp-code-string asm-reader) lisp-code-string)
                       (setf (n-lisp-forms asm-reader) n-lisp-forms)
-                      (setf (is-there-code-on-this-line asm-reader) is-there-code-on-this-line)
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                       (setf asm-reader (new-instruction asm-reader))
                       ;; temporary code before `asm-reader` is taken fully into use.
@@ -955,8 +937,7 @@
                       (setf state-stack (state-stack asm-reader))
                       (setf ast-string (ast-string asm-reader))
                       (setf lisp-code-string (lisp-code-string asm-reader))
-                      (setf n-lisp-forms (n-lisp-forms asm-reader))
-                      (setf is-there-code-on-this-line (is-there-code-on-this-line asm-reader)))
+                      (setf n-lisp-forms (n-lisp-forms asm-reader)))
                       ;; temporary code before `asm-reader` is taken fully into use ends here.
                      ;; otherwise don't output anything.
                      (t nil)))
@@ -1041,7 +1022,7 @@
                      ;; if yes, change to asm mode.
                      ((equal my-char "a")
                       (setf current-mode "asm")
-                      (setf is-there-code-on-this-line nil)
+                      (setf (is-there-code-on-this-line asm-reader) nil)
                       (setf current-state "start-of-line")
                       (setf ast-string (concatenate 'string
                                                    ast-string
@@ -1055,7 +1036,7 @@
                      ;; is character l ?
                      ;; if yes, start a new Lisp mode.
                      ((equal my-char "l")
-                      (setf is-there-code-on-this-line nil)
+                      (setf (is-there-code-on-this-line asm-reader) nil)
                       (setf current-state "start-of-line")
                       (setf ast-string (concatenate 'string
                                                    ast-string
