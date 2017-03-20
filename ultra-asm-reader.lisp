@@ -23,76 +23,57 @@
   (setf (state-stack asm-reader) nil)
   asm-reader)
 
-(defun asm-start-of-line (is-there-code-on-this-line my-char current-state current-lisp-state state-stack ast-string lisp-code-string n-lisp-forms)
+(defun asm-start-of-line (asm-reader my-char)
   (cond
     ;; is character # ?
     ;; if yes, mark hash sign read, do not output anything.
     ((equal my-char "#")
-     (push current-state state-stack)
-     (setf current-state "hash-sign-read"))
+     (push-state asm-reader)
+     (setf (current-state asm-reader) "hash-sign-read"))
     ((equal my-char "(")
      ;; is this a Lisp form (with parentesis)?
      ;; if yes, mark we are inside Lisp form, mark that there is code on this line, output "(
-     (push "in-space" state-stack)
-     (setf current-state "inside-lisp-form")
-     (setf n-lisp-forms 1)
-     (setf is-there-code-on-this-line t)
-     (setf ast-string (concatenate 'string ast-string "\"(")))
+     (push-state1 "in-space" asm-reader)
+     (setf (current-state asm-reader) "inside-lisp-form")
+     (setf (n-lisp-forms asm-reader) 1)
+     (setf (is-there-code-on-this-line asm-reader) t)
+     (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "\"(")))
     ((equal my-char ")")
      (error "cannot terminate Lisp form outside a Lisp form"))
     ((equal my-char "[")
-     (push current-state state-stack)
-     (setf current-state "opening-square-bracket")
-     (setf is-there-code-on-this-line t)
-     (setf ast-string (concatenate 'string ast-string "'(\"[")))
+     (push-state asm-reader)
+     (setf (current-state asm-reader) "opening-square-bracket")
+     (setf (is-there-code-on-this-line asm-reader) t)
+     (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "'(\"[")))
     ((equal my-char "]")
      (error "cannot terminate memory address syntax before instruction"))
     ;; is character ; ?
     ;; if yes, don't output anything, begin comment.
     ((equal my-char ";")
-     (setf current-state "inside-comment"))
+     (setf (current-state asm-reader) "inside-comment"))
     ;; is character / ?
     ;; if yes, mark we have a slash.
     ((equal my-char "/")
-     (push current-state state-stack)
-     (setf current-state "slash"))
+     (push-state asm-reader)
+     (setf (current-state asm-reader) "slash"))
     ;; is character newline?
     ;; if yes, start a new instruction.
     ((equal my-char (coerce (list #\Newline) 'string))
-     ;; temporary code before `asm-reader` is taken fully into use.
-     (let ((asm-reader (make-instance 'asm-reader)))
-       (setf (current-state asm-reader) current-state)
-       (setf (current-lisp-state asm-reader) current-lisp-state)
-       (setf (state-stack asm-reader) state-stack)
-       (setf (ast-string asm-reader) ast-string)
-       (setf (lisp-code-string asm-reader) lisp-code-string)
-       (setf (n-lisp-forms asm-reader) n-lisp-forms)
-       (setf (is-there-code-on-this-line asm-reader) is-there-code-on-this-line)
-       ;; temporary code before `asm-reader` is taken fully into use ends here.
-       (setf asm-reader (new-instruction asm-reader))
-       ;; temporary code before `asm-reader` is taken fully into use.
-       (setf current-state (current-state asm-reader))
-       (setf current-lisp-state (current-lisp-state asm-reader))
-       (setf state-stack (state-stack asm-reader))
-       (setf ast-string (ast-string asm-reader))
-       (setf lisp-code-string (lisp-code-string asm-reader))
-       (setf n-lisp-forms (n-lisp-forms asm-reader))
-       (setf is-there-code-on-this-line (is-there-code-on-this-line asm-reader))))
-       ;; temporary code before `asm-reader` is taken fully into use ends here.
+     (setf asm-reader (new-instruction asm-reader)))
     ;; is character backslash?
     ;; if yes, mark we have a backslash in start of line.
     ((equal my-char "\\")
-     (push current-state state-stack)
-     (setf current-state "backslash-in-start-of-line"))
+     (push-state asm-reader)
+     (setf (current-state asm-reader) "backslash-in-start-of-line"))
     ;; is character space?
     ;; if yes, do not output anything.
     ((equal my-char " ")
      nil)
     ;; otherwise mark we are inside an instruction, mark that there is code on this line, output " and current character.
-    (t (setf current-state "inside-instruction")
-     (setf is-there-code-on-this-line t)
-     (setf ast-string (concatenate 'string ast-string "'(\"" my-char))))
-  (values is-there-code-on-this-line current-state state-stack ast-string))
+    (t (setf (current-state asm-reader) "inside-instruction")
+     (setf (is-there-code-on-this-line asm-reader) t)
+     (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "'(\"" my-char))))
+  (values (is-there-code-on-this-line asm-reader) (current-state asm-reader) (state-stack asm-reader) (ast-string asm-reader)))
 
 (defun transform-code-to-string (stream current-mode)
   "This function converts assembly code into a string.
@@ -330,8 +311,17 @@
                 (cond
                   ;; are we in the start of the line?
                   ((equal current-state "start-of-line")
+                   ;; temporary code before `asm-reader` is taken fully into use.
+                   (setf (current-state asm-reader) current-state)
+                   (setf (current-lisp-state asm-reader) current-lisp-state)
+                   (setf (state-stack asm-reader) state-stack)
+                   (setf (ast-string asm-reader) ast-string)
+                   (setf (lisp-code-string asm-reader) lisp-code-string)
+                   (setf (n-lisp-forms asm-reader) n-lisp-forms)
+                   (setf (is-there-code-on-this-line asm-reader) is-there-code-on-this-line)
+                   ;; temporary code before `asm-reader` is taken fully into use ends here.
                    (setf (values is-there-code-on-this-line current-state state-stack ast-string)
-                         (asm-start-of-line is-there-code-on-this-line my-char current-state current-lisp-state state-stack ast-string lisp-code-string n-lisp-forms)))
+                         (asm-start-of-line asm-reader my-char)))
                   ((equal current-state "hash-sign-read")
                    (cond
                      ;; is character a ?
