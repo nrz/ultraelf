@@ -73,7 +73,7 @@
     (t (setf (current-state asm-reader) "inside-instruction")
      (setf (is-there-code-on-this-line asm-reader) t)
      (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "'(\"" my-char))))
-  (values (is-there-code-on-this-line asm-reader) (current-state asm-reader) (state-stack asm-reader) (ast-string asm-reader)))
+  asm-reader)
 
 (defun transform-code-to-string (stream current-mode)
   "This function converts assembly code into a string.
@@ -320,8 +320,16 @@
                    (setf (n-lisp-forms asm-reader) n-lisp-forms)
                    (setf (is-there-code-on-this-line asm-reader) is-there-code-on-this-line)
                    ;; temporary code before `asm-reader` is taken fully into use ends here.
-                   (setf (values is-there-code-on-this-line current-state state-stack ast-string)
-                         (asm-start-of-line asm-reader my-char)))
+                   (setf asm-reader (asm-start-of-line asm-reader my-char))
+                   ;; temporary code before `asm-reader` is taken fully into use.
+                   (setf current-state (current-state asm-reader))
+                   (setf current-lisp-state (current-lisp-state asm-reader))
+                   (setf state-stack (state-stack asm-reader))
+                   (setf ast-string (ast-string asm-reader))
+                   (setf lisp-code-string (lisp-code-string asm-reader))
+                   (setf n-lisp-forms (n-lisp-forms asm-reader))
+                   (setf is-there-code-on-this-line (is-there-code-on-this-line asm-reader)))
+                   ;; temporary code before `asm-reader` is taken fully into use ends here.
                   ((equal current-state "hash-sign-read")
                    (cond
                      ;; is character a ?
