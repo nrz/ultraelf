@@ -42,7 +42,7 @@
 (defgeneric push-state (asm-reader)
   (:documentation "store the current state on top of the state stack."))
 
-(defgeneric push-and-set-state (state asm-reader)
+(defgeneric push-current-and-set-state (state asm-reader)
   (:documentation "store the current state on top of the state stack and set a new state."))
 
 (defgeneric push-state1 (state asm-reader)
@@ -54,7 +54,7 @@
 (defmethod push-state ((asm-reader asm-reader))
   (push (slot-value asm-reader 'current-state) (slot-value asm-reader 'state-stack)))
 
-(defmethod push-and-set-state (state (asm-reader asm-reader))
+(defmethod push-current-and-set-state (state (asm-reader asm-reader))
   (push (slot-value asm-reader 'current-state) (slot-value asm-reader 'state-stack))
   (setf (slot-value asm-reader 'current-state) state))
 
