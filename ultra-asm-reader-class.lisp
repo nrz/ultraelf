@@ -34,6 +34,10 @@
      :accessor is-there-code-on-this-line
      :initform nil
      :documentation "A boolean value which tells whether this line has any code.")
+   (is-ready
+     :accessor is-ready
+     :initform nil
+     :documentation "A boolean value which tells whether this finite state machine is in the accepting state.")
    (invalid-last-characters
      :reader invalid-last-characters
      :initform (list "'" " " "(" ")")
