@@ -288,8 +288,7 @@
 
    #l marks change to Lisp mode (Common Lisp macros are executed during assembling of the code), or a new Lisp mode instance if we are on Lisp mode.
    #a marks return to asm, or a new instruction if we are on asm mode.
-   #e marks end of syntax.
-   Partially based on: http://weitz.de/macros.lisp"
+   #e marks end of syntax."
   (let
     ((asm-reader (make-instance 'asm-reader)))
     ;; loop through stream.
