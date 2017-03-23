@@ -290,7 +290,7 @@
    #a marks return to asm, or a new instruction if we are on asm mode.
    #e marks end of syntax.
    Partially based on: http://weitz.de/macros.lisp"
-  (let*
+  (let
     ((asm-reader (make-instance 'asm-reader)))
     ;; loop through stream.
     (loop for my-char = (coerce (list (read-char stream t nil t)) 'string)
