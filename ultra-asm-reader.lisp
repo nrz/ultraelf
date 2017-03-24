@@ -127,6 +127,8 @@
    inside-instruction
    description of state: inside first no-whitespace character block of this line.
    inside-instruction -> # -> error (a whitespace is required between instruction and hash sign).
+   inside-instruction -> ( -> error (a whitespace is required between an instruction and a Lisp form).
+   inside-instruction -> ) -> error (cannot terminate Lisp form outside a Lisp form).
    inside-instruction -> [ -> error (cannot begin memory address syntax inside instruction).
    inside-instruction -> ] -> error (cannot terminate memory address syntax inside instruction).
    inside-instruction -> ; -> inside-comment
@@ -382,6 +384,10 @@
                    (cond
                      ((equal my-char "#")
                       (error "a whitespace is required between instruction and hash sign"))
+                     ((equal my-char "(")
+                      (error "a whitespace is required between an instruction and a Lisp form"))
+                     ((equal my-char ")")
+                      (error "cannot terminate Lisp form outside a Lisp form"))
                      ((equal my-char "[")
                       (error "cannot begin memory address syntax inside instruction"))
                      ((equal my-char "]")
