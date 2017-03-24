@@ -57,6 +57,10 @@
     ;; if yes, start a new instruction.
     ((equal my-char (coerce (list #\Newline) 'string))
      (setf asm-reader (new-instruction asm-reader)))
+    ;; is character , ?
+    ;; if yes, print error
+    ((equal my-char ",")
+     (error "cannot begin instruction with a comma"))
     ;; is character backslash?
     ;; if yes, mark we have a backslash in start of line.
     ((equal my-char "\\")
@@ -94,6 +98,7 @@
    start-of-line -> / -> slash
    start-of-line -> \ -> backslash-in-start-of-line
    start-of-line -> a newline -> start-of-line (do not output anything).
+   start-of-line -> , -> error (cannot begin instruction with a comma).
    start-of-line -> a space -> start-of-line (do not output anything).
    start-of-line -> any character -> inside-instruction
 
