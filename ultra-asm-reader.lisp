@@ -149,6 +149,7 @@
    in-space -> / -> slash
    in-space -> \ -> backslash-in-space
    in-space -> a newline -> start-of-line
+   in-space -> , -> in-space (do not output anything).
    in-space -> a space -> in-space (do not output anything).
    in-space -> any other character -> inside-parameters
 
@@ -459,6 +460,10 @@
                      ;; if yes, start a new instruction.
                      ((equal my-char (coerce (list #\Newline) 'string))
                       (setf asm-reader (new-instruction asm-reader)))
+                     ;; is character , ?
+                     ;; if yes, do not output anything.
+                     ((equal my-char ",")
+                      nil)
                      ;; is character space?
                      ;; if yes, do not output anything.
                      ((equal my-char " ")
