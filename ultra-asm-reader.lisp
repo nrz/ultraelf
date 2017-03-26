@@ -316,11 +316,15 @@
                      ;; is character e ?
                      ;; if yes, we are done, fix closing parentheses and return.
                      ((equal my-char "e")
-                      (return-from transform-code-to-string
-                                   (concatenate 'string (get-string-without-invalid-last-character
-                                                          (get-string-without-invalid-last-character
-                                                            (ast-string asm-reader) (invalid-last-characters asm-reader))
-                                                          (invalid-last-characters asm-reader)) "))")))
+                      (pop-state asm-reader)
+                      (if (equal (current-state asm-reader) "start-of-line")
+                        (return-from transform-code-to-string
+                                     (concatenate 'string (ast-string asm-reader) ")"))
+                        (return-from transform-code-to-string
+                                     (concatenate 'string (get-string-without-invalid-last-character
+                                                            (get-string-without-invalid-last-character
+                                                              (ast-string asm-reader) (invalid-last-characters asm-reader))
+                                                            (invalid-last-characters asm-reader)) "))"))))
                      ((equal my-char "l")
                       (setf current-mode "Lisp")
                       (setf (lisp-code-string asm-reader) "")
