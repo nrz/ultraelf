@@ -37,11 +37,7 @@
    (is-ready
      :accessor is-ready
      :initform nil
-     :documentation "A boolean value which tells whether this finite state machine is in the accepting state.")
-   (invalid-last-characters
-     :reader invalid-last-characters
-     :initform (list "'" " " "(" ")")
-     :documentation "Some invalid last characters.")))
+     :documentation "A boolean value which tells whether this finite state machine is in the accepting state.")))
 
 (defgeneric push-state (asm-reader)
   (:documentation "store the current state on top of the state stack."))
