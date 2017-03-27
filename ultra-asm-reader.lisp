@@ -321,10 +321,7 @@
                         (return-from transform-code-to-string
                                      (concatenate 'string (ast-string asm-reader) ")"))
                         (return-from transform-code-to-string
-                                     (concatenate 'string (get-string-without-invalid-last-character
-                                                            (get-string-without-invalid-last-character
-                                                              (ast-string asm-reader) (invalid-last-characters asm-reader))
-                                                            (invalid-last-characters asm-reader)) "))"))))
+                                     (concatenate 'string (ast-string asm-reader) "))"))))
                      ((equal my-char "l")
                       (setf current-mode "Lisp")
                       (setf (lisp-code-string asm-reader) "")
