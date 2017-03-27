@@ -264,8 +264,9 @@
    inside-comment -> a newline -> start-of-line
    inside-comment -> any other character -> inside-comment (do not output anything).
 
-   slash -> * -> inside-c-comment
+   slash
    description of state: last character was slash `/`.
+   slash -> * -> inside-c-comment
    slash -> any other character -> pop earlier state from state stack (output / and the current character).
 
    backslash
