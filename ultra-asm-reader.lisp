@@ -855,10 +855,7 @@
                                                    (coerce (list #\Newline) 'string)
                                                    ")"))
                       (return-from transform-code-to-string
-                                   (concatenate 'string (get-string-without-invalid-last-character
-                                                          (get-string-without-invalid-last-character
-                                                            (ast-string asm-reader) (invalid-last-characters asm-reader))
-                                                          (invalid-last-characters asm-reader)) ")")))
+                                   (concatenate 'string (ast-string asm-reader) ")")))
                      ;; is character a ?
                      ;; if yes, change to asm mode.
                      ((equal my-char "a")
