@@ -64,7 +64,7 @@
     ;; is character backslash?
     ;; if yes, mark we have a backslash in start of line.
     ((equal my-char "\\")
-     (push-current-and-set-state "backslash-in-start-of-line" asm-reader))
+     (push-current-and-set-state "backslash" asm-reader))
     ;; is character space?
     ;; if yes, do not output anything.
     ((equal my-char " ")
@@ -96,15 +96,11 @@
    start-of-line -> ] -> error (cannot terminate memory address syntax before instruction).
    start-of-line -> ; -> inside-comment
    start-of-line -> / -> slash
-   start-of-line -> \ -> backslash-in-start-of-line
+   start-of-line -> \ -> backslash
    start-of-line -> a newline -> start-of-line (do not output anything).
    start-of-line -> , -> error (cannot begin instruction with a comma).
    start-of-line -> a space -> start-of-line (do not output anything).
    start-of-line -> any character -> inside-instruction
-
-   backslash-in-start-of-line
-   description of state: the line begins with a backslash (possibly after whitespace). I wonder if there is need for such lines.
-   backslash-in-start-of-line -> TODO!
 
    hash-sign-read
    description of state: the previous character was a hash sign.
@@ -152,15 +148,11 @@
    in-space -> ] -> error (cannot terminate memory address syntax outside memory address syntax).
    in-space -> ; -> inside-comment
    in-space -> / -> slash
-   in-space -> \ -> backslash-in-space
+   in-space -> \ -> backslash
    in-space -> a newline -> start-of-line
    in-space -> , -> in-space (do not output anything).
    in-space -> a space -> in-space (do not output anything).
    in-space -> any other character -> inside-parameters
-
-   backslash-in-space
-   description of state: immediately after a backslash in space between instruction and parameters (in case there is one or more parameters).
-   backslash-in-space -> TODO!
 
    inside-parameters
    description of state: inside parameter.
@@ -171,15 +163,11 @@
    inside-parameters -> ] -> error (cannot terminate memory address syntax inside a parameter).
    inside-parameters -> ; -> inside-comment
    inside-parameters -> / -> slash
-   inside-parameters -> \ -> backslash-inside-parameters
+   inside-parameters -> \ -> backslash
    inside-parameters -> a newline -> start-of-line
    inside-parameters -> , -> in-space
    inside-parameters -> a space -> in-space
    inside-parameters -> any other character -> inside-parameters
-
-   backslash-inside-parameters
-   description of state: backslash inside parameters.
-   backslash-inside-parameters -> TODO!
 
    opening-square-bracket
    description of state: the last character was a opening square bracket that opened memory address syntax.
@@ -190,7 +178,7 @@
    opening-square-bracket -> ] -> closing-square-bracket (the content of `memory-address-syntax-buffer` will be converted to intermediate representation).
    opening-square-bracket -> ; -> error (memory address syntax must be terminated with a closing square bracket before comment).
    opening-square-bracket -> / -> slash
-   opening-square-bracket -> \ -> backslash-inside-memory-address-syntax
+   opening-square-bracket -> \ -> backslash
    opening-square-bracket -> + -> plus-inside-memory-address-syntax
    opening-square-bracket -> a newline -> space-inside-memory-address-syntax
    opening-square-bracket -> a space -> space-inside-memory-address-syntax
@@ -205,7 +193,7 @@
    inside-memory-address-syntax -> ] -> closing-square-bracket (the content of `memory-address-syntax-buffer` will be converted to intermediate representation).
    inside-memory-address-syntax -> ; -> error (memory address syntax must be terminated with a closing square bracket before comment).
    inside-memory-address-syntax -> / -> slash
-   inside-memory-address-syntax -> \ -> backslash-inside-memory-address-syntax
+   inside-memory-address-syntax -> \ -> backslash
    inside-memory-address-syntax -> + -> plus-inside-memory-address-syntax
    inside-memory-address-syntax -> a newline -> space-inside-memory-address-syntax (do not output anything).
    inside-memory-address-syntax -> a space -> space-inside-memory-address-syntax (do not output anything).
@@ -220,7 +208,7 @@
    space-inside-memory-address-syntax -> ] -> closing-square-bracket (the content of `memory-address-syntax-buffer` will be converted to intermediate representation).
    space-inside-memory-address-syntax -> ; -> error (memory address syntax must be terminated with a closing square bracket before comment).
    space-inside-memory-address-syntax -> / -> slash
-   space-inside-memory-address-syntax -> \ -> backslash-inside-memory-address-syntax
+   space-inside-memory-address-syntax -> \ -> backslash
    space-inside-memory-address-syntax -> + -> plus-inside-memory-address-syntax
    space-inside-memory-address-syntax -> a newline -> error (memory address syntax must be terminated with a closing square bracket before newline).
    space-inside-memory-address-syntax -> a space -> space-inside-memory-address-syntax
@@ -235,15 +223,11 @@
    plus-inside-memory-address-syntax -> ] -> closing-square-bracket (the content of `memory-address-syntax-buffer` will be converted to intermediate representation).
    plus-inside-memory-address-syntax -> ; -> error (memory address syntax must be terminated with a closing square bracket before comment).
    plus-inside-memory-address-syntax -> / -> slash
-   plus-inside-memory-address-syntax -> \ -> backslash-inside-memory-address-syntax
+   plus-inside-memory-address-syntax -> \ -> backslash
    plus-inside-memory-address-syntax -> + -> plus-inside-memory-address-syntax
    plus-inside-memory-address-syntax -> a newline -> plus-inside-memory-address-syntax (do not output anything).
    plus-inside-memory-address-syntax -> a space -> plus-inside-memory-address-syntax (do not output anything).
    plus-inside-memory-address-syntax -> any other character -> inside-memory-address-syntax
-
-   backslash-inside-memory-address-syntax
-   description of state: backslash inside memory address syntax.
-   backslash-inside-memory-address-syntax -> TODO!
 
    inside-lisp-form-inside-memory-address-syntax TODO!
 
@@ -283,6 +267,11 @@
    slash -> * -> inside-c-comment
    description of state: last character was slash `/`.
    slash -> any other character -> pop earlier state from state stack (output / and the current character).
+
+   backslash
+   description of state: the last character was `\` as an escape character.
+   backslash -> \ -> return to previous state, output \
+   backslash -> anything else -> error (not defined yet).
 
    inside-c-comment
    description of state: inside comment delimited by `/*` and `*/`.
@@ -461,7 +450,7 @@
                      ;; is character backslash?
                      ;; if yes, mark we have a backslash in space.
                      ((equal my-char "\\")
-                      (push-current-and-set-state "backslash-in-space" asm-reader))
+                      (push-current-and-set-state "backslash" asm-reader))
                      ;; is character newline?
                      ;; if yes, start a new instruction.
                      ((equal my-char (coerce (list #\Newline) 'string))
@@ -504,7 +493,7 @@
                      ;; is character backslash?
                      ;; if yes, mark we have a backslash inside parameters.
                      ((equal my-char "\\")
-                      (push-current-and-set-state "backslash-inside-parameters" asm-reader))
+                      (push-current-and-set-state "backslash" asm-reader))
                      ;; is character newline?
                      ;; if yes, start a new instruction.
                      ((equal my-char (coerce (list #\Newline) 'string))
@@ -550,7 +539,7 @@
                      ;; is character backslash?
                      ;; if yes, mark we have a backslash inside memory address syntax
                      ((equal my-char "\\")
-                      (setf (current-state asm-reader) "backslash-inside-memory-address-syntax"))
+                      (push-current-and-set-state "backslash" asm-reader))
                      ;; is character +
                      ;; if yes, mark we are at plus inside memory address syntax, output +
                      ((equal my-char "+")
@@ -596,7 +585,7 @@
                      ;; is character backslash?
                      ;; if yes, mark we have a backslash inside memory address syntax
                      ((equal my-char "\\")
-                      (setf (current-state asm-reader) "backslash-inside-memory-address-syntax"))
+                      (push-current-and-set-state "backslash" asm-reader))
                      ;; is character +
                      ;; if yes, mark we are at plus inside memory address syntax, output +
                      ((equal my-char "+")
@@ -639,7 +628,7 @@
                      ;; is character backslash?
                      ;; if yes, mark we have a backslash inside memory address syntax
                      ((equal my-char "\\")
-                      (setf (current-state asm-reader) "backslash-inside-memory-address-syntax"))
+                      (push-current-and-set-state "backslash" asm-reader))
                      ;; is character +
                      ;; if yes, mark we are at plus inside memory address syntax, output +
                      ((equal my-char "+")
@@ -691,7 +680,7 @@
                      ;; is character backslash?
                      ;; if yes, mark we have a backslash inside memory address syntax
                      ((equal my-char "\\")
-                      (push-current-and-set-state "backslash-inside-memory-address-syntax" asm-reader))
+                      (push-current-and-set-state "backslash" asm-reader))
                      ;; is character +
                      ;; if yes, output +
                      ((equal my-char "+")
