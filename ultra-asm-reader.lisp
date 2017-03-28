@@ -834,7 +834,7 @@
                      ;; is character e ?
                      ;; if yes, we are done, fix closing parentheses and return.
                      ((equal my-char "e")
-                      (setf (ast-string asm-reader) (concatenate 'string
+                      (return-from transform-code-to-string (concatenate 'string
                                                    (ast-string asm-reader)
                                                    (coerce (list #\Newline) 'string)
                                                    "#a"
@@ -843,9 +843,7 @@
                                                    (coerce (list #\Newline) 'string)
                                                    "#e"
                                                    (coerce (list #\Newline) 'string)
-                                                   ")"))
-                      (return-from transform-code-to-string
-                                   (concatenate 'string (ast-string asm-reader) ")")))
+                                                   "))")))
                      ;; is character a ?
                      ;; if yes, change to asm mode.
                      ((equal my-char "a")
