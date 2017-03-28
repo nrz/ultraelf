@@ -518,7 +518,7 @@
                      ((equal my-char "(")
                       ;; is this a Lisp form (with parentesis)?
                       ;; if yes, mark we are inside Lisp form inside memory address syntax, output " and current character.
-                      (push-current-and-set-state "inside-lisp-form-inside-memory-address-syntax" asm-reader)
+                      (push-current-and-set-state "inside-lisp-form" asm-reader)
                       (setf (n-lisp-forms asm-reader) 1)
                       (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "\"" my-char)))
                      ((equal my-char ")")
@@ -564,7 +564,7 @@
                      ((equal my-char "(")
                       ;; is this a Lisp form (with parentesis)?
                       ;; if yes, mark we are inside Lisp form inside memory address syntax, output " and current character.
-                      (push-current-and-set-state "inside-lisp-form-inside-memory-address-syntax" asm-reader)
+                      (push-current-and-set-state "inside-lisp-form" asm-reader)
                       (setf (n-lisp-forms asm-reader) 1)
                       (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "\"" my-char)))
                      ((equal my-char ")")
@@ -608,7 +608,7 @@
                      ((equal my-char "(")
                       ;; is this a Lisp form (with parentesis)?
                       ;; if yes, mark we are inside Lisp form, output " and current character.
-                      (push-current-and-set-state "inside-lisp-form-inside-memory-address-syntax" asm-reader)
+                      (push-current-and-set-state "inside-lisp-form" asm-reader)
                       (setf (n-lisp-forms asm-reader) 1)
                       (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "\"(")))
                      ((equal my-char ")")
@@ -660,7 +660,7 @@
                      ((equal my-char "(")
                       ;; is this a Lisp form (with parentesis)?
                       ;; if yes, mark we are inside Lisp form inside memory address syntax, output " and current character.
-                      (push-current-and-set-state "inside-lisp-form-inside-memory-address-syntax" asm-reader)
+                      (push-current-and-set-state "inside-lisp-form" asm-reader)
                       (setf (n-lisp-forms asm-reader) 1)
                       (setf (ast-string asm-reader) (concatenate 'string (ast-string asm-reader) "\"(")))
                      ((equal my-char ")")
