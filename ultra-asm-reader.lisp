@@ -112,7 +112,7 @@
    inside-lisp-form
    description: inside a Lisp form that will be evaluated during assembling phase.
    inside-lisp-form -> ( -> inside-lisp-form (increment `(n-lisp-forms asm-reader)` to 1).
-   inside-lisp-form -> ) -> decrement `(n-lisp-forms asm-reader)` by 1. if `(n-lisp-forms asm-reader)` becomes zero, then -> closing-parenthesis.
+   inside-lisp-form -> ) -> decrement `(n-lisp-forms asm-reader)` by 1. if `(n-lisp-forms asm-reader)` becomes zero, then -> closing-parenthesis
    inside-lisp-form -> a newline -> space-inside-lisp-form
    inside-lisp-form -> a space -> -> space-inside-lisp-form
    inside-lisp-form -> any other character -> inside-lisp-form
@@ -120,7 +120,7 @@
    space-inside-lisp-form
    description: a space inside a Lisp form that will be evaluated during assembling phase.
    space-inside-lisp-form -> ( -> inside-lisp-form (increment `(n-lisp-forms asm-reader)` to 1).
-   space-inside-lisp-form -> ) -> decrement `(n-lisp-forms asm-reader)` by 1. if `(n-lisp-forms asm-reader)` becomes zero, then -> closing-parenthesis.
+   space-inside-lisp-form -> ) -> decrement `(n-lisp-forms asm-reader)` by 1. if `(n-lisp-forms asm-reader)` becomes zero, then -> closing-parenthesis
    space-inside-lisp-form -> a newline -> space-inside-lisp-form (do not output anything).
    space-inside-lisp-form -> a space -> -> space-inside-lisp-form (do not output anything).
    space-inside-lisp-form -> any other character -> inside-lisp-form.
@@ -172,7 +172,7 @@
    opening-square-bracket
    description of state: the last character was a opening square bracket that opened memory address syntax.
    opening-square-bracket -> # -> error (memory address syntax must be terminated with a closing square bracket before a hash sign)
-   opening-square-bracket -> ( -> inside-lisp-form-inside-memory-address-syntax (set `(n-lisp-forms asm-reader)` to 1).
+   opening-square-bracket -> ( -> inside-lisp-form (set `(n-lisp-forms asm-reader)` to 1).
    opening-square-bracket -> ) -> error (cannot terminate Lisp form outside a Lisp form)
    opening-square-bracket -> [ -> error (cannot begin a new memory address syntax inside memory address syntax).
    opening-square-bracket -> ] -> closing-square-bracket (the content of `memory-address-syntax-buffer` will be converted to intermediate representation).
@@ -228,8 +228,6 @@
    plus-inside-memory-address-syntax -> a newline -> plus-inside-memory-address-syntax (do not output anything).
    plus-inside-memory-address-syntax -> a space -> plus-inside-memory-address-syntax (do not output anything).
    plus-inside-memory-address-syntax -> any other character -> inside-memory-address-syntax
-
-   inside-lisp-form-inside-memory-address-syntax TODO!
 
    closing-square-bracket
    description of state: the last character was a closing square bracket that closed memory address syntax.
