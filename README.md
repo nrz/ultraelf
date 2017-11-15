@@ -13,7 +13,7 @@ For manual please see file `manual.txt`.
 
 All tests pass. So you should receive a message "No tests failed." when
 running `(test-parser)` and also `(test-x64-assembling-functions)`
-following the instructions in ultraelf.asd .
+following the instructions in `ultraelf.asd`.
 
 ## Implemented functionality
 * Binary code generation for quite many x86-64 instruction encodings.
