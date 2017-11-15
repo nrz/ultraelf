@@ -7,7 +7,7 @@ or (at your option) any later version. See COPYING file.
 All my code copyright (C) 2016-2017 Antti Nuortimo.
 
 ## Compiling
-ultraELF compiles at least with SBCL (tested with SBCL 1.2.4.debian).
+ultraELF compiles at least with SBCL (tested with SBCL 1.3.14.debian).
 For compiling and loading instructions please see file `ultraelf.asd`.
 For manual please see file `manual.txt`.
 
